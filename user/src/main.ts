@@ -6,10 +6,11 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.APP_PORT || 3000);
 
   // Swagger config
   const swaggerCustomOptions: SwaggerCustomOptions = {
@@ -36,10 +37,11 @@ async function bootstrap() {
     .build();
 
   const doc = SwaggerModule.createDocument(app, config, {
-    include: [AppModule],
+    include: [AppModule, UsersModule, AuthModule],
   });
   SwaggerModule.setup('api', app, doc, swaggerCustomOptions);
 
+  await app.listen(process.env.APP_PORT || 3000);
   const welcomeLog = `Application is running on: ${await app.getUrl()}`;
   Logger.log(welcomeLog, 'NestApplication');
 }

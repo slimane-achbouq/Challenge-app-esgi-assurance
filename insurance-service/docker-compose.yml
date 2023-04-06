@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    env_file:
+      - .env
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+
+  api:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_module
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+
+volumes:
+  mongodb-data:

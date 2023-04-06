@@ -16,7 +16,7 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto): Promise<any> {
     // Check if user exists
-    const userExists = await this.usersService.findByUsername(
+    const userExists = await this.usersService.findByUserByEmail(
       createUserDto.email,
     );
     if (userExists) {
@@ -36,7 +36,7 @@ export class AuthService {
 
   async signIn(data: AuthDto) {
     // Check if user exists
-    const user = await this.usersService.findByUsername(data.username);
+    const user = await this.usersService.findByUserByEmail(data.email);
     if (!user) throw new BadRequestException('User does not exist');
     const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches)

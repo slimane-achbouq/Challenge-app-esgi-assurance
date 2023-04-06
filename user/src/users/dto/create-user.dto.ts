@@ -18,7 +18,6 @@ export class CreateUserDto {
   lastname: string;
 
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
   @IsNotEmpty()

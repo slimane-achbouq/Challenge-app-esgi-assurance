@@ -12,8 +12,14 @@ import { Request } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
+import { User } from 'src/users/schemas/user.schema';
 
 @ApiTags('Auth')
 @Controller({
@@ -22,6 +28,16 @@ import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOkResponse({
+    description: 'Add new user',
+    type: User,
+  })
+  @ApiBody({
+    description: 'Add new user',
+    required: true,
+    type: User,
+  })
+  @HttpCode(HttpStatus.OK)
   @Post('signup')
   signup(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);

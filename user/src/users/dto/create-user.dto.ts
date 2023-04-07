@@ -40,5 +40,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   age: number;
 
+  isValide: boolean;
+
+  validationToken: string;
+
   refreshToken: string;
 }

@@ -5,6 +5,10 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
+import { v4 as uuidv4 } from 'uuid';
+import { VerifyDto } from './dto/verify-profile.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { UserDocument } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +18,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<any> {
+  async signUp(createUserDto: CreateUserDto): Promise<unknown> {
     // Check if user exists
     const userExists = await this.usersService.findByUserByEmail(
       createUserDto.email,
@@ -25,9 +29,11 @@ export class AuthService {
 
     // Hash password
     const hash = await this.hashData(createUserDto.password);
+    const validationToken = uuidv4();
     const newUser = await this.usersService.create({
       ...createUserDto,
       password: hash,
+      validationToken: validationToken,
     });
     const tokens = await this.getTokens(newUser._id, newUser.email);
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
@@ -89,5 +95,24 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async verifyProfile(verifyProfileDto: VerifyDto) {
+    const user: UserDocument = await this.usersService.findByUserByEmail(
+      verifyProfileDto.email,
+    );
+
+    if (!user)
+      throw new BadRequestException(
+        `User with email ${verifyProfileDto.email}  does not exist`,
+      );
+
+    if (verifyProfileDto.token === user.validationToken) {
+      await this.usersService.update(user._id, { isValide: true });
+    } else {
+      throw new BadRequestException(`Invalid Token !`);
+    }
+
+    return 'Profile is activated .';
   }
 }

@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -20,6 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { User } from 'src/users/schemas/user.schema';
+import { VerifyDto } from './dto/verify-profile.dto';
 
 @ApiTags('Auth')
 @Controller({
@@ -46,6 +48,11 @@ export class AuthController {
   @Post('signin')
   signin(@Body() data: AuthDto) {
     return this.authService.signIn(data);
+  }
+
+  @Post('verifyUser')
+  verify(@Body() verifyDto: VerifyDto) {
+    return this.authService.verifyProfile(verifyDto);
   }
 
   @UseGuards(AccessTokenGuard)

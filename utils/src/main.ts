@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
@@ -10,6 +10,9 @@ import { MailModule } from './mail/mail.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Validation
+  app.useGlobalPipes(new ValidationPipe());
 
   // Swagger config
   const swaggerCustomOptions: SwaggerCustomOptions = {

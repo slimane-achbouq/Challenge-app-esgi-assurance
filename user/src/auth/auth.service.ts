@@ -7,7 +7,6 @@ import { AuthDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 import { VerifyDto } from './dto/verify-profile.dto';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { UserDocument } from 'src/users/schemas/user.schema';
 
 @Injectable()

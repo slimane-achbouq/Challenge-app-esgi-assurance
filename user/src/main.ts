@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Validation
   app.useGlobalPipes(new ValidationPipe());
 
   // Swagger config

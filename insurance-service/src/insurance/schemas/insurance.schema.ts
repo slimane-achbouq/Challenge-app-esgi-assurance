@@ -1,5 +1,8 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema,SchemaOptions , Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Beneficiary } from './beneficiary.schema';
+import { Types } from 'mongoose';
+
 
 @Schema()
 export class Insurance extends Document {
@@ -26,6 +29,9 @@ export class Insurance extends Document {
 
   @Prop({ type: Date, default: Date.now })
   updatedAt: Date;
+
+  @Prop({ type: Types.ObjectId, ref: 'Beneficiary' })
+  beneficiary: Beneficiary;
 }
 
 export const InsuranceSchema = SchemaFactory.createForClass(Insurance);

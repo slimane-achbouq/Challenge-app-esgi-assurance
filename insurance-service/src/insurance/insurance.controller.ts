@@ -13,13 +13,11 @@ export class InsuranceController {
 
   @Get()
   getInsurances() {
-    console.log("ok")
     return this.insuranceService.getInsurances();
   }
 
   @Get(':id')
   getInsuranceById(@Param('id') id: string) {
-    console.log("ok")
     return this.insuranceService.getInsuranceById(id);
   }
 

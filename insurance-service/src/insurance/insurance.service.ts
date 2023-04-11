@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Insurance } from './schemas/insurance.schema';
@@ -12,8 +12,15 @@ export class InsuranceService {
   ) {}
 
   async createInsurance(insuranceDto: any): Promise<Insurance> {
-    const newInsurance = new this.insuranceModel(insuranceDto);
-    return newInsurance.save();
+    const beneficiary = await this.beneficiaryModel.findById(insuranceDto.beneficiary).exec();
+    if (!beneficiary) {
+      throw new NotFoundException('Beneficiary not found');
+    }
+    const newInsurance = new this.insuranceModel({ ...insuranceDto, beneficiary: insuranceDto.beneficiary });
+    const savedInsurance = await newInsurance.save();
+    beneficiary.insurances.push(savedInsurance._id);
+    await beneficiary.save();
+    return savedInsurance;
   }
 
   async getInsurances(): Promise<Insurance[]> {
@@ -53,5 +60,9 @@ export class InsuranceService {
 
   async deleteBeneficiary(id: string): Promise<Beneficiary> {
     return this.beneficiaryModel.findByIdAndDelete(id).exec();
+  }
+
+  async getBeneficiaryWithInsurances(id: string): Promise<Beneficiary> {
+    return this.beneficiaryModel.findById(id).populate('insurances').exec();
   }
 }

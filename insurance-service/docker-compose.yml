@@ -13,8 +13,7 @@ services:
   api:
     build: .
     volumes:
-      - .:/app
-      - /app/node_module
+      - .:/usr/src/app
     ports:
       - 3000:3000
     depends_on:

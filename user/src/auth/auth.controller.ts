@@ -22,6 +22,7 @@ import {
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { User } from 'src/users/schemas/user.schema';
 import { VerifyDto } from './dto/verify-profile.dto';
+import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
 
 @ApiTags('Auth')
 @Controller({
@@ -55,10 +56,19 @@ export class AuthController {
     return this.authService.verifyProfile(verifyDto);
   }
 
-  @UseGuards(AccessTokenGuard)
   @ApiBearerAuth()
+  @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {
     this.authService.logout(req.user['sub']);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@Req() req: Request) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }

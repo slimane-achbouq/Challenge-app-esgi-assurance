@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { InsuranceModule } from './insurance/insurance.module';
+import { BeneficiaryModule } from './beneficiary/beneficiary.module';
 
 
 
@@ -13,6 +14,7 @@ dotenv.config();
   imports: [
     MongooseModule.forRoot(process.env.MONGODB_URI),
     InsuranceModule,
+    BeneficiaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

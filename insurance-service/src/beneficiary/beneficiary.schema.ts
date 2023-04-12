@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Insurance } from './insurance.schema';
+import { Insurance } from '../insurance/insurance.schema';
 import { Types } from 'mongoose';
 
 

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Insurance, InsuranceSchema } from './schemas/insurance.schema';
-import { Beneficiary, BeneficiarySchema } from './schemas/beneficiary.schema';
+import { Insurance, InsuranceSchema } from './insurance.schema';
+import { Beneficiary, BeneficiarySchema } from '../beneficiary/beneficiary.schema';
 import { InsuranceController } from './insurance.controller';
 import { InsuranceService } from './insurance.service';
+import { BeneficiaryModule } from '../beneficiary/beneficiary.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { InsuranceService } from './insurance.service';
       { name: Insurance.name, schema: InsuranceSchema },
       { name: Beneficiary.name, schema: BeneficiarySchema },
     ]),
+    BeneficiaryModule
   ],
   controllers: [InsuranceController],
   providers: [InsuranceService],

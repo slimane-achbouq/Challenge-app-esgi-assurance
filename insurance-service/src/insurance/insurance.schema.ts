@@ -1,6 +1,6 @@
 import { Schema,SchemaOptions , Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Beneficiary } from './beneficiary.schema';
+import { Beneficiary } from '../beneficiary/beneficiary.schema';
 import { Types } from 'mongoose';
 
 

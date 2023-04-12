@@ -58,13 +58,10 @@ export const apiPropertiesUser: {
     description: 'User age',
   },
 };
-
-export type UserDocument = User & Document;
-
 @Schema({
   timestamps: { createdAt: 'created' },
 })
-export class User {
+export class User extends Document {
   @ApiProperty(apiPropertiesUser.firstname)
   @Prop({ required: true })
   firstname: string;

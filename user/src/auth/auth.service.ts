@@ -11,7 +11,7 @@ import { AuthDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 import { VerifyDto } from './dto/verify-profile.dto';
-import { UserDocument } from 'src/users/schemas/user.schema';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -47,6 +47,10 @@ export class AuthService {
     // Check if user exists
     const user = await this.usersService.findByUserByEmail(data.email);
     if (!user) throw new BadRequestException('User does not exist');
+
+    if (!user.isValide)
+      throw new BadRequestException(`User profile is not activated !`);
+
     const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches)
       throw new BadRequestException('Password is incorrect');
@@ -101,7 +105,7 @@ export class AuthService {
   }
 
   async verifyProfile(verifyProfileDto: VerifyDto) {
-    const user: UserDocument = await this.usersService.findByUserByEmail(
+    const user: User = await this.usersService.findByUserByEmail(
       verifyProfileDto.email,
     );
 

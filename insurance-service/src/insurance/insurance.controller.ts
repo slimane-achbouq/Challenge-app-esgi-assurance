@@ -1,32 +1,32 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { InsuranceService } from './insurance.service';
 
-@Controller('insurance')
+@Controller()
 export class InsuranceController {
   constructor(private insuranceService: InsuranceService) {}
 
   // Insurance CRUD operations
-  @Post()
+  @Post('insurance')
   createInsurance(@Body() insuranceDto: any) {
     return this.insuranceService.createInsurance(insuranceDto);
   }
 
-  @Get()
+  @Get('insurance')
   getInsurances() {
     return this.insuranceService.getInsurances();
   }
 
-  @Get(':id')
+  @Get('insurance/:id')
   getInsuranceById(@Param('id') id: string) {
     return this.insuranceService.getInsuranceById(id);
   }
 
-  @Put(':id')
+  @Put('insurance/:id')
   updateInsurance(@Param('id') id: string, @Body() insuranceDto: any) {
     return this.insuranceService.updateInsurance(id, insuranceDto);
   }
 
-  @Delete(':id')
+  @Delete('insurance/:id')
   deleteInsurance(@Param('id') id: string) {
     return this.insuranceService.deleteInsurance(id);
   }
@@ -58,4 +58,10 @@ export class InsuranceController {
   deleteBeneficiary(@Param('id') id: string) {
     return this.insuranceService.deleteBeneficiary(id);
 }
+
+@Get('beneficiary/:id/insurances')
+getBeneficiaryWithInsurances(@Param('id') id: string) {
+return this.insuranceService.getBeneficiaryWithInsurances(id);
+}
+
 }

@@ -7,7 +7,10 @@ import { Types } from 'mongoose';
 @Schema()
 export class Beneficiary extends Document {
   @Prop({ required: true })
-  name: string;
+  firstName: string;
+
+  @Prop({ required: true })
+  lastName: string;
 
   @Prop({ required: true })
   postalAddress: string;
@@ -18,8 +21,13 @@ export class Beneficiary extends Document {
   @Prop({ required: true })
   email: string;
 
+  @Prop({ required: true })
+  userId: string;
+
   @Prop([{ type: Types.ObjectId, ref: 'Insurance' }])
   insurances: Insurance[];
+
+  
 }
 
 export const BeneficiarySchema = SchemaFactory.createForClass(Beneficiary);

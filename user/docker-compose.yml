@@ -14,11 +14,11 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    ports:
-      - ${APP_PORT}:${APP_PORT}
-    command: npm run start:dev
     env_file:
       - .env
+    ports:
+      - 3000:3000
+    command: npm run start:dev
     depends_on:
       - mongodb
 

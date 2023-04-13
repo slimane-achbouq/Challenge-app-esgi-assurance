@@ -72,6 +72,10 @@ typings/
 .env
 .env.test
 
+# es-lint config 
+.vscode
+
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 

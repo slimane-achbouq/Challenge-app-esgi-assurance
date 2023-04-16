@@ -7,31 +7,28 @@ export class InsuranceController {
   constructor(private insuranceService: InsuranceService) {}
 
 
-  @Post()
-  createInsurance(@Body() insuranceDto: any) {
+  @MessagePattern({ cmd: 'create_insurance' })
+  async createInsurance(@Payload() insuranceDto: any) {
     return this.insuranceService.createInsurance(insuranceDto);
-  }
-
-  
-
-  @MessagePattern({  cmd: 'hello' })
-  async getInsurances(@Payload() id: string) {
-    console.log(id)
-    return this.insuranceService.getInsurances();
   } 
 
-  @Get(':id')
-  getInsuranceById(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'getInsurances' })
+  async getInsurances() {
+    return this.insuranceService.getInsurances();
+  }
+
+  @MessagePattern({ cmd: 'get_insurance_by_id' })
+  async getInsuranceById(@Payload() id: string) {
     return this.insuranceService.getInsuranceById(id);
   }
   
-  @Put(':id')
-  updateInsurance(@Param('id') id: string, @Body() insuranceDto: any) {
-    return this.insuranceService.updateInsurance(id, insuranceDto);
+  @MessagePattern({ cmd: 'update_insurance' })
+  async updateInsurance(@Payload() data: { id: string; insuranceDto: any }) {
+    return this.insuranceService.updateInsurance(data.id, data.insuranceDto);
   }
 
-  @Delete(':id')
-  deleteInsurance(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'delete_insurance' })
+  async deleteInsurance(@Payload() id: string) {
     return this.insuranceService.deleteInsurance(id);
   }
 

@@ -11,14 +11,6 @@ import { InsuranceService } from './insurance/insurance.service';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService,@Inject(InsuranceService) private readonly insuranceService: InsuranceService) {}
-
-
-  @Get()
-  getHello(): string {
-    Logger.log('info')
-    return this.appService.getHello();
-  }
-
  
 
 }

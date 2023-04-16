@@ -1,42 +1,42 @@
 import { Controller,Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { BeneficiaryService } from './beneficiary.service';
 import { CreateBeneficiaryDto,UpdateBeneficiaryDto } from './beneficiary.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('beneficiary')
 export class BeneficiaryController {
   constructor(private readonly beneficiaryService: BeneficiaryService) {}
 
-  @Post()
-  createBeneficiary(@Body() beneficiaryDto: CreateBeneficiaryDto) {
-    return this.beneficiaryService.createBeneficiary(beneficiaryDto);
+  @MessagePattern({ cmd: 'createBeneficiary' })
+  async createBeneficiary(@Payload() beneficiaryDto: any) {
+    return await this.beneficiaryService.createBeneficiary(beneficiaryDto);
   }
 
-  @Get()
-  getBeneficiaries(){
-    console.log("ok")
-    return this.beneficiaryService.getBeneficiaries();
+  @MessagePattern({ cmd: 'getBeneficiaries' })
+  async getBeneficiaries() {
+    return await this.beneficiaryService.getBeneficiaries();
   }
 
-  @Get(':id')
-  getBeneficiaryById(@Param('id') id: string) {
-    console.log("okk")
-    return this.beneficiaryService.getBeneficiaryById(id);
+  @MessagePattern({ cmd: 'getBeneficiaryById' })
+  async getBeneficiaryById(@Payload() id: string) {
+    return await this.beneficiaryService.getBeneficiaryById(id);
   }
 
-  @Put(':id')
-  updateBeneficiary(@Param('id') id: string, @Body() beneficiaryDto: UpdateBeneficiaryDto) {
-    return this.beneficiaryService.updateBeneficiary(id, beneficiaryDto);
+  @MessagePattern({ cmd: 'updateBeneficiary' })
+  async updateBeneficiary(@Payload() data: any) {
+    const { id, beneficiaryDto } = data;
+    return await this.beneficiaryService.updateBeneficiary(id, beneficiaryDto);
   }
 
-  @Delete(':id')
-  deleteBeneficiary(@Param('id') id: string) {
-    return this.beneficiaryService.deleteBeneficiary(id);
-}
+  @MessagePattern({ cmd: 'deleteBeneficiary' })
+  async deleteBeneficiary(@Payload() id: string) {
+    return await this.beneficiaryService.deleteBeneficiary(id);
+  }
 
-@Get(':id/insurances')
-getBeneficiaryWithInsurances(@Param('id') id: string) {
-return this.beneficiaryService.getBeneficiaryWithInsurances(id);
-}
+  @MessagePattern({ cmd: 'getBeneficiaryWithInsurances' })
+  async getBeneficiaryWithInsurances(@Payload() id: string) {
+    return await this.beneficiaryService.getBeneficiaryWithInsurances(id);
+  }
 
   // Add other endpoints for CRUD operations here
 }

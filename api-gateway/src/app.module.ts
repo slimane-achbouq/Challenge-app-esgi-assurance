@@ -8,17 +8,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [
     ClientsModule.register([
       {
-        name: 'INSURANCE_SERVICE',
-        transport: Transport.KAFKA,
+        name: 'ITEM_MICROSERVICE',
+        transport: Transport.TCP,
         options: {
-          client: {
-            clientId: 'auth',
-            brokers: ['192.168.1.15:9092'],
-          },
-          producerOnlyMode: true,
-          consumer: {
-            groupId: 'auth-consumer',
-          },
+          host: '0.0.0.0',
+          port: 3001,
         },
       },
     ]),

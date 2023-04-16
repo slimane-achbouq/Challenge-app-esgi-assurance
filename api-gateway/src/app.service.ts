@@ -1,23 +1,24 @@
 import { Inject, Injectable,OnModuleInit } from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
+import { Client, ClientProxy,Transport } from '@nestjs/microservices';
 
 
 @Injectable()
-export class AppService implements OnModuleInit {
+export class AppService {
 
-  
-  constructor(@Inject('INSURANCE_SERVICE') private readonly client: ClientKafka){
+  @Client({
+    transport: Transport.TCP,
+    options: {
+      host: '127.0.0.1',
+      port: 3001,
+    },
+  })
+  client: ClientProxy;
 
-  }
   getHello(): string {
     return 'Hello World!';
   }
 
-  onModuleInit() {
-    this.client.subscribeToResponseOf('get.insurance');
-  }
-
   async getInsurance(id: string) {
-    return this.client.send('get.insurance', JSON.stringify({"ok":"ok"})).subscribe(d=>console.log(d));
+    return this.client.send({ cmd: 'hello' }, id).subscribe(d=>console.log(d));
   }
 }

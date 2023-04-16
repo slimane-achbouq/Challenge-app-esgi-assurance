@@ -1,9 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Inject, Param } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+
+  constructor(@Inject('ITEM_MICROSERVICE') private client: ClientProxy,private readonly appService: AppService) {}
 
   @Get()
   getHello(): string {
@@ -12,6 +14,6 @@ export class AppController {
 
   @Get('insurance/:id')
   async getInsurance(@Param('id') id: string) {
-    return this.appService.getInsurance(id);
+    return this.client.send({ cmd: 'hello' }, id);
   }
 }

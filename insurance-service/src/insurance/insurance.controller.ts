@@ -7,7 +7,7 @@ export class InsuranceController {
   constructor(private insuranceService: InsuranceService) {}
 
 
-  @MessagePattern({ cmd: 'create_insurance' })
+  @MessagePattern({ cmd: 'createInsurance' })
   async createInsurance(@Payload() insuranceDto: any) {
     return this.insuranceService.createInsurance(insuranceDto);
   } 
@@ -17,17 +17,17 @@ export class InsuranceController {
     return this.insuranceService.getInsurances();
   }
 
-  @MessagePattern({ cmd: 'get_insurance_by_id' })
+  @MessagePattern({ cmd: 'getInsuranceById' })
   async getInsuranceById(@Payload() id: string) {
     return this.insuranceService.getInsuranceById(id);
   }
   
-  @MessagePattern({ cmd: 'update_insurance' })
+  @MessagePattern({ cmd: 'updateInsurance' })
   async updateInsurance(@Payload() data: { id: string; insuranceDto: any }) {
     return this.insuranceService.updateInsurance(data.id, data.insuranceDto);
   }
 
-  @MessagePattern({ cmd: 'delete_insurance' })
+  @MessagePattern({ cmd: 'deleteInsurance' })
   async deleteInsurance(@Payload() id: string) {
     return this.insuranceService.deleteInsurance(id);
   }

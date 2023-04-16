@@ -16,5 +16,6 @@ import { BeneficiaryModule } from '../beneficiary/beneficiary.module';
   ],
   controllers: [InsuranceController],
   providers: [InsuranceService],
+  exports: [InsuranceService]
 })
 export class InsuranceModule {}

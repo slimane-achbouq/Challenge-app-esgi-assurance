@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { InsuranceService } from './insurance.service';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('insurance')
 export class InsuranceController {
@@ -11,16 +12,19 @@ export class InsuranceController {
     return this.insuranceService.createInsurance(insuranceDto);
   }
 
-  @Get()
-  getInsurances() {
+  
+
+  @MessagePattern({  cmd: 'hello' })
+  async getInsurances(@Payload() id: string) {
+    console.log(id)
     return this.insuranceService.getInsurances();
-  }
+  } 
 
   @Get(':id')
   getInsuranceById(@Param('id') id: string) {
     return this.insuranceService.getInsuranceById(id);
   }
-
+  
   @Put(':id')
   updateInsurance(@Param('id') id: string, @Body() insuranceDto: any) {
     return this.insuranceService.updateInsurance(id, insuranceDto);

@@ -1,17 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Inject } from '@nestjs/common';
 import { AppService } from './app.service';
 
 import { Logger } from '@nestjs/common';
 
 import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { InsuranceService } from './insurance/insurance.service';
 
 
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-
+  constructor(private readonly appService: AppService,@Inject(InsuranceService) private readonly insuranceService: InsuranceService) {}
 
 
   @Get()
@@ -20,11 +19,6 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @MessagePattern('get.insurance')
-  async getInsuranceById(@Payload() id: string) {
-    console.log("kkkkkkkkkk")
-    Logger.log('info')
-    return this.appService.getHello();
-    
-  } 
+ 
+
 }

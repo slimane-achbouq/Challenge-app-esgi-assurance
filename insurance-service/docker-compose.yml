@@ -15,37 +15,11 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - 3000:3000
+      - 3001:3001
     depends_on:
       - mongodb
     env_file:
       - .env
-
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    
-    container_name: kafka
-    expose: 
-      - '9092'  
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.5.1.145
-
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    ports:
-      - '9092:9092'
-      - '29092:29092'
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-    ports:
-      - '2181:2181'
-      
 
 
 volumes:

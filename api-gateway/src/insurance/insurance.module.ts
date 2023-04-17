@@ -9,7 +9,7 @@ import { InsuranceController } from './insurance.controller';
         name: 'INSURANCE_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'localhost',
+          host: 'api',
           port: 3001,
         },
       },

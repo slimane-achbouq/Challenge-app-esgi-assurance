@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
@@ -7,7 +11,7 @@ import { AuthDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 import { VerifyDto } from './dto/verify-profile.dto';
-import { UserDocument } from 'src/users/schemas/user.schema';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -43,6 +47,10 @@ export class AuthService {
     // Check if user exists
     const user = await this.usersService.findByUserByEmail(data.email);
     if (!user) throw new BadRequestException('User does not exist');
+
+    if (!user.isValide)
+      throw new BadRequestException(`User profile is not activated !`);
+
     const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches)
       throw new BadRequestException('Password is incorrect');
@@ -97,7 +105,7 @@ export class AuthService {
   }
 
   async verifyProfile(verifyProfileDto: VerifyDto) {
-    const user: UserDocument = await this.usersService.findByUserByEmail(
+    const user: User = await this.usersService.findByUserByEmail(
       verifyProfileDto.email,
     );
 
@@ -113,5 +121,19 @@ export class AuthService {
     }
 
     return 'Profile is activated .';
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.usersService.findById(userId);
+    if (!user || !user.refreshToken)
+      throw new ForbiddenException('Access Denied');
+    const refreshTokenMatches = await argon2.verify(
+      user.refreshToken,
+      refreshToken,
+    );
+    if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    return tokens;
   }
 }

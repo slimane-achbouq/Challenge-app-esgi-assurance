@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { InsuranceModule } from './insurance/insurance.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuoteModule } from './quote/quote.module';
-
+import { VehicleModule } from './vehicle/vehicle.module';
 
 @Module({
   imports: [
-    InsuranceModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      autoLoadEntities: true,
+      synchronize: true, // Disable this in production
+    }),
     QuoteModule,
+    VehicleModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

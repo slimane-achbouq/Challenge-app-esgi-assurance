@@ -8,7 +8,6 @@ services:
       - .:/usr/src/app
     ports:
       - 3000:3000
-      - 3002:3002
     expose:
       - "3000"
     networks:

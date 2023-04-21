@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  getway:
+    extends:
+      file: api-gateway/docker-compose.yml
+      service: getway
+
+  insurance-service-db:
+    extends:
+      file: insurance-service/docker-compose.yml
+      service: insurance-service-db
+
+  insurance-service:
+    extends:
+      file: insurance-service/docker-compose.yml
+      service: insurance-service
+
+  quote-service:
+    extends:
+      file: quote-service/docker-compose.yml
+      service: quote-service
+
+  quote-service-db:
+    extends:
+      file: quote-service/docker-compose.yml
+      service: quote-service-db
+networks:
+  my-network:
+    external: true
+
+volumes:
+  mongodb-data:
+  nestjs-db-data:

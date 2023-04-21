@@ -28,6 +28,7 @@ export class MailService {
       to: [
         {
           email: `${verifyProfileModel.email}`,
+          token: `${verifyProfileModel.token}`
         },
       ],
       htmlContent: templateContent,

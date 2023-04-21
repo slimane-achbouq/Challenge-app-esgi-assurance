@@ -4,11 +4,10 @@ import { AppService } from './app.service';
 import { InsuranceModule } from './insurance/insurance.module';
 import { QuoteModule } from './quote/quote.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
-
+import { UtilsModule } from './utils/utils.module';
 
 @Module({
-  imports: [InsuranceModule, QuoteModule, AuthModule],
+  imports: [InsuranceModule, QuoteModule, AuthModule, UtilsModule],
   controllers: [AppController],
   providers: [AppService],
 })

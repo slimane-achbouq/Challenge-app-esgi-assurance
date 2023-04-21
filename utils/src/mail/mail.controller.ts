@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MailService } from './mail.service';
 import { VerifyDto } from './dto/verify-profile.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @ApiTags('Mail')
 @Controller({
@@ -10,8 +11,8 @@ import { VerifyDto } from './dto/verify-profile.dto';
 export class MailController {
   constructor(private readonly maileService: MailService) {}
 
-  @Post('verify')
-  sendMailtoValidateUser(@Body() veridyDto: VerifyDto) {
+  @MessagePattern({ cmd: 'sendMail' })
+  sendMailtoValidateUser(@Payload() veridyDto: VerifyDto) {
     return this.maileService.sendMailtoValidateUser(veridyDto);
   }
 }

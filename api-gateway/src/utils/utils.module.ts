@@ -1,21 +1,20 @@
 import { Module } from '@nestjs/common';
-import { QuoteController } from './quote.controller';
+import { UtilsController } from './utils.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
-    // ...
     ClientsModule.register([
       {
-        name: 'QUOTE_SERVICE',
+        name: 'UTILS_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'quote-service-host',
-          port: 3002,
+          host: 'utils-service-host',
+          port: 3004,
         },
       },
     ]),
   ],
-  controllers: [QuoteController],
+  controllers: [UtilsController],
 })
-export class QuoteModule {}
+export class UtilsModule {}

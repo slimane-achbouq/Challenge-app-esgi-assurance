@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000/v1';
+const API_URL = 'http://localhost:8000';
 
 async function httpGetLogs(logType, startDate, endDate) {
     return await fetch(`${API_URL}/logs`, {

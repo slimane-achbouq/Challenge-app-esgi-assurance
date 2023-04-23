@@ -10,7 +10,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'QUOTE_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'nestjs-app',
+          host: 'quote-service',
           port: 3002,
         },
       },

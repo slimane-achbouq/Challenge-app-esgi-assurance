@@ -6,12 +6,28 @@ import {
 } from 'typeorm';
 import { Quote } from '../quote/quote.entity';
 
+
+enum VehicleType {
+  CAR = 'Car',
+  MOTORCYCLE = 'Motorcycle',
+  TRUCK = 'Truck',
+}
+
+enum PurchaseMode {
+  NEW = 'New',
+  USED = 'Used',
+}
+
+
 @Entity()
 export class Vehicle {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: VehicleType,
+  })
   vehicleType: string;
 
   @Column()
@@ -38,7 +54,10 @@ export class Vehicle {
   @Column()
   registrationCardHolder: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: PurchaseMode,
+  })
   purchaseMode: string;
 
   @Column()

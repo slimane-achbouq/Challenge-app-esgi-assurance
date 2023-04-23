@@ -8,18 +8,36 @@ import {
 } from 'typeorm';
 import { Vehicle } from '../vehicle/vehicle.entity';
 
+
+enum InsuranceType {
+  LIABILITY = 'Liability',
+  COLLISION = 'Collision',
+  COMPREHENSIVE = 'Comprehensive',
+}
+
+enum Coverage {
+  BASIC = 'Basic',
+  STANDARD = 'Standard',
+  PREMIUM = 'Premium',
+}
+
 @Entity()
 export class Quote {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   
-  @PrimaryGeneratedColumn('increment')
   quoteNumber: number;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: InsuranceType,
+  })
   insuranceType: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: Coverage,
+  })
   coverage: string;
 
   @Column()

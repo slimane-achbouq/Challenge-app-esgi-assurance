@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 import { IsString, IsNumber, IsInt, Min, Max, IsNotEmpty } from 'class-validator';
 
 export class CreateVehicleDto {
@@ -52,7 +53,8 @@ export class CreateVehicleDto {
   @IsInt()
   annualMileage: number;
 
-  @IsNotEmpty()
-  carteGrise: Buffer;
+  @IsOptional()
+  @IsString()
+  carteGrise?: string;
 }
 

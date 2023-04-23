@@ -7,18 +7,27 @@ import {
     Param,
     Put,
     Delete,
+    UseInterceptors,
+    UploadedFile,
+    NotFoundException,
   } from '@nestjs/common';
   import { VehicleService } from './vehicle.service';
   import { Vehicle } from './vehicle.entity';
   import { MessagePattern, Payload } from '@nestjs/microservices';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as multer from 'multer';
+import { Express } from 'express';
+import { diskStorage } from 'multer';
+
+
   
   @Controller('vehicle')
   export class VehicleController {
     constructor(private readonly vehicleService: VehicleService) {}
   
     @MessagePattern({ cmd: 'createVehicle' })
-    async createVehicle(@Payload() vehicleDto: any): Promise<Vehicle> {
-      return await this.vehicleService.createVehicle(vehicleDto);
+    async createVehicle(vehicleDto: any): Promise<Vehicle> {
+      return this.vehicleService.createVehicle(vehicleDto);
     }
   
     @MessagePattern({ cmd: 'getVehicles' })
@@ -32,9 +41,14 @@ import {
     }
   
     @MessagePattern({ cmd: 'updateVehicle' })
-    async updateVehicle(@Payload() data: any): Promise<Vehicle> {
+    async updateVehicle(data: { id: string; vehicleDto: any }): Promise<Vehicle> {
       const { id, vehicleDto } = data;
-      return await this.vehicleService.updateVehicle(id, vehicleDto);
+      const vehicle = await this.vehicleService.getVehicleById(id);
+      if (!vehicle) {
+        throw new NotFoundException('Vehicle not found');
+      }
+      const updatedVehicle = await this.vehicleService.updateVehicle(id, vehicleDto);
+      return updatedVehicle;
     }
   
     @MessagePattern({ cmd: 'deleteVehicle' })

@@ -6,9 +6,16 @@ import {
     Param,
     Put,
     Delete,
+    UseInterceptors,
+    UploadedFile,
   } from '@nestjs/common';
   import { Client, ClientProxy, Transport } from '@nestjs/microservices';
   import { Inject } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as multer from 'multer';
+import { diskStorage } from 'multer';
+
+
   
   @Controller()
   export class QuoteController {
@@ -44,8 +51,15 @@ import {
   
     // Vehicle related endpoints
     @Post('vehicles')
-    async createVehicle(@Body() vehicleDto: any) {
-      return this.quoteServiceClient.send({ cmd: 'createVehicle' }, vehicleDto).toPromise();
+    @UseInterceptors(FileInterceptor('carteGrise'))
+    async createVehicle(@Body() vehicleDto: any, @UploadedFile() file: Express.Multer.File) {
+      const fileContent = file ? file.buffer.toString('base64') : null;
+      if (!fileContent) {
+        throw new Error('File not uploaded');
+      }
+      return this.quoteServiceClient
+        .send({ cmd: 'createVehicle' }, { ...vehicleDto, carteGrise: fileContent })
+        .toPromise();
     }
   
     @Get('vehicles')
@@ -59,9 +73,20 @@ import {
     }
   
     @Put('vehicles/:id')
-    async updateVehicle(@Param('id') id: string, @Body() vehicleDto: any) {
-      return this.quoteServiceClient.send({ cmd: 'updateVehicle' }, { id, vehicleDto }).toPromise();
+    @UseInterceptors(FileInterceptor('carteGrise'))
+    async updateVehicle(
+      @Param('id') id: string,
+      @Body() vehicleDto: any,
+      @UploadedFile() file: Express.Multer.File,
+    ) {
+      const fileContent = file ? file.buffer.toString('base64') : null;
+      const updatedVehicleDto = fileContent ? { ...vehicleDto, carteGrise: fileContent } : vehicleDto;
+
+      return this.quoteServiceClient
+        .send({ cmd: 'updateVehicle' }, { id, vehicleDto: updatedVehicleDto })
+        .toPromise();
     }
+
   
     @Delete('vehicles/:id')
     async deleteVehicle(@Param('id') id: string) {

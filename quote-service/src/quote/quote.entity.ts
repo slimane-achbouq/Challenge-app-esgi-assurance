@@ -4,11 +4,15 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Vehicle } from '../vehicle/vehicle.entity';
 
 @Entity()
 export class Quote {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+  
   @PrimaryGeneratedColumn('increment')
   quoteNumber: number;
 
@@ -24,10 +28,10 @@ export class Quote {
   @Column()
   coverageDuration: number;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @Column()

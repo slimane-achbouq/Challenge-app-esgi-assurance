@@ -18,6 +18,7 @@ import {
   
     @MessagePattern({ cmd: 'createQuote' })
     async createQuote(@Payload() quoteDto: any): Promise<Quote> {
+      console.log(quoteDto)
       return await this.quoteService.createQuote(quoteDto);
     }
   

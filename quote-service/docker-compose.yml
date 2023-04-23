@@ -8,6 +8,8 @@ services:
       - '3002:3002'
     depends_on:
       - db
+    volumes:
+      - .:/usr/src/app
     environment:
       DATABASE_URL: postgres://user:password@db:5432/nestjsdb
 

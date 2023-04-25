@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Inject } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Inject, UseInterceptors, UploadedFiles, UploadedFile } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Observable } from 'rxjs';
 
 @Controller()
@@ -50,13 +51,40 @@ export class InsuranceController {
     }
 
     @Post('beneficiary')
-    createBeneficiary(@Body() beneficiaryDto: any): Observable<any> {
-      return this.insuranceServiceClient.send({ cmd: 'createBeneficiary' }, beneficiaryDto);
+    @UseInterceptors(FileInterceptor('justificatifDomicile'), FileInterceptor('permis'))
+    async createBeneficiary(
+      @Body() beneficiaryDto: any,
+      @UploadedFile('justificatifDomicile') justificatifDomicile: Express.Multer.File,
+      @UploadedFile('permis') permis: Express.Multer.File,
+    ) {
+      const fileContents = {
+        justificatifDomicile: justificatifDomicile
+          ? justificatifDomicile.buffer.toString('base64')
+          : null,
+        permis: permis ? permis.buffer.toString('base64') : null,
+      };
+      return this.insuranceServiceClient
+        .send({ cmd: 'createBeneficiary' }, { beneficiaryDto, fileContents })
+        .toPromise();
     }
 
     @Put('beneficiary/:id')
-    updateBeneficiary(@Param('id') id: string, @Body() beneficiaryDto: any): Observable<any> {
-      return this.insuranceServiceClient.send({ cmd: 'updateBeneficiary' }, { id, ...beneficiaryDto });
+    @UseInterceptors(FileInterceptor('justificatifDomicile'), FileInterceptor('permis'))
+    async updateBeneficiary(
+      @Param('id') id: string,
+      @Body() beneficiaryDto: any,
+      @UploadedFile('justificatifDomicile') justificatifDomicile: Express.Multer.File,
+      @UploadedFile('permis') permis: Express.Multer.File,
+    ) {
+      const fileContents = {
+        justificatifDomicile: justificatifDomicile
+          ? justificatifDomicile.buffer.toString('base64')
+          : null,
+        permis: permis ? permis.buffer.toString('base64') : null,
+      };
+      return this.insuranceServiceClient
+        .send({ cmd: 'updateBeneficiary' }, { id, beneficiaryDto, fileContents })
+        .toPromise();
     }
 
     @Delete('beneficiary/:id')

@@ -27,6 +27,12 @@ export class Beneficiary extends Document {
   @Prop([{ type: Types.ObjectId, ref: 'Insurance' }])
   insurances: Insurance[];
 
+  @Prop({ type: String, required: false })
+  justificatifDomicile: string;
+
+  @Prop({ type: String, required: false })
+  permis: string;
+
   
 }
 

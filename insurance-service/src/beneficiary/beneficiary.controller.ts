@@ -8,8 +8,9 @@ export class BeneficiaryController {
   constructor(private readonly beneficiaryService: BeneficiaryService) {}
 
   @MessagePattern({ cmd: 'createBeneficiary' })
-  async createBeneficiary(@Payload() beneficiaryDto: any) {
-    return await this.beneficiaryService.createBeneficiary(beneficiaryDto);
+  async createBeneficiary(@Payload() data: any) {
+    const { beneficiaryDto, fileContents } = data;
+    return await this.beneficiaryService.createBeneficiary(beneficiaryDto, fileContents);
   }
 
   @MessagePattern({ cmd: 'getBeneficiaries' })
@@ -24,8 +25,8 @@ export class BeneficiaryController {
 
   @MessagePattern({ cmd: 'updateBeneficiary' })
   async updateBeneficiary(@Payload() data: any) {
-    const { id, beneficiaryDto } = data;
-    return await this.beneficiaryService.updateBeneficiary(id, beneficiaryDto);
+    const { id, beneficiaryDto, fileContents } = data;
+    return await this.beneficiaryService.updateBeneficiary(id, beneficiaryDto, fileContents);
   }
 
   @MessagePattern({ cmd: 'deleteBeneficiary' })

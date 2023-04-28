@@ -7,10 +7,11 @@ import { InsuranceController } from './insurance.controller';
     ClientsModule.register([
       {
         name: 'INSURANCE_SERVICE',
-        transport: Transport.TCP,
+        transport: Transport.RMQ,
         options: {
-          host: 'api',
-          port: 3001,
+          urls: ['amqp://admin:admin_password@rabbitmq:5672'],
+          queue: 'insurance_service_queue',
+          queueOptions: { durable: false },
         },
       },
     ]),

@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpCode, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Headers, HttpCode, Post} from '@nestjs/common';
 import {VisitorService} from "./visitor.service";
 import {Visitor} from "../schemas/visitor.schema";
 
@@ -17,8 +17,8 @@ export class VisitorController {
     // @HasRole(Role.ADMINISTRATOR)
     @Get()
     @HttpCode(200)
-    async getUniqueVisitorsCount(@Body() body: { app_id: string }) {
-        const { app_id } = body;
+    async getUniqueVisitorsCount(@Headers() headers) {
+        const app_id = headers["app-id"];
         return this.visitorService.getTotalDistinctVisitors(app_id);
     }
 }

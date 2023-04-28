@@ -13,7 +13,7 @@ export class TimeService {
         return createdTime.save();
     }
 
-    async getTotalSecondsByPage(appId: string): Promise<any> {
+    async getTotalSecondsByPage(appId: string) {
         const result = await this.timeModel.aggregate([
             {
                 $match: {app_id: appId}

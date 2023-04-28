@@ -7,6 +7,9 @@ export class Visit extends Document {
     app_id: string;
 
     @Prop({required: true})
+    page: string;
+
+    @Prop({required: true})
     id_visit: string;
 
     @Prop({required: true, default: now()})

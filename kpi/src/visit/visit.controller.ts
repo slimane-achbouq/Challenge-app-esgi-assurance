@@ -1,6 +1,7 @@
 import {Body, Controller, Get, HttpCode, Post} from '@nestjs/common';
 import {VisitService} from "./visit.service";
 import {Visit} from "../schemas/visit.schema";
+import { Headers } from '@nestjs/common';
 
 @Controller("visit")
 export class VisitController {
@@ -9,7 +10,6 @@ export class VisitController {
 
     @Post()
     async createVisit(@Body() visit: Visit) {
-        console.log(visit)
         return this.visitService.create(visit);
     }
 
@@ -23,8 +23,8 @@ export class VisitController {
 
     @Get()
     @HttpCode(200)
-    async getTotalVisitsCount(@Body() body: { app_id: string }) {
-        const { app_id } = body;
+    async getTotalVisitsCount(@Headers() headers) {
+        const app_id = headers["app-id"];
         return this.visitService.getTotalVisitsByAppId(app_id);
     }
 }

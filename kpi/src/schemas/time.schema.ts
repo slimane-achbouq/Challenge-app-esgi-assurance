@@ -2,7 +2,7 @@ import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document, now} from 'mongoose';
 
 @Schema()
-export class Kpi extends Document {
+export class Time extends Document {
     @Prop({required: true})
     id_visitor: string;
 
@@ -10,16 +10,13 @@ export class Kpi extends Document {
     id_visit: string;
 
     @Prop({required: true})
-    tag: string;
+    seconds: string;
 
     @Prop({required: true})
-    event: string;
-
-    @Prop({required: true})
-    content: string;
+    page: string;
 
     @Prop({required: true, default: now()})
     createdAt: Date;
 }
 
-export const KpiSchema = SchemaFactory.createForClass(Kpi);
+export const TimeSchema = SchemaFactory.createForClass(Time);

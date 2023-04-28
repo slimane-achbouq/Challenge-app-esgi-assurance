@@ -38,7 +38,7 @@
                         <!-- Report card (Top Countries) -->
                         <DurationTimeStats v-bind:data="times"/>
                         <!-- Doughnut chart (Sessions By Device) -->
-                        <AnalyticsCard08/>
+                        <KpiStats v-bind:data="kpis"/>
                         <!-- Doughnut chart (Visit By Age Category) -->
                         <AnalyticsCard09/>
                         <!-- Polar chart (Sessions By Gender) -->
@@ -63,7 +63,7 @@ import VisitedPagesStats from '../partials/analytics/VisitedPagesStats.vue'
 import AnalyticsCard08 from '../partials/analytics/AnalyticsCard08.vue'
 import AnalyticsCard09 from '../partials/analytics/AnalyticsCard09.vue'
 import AnalyticsCard10 from '../partials/analytics/AnalyticsCard10.vue'
-import AnalyticsCard11 from '../partials/analytics/AnalyticsCard11.vue'
+import KpiStats from '../partials/analytics/KpiStats.vue'
 import DurationTimeStats from "@/partials/analytics/DurationTimeStats.vue";
 
 const appId = 'TEST_APP_ID';
@@ -80,14 +80,15 @@ export default {
         AnalyticsCard08,
         AnalyticsCard09,
         AnalyticsCard10,
-        AnalyticsCard11,
+        KpiStats,
     },
     data() {
         return {
             topPagesVisits: null,
             visitors: null,
             times: null,
-            appId: null
+            appId: null,
+            kpis: null,
         }
     },
     setup() {
@@ -127,12 +128,23 @@ export default {
                 method: 'GET',
             });
             return await response.json();
+        },
+        async getAllKpis() {
+            const response = await fetch(`${API_URL}/kpi`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "App-Id": appId,
+                },
+                method: 'GET',
+            });
+            return await response.json();
         }
     },
     async created() {
         this.topPagesVisits = await this.getTotalVisits();
         this.visitors = await this.getTotalUniqueVisitors();
         this.times = await this.getTimePerPage();
+        this.kpis = await this.getAllKpis();
         this.appId = 'TEST_APP_ID';
     }
 }

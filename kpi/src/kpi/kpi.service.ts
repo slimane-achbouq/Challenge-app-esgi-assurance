@@ -13,8 +13,8 @@ export class KpiService {
         return createdKpi.save();
     }
 
-    async findAll(): Promise<Kpi[]> {
-        return this.kpiModel.find().exec();
+    async findAllKpis(appId: string){
+        return this.kpiModel.find({app_id: appId}).sort({ createdAt: -1 }).exec();
     }
 
     async findKpisByTag(tag: string): Promise<Kpi[]> {

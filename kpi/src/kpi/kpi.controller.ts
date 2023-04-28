@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Headers, HttpCode, Post} from '@nestjs/common';
 import {KpiService} from "./kpi.service";
 import {Kpi} from "../schemas/kpi.schema";
 
@@ -14,8 +14,10 @@ export class KpiController {
     }
 
     @Get()
-    async getKpis() {
-        return this.kpiService.findAll();
+    @HttpCode(200)
+    async getUniqueVisitorsCount(@Headers() headers) {
+        const app_id = headers["app-id"];
+        return this.kpiService.findAllKpis(app_id);
     }
 
     @Get("tag/:tag")

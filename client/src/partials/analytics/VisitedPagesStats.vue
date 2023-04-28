@@ -14,7 +14,7 @@
 
                     <ul class="space-y-1 text-sm text-slate-800 mt-3 mb-4">
                         <li class="relative px-2 py-1" v-for="result in data" :key="result._id.page">
-                            <div class="absolute inset-0 bg-emerald-100" aria-hidden="true" :style="'width:' + result.totalVisits + 'px; max-width: 100%'"></div>
+                            <div class="absolute inset-0 bg-emerald-100" aria-hidden="true" :style="'width:' + result.totalVisits * 10 + 'px; max-width: 100%'"></div>
                             <div class="relative flex justify-between space-x-2">
                                 <div>{{ result._id.page }}</div>
                                 <div class="font-medium">{{ result.totalVisits }}</div>

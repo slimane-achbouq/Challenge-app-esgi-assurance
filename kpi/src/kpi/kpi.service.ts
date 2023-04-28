@@ -12,4 +12,16 @@ export class KpiService {
         const createdKpi = new this.kpiModel(dataKpi);
         return createdKpi.save();
     }
+
+    async findAll(): Promise<Kpi[]> {
+        return this.kpiModel.find().exec();
+    }
+
+    async findKpisByTag(tag: string): Promise<Kpi[]> {
+        return this.kpiModel.find({tag: tag}).exec();
+    }
+
+    async findKpisByVisitor(visitor: string): Promise<Kpi[]> {
+        return this.kpiModel.find({visitor: visitor}).exec();
+    }
 }

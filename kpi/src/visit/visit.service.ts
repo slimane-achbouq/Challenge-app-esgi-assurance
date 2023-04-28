@@ -12,4 +12,14 @@ export class VisitService {
         const createdVisit = new this.visitModel(dataVisit);
         return createdVisit.save();
     }
+
+    async getTotalDistinctVisits(appId: string): Promise<number> {
+        const distinctVisits = await this.visitModel.distinct('id_visit', { app_id: appId });
+        return distinctVisits.length;
+    }
+
+    async getTotalVisitsByAppId(appId: string): Promise<number> {
+        const visits = await this.visitModel.find({ app_id: appId });
+        return visits.length;
+    }
 }

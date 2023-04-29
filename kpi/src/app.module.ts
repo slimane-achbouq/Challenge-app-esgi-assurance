@@ -6,6 +6,7 @@ import { KpiModule } from './kpi/kpi.module';
 import {VisitModule} from "./visit/visit.module";
 import {VisitorModule} from "./visitor/visitor.module";
 import {TimeModule} from "./time/time.module";
+import {BrowserModule} from "./browser/browser.module";
 
 @Module({
     imports: [
@@ -13,7 +14,8 @@ import {TimeModule} from "./time/time.module";
         KpiModule,
         VisitModule,
         VisitorModule,
-        TimeModule
+        TimeModule,
+        BrowserModule
     ],
     controllers: [AppController],
     providers: [AppService],

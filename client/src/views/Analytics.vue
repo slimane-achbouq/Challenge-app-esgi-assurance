@@ -40,7 +40,7 @@
                         <!-- Doughnut chart (Sessions By Device) -->
                         <KpiStats v-bind:data="kpis"/>
                         <!-- Doughnut chart (Visit By Age Category) -->
-                        <AnalyticsCard09/>
+                        <UsedBrowsersStats v-bind:appId="appId" v-bind:API_URL="API_URL"/>
                         <!-- Polar chart (Sessions By Gender) -->
                         <AnalyticsCard10/>
 
@@ -61,7 +61,7 @@ import Header from '../partials/Header.vue'
 import Datepicker from '../components/Datepicker.vue'
 import VisitedPagesStats from '../partials/analytics/VisitedPagesStats.vue'
 import AnalyticsCard08 from '../partials/analytics/AnalyticsCard08.vue'
-import AnalyticsCard09 from '../partials/analytics/AnalyticsCard09.vue'
+import UsedBrowsersStats from '../partials/analytics/UsedBrowsersStats.vue'
 import AnalyticsCard10 from '../partials/analytics/AnalyticsCard10.vue'
 import KpiStats from '../partials/analytics/KpiStats.vue'
 import DurationTimeStats from "@/partials/analytics/DurationTimeStats.vue";
@@ -78,7 +78,7 @@ export default {
         Datepicker,
         VisitedPagesStats,
         AnalyticsCard08,
-        AnalyticsCard09,
+        UsedBrowsersStats,
         AnalyticsCard10,
         KpiStats,
     },
@@ -87,8 +87,10 @@ export default {
             topPagesVisits: null,
             visitors: null,
             times: null,
-            appId: null,
+            appId: appId,
+            API_URL: API_URL,
             kpis: null,
+            browsers: null,
         }
     },
     setup() {
@@ -138,14 +140,26 @@ export default {
                 method: 'GET',
             });
             return await response.json();
-        }
+        },
+        async getAllUsedBrowers() {
+            const response = await fetch(`${API_URL}/browser`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "App-Id": appId,
+                },
+                method: 'GET',
+            });
+            return await response.json();
+        },
     },
     async created() {
         this.topPagesVisits = await this.getTotalVisits();
         this.visitors = await this.getTotalUniqueVisitors();
         this.times = await this.getTimePerPage();
         this.kpis = await this.getAllKpis();
-        this.appId = 'TEST_APP_ID';
+        this.browsers = await this.getAllUsedBrowers();
+        this.appId = appId;
+        this.API_URL = API_URL;
     }
 }
 </script>

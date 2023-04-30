@@ -33,16 +33,11 @@
 
                     <!-- Cards -->
                     <div class="grid grid-cols-12 gap-6">
-                        <!-- Report card (Top Pages) -->
                         <VisitedPagesStats v-bind:data="topPagesVisits"/>
-                        <!-- Report card (Top Countries) -->
                         <DurationTimeStats v-bind:data="times"/>
-                        <!-- Doughnut chart (Sessions By Device) -->
                         <KpiStats v-bind:data="kpis"/>
-                        <!-- Doughnut chart (Visit By Age Category) -->
                         <UsedBrowsersStats v-bind:appId="appId" v-bind:API_URL="API_URL"/>
-                        <!-- Polar chart (Sessions By Gender) -->
-                        <AnalyticsCard10/>
+                        <UsedDevicesStats v-bind:appId="appId" v-bind:API_URL="API_URL"/>
 
                     </div>
 
@@ -62,7 +57,7 @@ import Datepicker from '../components/Datepicker.vue'
 import VisitedPagesStats from '../partials/analytics/VisitedPagesStats.vue'
 import AnalyticsCard08 from '../partials/analytics/AnalyticsCard08.vue'
 import UsedBrowsersStats from '../partials/analytics/UsedBrowsersStats.vue'
-import AnalyticsCard10 from '../partials/analytics/AnalyticsCard10.vue'
+import UsedDevicesStats from '../partials/analytics/UsedDevicesStats.vue'
 import KpiStats from '../partials/analytics/KpiStats.vue'
 import DurationTimeStats from "@/partials/analytics/DurationTimeStats.vue";
 
@@ -79,7 +74,7 @@ export default {
         VisitedPagesStats,
         AnalyticsCard08,
         UsedBrowsersStats,
-        AnalyticsCard10,
+        UsedDevicesStats,
         KpiStats,
     },
     data() {
@@ -91,6 +86,7 @@ export default {
             API_URL: API_URL,
             kpis: null,
             browsers: null,
+            devices: null,
         }
     },
     setup() {
@@ -151,6 +147,16 @@ export default {
             });
             return await response.json();
         },
+        async getAllDevices() {
+            const response = await fetch(`${API_URL}/device`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "App-Id": appId,
+                },
+                method: 'GET',
+            });
+            return await response.json();
+        },
     },
     async created() {
         this.topPagesVisits = await this.getTotalVisits();
@@ -158,6 +164,7 @@ export default {
         this.times = await this.getTimePerPage();
         this.kpis = await this.getAllKpis();
         this.browsers = await this.getAllUsedBrowers();
+        this.devices = await this.getAllDevices();
         this.appId = appId;
         this.API_URL = API_URL;
     }

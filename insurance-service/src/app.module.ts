@@ -12,7 +12,7 @@ dotenv.config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGODB_URI),
+    MongooseModule.forRoot('mongodb://mongodb:27017/nestjs-mongodb'),
     InsuranceModule,
     BeneficiaryModule,
   ],

@@ -8,6 +8,7 @@ import {VisitorModule} from "./visitor/visitor.module";
 import {TimeModule} from "./time/time.module";
 import {BrowserModule} from "./browser/browser.module";
 import {DeviceModule} from "./device/device.module";
+import {TagModule} from "./tag/tag.module";
 
 @Module({
     imports: [
@@ -17,7 +18,8 @@ import {DeviceModule} from "./device/device.module";
         VisitorModule,
         TimeModule,
         BrowserModule,
-        DeviceModule
+        DeviceModule,
+        TagModule
     ],
     controllers: [AppController],
     providers: [AppService],

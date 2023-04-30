@@ -51,14 +51,14 @@
 
 <script>
 import {ref} from 'vue'
-import Sidebar from '../partials/Sidebar.vue'
-import Header from '../partials/Header.vue'
-import Datepicker from '../components/Datepicker.vue'
-import VisitedPagesStats from '../partials/analytics/VisitedPagesStats.vue'
-import AnalyticsCard08 from '../partials/analytics/AnalyticsCard08.vue'
-import UsedBrowsersStats from '../partials/analytics/UsedBrowsersStats.vue'
-import UsedDevicesStats from '../partials/analytics/UsedDevicesStats.vue'
-import KpiStats from '../partials/analytics/KpiStats.vue'
+import Sidebar from '../../partials/Sidebar.vue'
+import Header from '../../partials/Header.vue'
+import Datepicker from '../../components/Datepicker.vue'
+import VisitedPagesStats from '../../partials/analytics/VisitedPagesStats.vue'
+import AnalyticsCard08 from '../../partials/analytics/AnalyticsCard08.vue'
+import UsedBrowsersStats from '../../partials/analytics/UsedBrowsersStats.vue'
+import UsedDevicesStats from '../../partials/analytics/UsedDevicesStats.vue'
+import KpiStats from '../../partials/analytics/KpiStats.vue'
 import DurationTimeStats from "@/partials/analytics/DurationTimeStats.vue";
 
 const appId = 'TEST_APP_ID';

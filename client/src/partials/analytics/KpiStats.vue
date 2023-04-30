@@ -75,7 +75,7 @@ export default {
             const year = date.getFullYear();
             const hour = date.getHours();
             const minute = date.getMinutes();
-            return `${day}/${month}/${year} à ${hour}:${minute}`;
+            return `${day}/${month}/${year} at ${hour}:${minute}`;
         }
     }
 }

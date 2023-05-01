@@ -60,6 +60,9 @@
                                             </div>
                                         </div>
                                     </form>
+                                    <router-link to="/analytics/dashboard">
+                                        <button class="btn bg-indigo-500 text-white" style="margin-top: 30px">Go back</button>
+                                    </router-link>
                                 </div>
                             </div>
                         </div>
@@ -78,9 +81,25 @@
 
 <script>
 const API_URL = 'http://localhost:3000';
-const appId = 'TEST_APP_ID';
+const appId = localStorage.getItem("appId") || getCookie("appId");
+
+function getCookie(name) {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(`${name}=`)) {
+            return cookie.substring(name.length + 1);
+        }
+    }
+    return null;
+}
+
 export default {
     data() {
+        if (!localStorage.getItem("kpiJwtToken") && !getCookie("kpiJwtToken")) {
+            this.$router.push("/analytics/login");
+        }
+
         return {
             label: '',
             appId: appId,
@@ -100,7 +119,6 @@ export default {
                 }),
             });
             if (response.ok) {
-                console.log('Tag created!');
                 this.successMsg = 'Tag created!';
                 this.label = "";
             } else {

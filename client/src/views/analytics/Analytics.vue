@@ -61,8 +61,19 @@ import UsedDevicesStats from '../../partials/analytics/UsedDevicesStats.vue'
 import KpiStats from '../../partials/analytics/KpiStats.vue'
 import DurationTimeStats from "@/partials/analytics/DurationTimeStats.vue";
 
-const appId = 'TEST_APP_ID';
+const appId = localStorage.getItem("appId") || getCookie("appId");
 const API_URL = 'http://localhost:3000';
+
+function getCookie(name) {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(`${name}=`)) {
+            return cookie.substring(name.length + 1);
+        }
+    }
+    return null;
+}
 
 export default {
     name: 'Analytics',
@@ -157,6 +168,11 @@ export default {
             });
             return await response.json();
         },
+    },
+    beforeCreate () {
+        if (!localStorage.getItem("kpiJwtToken") && !getCookie("kpiJwtToken")) {
+            this.$router.push("/analytics/login");
+        }
     },
     async created() {
         this.topPagesVisits = await this.getTotalVisits();

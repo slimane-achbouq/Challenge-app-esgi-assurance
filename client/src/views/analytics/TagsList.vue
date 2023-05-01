@@ -16,7 +16,7 @@
                             <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">My tags ✨</h1>
                         </div>
                         <div>
-                            <router-link to="/analytics/new-tag">
+                            <router-link to="/analytics/create-tag">
                                 <button class="btn bg-indigo-500 text-white" style="margin-top: 30px">Create a new tag</button>
                             </router-link>
                         </div>
@@ -68,7 +68,19 @@ import Sidebar from '@/partials/Sidebar.vue'
 import ModalBasic from '@/components/Modal.vue'
 
 // let id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
-const appId = "TEST_APP_ID";
+const appId = localStorage.getItem("appId") || getCookie("appId");
+
+function getCookie(name) {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(`${name}=`)) {
+            return cookie.substring(name.length + 1);
+        }
+    }
+    return null;
+}
+
 export default {
     name: 'TagsList',
     components: {
@@ -77,6 +89,10 @@ export default {
         Sidebar
     },
     data() {
+        if (!localStorage.getItem("kpiJwtToken") && !getCookie("kpiJwtToken")) {
+            this.$router.push("/analytics/login");
+        }
+
         return {
             tags: null,
             appId: appId
@@ -115,7 +131,6 @@ export default {
         });
 
         let res = await response.json();
-        console.log(res)
         this.tags = res;
     }
 }

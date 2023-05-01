@@ -9,6 +9,9 @@ import {TimeModule} from "./time/time.module";
 import {BrowserModule} from "./browser/browser.module";
 import {DeviceModule} from "./device/device.module";
 import {TagModule} from "./tag/tag.module";
+import {AppidModule} from "./appid/appid.module";
+import {UserModule} from "./user/user.module";
+import {AuthModule} from "./user/auth.module";
 
 @Module({
     imports: [
@@ -19,7 +22,10 @@ import {TagModule} from "./tag/tag.module";
         TimeModule,
         BrowserModule,
         DeviceModule,
-        TagModule
+        TagModule,
+        AppidModule,
+        UserModule,
+        AuthModule
     ],
     controllers: [AppController],
     providers: [AppService],

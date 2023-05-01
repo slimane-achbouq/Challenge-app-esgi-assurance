@@ -2,6 +2,9 @@
     <div class="bg-gray-100 min-h-screen flex items-center justify-center">
         <div class="bg-white p-10 rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold mb-5">Create a new Analytics account</h2>
+            <div :class="show + ' bg-' + statusClass + '-500'">
+                <p class="p-3 mb-3">{{ statusMsg }}</p>
+            </div>
             <form @submit.prevent="submitForm">
                 <div class="mb-4">
                     <label for="username" class="block text-gray-700 font-semibold mb-2">Username</label>
@@ -55,7 +58,9 @@ export default {
             username: '',
             email: '',
             password: '',
-            error: '',
+            statusMsg: '',
+            statusClass: '',
+            show: 'hidden',
         }
     },
     methods: {
@@ -89,10 +94,27 @@ export default {
                         }),
                     });
 
-                    this.$router.push('/analytics/login')
+                    this.statusMsg = 'Account created successfully! You can now login.';
+                    this.statusClass = 'emerald';
+                    this.show = 'block';
+                    this.username = '';
+                    this.email = '';
+                    this.password = '';
+                }
+                else {
+                    this.statusClass = 'red';
+                    this.show = 'block';
+                    const zodErr = await res.json();
+                    if (zodErr.error) {
+                        this.statusMsg = zodErr.error.issues[0].message;
+                    }
+                    else {
+                        this.statusMsg = zodErr.message;
+                    }
+                    console.log(zodErr.error.issues[0].message)
                 }
             } catch (error) {
-                this.error = error.response.data.message || 'Une erreur est survenue.'
+                this.statusMsg = "There is an error. Please check your information";
             }
         },
     },

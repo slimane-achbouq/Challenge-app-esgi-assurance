@@ -61,9 +61,6 @@ import UsedDevicesStats from '../../partials/analytics/UsedDevicesStats.vue'
 import KpiStats from '../../partials/analytics/KpiStats.vue'
 import DurationTimeStats from "@/partials/analytics/DurationTimeStats.vue";
 
-const appId = localStorage.getItem("appId") || getCookie("appId");
-const API_URL = 'http://localhost:3000';
-
 function getCookie(name) {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
@@ -93,8 +90,8 @@ export default {
             topPagesVisits: null,
             visitors: null,
             times: null,
-            appId: appId,
-            API_URL: API_URL,
+            appId: '',
+            API_URL: '',
             kpis: null,
             browsers: null,
             devices: null,
@@ -109,60 +106,60 @@ export default {
     },
     methods: {
         async getTotalVisits() {
-            const response = await fetch(`${API_URL}/visit`, {
+            const response = await fetch(`${this.API_URL}/visit`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "App-Id": appId,
+                    "App-Id": this.appId,
                 },
                 method: 'GET',
             });
             return await response.json();
         },
         async getTotalUniqueVisitors() {
-            const response = await fetch(`${API_URL}/visitor`, {
+            const response = await fetch(`${this.API_URL}/visitor`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "App-Id": appId,
+                    "App-Id": this.appId,
                 },
                 method: 'GET',
             });
             return await response.json();
         },
         async getTimePerPage() {
-            const response = await fetch(`${API_URL}/time`, {
+            const response = await fetch(`${this.API_URL}/time`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "App-Id": appId,
+                    "App-Id": this.appId,
                 },
                 method: 'GET',
             });
             return await response.json();
         },
         async getAllKpis() {
-            const response = await fetch(`${API_URL}/kpi`, {
+            const response = await fetch(`${this.API_URL}/kpi`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "App-Id": appId,
+                    "App-Id": this.appId,
                 },
                 method: 'GET',
             });
             return await response.json();
         },
         async getAllUsedBrowers() {
-            const response = await fetch(`${API_URL}/browser`, {
+            const response = await fetch(`${this.API_URL}/browser`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "App-Id": appId,
+                    "App-Id": this.appId,
                 },
                 method: 'GET',
             });
             return await response.json();
         },
         async getAllDevices() {
-            const response = await fetch(`${API_URL}/device`, {
+            const response = await fetch(`${this.API_URL}/device`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    "App-Id": appId,
+                    "App-Id": this.appId,
                 },
                 method: 'GET',
             });
@@ -175,14 +172,15 @@ export default {
         }
     },
     async created() {
+        this.appId = localStorage.getItem("appId") || getCookie("appId");
+        this.API_URL = 'http://localhost:3000';
+
         this.topPagesVisits = await this.getTotalVisits();
         this.visitors = await this.getTotalUniqueVisitors();
         this.times = await this.getTimePerPage();
         this.kpis = await this.getAllKpis();
         this.browsers = await this.getAllUsedBrowers();
         this.devices = await this.getAllDevices();
-        this.appId = appId;
-        this.API_URL = API_URL;
     }
 }
 </script>

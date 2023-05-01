@@ -1,7 +1,8 @@
-import {Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Get, Request} from '@nestjs/common';
+import {Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Get, Request, UsePipes} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {CreateUserDto} from "./user.dto";
 import {AuthGuard} from "./auth.guard";
+import {CreateUserValidationPipe} from "./user.pipe";
 
 @Controller('kpiAuth')
 export class AuthController {
@@ -13,6 +14,7 @@ export class AuthController {
         return this.authService.signIn(signInDto.email, signInDto.password);
     }
 
+    @UsePipes(new CreateUserValidationPipe)
     @HttpCode(HttpStatus.OK)
     @Post('register')
     async register(@Body() createUserDto: CreateUserDto) {

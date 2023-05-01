@@ -20,9 +20,11 @@
                     </div>
 
                     <div class="border-t border-slate-200">
-
+                        <div :class="show + ' bg-' + statusClass + '-500'">
+                            <p class="p-3 mb-3">{{ statusMsg }}</p>
+                        </div>
                         <div>
-                            <div class="md:grid md:grid-cols-4 md:gap-3">
+                            <div class="md:grid md:grid-cols-4 md:gap-3 md:mt-10">
                                 <div class="md:col-span-1">
                                     <div class="px-4 sm:px-0">
                                         <br>
@@ -43,17 +45,18 @@
                                                         <span class="text-rose-500">*</span></label>
                                                     <input id="mandatory" class="form-input w-full" type="text"
                                                            v-model.trim="label" required/>
+                                                    <small>The tag must contains at minimum 3 characters</small>
                                                 </div>
 
 
                                             </div>
                                             <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                                                <button type="submit" v-if="label"
+                                                <button type="submit" v-if="label && label.length > 2"
                                                         class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
 
                                                     Submit
                                                 </button>
-                                                <button type="submit" disabled v-if="!label"
+                                                <button type="submit" disabled v-if="!label || label.length < 3"
                                                         class="px-3 py-2 text-white bg-gray-300 rounded focus:outline-none">
                                                     Submit
                                                 </button>
@@ -61,7 +64,8 @@
                                         </div>
                                     </form>
                                     <router-link to="/analytics/dashboard">
-                                        <button class="btn bg-indigo-500 text-white" style="margin-top: 30px">Go back</button>
+                                        <button class="btn bg-indigo-500 text-white" style="margin-top: 30px">Go back
+                                        </button>
                                     </router-link>
                                 </div>
                             </div>
@@ -80,9 +84,6 @@
 </template>
 
 <script>
-const API_URL = 'http://localhost:3000';
-const appId = localStorage.getItem("appId") || getCookie("appId");
-
 function getCookie(name) {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
@@ -95,6 +96,10 @@ function getCookie(name) {
 }
 
 export default {
+    created() {
+        this.appId = localStorage.getItem("appId") || getCookie("appId");
+        this.API_URL = 'http://localhost:3000';
+    },
     data() {
         if (!localStorage.getItem("kpiJwtToken") && !getCookie("kpiJwtToken")) {
             this.$router.push("/analytics/login");
@@ -102,13 +107,16 @@ export default {
 
         return {
             label: '',
-            appId: appId,
-            successMsg: '',
+            appId: '',
+            API_URL: '',
+            statusMsg: '',
+            statusClass: '',
+            show: 'hidden',
         }
     },
     methods: {
         async handleSubmit() {
-            const response = await fetch(`${API_URL}/tag`, {
+            const response = await fetch(`${this.API_URL}/tag`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -119,11 +127,20 @@ export default {
                 }),
             });
             if (response.ok) {
-                this.successMsg = 'Tag created!';
+                this.statusMsg = 'The tag "' + this.label + '" has been created successfully !';
+                this.statusClass = 'emerald';
+                this.show = 'block';
                 this.label = "";
             } else {
-                console.error('Error creating tag:', response.statusText);
-                this.successMsg = 'Error creating tag!';
+                this.statusClass = 'red';
+                this.show = 'block';
+                const zodErr = await res.json();
+                if (zodErr.error) {
+                    this.statusMsg = zodErr.error.issues[0].message;
+                }
+                else {
+                    this.statusMsg = zodErr.message;
+                }
             }
         },
     },

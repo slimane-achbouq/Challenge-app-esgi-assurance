@@ -3,6 +3,9 @@
         <div class="bg-white p-10 rounded-lg shadow-md">
             <form @submit.prevent="login">
                 <h1 class="text-2xl mb-4 font-medium">Sign in page</h1>
+                <div :class="show + ' bg-' + statusClass + '-500'">
+                    <p class="p-3 mb-3">{{ statusMsg }}</p>
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="email">
                         Email
@@ -46,8 +49,8 @@
                 <hr class="mt-6">
                 <div class="mt-4">
                     <router-link
-                        to="/"
-                        class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                            to="/"
+                            class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
                     >
                         Go to insurance site
                     </router-link>
@@ -63,7 +66,10 @@ export default {
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            statusMsg: '',
+            statusClass: '',
+            show: 'hidden',
         }
     },
     methods: {
@@ -105,9 +111,19 @@ export default {
 
                     await this.$store.dispatch('auth/kpiLogin', actionPayload);
                     this.$router.push('/analytics/dashboard')
+                } else {
+                    this.statusClass = 'red';
+                    this.show = 'block';
+                    const zodErr = await res.json();
+                    if (zodErr.error) {
+                        this.statusMsg = zodErr.error.issues[0].message;
+                    } else {
+                        this.statusMsg = zodErr.message;
+                    }
+                    console.log(zodErr.error.issues[0].message)
                 }
             } catch (error) {
-                this.error = error || 'Une erreur est survenue.'
+                this.statusMsg = "There is an error. Please check your information";
             }
         }
     }

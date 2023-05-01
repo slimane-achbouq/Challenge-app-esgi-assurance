@@ -6,7 +6,7 @@ export class Tag extends Document {
     @Prop({required: true})
     app_id: string;
 
-    @Prop({required: true})
+    @Prop({required: true, min: 3, max: 20})
     label: string;
 
     @Prop({required: false})

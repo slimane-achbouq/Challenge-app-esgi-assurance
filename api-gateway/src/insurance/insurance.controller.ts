@@ -50,7 +50,7 @@ export class InsuranceController {
       return this.insuranceServiceClient.send({ cmd: 'getBeneficiaries' }, '');
     }
 
-    @Post('beneficiary')
+  @Post('beneficiary')
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'justificatifDomicile', maxCount: 1 },
     { name: 'permis', maxCount: 1 },
@@ -68,29 +68,27 @@ export class InsuranceController {
       .toPromise();
   }
 
-    @Put('beneficiary/:id')
-    @UseInterceptors(FileInterceptor('justificatifDomicile'), FileInterceptor('permis'))
-    async updateBeneficiary(
-      @Param('id') id: string,
-      @Body() beneficiaryDto: any,
-      @UploadedFile() justificatifDomicile: Express.Multer.File,
-      @UploadedFile() permis: Express.Multer.File,
-    ) {
-      const fileContents = {
-        justificatifDomicile: justificatifDomicile
-          ? justificatifDomicile.buffer.toString('base64')
-          : null,
-        permis: permis ? permis.buffer.toString('base64') : null,
-      };
-      return this.insuranceServiceClient
-        .send({ cmd: 'updateBeneficiary' }, { id, beneficiaryDto, fileContents })
-        .toPromise();
-    }
-
-    @Delete('beneficiary/:id')
-    deleteBeneficiary(@Param('id') id: string): Observable<any> {
-      return this.insuranceServiceClient.send({ cmd: 'deleteBeneficiary' }, id);
-    }
+  @Put('beneficiary/:id')
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'justificatifDomicile', maxCount: 1 },
+    { name: 'permis', maxCount: 1 },
+  ]))
+  async updateBeneficiary(
+    @Param('id') id: string,
+    @Body() beneficiaryDto: any,
+    @UploadedFiles() files: { justificatifDomicile: Express.Multer.File[], permis: Express.Multer.File[] }
+  ) {
+    const fileContents = {
+      justificatifDomicile: files.justificatifDomicile && files.justificatifDomicile[0]
+        ? files.justificatifDomicile[0].buffer.toString('base64')
+        : null,
+      permis: files.permis && files.permis[0] ? files.permis[0].buffer.toString('base64') : null,
+    };
+    return this.insuranceServiceClient
+      .send({ cmd: 'updateBeneficiary' }, { id, beneficiaryDto, fileContents })
+      .toPromise();
+  }
+  
 
 
 

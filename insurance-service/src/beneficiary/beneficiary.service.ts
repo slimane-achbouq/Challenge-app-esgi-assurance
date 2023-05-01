@@ -49,23 +49,40 @@ export class BeneficiaryService {
     fileContents: { justificatifDomicile: string; permis: string },
   ): Promise<Beneficiary> {
     const { justificatifDomicile, permis } = fileContents;
-
-    // Save the files and get their paths
-    const justificatifDomicilePath = justificatifDomicile
-      ? this.saveFile(justificatifDomicile, 'justificatif-domicile')
-      : null;
-    const permisPath = permis ? this.saveFile(permis, 'permis') : null;
-
+    const beneficiary = await this.beneficiaryModel.findById(id).exec();
+  
+    let updatedJustificatifDomicilePath: string | null = null;
+    let updatedPermisPath: string | null = null;
+  
+    if (justificatifDomicile) {
+      if (beneficiary.justificatifDomicile) {
+        fs.unlinkSync(beneficiary.justificatifDomicile); // Delete the old file
+      }
+      updatedJustificatifDomicilePath = await this.saveFile(justificatifDomicile, 'justificatif-domicile');
+    } else {
+      updatedJustificatifDomicilePath = beneficiary.justificatifDomicile;
+    }
+  
+    if (permis) {
+      if (beneficiary.permis) {
+        fs.unlinkSync(beneficiary.permis); // Delete the old file
+      }
+      updatedPermisPath = await this.saveFile(permis, 'permis');
+    } else {
+      updatedPermisPath = beneficiary.permis;
+    }
+  
     const updatedBeneficiaryDto = {
       ...beneficiaryDto,
-      justificatifDomicile: justificatifDomicilePath,
-      permis: permisPath,
+      justificatifDomicile: updatedJustificatifDomicilePath,
+      permis: updatedPermisPath,
     };
-
+  
     return this.beneficiaryModel
       .findByIdAndUpdate(id, updatedBeneficiaryDto, { new: true })
       .exec();
   }
+  
 
   async deleteBeneficiary(id: string): Promise<Beneficiary> {
     return this.beneficiaryModel.findByIdAndDelete(id).exec();

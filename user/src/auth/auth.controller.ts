@@ -23,47 +23,53 @@ import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { User } from 'src/users/schemas/user.schema';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@ApiTags('Auth')
+// @ApiTags('Auth')
 @Controller({
   path: 'auth',
 })
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @ApiOkResponse({
-    description: 'Add new user',
-    type: CreateUserDto,
-  })
-  @ApiBody({
-    description: 'Add new user',
-    required: true,
-    type: CreateUserDto,
-  })
-  @HttpCode(HttpStatus.OK)
-  @Post('signup')
+  // @ApiOkResponse({
+  //   description: 'Add new user',
+  //   type: CreateUserDto,
+  // })
+  // @ApiBody({
+  //   description: 'Add new user',
+  //   required: true,
+  //   type: CreateUserDto,
+  // })
+  // @HttpCode(HttpStatus.OK)
+  // @Post('signup')
+  @MessagePattern({ cmd: 'singUp' })
   signup(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
   }
 
-  @Post('signin')
+  // @Post('signin')
+  @MessagePattern({ cmd: 'singIn' })
   signin(@Body() data: AuthDto) {
     return this.authService.signIn(data);
   }
 
+  @MessagePattern({ cmd: 'verifyUser' })
   @Post('verifyUser')
   verify(@Body() verifyDto: VerifyDto) {
     return this.authService.verifyProfile(verifyDto);
   }
 
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
+  @MessagePattern({ cmd: 'logout' })
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {
     this.authService.logout(req.user['sub']);
   }
 
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
+  @MessagePattern({ cmd: 'refresh' })
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
@@ -72,3 +78,5 @@ export class AuthController {
     return this.authService.refreshTokens(userId, refreshToken);
   }
 }
+
+

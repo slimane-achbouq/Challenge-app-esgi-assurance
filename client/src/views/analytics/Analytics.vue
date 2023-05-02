@@ -12,6 +12,18 @@
 
             <main>
                 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+                    <div :class="show + ' bg-emerald-500'">
+                        <p class="p-3 mb-3">
+                             Get started with our analytics tool :
+                            <router-link
+                                to="/analytics/getting-started"
+                                class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                            >
+                                Full guide
+                            </router-link>
+                            <button class="float-right" @click="handleCloseStatus">X</button>
+                        </p>
+                    </div>
 
                     <!-- Page header -->
                     <div class="sm:flex sm:justify-between sm:items-center mb-8">
@@ -95,6 +107,7 @@ export default {
             kpis: null,
             browsers: null,
             devices: null,
+            show: 'block',
         }
     },
     setup() {
@@ -105,6 +118,9 @@ export default {
         }
     },
     methods: {
+        handleCloseStatus() {
+            this.show = 'hidden';
+        },
         async getTotalVisits() {
             const response = await fetch(`${this.API_URL}/visit`, {
                 headers: {

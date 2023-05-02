@@ -8,6 +8,7 @@ import TagsList from "@/views/analytics/TagsList.vue";
 import AnalyticsRegister from "@/views/analytics/AnalyticsRegister.vue";
 import AnalyticsLogin from "@/views/analytics/AnalyticsLogin.vue";
 import AnalyticsLogout from "@/components/logout/AnalyticsLogout.vue";
+import GettingStarted from "@/views/analytics/GettingStarted.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -21,6 +22,7 @@ const router = createRouter({
       { path: '/analytics/register', name: 'analytics_register', component: AnalyticsRegister, meta: { requiresUnauth: false } },
       { path: '/analytics/login', name: 'analytics_login', component: AnalyticsLogin, meta: { requiresUnauth: false } },
       { path: '/analytics/logout', name: 'analytics_logout', component: AnalyticsLogout, meta: { requiresUnauth: false } },
+      { path: '/analytics/getting-started', name: 'analytics_getting_started', component: GettingStarted, meta: { requiresUnauth: false } },
     ]
   })
 

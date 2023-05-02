@@ -124,6 +124,8 @@ export default {
                 }
             } catch (error) {
                 this.statusMsg = "There is an error. Please check your information";
+                this.statusClass = "red";
+                this.show = 'block';
             }
         }
     }

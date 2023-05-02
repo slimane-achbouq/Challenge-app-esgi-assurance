@@ -9,7 +9,8 @@ import {Appid, AppidSchema} from "../schemas/appid.schema";
         MongooseModule.forFeature([{name: Appid.name, schema: AppidSchema}]),
     ],
     providers: [AppidService],
-    controllers: [AppidController]
+    controllers: [AppidController],
+    exports: [AppidService]
 })
 export class AppidModule {
 }

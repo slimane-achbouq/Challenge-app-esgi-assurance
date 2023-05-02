@@ -1,6 +1,9 @@
-import {Body, Controller, Get, Headers, HttpCode, Post} from '@nestjs/common';
+import {BadRequestException, Body, Controller, Get, Headers, HttpCode, NotFoundException, Post} from '@nestjs/common';
 import {KpiService} from "./kpi.service";
 import {Kpi} from "../schemas/kpi.schema";
+import {InjectModel} from "@nestjs/mongoose";
+import {Tag} from "../schemas/tag.schema";
+import {Model} from "mongoose";
 
 @Controller("kpi")
 export class KpiController {

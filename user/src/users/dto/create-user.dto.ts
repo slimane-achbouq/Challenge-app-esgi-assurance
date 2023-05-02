@@ -1,11 +1,17 @@
 import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 import {
+  IsDate,
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsPhoneNumber,
   IsString,
+  MaxDate,
   MinLength,
 } from 'class-validator';
+import { Statut } from '../enums/statut.enum';
+import { Role } from '../enums/roles.enum';
+import { Transform } from 'class-transformer';
 
 export const apiPropertiesUser: {
   [P in keyof Partial<CreateUserDto>]: ApiPropertyOptions;
@@ -58,9 +64,15 @@ export const apiPropertiesUser: {
   },
   age: {
     required: true,
-    format: 'number',
-    example: '19',
+    format: 'Date',
+    example: '2000-05-02T22:28:07.468Z',
     description: 'User age',
+  },
+  phoneNumber: {
+    required: true,
+    format: 'number',
+    example: '+33749380088',
+    description: 'User phone number',
   },
 };
 
@@ -81,11 +93,6 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty(apiPropertiesUser.password)
-  @IsNotEmpty()
-  @MinLength(8)
-  password: string;
-
   @ApiProperty(apiPropertiesUser.adresse)
   @IsString()
   @IsNotEmpty()
@@ -101,9 +108,21 @@ export class CreateUserDto {
   @IsNotEmpty()
   codeCity: number;
 
-  @ApiProperty(apiPropertiesUser.age)
-  @IsNumber()
+
+  @ApiProperty(apiPropertiesUser.phoneNumber)
+  @IsPhoneNumber()
   @IsNotEmpty()
+  phoneNumber: number;
+
+  @ApiProperty(apiPropertiesUser.password)
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
+
+  @ApiProperty(apiPropertiesUser.age)
+  @Transform( ({ value }) => new Date(value))
+  @IsDate()
+  @MaxDate(new Date())
   age: number;
 
   isValide: boolean;
@@ -111,4 +130,13 @@ export class CreateUserDto {
   validationToken: string;
 
   refreshToken: string;
+
+  accessToken: string;
+
+  statut: Statut;
+
+  role: Role;
 }
+
+// To protect routes 
+// export type CreateUser = Omit<CreateUserDto, "statut" | ....>

@@ -33,12 +33,12 @@ export class AuthController {
 
   @ApiOkResponse({
     description: 'Add new user',
-    type: User,
+    type: CreateUserDto,
   })
   @ApiBody({
     description: 'Add new user',
     required: true,
-    type: User,
+    type: CreateUserDto,
   })
   @HttpCode(HttpStatus.OK)
   @Post('signup')

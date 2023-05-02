@@ -7,9 +7,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) readonly userModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = await this.findByUserByEmail(createUserDto.email);
+
+    if(user) {
+      throw new BadRequestException('You have an a compte in our database !');
+    }
+
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
@@ -18,7 +24,7 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<User | undefined> {
     const user: User = await this.userModel.findById(id);
 
     if (!user.isValide)

@@ -5,7 +5,7 @@
         </header>
         <!-- Chart built with Chart.js 3 -->
         <!-- Change the height attribute to adjust the chart height -->
-        <DoughnutChart :data="chartData" width="389" height="260"/>
+        <DoughnutChart v-if="chartData" :data="chartData" width="389" height="260"/>
     </div>
 </template>
 
@@ -37,10 +37,13 @@ export default {
                 },
                 method: 'GET',
             });
-            return await response.json();
+
+            this.browsers = await response.json();
         },
     },
     async created() {
+        await this.getAllUsedBrowers();
+
         const chartData = ref({
             labels: ['0'],
             datasets: [
@@ -67,7 +70,6 @@ export default {
         })
 
         this.chartData = chartData;
-        this.browsers = await this.getAllUsedBrowers();
         let counter = 0;
 
         for (let browser of this.browsers) {

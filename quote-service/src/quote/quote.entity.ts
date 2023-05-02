@@ -55,6 +55,9 @@ export class Quote {
   @Column()
   userId: string;
 
+  @Column({ nullable: true })
+  insuranceId: string;
+
   @OneToOne(() => Vehicle, (vehicle) => vehicle.quote, {
     onDelete: 'CASCADE',
     nullable: false,

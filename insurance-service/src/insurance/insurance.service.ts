@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Insurance } from './insurance.schema';
 import { Beneficiary } from '../beneficiary/beneficiary.schema';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class InsuranceService {
   constructor(
     @InjectModel(Insurance.name) private insuranceModel: Model<Insurance>,
     @InjectModel(Beneficiary.name) private beneficiaryModel: Model<Beneficiary>,
+    @Inject('QUOTE_SERVICE') private readonly quoteServiceClient: ClientProxy
     
   ) {}
 
@@ -34,7 +36,26 @@ export class InsuranceService {
   }
 
   async updateInsurance(id: string, insuranceDto: any): Promise<Insurance> {
-    return this.insuranceModel.findByIdAndUpdate(id, insuranceDto, { new: true }).exec();
+    let  insurance = await this.insuranceModel.findById(id).exec();
+    const updateDinsurance = this.insuranceModel.findByIdAndUpdate(id, insuranceDto, { new: true }).exec();
+
+      
+    const quoteDto = {};
+    if (insuranceDto['insuranceType'] && insurance['insuranceType'] !== insuranceDto['insuranceType']) {
+      quoteDto['insuranceType'] = insuranceDto['insuranceType'];
+    }
+
+    if (insuranceDto['insurancePremium'] && insurance['insurancePremium'] !== insuranceDto['insurancePremium'] ) {
+      quoteDto['insurancePremium'] = insuranceDto['insurancePremium'];
+    }
+
+    
+    const quoteId = insurance['quoteId']
+    console.log(quoteDto)
+    console.log(quoteId)
+    this.quoteServiceClient.send({ cmd: 'updateQuote' }, { id:quoteId, quoteDto }).toPromise();
+    return updateDinsurance;
+
   }
 
   async deleteInsurance(id: string): Promise<Insurance> {

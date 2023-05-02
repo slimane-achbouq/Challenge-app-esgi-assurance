@@ -35,6 +35,10 @@ export class Insurance extends Document {
 
   @Prop({ required: true })
   vehicleId: string;
+
+  @Prop({ required: true, type: String })
+  quoteId: string;
+
 }
 
 export const InsuranceSchema = SchemaFactory.createForClass(Insurance);

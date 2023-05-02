@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Inject } from '@nestjs/common';
 import { InsuranceService } from './insurance.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('insurance')
 export class InsuranceController {
@@ -23,8 +23,13 @@ export class InsuranceController {
   }
   
   @MessagePattern({ cmd: 'updateInsurance' })
-  async updateInsurance(@Payload() data: { id: string; insuranceDto: any }) {
-    return this.insuranceService.updateInsurance(data.id, data.insuranceDto);
+  async updateInsurance(@Payload() data: any) {
+
+
+    const { id } = data;
+    const { id: _, ...insuranceDto } = data;
+
+    return this.insuranceService.updateInsurance(id, insuranceDto);
   }
 
   @MessagePattern({ cmd: 'deleteInsurance' })

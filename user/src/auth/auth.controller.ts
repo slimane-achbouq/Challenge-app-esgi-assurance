@@ -43,15 +43,15 @@ export class AuthController {
   // })
   // @HttpCode(HttpStatus.OK)
   // @Post('signup')
-  @MessagePattern({ cmd: 'singUp' })
-  signup(@Body() createUserDto: CreateUserDto) {
+  @MessagePattern({ cmd: 'singupCommande' })
+  signup(@Payload() createUserDto: CreateUserDto): Promise<any> {
     return this.authService.signUp(createUserDto);
   }
 
   // @Post('signin')
   @MessagePattern({ cmd: 'singIn' })
-  signin(@Body() data: AuthDto) {
-    return this.authService.signIn(data);
+  async signin(@Payload() data: AuthDto) {
+    return await this.authService.signIn(data);
   }
 
   @MessagePattern({ cmd: 'verifyUser' })

@@ -31,28 +31,28 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   signup(@Body() createUserDto: any) {
-    return this.userServiceClient.send({ cmd: 'singUp' }, createUserDto)
-      .toPromise;
+    return this.userServiceClient.send({ cmd: 'singupCommande' }, createUserDto)
+      .toPromise();
   }
 
   @Post('signin')
   signin(@Body() data: any) {
-    return this.userServiceClient.send({ cmd: 'singIn' }, data).toPromise;
+    return this.userServiceClient.send({ cmd: 'singIn' }, data).toPromise();
   }
 
   @Post('verifyUser')
   verify(@Body() verifyDto: any) {
     return this.userServiceClient.send({ cmd: 'verifyUser' }, verifyDto)
-      .toPromise;
+      .toPromise();
   }
 
   @Get('logout')
   logout(@Req() req: Request) {
-    return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise;
+    return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
 
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
-    return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise;
+    return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
 }

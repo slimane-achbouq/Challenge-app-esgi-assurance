@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  db:
+  mongodb:
     image: mongo:latest
     env_file:
       - .env
@@ -16,6 +16,7 @@ services:
     build: .
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - 3004:3004
     depends_on:

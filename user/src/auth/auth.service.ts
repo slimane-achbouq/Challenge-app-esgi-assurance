@@ -36,10 +36,12 @@ export class AuthService {
     const newUser = await this.usersService.create({
       ...createUserDto,
       password: hash,
-      validationToken: validationToken,
+      validationToken: validationToken
     });
     const tokens = await this.getTokens(newUser._id, newUser.email);
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
+
+    const newUserUpdate = await this.usersService.update(newUser._id, { accessToken: tokens.accessToken })
     return tokens;
   }
 

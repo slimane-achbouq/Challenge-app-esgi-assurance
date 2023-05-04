@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
+import { UserController } from './user.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { InsuranceController } from './insurance.controller';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'INSURANCE_SERVICE',
+        name: 'USER_SERVICE',
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-          queue: 'insurance_service_queue',
+          queue: 'user_service_queue',
           queueOptions: { durable: false },
         },
       },
     ]),
   ],
-  controllers: [InsuranceController],
+  controllers: [UserController],
 })
-export class InsuranceModule {}
+export class UserModule {}

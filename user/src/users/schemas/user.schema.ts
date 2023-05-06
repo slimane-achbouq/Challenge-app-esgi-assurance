@@ -116,14 +116,8 @@ export class User extends Document {
   @Prop({ default: "" })
   validationToken: string;
 
-  @Prop({ default: "" })
-  accessToken: string;
-
-  @Prop({ default: "" })
-  refreshToken: string;
-
-  @Prop({ default: Role.USER })
-  role: Role;
+  @Prop({ default: [Role.USER ] })
+  roles: Role[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

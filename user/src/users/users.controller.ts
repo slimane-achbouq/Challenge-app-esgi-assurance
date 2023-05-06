@@ -17,6 +17,7 @@ import { Roles } from './roles.decorator';
 import { Role } from './enums/roles.enum';
 import { RolesGuard } from './roles.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { RabbitMQAccessTokenGuard } from 'src/common/guards/RabbitMQAccessTokenGuard';
 
 @ApiTags('user')
 @Controller({
@@ -32,7 +33,7 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(RabbitMQAccessTokenGuard)
   @MessagePattern({ cmd: 'getUsers' })
   findAll() {
     console.log(this.usersService.findAll())

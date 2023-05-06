@@ -20,6 +20,7 @@ import {
 import { Request } from 'express';
 
 
+
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
@@ -58,7 +59,9 @@ export class UserController {
   }
 
   @Get('getUsers')
-  getUsers(@Req() req: Request) {
-    return this.userServiceClient.send({ cmd: 'getUsers' }, req).toPromise();
+  getUsers(@Req() req) {
+    return this.userServiceClient
+      .send({ cmd: 'getUsers' }, { accessToken: req.headers.authorization })
+      .toPromise();
   }
 }

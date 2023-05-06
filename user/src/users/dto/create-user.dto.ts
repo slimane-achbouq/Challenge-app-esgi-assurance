@@ -129,13 +129,9 @@ export class CreateUserDto {
 
   validationToken: string;
 
-  refreshToken: string;
-
-  accessToken: string;
-
   statut: Statut;
 
-  role: Role;
+  roles: Role[];
 }
 
 // To protect routes 

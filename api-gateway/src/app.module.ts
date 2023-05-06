@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { InsuranceModule } from './insurance/insurance.module';
 import { QuoteModule } from './quote/quote.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [InsuranceModule, QuoteModule, UserModule],
+  imports: [InsuranceModule, QuoteModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

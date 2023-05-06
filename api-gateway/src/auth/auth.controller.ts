@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -54,5 +55,10 @@ export class UserController {
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
+  }
+
+  @Get('getUsers')
+  getUsers(@Req() req: Request) {
+    return this.userServiceClient.send({ cmd: 'getUsers' }, req).toPromise();
   }
 }

@@ -84,7 +84,7 @@ export class AuthService {
           username,
         },
         {
-          secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+          secret: 'JWT_ACCESS_SECRET',
           expiresIn: '15m',
         },
       ),
@@ -94,7 +94,7 @@ export class AuthService {
           username,
         },
         {
-          secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+          secret: 'JWT_ACCESS_SECRET',
           expiresIn: '7d',
         },
       ),
@@ -106,9 +106,9 @@ export class AuthService {
     };
   }
 
-  async verifyProfile(verifyProfileDto: VerifyDto) {
+  async verifyProfile(verifyProfileDto: any) {
     const user: User = await this.usersService.findByUserByEmail(
-      verifyProfileDto.email,
+      verifyProfileDto.username,
     );
 
     if (!user)

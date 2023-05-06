@@ -16,6 +16,7 @@ import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { Roles } from './roles.decorator';
 import { Role } from './enums/roles.enum';
 import { RolesGuard } from './roles.guard';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @ApiTags('user')
 @Controller({
@@ -31,15 +32,15 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard && RolesGuard)
-  @Roles(Role.ADMIN)
-  @Get()
+  @UseGuards(AccessTokenGuard)
+  @MessagePattern({ cmd: 'getUsers' })
   findAll() {
+    console.log(this.usersService.findAll())
     return this.usersService.findAll();
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard && RolesGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Get(':id')
   findById(@Param('id') id: string) {

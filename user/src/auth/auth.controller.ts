@@ -56,7 +56,7 @@ export class AuthController {
 
   @MessagePattern({ cmd: 'verifyUser' })
   @Post('verifyUser')
-  verify(@Body() verifyDto: VerifyDto) {
+  verify(@Payload() verifyDto: any) {
     return this.authService.verifyProfile(verifyDto);
   }
 

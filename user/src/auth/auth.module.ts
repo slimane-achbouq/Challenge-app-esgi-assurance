@@ -6,8 +6,13 @@ import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
 import { UsersModule } from 'src/users/users.module';
 import { ConfigService } from '@nestjs/config';
 
+
+
 @Module({
-  imports: [JwtModule.register({}), UsersModule],
+  imports: [JwtModule.register({
+    secret: process.env.JWT_ACCESS_SECRET,
+    signOptions: { expiresIn: '60s' },
+  }), UsersModule],
   controllers: [AuthController],
   providers: [
     AuthService,

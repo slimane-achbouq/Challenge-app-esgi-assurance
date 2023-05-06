@@ -13,11 +13,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
-import { Roles } from './roles.decorator';
 import { Role } from './enums/roles.enum';
-import { RolesGuard } from './roles.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RabbitMQAccessTokenGuard } from 'src/common/guards/RabbitMQAccessTokenGuard';
+import { Roles } from 'src/common/guards/roles.decorator';
 
 @ApiTags('user')
 @Controller({
@@ -27,22 +27,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @Roles(Role.ADMIN)
+  @Roles('Admin')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(RabbitMQAccessTokenGuard)
+  
+  @UseGuards(RolesGuard)
+  @Roles('Admin')
   @MessagePattern({ cmd: 'getUsers' })
   findAll() {
-    console.log(this.usersService.findAll())
     return this.usersService.findAll();
   }
 
   @ApiBearerAuth()
   @UseGuards(AccessTokenGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @Roles('Admin')
   @Get(':id')
   findById(@Param('id') id: string) {
     return this.usersService.findById(id);

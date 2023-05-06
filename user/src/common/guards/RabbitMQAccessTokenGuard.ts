@@ -28,6 +28,7 @@ export class RabbitMQAccessTokenGuard implements CanActivate {
 
     try {
       const decoded = this.jwtService.verify(token);
+      context.switchToHttp().getRequest().user = decoded;
       return !!decoded;
     } catch (e) {
       throw new RpcException('Unauthorized');

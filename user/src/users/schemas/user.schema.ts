@@ -118,6 +118,9 @@ export class User extends Document {
 
   @Prop({ default: [Role.USER ] })
   roles: Role[];
+
+  @Prop({ default: "" })
+  refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

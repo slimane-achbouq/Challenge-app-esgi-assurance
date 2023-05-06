@@ -127,7 +127,8 @@ export class CreateUserDto {
 
   isValide: boolean;
 
-  validationToken: string;
+
+  refreshToken: string;
 
   statut: Statut;
 

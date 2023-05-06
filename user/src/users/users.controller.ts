@@ -33,7 +33,7 @@ export class UsersController {
   }
 
   
-  @UseGuards(RolesGuard)
+  @UseGuards(RabbitMQAccessTokenGuard, RolesGuard)
   @Roles('Admin')
   @MessagePattern({ cmd: 'getUsers' })
   findAll() {

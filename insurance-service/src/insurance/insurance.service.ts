@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Insurance } from './insurance.schema';
 import { Beneficiary } from '../beneficiary/beneficiary.schema';
 import { ClientProxy } from '@nestjs/microservices';
+import { CreateInsuranceDto, UpdateInsuranceDto } from './insurance.dto';
 
 @Injectable()
 export class InsuranceService {
@@ -14,7 +15,7 @@ export class InsuranceService {
     
   ) {}
 
-  async createInsurance(insuranceDto: any): Promise<Insurance> {
+  async createInsurance(insuranceDto: CreateInsuranceDto): Promise<Insurance> {
     const beneficiary = await this.beneficiaryModel.findById(insuranceDto.beneficiary).exec();
     if (!beneficiary) {
       throw new NotFoundException('Beneficiary not found');
@@ -35,7 +36,7 @@ export class InsuranceService {
     return this.insuranceModel.findById(id).exec();
   }
 
-  async updateInsurance(id: string, insuranceDto: any): Promise<Insurance> {
+  async updateInsurance(id: string, insuranceDto: UpdateInsuranceDto): Promise<Insurance> {
     let  insurance = await this.insuranceModel.findById(id).exec();
     const updateDinsurance = this.insuranceModel.findByIdAndUpdate(id, insuranceDto, { new: true }).exec();
 

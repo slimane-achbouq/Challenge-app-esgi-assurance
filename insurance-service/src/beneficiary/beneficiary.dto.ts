@@ -1,5 +1,30 @@
-import { Beneficiary } from './beneficiary.schema';
+import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
 
-export type CreateBeneficiaryDto = Omit<Beneficiary, 'id' | '_id' | 'insurances'>;
+export class CreateBeneficiaryDto {
+  @IsNotEmpty()
+  @IsString()
+  firstName: string;
 
-export type UpdateBeneficiaryDto = Partial<Omit<Beneficiary, 'id' | '_id' | 'insurances'>>;
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  postalAddress: string;
+
+  @IsNotEmpty()
+  @IsString()
+  phoneNumber: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
+}
+
+export type UpdateBeneficiaryDto = Partial<CreateBeneficiaryDto>;

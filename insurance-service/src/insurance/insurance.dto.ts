@@ -1,6 +1,5 @@
-import { IsNotEmpty, IsString, IsEnum, IsDateString, IsNumber, IsUUID } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
-
+import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Beneficiary } from '../beneficiary/beneficiary.schema';
 
 enum InsuranceType {
   LIABILITY = 'Liability',
@@ -8,16 +7,9 @@ enum InsuranceType {
   COMPREHENSIVE = 'Comprehensive',
 }
 
-enum Coverage {
-  BASIC = 'Basic',
-  STANDARD = 'Standard',
-  PREMIUM = 'Premium',
-}
-
 export class CreateInsuranceDto {
   @IsNotEmpty()
-  @IsNumber()
-  dossierNumber: number;
+  dossierNumber: string;
 
   @IsNotEmpty()
   @IsEnum(InsuranceType)
@@ -39,16 +31,13 @@ export class CreateInsuranceDto {
   @IsEnum(['active', 'cancelled'])
   insuranceStatus: string;
 
-  @IsNotEmpty()
-  beneficiary: string;
+  beneficiary: Beneficiary;
 
   @IsNotEmpty()
-  @IsUUID()
   vehicleId: string;
 
   @IsNotEmpty()
-  @IsUUID()
   quoteId: string;
 }
 
-export class UpdateInsuranceDto extends PartialType(CreateInsuranceDto) {}
+export type UpdateInsuranceDto  = Partial<CreateInsuranceDto>;

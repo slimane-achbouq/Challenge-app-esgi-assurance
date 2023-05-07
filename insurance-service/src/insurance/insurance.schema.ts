@@ -11,8 +11,8 @@ enum InsuranceType {
 
 @Schema()
 export class Insurance extends Document {
-  @Prop({ required: true })
-  dossierNumber: string;
+  @Prop({ type: Number, unique: true})
+  dossierNumber: number;
 
   @Prop({ required: true, enum: InsuranceType })
   insuranceType: string;

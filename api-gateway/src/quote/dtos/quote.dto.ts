@@ -32,9 +32,10 @@ export class CreateQuoteDto {
   coverageDuration: number;
 
   @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   userId: string;
 
+  @IsNotEmpty()
   @IsUUID()
   vehicleId: string;
 }

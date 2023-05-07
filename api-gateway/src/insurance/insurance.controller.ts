@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Inject, UseInterceptors, UploadedFiles, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Inject, UseInterceptors, UploadedFiles, UploadedFile, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { Observable } from 'rxjs';
+import { CreateBeneficiaryDto, UpdateBeneficiaryDto } from './dtos/beneficiary.dto';
+import { CreateInsuranceDto, UpdateInsuranceDto } from './dtos/insurance.dto';
 
 @Controller()
 export class InsuranceController {
@@ -9,7 +11,8 @@ export class InsuranceController {
     constructor(@Inject('INSURANCE_SERVICE') private insuranceServiceClient: ClientProxy) {}
   
     @Post('insurance')
-    createInsurance(@Body() insuranceDto: any): Observable<any> {
+    @UsePipes(ValidationPipe)
+    createInsurance(@Body() insuranceDto: CreateInsuranceDto): Observable<any> {
       return this.insuranceServiceClient.send({ cmd: 'createInsurance' }, insuranceDto);
     }
   
@@ -24,7 +27,8 @@ export class InsuranceController {
     }
   
     @Put('insurance/:id')
-    updateInsurance(@Param('id') id: string, @Body() insuranceDto: any): Observable<any> {
+    @UsePipes(ValidationPipe)
+    updateInsurance(@Param('id') id: string, @Body() insuranceDto: UpdateInsuranceDto): Observable<any> {
       return this.insuranceServiceClient.send({ cmd: 'updateInsurance' }, { id, ...insuranceDto });
     }
   
@@ -51,12 +55,13 @@ export class InsuranceController {
     }
 
   @Post('beneficiary')
+  @UsePipes(ValidationPipe)
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'justificatifDomicile', maxCount: 1 },
     { name: 'permis', maxCount: 1 },
   ]))
   async createBeneficiary(
-    @Body() beneficiaryDto: any,
+    @Body() beneficiaryDto: CreateBeneficiaryDto,
     @UploadedFiles() files: { justificatifDomicile: Express.Multer.File[], permis: Express.Multer.File[]}
   ) {
     const fileContents = {
@@ -69,13 +74,14 @@ export class InsuranceController {
   }
 
   @Put('beneficiary/:id')
+  @UsePipes(ValidationPipe)
   @UseInterceptors(FileFieldsInterceptor([
     { name: 'justificatifDomicile', maxCount: 1 },
     { name: 'permis', maxCount: 1 },
   ]))
   async updateBeneficiary(
     @Param('id') id: string,
-    @Body() beneficiaryDto: any,
+    @Body() beneficiaryDto: UpdateBeneficiaryDto,
     @UploadedFiles() files: { justificatifDomicile: Express.Multer.File[], permis: Express.Multer.File[] }
   ) {
     const fileContents = {

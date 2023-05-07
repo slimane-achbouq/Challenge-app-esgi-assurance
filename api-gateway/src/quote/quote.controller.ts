@@ -8,12 +8,16 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { Client, ClientProxy, Transport } from '@nestjs/microservices';
 import { Inject } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { diskStorage } from 'multer';
+import { CreateQuoteDto, UpdateQuoteDto } from './dtos/quote.dto';
+import { CreateVehicleDto, UpdateVehicleDto } from './dtos/vehicle.dto';
 
 @Controller()
 export class QuoteController {
@@ -23,7 +27,8 @@ export class QuoteController {
 
   // Quote related endpoints
   @Post('quotes')
-  async createQuote(@Body() quoteDto: any) {
+  @UsePipes(ValidationPipe)
+  async createQuote(@Body() quoteDto: CreateQuoteDto) {
     return this.quoteServiceClient
       .send({ cmd: 'createQuote' }, quoteDto)
       .toPromise();
@@ -42,7 +47,8 @@ export class QuoteController {
   }
 
   @Put('quotes/:id')
-  async updateQuote(@Param('id') id: string, @Body() quoteDto: any) {
+  @UsePipes(ValidationPipe)
+  async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
     return this.quoteServiceClient
       .send({ cmd: 'updateQuote' }, { id, quoteDto })
       .toPromise();
@@ -56,8 +62,9 @@ export class QuoteController {
   // Vehicle related endpoints
   @Post('vehicles')
   @UseInterceptors(FileInterceptor('carteGrise'))
+  @UsePipes(ValidationPipe)
   async createVehicle(
-    @Body() vehicleDto: any,
+    @Body() vehicleDto: CreateVehicleDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const fileContent = file ? file.buffer.toString('base64') : null;
@@ -86,9 +93,10 @@ export class QuoteController {
 
   @Put('vehicles/:id')
   @UseInterceptors(FileInterceptor('carteGrise'))
+  @UsePipes(ValidationPipe)
   async updateVehicle(
     @Param('id') id: string,
-    @Body() vehicleDto: any,
+    @Body() vehicleDto: UpdateVehicleDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const fileContent = file ? file.buffer.toString('base64') : null;

@@ -34,7 +34,7 @@ export class UsersController {
 
   
   @UseGuards(RabbitMQAccessTokenGuard, RolesGuard)
-  @Roles('Admin')
+  @Roles('User')
   @MessagePattern({ cmd: 'getUsers' })
   findAll() {
     return this.usersService.findAll();

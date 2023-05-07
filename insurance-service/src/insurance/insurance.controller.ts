@@ -30,6 +30,7 @@ export class InsuranceController {
     const { id } = data;
     const { id: _, ...insuranceDto } = data;
 
+    // @ts-ignore
     return this.insuranceService.updateInsurance(id, insuranceDto);
   }
 

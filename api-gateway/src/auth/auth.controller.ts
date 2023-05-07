@@ -18,7 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-
+import {JwtAuthGuard} from './jwt-auth.guard'
 
 
 @ApiTags('Auth')
@@ -59,6 +59,7 @@ export class UserController {
   }
 
   @Get('getUsers')
+  @UseGuards(JwtAuthGuard)
   getUsers(@Req() req) {
     return this.userServiceClient
       .send({ cmd: 'getUsers' }, { accessToken: req.headers.authorization })

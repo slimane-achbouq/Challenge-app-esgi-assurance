@@ -10,6 +10,8 @@ import {
   UploadedFile,
   ValidationPipe,
   UsePipes,
+  UseGuards,
+  Req
 } from '@nestjs/common';
 import { Client, ClientProxy, Transport } from '@nestjs/microservices';
 import { Inject } from '@nestjs/common';
@@ -18,6 +20,8 @@ import * as multer from 'multer';
 import { diskStorage } from 'multer';
 import { CreateQuoteDto, UpdateQuoteDto } from './dtos/quote.dto';
 import { CreateVehicleDto, UpdateVehicleDto } from './dtos/vehicle.dto';
+import { CreateVehicleQuoteDto } from './dtos/vehicle-quote.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller()
 export class QuoteController {
@@ -115,4 +119,64 @@ export class QuoteController {
       .send({ cmd: 'deleteVehicle' }, id)
       .toPromise();
   }
+
+
+  @Post('vehicles-with-quotes')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('carteGrise'))
+  @UsePipes(ValidationPipe)
+  async createVehicleWithQuote(
+    @Req() req,
+    @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const fileContent = file ? file.buffer.toString('base64') : null;
+    if (!fileContent) {
+      throw new Error('File not uploaded');
+    }
+
+    const vehicleQuoteDto : CreateVehicleDto= {
+      vehicleType: createVehicleQuoteDto.vehicleType,
+      brand: createVehicleQuoteDto.brand,
+      model: createVehicleQuoteDto.model,
+      horsepower: createVehicleQuoteDto.horsepower,
+      licensePlate: createVehicleQuoteDto.licensePlate,
+      licenseObtainedDate: createVehicleQuoteDto.licenseObtainedDate,
+      vehicleCirculationDate: createVehicleQuoteDto.vehicleCirculationDate,
+      registrationCardDate: createVehicleQuoteDto.registrationCardDate,
+      purchaseMode: createVehicleQuoteDto.purchaseMode,
+      parkingPostalCode: createVehicleQuoteDto.parkingPostalCode,
+      parkingType: createVehicleQuoteDto.parkingType,
+      annualMileage: createVehicleQuoteDto.annualMileage,
+      registrationCardHolder: createVehicleQuoteDto.registrationCardHolder
+    };
+
+    // Create vehicle first
+    const createdVehicle = await this.quoteServiceClient
+      .send(
+        { cmd: 'createVehicle' },
+        { ...vehicleQuoteDto, carteGrise: fileContent },
+      )
+      .toPromise();
+
+    // Create quote with the created vehicle's ID
+    const quoteDtoWithVehicleId = {
+      insuranceType: createVehicleQuoteDto.insuranceType,
+      coverage: createVehicleQuoteDto.coverage,
+      insurancePremium: 33,
+      coverageDuration: 22,
+      userId: req.user.sub,
+      vehicleId: createdVehicle.id,
+    };
+    const createdQuote = await this.quoteServiceClient
+      .send({ cmd: 'createQuote' }, quoteDtoWithVehicleId)
+      .toPromise();
+
+    // Return both the created vehicle and quote
+    return {
+      vehicle: createdVehicle,
+      quote: createdQuote,
+    };
+  }
+
 }

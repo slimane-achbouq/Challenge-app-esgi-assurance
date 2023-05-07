@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Vehicle } from './vehicle.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import { CreateVehicleDto } from './vehicle.dto';
 
 @Injectable()
 export class VehicleService {
@@ -12,7 +13,7 @@ export class VehicleService {
     private vehicleRepository: Repository<Vehicle>,
   ) {}
 
-  async createVehicle(vehicleDto: any): Promise<Vehicle> {
+  async createVehicle(vehicleDto: CreateVehicleDto): Promise<Vehicle> {
     const { carteGrise, ...rest } = vehicleDto;
     const fileName = `${Date.now()}-carte-grise.pdf`;
     const filePath = path.join('./uploads', fileName);

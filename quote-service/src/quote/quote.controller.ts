@@ -11,13 +11,14 @@ import {
 import { QuoteService } from './quote.service';
 import { Quote } from './quote.entity';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { CreateQuoteDto } from './quote.dto';
 
 @Controller('quote')
 export class QuoteController {
   constructor(private readonly quoteService: QuoteService) {}
 
   @MessagePattern({ cmd: 'createQuote' })
-  async createQuote(@Payload() quoteDto: any): Promise<Quote> {
+  async createQuote(@Payload() quoteDto: CreateQuoteDto): Promise<Quote> {
     console.log(quoteDto);
     return await this.quoteService.createQuote(quoteDto);
   }

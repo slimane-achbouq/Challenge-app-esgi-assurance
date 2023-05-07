@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quote } from './quote.entity';
-import { CreateQuoteDto } from './quote.dto';
+import { CreateQuoteDto, UpdateQuoteDto } from './quote.dto';
 import { Vehicle } from 'src/vehicle/vehicle.entity';
 import { VehicleService } from 'src/vehicle/vehicle.service';
 
@@ -14,7 +14,7 @@ export class QuoteService {
     private readonly vehicleService: VehicleService,
   ) {}
 
-  async createQuote(quoteDto: any): Promise<Quote> {
+  async createQuote(quoteDto: CreateQuoteDto): Promise<Quote> {
     // Find the vehicle by its ID
     const vehicle = await this.vehicleService.getVehicleById(quoteDto.vehicleId);
 
@@ -40,9 +40,13 @@ export class QuoteService {
     return this.quoteRepository.findOneBy({ id });
   }
 
-  async updateQuote(id: string, quoteDto: CreateQuoteDto): Promise<Quote> {
-    await this.quoteRepository.update(id, quoteDto);
-    return this.quoteRepository.findOneBy({ id });
+  async updateQuote(id: string, quoteDto: UpdateQuoteDto): Promise<Quote> {
+
+    const fieldName : string = "id"
+    console.log(id)
+    console.log(quoteDto)
+    await this.quoteRepository.update( { [fieldName]: id }, quoteDto);
+    return this.quoteRepository.findOneBy({ id: id });
   }
 
   async deleteQuote(id: number): Promise<void> {

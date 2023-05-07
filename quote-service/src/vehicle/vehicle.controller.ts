@@ -18,6 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { Express } from 'express';
 import { diskStorage } from 'multer';
+import { CreateVehicleDto } from './vehicle.dto';
 
 
   
@@ -26,7 +27,7 @@ import { diskStorage } from 'multer';
     constructor(private readonly vehicleService: VehicleService) {}
   
     @MessagePattern({ cmd: 'createVehicle' })
-    async createVehicle(vehicleDto: any): Promise<Vehicle> {
+    async createVehicle(vehicleDto: CreateVehicleDto): Promise<Vehicle> {
       return this.vehicleService.createVehicle(vehicleDto);
     }
   

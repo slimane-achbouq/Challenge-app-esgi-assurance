@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEnum, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsEnum, IsNumber, IsUUID } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 enum InsuranceType {
@@ -14,9 +14,6 @@ enum InsuranceType {
   }
 
 export class CreateQuoteDto {
-  @IsNotEmpty()
-  @IsNumber()
-  quoteNumber: number;
 
   @IsNotEmpty()
   @IsEnum(InsuranceType)
@@ -38,8 +35,8 @@ export class CreateQuoteDto {
   @IsString()
   userId: string;
 
-  @IsString()
-  insuranceId: string;
+  @IsUUID()
+  vehicleId: string;
 }
 
 export class UpdateQuoteDto extends PartialType(CreateQuoteDto) {}

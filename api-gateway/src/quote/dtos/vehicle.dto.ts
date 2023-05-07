@@ -27,7 +27,6 @@ export class CreateVehicleDto {
   model: string;
 
   @IsNotEmpty()
-  @IsNumber()
   horsepower: number;
 
   @IsNotEmpty()
@@ -63,11 +62,8 @@ export class CreateVehicleDto {
   parkingType: string;
 
   @IsNotEmpty()
-  @IsNumber()
   annualMileage: number;
 
-  @IsString()
-  carteGrise: string;
 }
 
 export class UpdateVehicleDto extends PartialType(CreateVehicleDto) {}

@@ -26,6 +26,8 @@ export class Quote {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   
+
+  @PrimaryGeneratedColumn()
   quoteNumber: number;
 
   @Column({

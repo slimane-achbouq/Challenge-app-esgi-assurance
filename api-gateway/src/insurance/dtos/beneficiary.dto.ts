@@ -1,5 +1,5 @@
 import { IBeneficiary } from "../interfaces/beneficiary.interface";
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsUUID} from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateBeneficiaryDto {
@@ -24,16 +24,9 @@ export class CreateBeneficiaryDto {
   email: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   userId: string;
 
-  @IsOptional()
-  @IsString()
-  justificatifDomicile: string;
-
-  @IsOptional()
-  @IsString()
-  permis: string;
 }
 
 export class UpdateBeneficiaryDto extends PartialType(CreateBeneficiaryDto) {}

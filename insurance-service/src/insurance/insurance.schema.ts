@@ -3,13 +3,18 @@ import { Document } from 'mongoose';
 import { Beneficiary } from '../beneficiary/beneficiary.schema';
 import { Types } from 'mongoose';
 
+enum InsuranceType {
+  LIABILITY = 'Liability',
+  COLLISION = 'Collision',
+  COMPREHENSIVE = 'Comprehensive',
+}
 
 @Schema()
 export class Insurance extends Document {
   @Prop({ required: true })
   dossierNumber: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, enum: InsuranceType })
   insuranceType: string;
 
   @Prop({ required: true, type: Date })

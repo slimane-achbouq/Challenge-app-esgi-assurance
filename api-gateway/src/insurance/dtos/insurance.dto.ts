@@ -1,5 +1,18 @@
-import { IsNotEmpty, IsString, IsEnum, IsDateString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsEnum, IsDateString, IsNumber, IsUUID } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
+
+
+enum InsuranceType {
+  LIABILITY = 'Liability',
+  COLLISION = 'Collision',
+  COMPREHENSIVE = 'Comprehensive',
+}
+
+enum Coverage {
+  BASIC = 'Basic',
+  STANDARD = 'Standard',
+  PREMIUM = 'Premium',
+}
 
 export class CreateInsuranceDto {
   @IsNotEmpty()
@@ -7,8 +20,8 @@ export class CreateInsuranceDto {
   dossierNumber: string;
 
   @IsNotEmpty()
-  @IsString()
-  insuranceType: string;
+  @IsEnum(InsuranceType)
+  insuranceType: InsuranceType;
 
   @IsNotEmpty()
   @IsDateString()
@@ -30,11 +43,11 @@ export class CreateInsuranceDto {
   beneficiary: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   vehicleId: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   quoteId: string;
 }
 

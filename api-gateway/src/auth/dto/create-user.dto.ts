@@ -123,12 +123,4 @@ export class CreateUserDto {
   @IsDate()
   @MaxDate(new Date())
   age: number;
-
-  isValide: boolean;
-
-  refreshToken: string;
-
-  statut: Statut;
-
-  roles: Role[];
 }

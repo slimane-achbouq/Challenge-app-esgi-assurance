@@ -16,7 +16,9 @@ import { Role } from 'src/common/enums/roles.enum';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Roles } from '../common/guards/roles.decorator';
 import { RolesGuard } from 'src/common/guards/roles.guard';
-
+import { CreateUserDto } from './dto/create-user.dto';
+import { AuthDto } from './dto/auth.dto';
+import { VerifyDto } from './dto/verify-profile.dto';
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
@@ -28,19 +30,19 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('signup')
-  signup(@Body() createUserDto: any) {
+  signup(@Body() createUserDto: CreateUserDto) {
     return this.userServiceClient
       .send({ cmd: 'singupCommande' }, createUserDto)
       .toPromise();
   }
 
   @Post('signin')
-  signin(@Body() data: any) {
+  signin(@Body() data: AuthDto) {
     return this.userServiceClient.send({ cmd: 'singIn' }, data).toPromise();
   }
 
   @Post('verifyUser')
-  verify(@Body() verifyDto: any) {
+  verify(@Body() verifyDto: VerifyDto) {
     return this.userServiceClient
       .send({ cmd: 'verifyUser' }, verifyDto)
       .toPromise();

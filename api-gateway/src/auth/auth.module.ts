@@ -1,12 +1,16 @@
-import { Module,Provider } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 import { UserController } from './auth.controller';
-import { ClientsModule, Transport,ClientProxyFactory, ClientProxy } from '@nestjs/microservices';
+import {
+  ClientsModule,
+  Transport,
+  ClientProxyFactory,
+  ClientProxy,
+} from '@nestjs/microservices';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.auth';
 import { JwtStrategy } from './jwt.strategy';
-
 
 const clientProxyProvider: Provider = {
   provide: 'USER_SERVICE',
@@ -22,7 +26,6 @@ const clientProxyProvider: Provider = {
   },
 };
 
-
 @Module({
   imports: [
     PassportModule,
@@ -32,8 +35,7 @@ const clientProxyProvider: Provider = {
     }),
   ],
   controllers: [UserController],
-  providers: [AuthService, LocalStrategy, JwtStrategy,clientProxyProvider],
-  exports :[clientProxyProvider]
-
+  providers: [AuthService, LocalStrategy, JwtStrategy, clientProxyProvider],
+  exports: [clientProxyProvider],
 })
 export class AuthModule {}

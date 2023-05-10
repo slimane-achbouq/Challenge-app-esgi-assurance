@@ -126,12 +126,12 @@ services:
 
   utils-service: 
     extends: 
-      file: utils-service/docker-compose.yml
+      file: utils/docker-compose.yml
       service: utils-service
   
   utils-service-db: 
     extends: 
-      file: utils-service/docker-compose.yml
+      file: utils/docker-compose.yml
       service: utils-service-db
 
 networks:

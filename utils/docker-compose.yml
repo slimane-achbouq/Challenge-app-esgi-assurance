@@ -7,20 +7,20 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data_container:/data/db
+      - ./data/db:/data/db
     networks:
       - my-network
 
   utils-service: 
     build: .
     volumes:
-      - .:/app/utils
-      - /app/utils/node_modules
+      - .:/utils/src/app
+      - /utils/src/app/node_modules
     env_file:
       - .env
     ports:
-      - 3004:3004
-    command: npm run start:dev
+      - 3005:3005
+    command: sh -c "npm install && npm run start:dev"
     depends_on:
       - utils-service-db
     networks:

@@ -12,6 +12,7 @@ import { Logger } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { InsuranceModule } from './insurance/insurance.module';
 import { QuoteModule } from './quote/quote.module';
+import { UtilsModule } from './utils/utils.module';
 dotenv.config();
 
 async function bootstrap() {
@@ -57,7 +58,7 @@ async function bootstrap() {
     .build();
 
   const doc = SwaggerModule.createDocument(app, config, {
-    include: [AppModule, AuthModule, InsuranceModule, QuoteModule],
+    include: [AppModule, AuthModule, InsuranceModule, QuoteModule, UtilsModule],
   });
   SwaggerModule.setup('api/v1', app, doc, swaggerCustomOptions);
 

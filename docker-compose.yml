@@ -38,7 +38,7 @@ services:
     volumes:
       - ./insurance-service/data/db:/data/db
     ports:
-      - "27017:27017"
+      - "27018:27017"
     networks:
       - my-network
 
@@ -91,6 +91,40 @@ services:
       - ./quote-service/data/db:/var/lib/postgresql/data
     networks:
       - my-network
+
+
+  user-database:
+    container_name: user-database
+    hostname: user-database
+    image: mongo:latest
+    env_file:
+      - ./user/.env
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+
+  user-service:
+    container_name: user-service
+    hostname: user-service
+    build: ./user
+    volumes:
+      - ./user:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3004:3004
+    depends_on:
+      - user-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./user/.env
+    networks:
+      - my-network
+
+
 
 networks:
   my-network:

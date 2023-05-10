@@ -1,34 +1,97 @@
 version: '3.8'
 
 services:
-  getway:
-    extends:
-      file: api-gateway/docker-compose.yml
-      service: getway
 
-  insurance-service-db:
-    extends:
-      file: insurance-service/docker-compose.yml
-      service: insurance-service-db
+  gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    volumes:
+        - ./api-gateway:/usr/src/app
+        - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    networks:
+      - my-network
+    command: sh -c "npm install && npm run start:dev"
+    env_file:
+      - ./api-gateway/.env
 
-  insurance-service:
-    extends:
-      file: insurance-service/docker-compose.yml
-      service: insurance-service
+  rabbitmq:
+    container_name: rabbitmq
+    image:  rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin_password
+    hostname: rabbitmq
+    volumes: 
+      - /var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - my-network
+
+  insurancedatabase:
+    container_name: insurancedatabase
+    image: mongo:latest
+    hostname: insurancedatabase
+    volumes:
+      - ./insurance-service/data/db:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+
+  insurance-api:
+    container_name: insurance-api
+    build: ./insurance-service
+    volumes:
+        - ./insurance-service:/usr/src/app
+        - /usr/src/app/node_modules
+    ports:
+      - 3001:3001
+    depends_on:
+      - insurancedatabase
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./insurance-service/.env
+    networks:
+      - my-network
 
   quote-service:
-    extends:
-      file: quote-service/docker-compose.yml
-      service: quote-service
+    container_name: quote-api
+    build: ./quote-service
+    ports:
+      - '3002:3002'
+    depends_on:
+      - quotedatabase
+      - gateway
+      - rabbitmq
+    volumes:
+      - ./quote-service:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DATABASE_URL: postgres://user:password@quotedatabase:5432/nestjsdb
+    networks:
+      - my-network
 
-  quote-service-db:
-    extends:
-      file: quote-service/docker-compose.yml
-      service: quote-service-db
+  quotedatabase:
+    container_name: quotedatabase
+    image: postgres:13
+    hostname: quotedatabase
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nestjsdb
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./quote-service/data/db:/var/lib/postgresql/data
+    networks:
+      - my-network
+
 networks:
   my-network:
-    external: true
-
-volumes:
-  mongodb-data:
-  nestjs-db-data:
+    

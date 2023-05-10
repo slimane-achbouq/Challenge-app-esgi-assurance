@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  mongodb:
+  user-database:
     image: mongo:latest
     env_file:
       - .env
@@ -20,7 +20,7 @@ services:
     ports:
       - 3004:3004
     depends_on:
-      - mongodb
+      - user-database
     env_file:
       - .env
     networks:

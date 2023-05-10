@@ -1,14 +1,18 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Inject, UseInterceptors, UploadedFiles, UploadedFile, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Req,UseGuards, Controller, Get, Post, Put, Delete, Param, Body, Inject, UseInterceptors, UploadedFiles, UploadedFile, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { Observable } from 'rxjs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CreateQuoteDto } from 'src/quote/dtos/quote.dto';
 import { CreateBeneficiaryDto, UpdateBeneficiaryDto } from './dtos/beneficiary.dto';
-import { CreateInsuranceDto, UpdateInsuranceDto } from './dtos/insurance.dto';
+import { CreateInsuranceDto, CreateModifiedInsuranceDto, UpdateInsuranceDto } from './dtos/insurance.dto';
 
 @Controller()
 export class InsuranceController {
   
-    constructor(@Inject('INSURANCE_SERVICE') private insuranceServiceClient: ClientProxy) {}
+    constructor(@Inject('INSURANCE_SERVICE') private insuranceServiceClient: ClientProxy,
+                @Inject('QUOTE_SERVICE') private readonly quoteServiceClient: ClientProxy,
+                @Inject('USER_SERVICE') private userServiceClient: ClientProxy) {}
   
     @Post('insurance')
     @UsePipes(ValidationPipe)
@@ -97,6 +101,76 @@ export class InsuranceController {
   
 
 
+@Post('beneficiary-insurance')
+@UsePipes(ValidationPipe)
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(FileFieldsInterceptor([
+  { name: 'justificatifDomicile', maxCount: 1 },
+  { name: 'permis', maxCount: 1 },
+]))
+async createBeneficiaryInsurance(
+  @Req() req,
+  @Body() createModifiedInsuranceDto: CreateModifiedInsuranceDto,
+  @UploadedFiles() files: { justificatifDomicile: Express.Multer.File[], permis: Express.Multer.File[]}
+) {
 
-  // Add other endpoints for CRUD operations here
+  const userData =  await this.userServiceClient
+      .send({ cmd: 'findUserById' }, req.user.sub)
+      .toPromise();
+
+  let currentbeneficiary =  await this.insuranceServiceClient.send({ cmd: 'getBeneficiaryByUserId' }, req.user.sub).toPromise();
+
+  const fileContents = {
+    justificatifDomicile: files.justificatifDomicile[0] ? files.justificatifDomicile[0].buffer.toString('base64') : null,
+    permis: files.permis[0] ? files.permis[0].buffer.toString('base64') : null,
+  };
+
+  if ( ! currentbeneficiary )
+
+  {
+    const beneficiaryInsuranceDto : CreateBeneficiaryDto = {
+      firstName: userData.firstname,
+      lastName: userData.lastname,
+      postalAddress: userData.adresse + ' '+ userData.codeCity + ' '+ userData.city   ,
+      phoneNumber: userData.phoneNumber,
+      email: userData.email,
+      userId: userData['_id'],
+    }
+  
+    const beneficiary = await this.insuranceServiceClient
+      .send({ cmd: 'createBeneficiary' }, { beneficiaryDto: beneficiaryInsuranceDto, fileContents })
+      .toPromise();
+
+      currentbeneficiary = beneficiary
+
+  }
+
+  const relateduote = await this.quoteServiceClient
+          .send({ cmd: 'getQuoteById' }, createModifiedInsuranceDto.quoteId)
+          .toPromise();
+
+
+  const insuranceDto: CreateInsuranceDto ={
+
+    insuranceType: relateduote.insuranceType,
+    coverageStartDate: createModifiedInsuranceDto.coverageStartDate,
+    coverageEndDate: createModifiedInsuranceDto.coverageEndDate,
+    insurancePremium: relateduote.insurancePremium,
+    insuranceStatus: 'active',
+    quoteId: relateduote.id,
+    dossierNumber: relateduote.quoteNumber,
+    vehicleId:relateduote.vehicle.id,
+    beneficiary : currentbeneficiary['_id'],
+
+  }
+
+  return  this.insuranceServiceClient
+    .send({ cmd: 'createInsurance' }, insuranceDto)
+    .toPromise(); 
+
+}
+
+
+
+
 }

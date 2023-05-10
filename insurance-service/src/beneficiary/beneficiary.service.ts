@@ -92,7 +92,10 @@ export class BeneficiaryService {
     return this.beneficiaryModel.findById(id).populate('insurances').exec();
   }
 
-  // Add other methods for CRUD operations here
+  async getBeneficiaryByUserId(userId: string): Promise<Beneficiary> {
+    return this.beneficiaryModel.findOne({ userId }).exec();
+  }
+  
 
 
   private saveFile(base64Content: string, prefix: string): string {

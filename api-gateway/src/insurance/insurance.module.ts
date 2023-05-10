@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AuthModule } from 'src/auth/auth.module';
+import { QuoteModule } from 'src/quote/quote.module';
 import { InsuranceController } from './insurance.controller';
 
 @Module({
   imports: [
+    QuoteModule,
+    AuthModule,
     ClientsModule.register([
       {
         name: 'INSURANCE_SERVICE',

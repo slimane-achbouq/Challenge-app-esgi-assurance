@@ -34,17 +34,15 @@ export class UsersController {
 
   
   @UseGuards(RabbitMQAccessTokenGuard, RolesGuard)
-  @Roles('User')
+  @Roles(Role.USER)
   @MessagePattern({ cmd: 'getUsers' })
   findAll() {
     return this.usersService.findAll();
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard, RolesGuard)
-  @Roles('Admin')
-  @Get(':id')
-  findById(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'findUserById' })
+  findById(@Payload() id: string) {
+    console.log(id)
     return this.usersService.findById(id);
   }
 

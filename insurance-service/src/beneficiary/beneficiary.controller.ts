@@ -39,5 +39,8 @@ export class BeneficiaryController {
     return await this.beneficiaryService.getBeneficiaryWithInsurances(id);
   }
 
-  // Add other endpoints for CRUD operations here
+  @MessagePattern({ cmd: 'getBeneficiaryByUserId' })
+  async getBeneficiaryByUserId(@Payload() id: string) {
+    return await this.beneficiaryService.getBeneficiaryByUserId(id);
+  }
 }

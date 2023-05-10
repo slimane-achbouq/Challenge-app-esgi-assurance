@@ -37,7 +37,11 @@ export class QuoteService {
   }
 
   async getQuoteById(id: string): Promise<Quote> {
-    return this.quoteRepository.findOneBy({ id });
+    return this.quoteRepository
+    .createQueryBuilder('quote')
+    .leftJoinAndSelect('quote.vehicle', 'vehicle')
+    .where('quote.id = :id', { id })
+    .getOne();
   }
 
   async updateQuote(id: string, quoteDto: UpdateQuoteDto): Promise<Quote> {

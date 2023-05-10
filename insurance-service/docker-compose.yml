@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     volumes:
-      - mongodb-data:/data/db
+      - ./data/db:/data/db
     ports:
       - "27018:27017"
     networks:

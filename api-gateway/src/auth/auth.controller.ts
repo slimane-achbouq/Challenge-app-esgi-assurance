@@ -10,20 +10,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
-  ApiBody,
-  ApiOkResponse,
   ApiTags,
+  ApiOkResponse,
+  ApiBody,
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Role } from 'src/common/enums/roles.enum';
-import {JwtAuthGuard} from './jwt-auth.guard'
+import { JwtAuthGuard } from './jwt-auth.guard';
 import { Roles } from '../common/guards/roles.decorator';
 import { RolesGuard } from 'src/common/guards/roles.guard';
-
-
+import { CreateUserDto } from './dto/create-user.dto';
+import { AuthDto } from './dto/auth.dto';
+import { VerifyDto } from './dto/verify-profile.dto';
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
@@ -33,36 +33,53 @@ export class UserController {
     @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
   ) {}
 
-  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    description: 'Add new user',
+    type: CreateUserDto,
+  })
+  @ApiBody({
+    description: 'Add new user',
+    required: true,
+    type: CreateUserDto,
+  })
+  @HttpCode(HttpStatus.CREATED)
   @Post('signup')
-  signup(@Body() createUserDto: any) {
-    return this.userServiceClient.send({ cmd: 'singupCommande' }, createUserDto)
+  signup(@Body() createUserDto: CreateUserDto) {
+    return this.userServiceClient
+      .send({ cmd: 'singupCommande' }, createUserDto)
       .toPromise();
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('signin')
-  signin(@Body() data: any) {
+  signin(@Body() data: AuthDto) {
     return this.userServiceClient.send({ cmd: 'singIn' }, data).toPromise();
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @Post('verifyUser')
-  verify(@Body() verifyDto: any) {
-    return this.userServiceClient.send({ cmd: 'verifyUser' }, verifyDto)
+  verify(@Body() verifyDto: VerifyDto) {
+    return this.userServiceClient
+      .send({ cmd: 'verifyUser' }, verifyDto)
       .toPromise();
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get('logout')
   logout(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
-
+  
+  @HttpCode(HttpStatus.OK)
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
 
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
   @Get('getUsers')
-  @UseGuards(JwtAuthGuard,RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   getUsers(@Req() req) {
     return this.userServiceClient

@@ -11,9 +11,9 @@ import {
   ValidationPipe,
   UsePipes,
   UseGuards,
-  Req
+  Req,
 } from '@nestjs/common';
-import { Client, ClientProxy, Transport } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { Inject } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
@@ -22,7 +22,9 @@ import { CreateQuoteDto, UpdateQuoteDto } from './dtos/quote.dto';
 import { CreateVehicleDto, UpdateVehicleDto } from './dtos/vehicle.dto';
 import { CreateVehicleQuoteDto } from './dtos/vehicle-quote.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Quote')
 @Controller()
 export class QuoteController {
   constructor(
@@ -120,7 +122,6 @@ export class QuoteController {
       .toPromise();
   }
 
-
   @Post('vehicles-with-quotes')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('carteGrise'))
@@ -135,7 +136,7 @@ export class QuoteController {
       throw new Error('File not uploaded');
     }
 
-    const vehicleQuoteDto : CreateVehicleDto= {
+    const vehicleQuoteDto: CreateVehicleDto = {
       vehicleType: createVehicleQuoteDto.vehicleType,
       brand: createVehicleQuoteDto.brand,
       model: createVehicleQuoteDto.model,
@@ -148,7 +149,7 @@ export class QuoteController {
       parkingPostalCode: createVehicleQuoteDto.parkingPostalCode,
       parkingType: createVehicleQuoteDto.parkingType,
       annualMileage: createVehicleQuoteDto.annualMileage,
-      registrationCardHolder: createVehicleQuoteDto.registrationCardHolder
+      registrationCardHolder: createVehicleQuoteDto.registrationCardHolder,
     };
 
     // Create vehicle first
@@ -178,5 +179,4 @@ export class QuoteController {
       quote: createdQuote,
     };
   }
-
 }

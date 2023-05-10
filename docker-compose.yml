@@ -124,7 +124,15 @@ services:
     networks:
       - my-network
 
-
+  utils-service: 
+    extends: 
+      file: utils-service/docker-compose.yml
+      service: utils-service
+  
+  utils-service-db: 
+    extends: 
+      file: utils-service/docker-compose.yml
+      service: utils-service-db
 
 networks:
   my-network:

@@ -111,4 +111,5 @@ dist
 
 *.pdf
 
+# database volums
 data/

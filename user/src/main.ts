@@ -11,10 +11,11 @@ async function bootstrap() {
         urls: ['amqp://admin:admin_password@rabbitmq:5672'],
         queue: 'user_service_queue',
         queueOptions: { durable: false },
-      }
-    }
+      },
+    },
   );
-  app.listen().then(() => console.log('User microservice listening on RabbitMQ'));
-
+  app
+    .listen()
+    .then(() => console.log('User microservice listening on RabbitMQ'));
 }
 bootstrap();

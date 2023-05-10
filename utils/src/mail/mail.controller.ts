@@ -11,8 +11,8 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 export class MailController {
   constructor(private readonly maileService: MailService) {}
 
-  @MessagePattern({ cmd: 'sendMail' })
-  sendMailtoValidateUser(@Payload() veridyDto: VerifyDto) {
+  @Post('singInConfirmationEmail')
+  sendMailtoValidateUser(@Body() veridyDto: VerifyDto) {
     return this.maileService.sendMailtoValidateUser(veridyDto);
   }
 }

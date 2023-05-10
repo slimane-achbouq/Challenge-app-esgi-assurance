@@ -1,16 +1,21 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { join } from 'path';
-import * as path from 'path';
 
 import * as fs from 'fs';
 import { MailVerifyProfile } from 'src/models/mail-verify-profile.model';
-import * as SibApiV3Sdk from 'sib-api-v3-sdk';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const SibApiV3Sdk = require('sib-api-v3-typescript');
 
 @Injectable()
 export class MailService {
   templateFolderPath = join(__dirname, 'templates');
 
   async sendMailtoValidateUser(verifyProfileModel: MailVerifyProfile) {
+    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+
+    const apiKey = apiInstance.authentications['apiKey'];
+    apiKey.apiKey = process.env.SEND_IN_BLUE_API_KEY;
+
     const templatePath = './src/mail/templates/verify-user-email/body.hbs';
     const subject = fs.readFileSync(
       './src/mail/templates/verify-user-email/header.txt',
@@ -28,7 +33,6 @@ export class MailService {
       to: [
         {
           email: `${verifyProfileModel.email}`,
-          token: `${verifyProfileModel.token}`
         },
       ],
       htmlContent: templateContent,
@@ -42,35 +46,9 @@ export class MailService {
     };
 
     try {
-      await this.sendEmail(sendSmtpEmail);
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
     } catch (error) {
       console.log(error);
     }
-    return true;
-  }
-
-  /**
-   * Send Mail message which contains broadcast link
-   * @param sendSmtpEmail
-   */
-  async sendEmail(sendSmtpEmail: any) {
-    const defaultClient = SibApiV3Sdk.ApiClient.instance;
-
-    const apiKey = defaultClient.authentications['api-key'];
-    apiKey.apiKey = process.env.SEND_IN_BLUE_API_KEY;
-
-    const partnerKey = defaultClient.authentications['partner-key'];
-    partnerKey.apiKey = process.env.SEND_IN_BLUE_API_KEY;
-
-    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-
-    apiInstance.sendTransacEmail(sendSmtpEmail).then(
-      function () {
-        Logger.log('Send mail successfully.');
-      },
-      function (error) {
-        Logger.error(error);
-      },
-    );
   }
 }

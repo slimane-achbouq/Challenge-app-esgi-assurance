@@ -27,7 +27,7 @@ const clientProxyProvider: Provider = {
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_ACCESS_SECRET,
+      secret: 'JWT_ACCESS_SECRET',
       signOptions: { expiresIn: '60s' },
     }),
   ],

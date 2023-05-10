@@ -11,7 +11,7 @@ import {
 import { QuoteService } from './quote.service';
 import { Quote } from './quote.entity';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateQuoteDto } from './quote.dto';
+import { CreateQuoteDto, UpdateQuoteDto } from './quote.dto';
 
 @Controller('quote')
 export class QuoteController {
@@ -34,7 +34,7 @@ export class QuoteController {
   }
 
   @MessagePattern({ cmd: 'updateQuote' })
-  async updateQuote(@Payload() data: any): Promise<Quote> {
+  async updateQuote(@Payload() data:{ id: string ,quoteDto :UpdateQuoteDto } ): Promise<Quote> {
     const { id, quoteDto } = data;
     return await this.quoteService.updateQuote(id, quoteDto);
   }

@@ -1,7 +1,7 @@
 import { Module ,Provider} from '@nestjs/common';
 import { QuoteController } from './quote.controller';
 import { ClientsModule, Transport, ClientProxyFactory, ClientProxy} from '@nestjs/microservices';
-
+import { JwtModule } from '@nestjs/jwt';
 
 
 const clientProxyProvider: Provider = {
@@ -20,6 +20,11 @@ const clientProxyProvider: Provider = {
 
 
 @Module({
+  imports: [
+    JwtModule.register({
+      secret: 'JWT_ACCESS_SECRET',
+      signOptions: { expiresIn: '60s' },
+    })], 
   providers: [clientProxyProvider],
   controllers: [QuoteController],
   exports:[clientProxyProvider]

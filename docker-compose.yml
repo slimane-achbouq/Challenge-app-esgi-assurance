@@ -25,6 +25,15 @@ services:
     extends:
       file: quote-service/docker-compose.yml
       service: quote-service-db
+  utils-service: 
+    extends: 
+      file: utils-service/docker-compose.yml
+      service: utils-service
+  
+  utils-service-db: 
+    extends: 
+      file: utils-service/docker-compose.yml
+      service: utils-service-db
 networks:
   my-network:
     external: true

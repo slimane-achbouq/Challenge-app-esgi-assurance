@@ -71,8 +71,9 @@ services:
     volumes:
       - ./quote-service:/usr/src/app
       - /usr/src/app/node_modules
-    environment:
-      DATABASE_URL: postgres://user:password@quotedatabase:5432/nestjsdb
+
+    env_file:
+      - ./quote-service/.env 
     networks:
       - my-network
 

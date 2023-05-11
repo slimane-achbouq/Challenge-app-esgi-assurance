@@ -18,8 +18,8 @@ const clientProxyProvider: Provider = {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-        queue: 'user_service_queue',
+        urls: [process.env.RABBITMQ_URL],
+        queue: process.env.USER_SERVICE_QUEUE,
         queueOptions: { durable: false },
       },
     });
@@ -30,7 +30,7 @@ const clientProxyProvider: Provider = {
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: 'JWT_ACCESS_SECRET',
+      secret: process.env.JWT_ACCESS_SECRET,
       signOptions: { expiresIn: '60s' },
     }),
   ],

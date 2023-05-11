@@ -21,8 +21,8 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-      queue: 'api_gateway_queue',
+      urls: [process.env.RABBITMQ_URL],
+      queue: process.env.API_GATEWAY_QUEUE,
       queueOptions: {
         durable: false,
       },

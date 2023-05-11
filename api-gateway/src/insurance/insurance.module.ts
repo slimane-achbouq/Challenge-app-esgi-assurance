@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     JwtModule.register({
-      secret: 'JWT_ACCESS_SECRET',
+      secret: process.env.JWT_ACCESS_SECRET,
       signOptions: { expiresIn: '60s' },
     }),
     QuoteModule,
@@ -18,8 +18,8 @@ import { JwtModule } from '@nestjs/jwt';
         name: 'INSURANCE_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-          queue: 'insurance_service_queue',
+          urls: [process.env.RABBITMQ_URL],
+          queue: process.env.INSURANCE_SERVICE_QUEUE,
           queueOptions: { durable: false },
         },
       },

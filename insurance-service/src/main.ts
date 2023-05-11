@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice(AppModule, {
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-      queue: 'insurance_service_queue',
+      urls: [process.env.RABBITMQ_URL],
+      queue: process.env.INSURANCE_SERVICE_QUEUE,
       queueOptions: { durable: false },
     },
   });

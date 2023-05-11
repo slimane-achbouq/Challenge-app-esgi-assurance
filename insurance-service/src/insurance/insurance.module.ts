@@ -14,8 +14,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'QUOTE_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-          queue: 'quote_service_queue',
+          urls: [process.env.RABBITMQ_URL],
+          queue: process.env.QUOTE_SERVICE_QUEUE,
           queueOptions: { durable: false },
         },
       },

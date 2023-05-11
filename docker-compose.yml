@@ -101,7 +101,7 @@ services:
     env_file:
       - ./user/.env
     volumes:
-      - ./data/db:/data/db
+      - ./user/data/db:/data/db
     ports:
       - "27017:27017"
     networks:

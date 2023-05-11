@@ -11,30 +11,28 @@
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <router-link :to="{ name: 'user-profile', params: { id: customer.id }}">
         <div class="flex items-center">
 
           <div class="font-medium text-slate-800">{{customer.firstName}} {{customer.lastName}}</div>
         </div>
-      </router-link>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="text-left">{{customer.email}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-left">{{customer.city}},{{customer.postalCode}}</div>
+        <div class="text-left">{{customer.city}},{{customer.city}},{{customer.codeCity}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="text-center">{{customer.phoneNumber}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center font-medium text-sky-500"><span v-if="customer.isVerified">Verified</span><span v-if="!customer.isVerified">Not verified</span></div>
+        <div class="text-center font-medium text-sky-500"><span v-if="customer.isValide">Verified</span><span v-if="!customer.isValide">Not verified</span></div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center font-medium text-emerald-500">{{customer.profession}}</div>
+        <div class="text-center font-medium text-emerald-500">{{customer.age}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center">{{customer.associationName}}</div>
+        <div class="text-center">{{customer.roles[0]}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
 

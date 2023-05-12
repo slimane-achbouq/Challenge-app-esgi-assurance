@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -9,17 +10,17 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
-import { v4 as uuidv4 } from 'uuid';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { User } from 'src/users/schemas/user.schema';
 import { Role } from 'src/users/enums/roles.enum';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private configService: ConfigService,
+    @Inject('UTILS_SERVICE') private readonly utilsService: ClientProxy,
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<unknown> {
@@ -33,12 +34,27 @@ export class AuthService {
 
     // Hash password
     const hash = await this.hashData(createUserDto.password);
+
     const newUser = await this.usersService.create({
       ...createUserDto,
       password: hash,
     });
 
-    const tokens = await this.getTokens(newUser._id, newUser.email, newUser.roles);
+    const tokens = await this.getTokens(
+      newUser._id,
+      newUser.email,
+      newUser.roles,
+    );
+
+    const payload = {
+      email: createUserDto.email,
+      token: tokens.accessToken,
+    };
+
+    await this.utilsService
+      .send({ cmd: 'singInConfirmationEmail' }, payload)
+      .toPromise();
+
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
 
     return tokens;
@@ -75,13 +91,13 @@ export class AuthService {
     });
   }
 
-  async getTokens(userId: string, username: string,roles:Role[]) {
+  async getTokens(userId: string, username: string, roles: Role[]) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
           sub: userId,
           username,
-          roles: roles
+          roles: roles,
         },
         {
           secret: process.env.JWT_ACCESS_SECRET,
@@ -92,7 +108,7 @@ export class AuthService {
         {
           sub: userId,
           username,
-          roles: roles
+          roles: roles,
         },
         {
           secret: process.env.JWT_ACCESS_SECRET,
@@ -107,9 +123,9 @@ export class AuthService {
     };
   }
 
-  async verifyProfile(verifyProfileDto: any) {
+  async verifyProfile(verifyProfileDto: VerifyDto) {
     const user: User = await this.usersService.findByUserByEmail(
-      verifyProfileDto.username,
+      verifyProfileDto.email,
     );
 
     if (!user)
@@ -117,13 +133,28 @@ export class AuthService {
         `User with email ${verifyProfileDto.email}  does not exist`,
       );
 
-    if (verifyProfileDto.token === user.validationToken) {
+    // if (verifyProfileDto.token === user.validationToken) {
+    //   await this.usersService.update(user._id, { isValide: true });
+    // } else {
+    //   throw new BadRequestException(`Invalid Token !`);
+    // }
+
+    // return 'Profile is activated .';
+    const tokenValidation = await this.jwtService.verifyAsync(
+      verifyProfileDto.token,
+      {
+        secret: process.env.JWT_ACCESS_SECRET,
+      },
+    );
+
+    console.log(tokenValidation);
+
+    if (tokenValidation) {
       await this.usersService.update(user._id, { isValide: true });
-    } else {
-      throw new BadRequestException(`Invalid Token !`);
+      return 'User profile activated !';
     }
 
-    return 'Profile is activated .';
+    return new Error('Token wrong !');
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
@@ -138,6 +169,5 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email, user.roles);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
-    
   }
 }

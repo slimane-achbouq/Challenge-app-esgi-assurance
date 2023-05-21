@@ -155,6 +155,23 @@ services:
     networks:
       - my-network
 
+  claims-service:
+    container_name: claims-service
+    hostname: claims-service
+    build: ./claims
+    volumes:
+      - ./claims:/src/app
+      - /src/app/node_modules
+    ports:
+      - 3006:3006
+    depends_on:
+      - claims-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./claims/.env
+    networks:
+      - my-network
 networks:
   my-network:
     

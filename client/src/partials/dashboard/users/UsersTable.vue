@@ -46,7 +46,7 @@
                   </div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap ">
-                  <div class="font-semibold text-left">Nom</div>
+                  <div class="font-semibold text-left">Name</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="font-semibold text-left">Email</div>
@@ -61,10 +61,10 @@
                   <div class="font-semibold text-left">Status</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold text-left">profession</div>
+                  <div class="font-semibold text-left">Age</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold">Association Name</div>
+                  <div class="font-semibold text-left">Role</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <span class="sr-only">Menu</span>
@@ -167,6 +167,7 @@
       }
 
       const onEdit =(user)=>{
+        console.log("ok")
         emit('edit', user)
       }
 
@@ -176,6 +177,38 @@
       })
 
       const fetchUsers = async() => {
+
+
+      customers.value =[ 
+            {
+                id: 1,
+                firstName: 'aaaa',
+                lastName: 'aaa',
+                email: 'aaa.doe@example.com',
+                city: 'aaa York',
+                state: 'NY',
+                codeCity: '10001',
+                phoneNumber: '555-555-5555',
+                isValide: true,
+                age: 30,
+                roles: ['user', 'admin']
+            },
+            {
+                id: 2,
+                firstName: 'aaa',
+                lastName: 'aa',
+                email: 'johaan.doe@example.com',
+                city: 'New York',
+                state: 'NY',
+                codeCity: '10001',
+                phoneNumber: '555-555-5555',
+                isValide: true,
+                age: 30,
+                roles: ['user', 'admin']
+            }
+          
+      ]
+      /*
       try {
         loading.value = true
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
@@ -195,6 +228,7 @@
         loading.value = false
       } catch (error) {
       }
+      */
     }
 
     const searchCustomers = async() =>  {
@@ -217,12 +251,7 @@
         }
     }
 
-
-
-
-
     onMounted(fetchUsers)
-
 
       return {
         selectAll,
@@ -241,7 +270,6 @@
         loading
       }
     }
-
 
   }
   </script>

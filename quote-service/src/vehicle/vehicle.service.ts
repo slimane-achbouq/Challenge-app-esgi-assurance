@@ -15,14 +15,12 @@ export class VehicleService {
 
   async createVehicle(vehicleDto: CreateVehicleDto): Promise<Vehicle> {
     const { carteGrise, ...rest } = vehicleDto;
-    const fileName = `${Date.now()}-carte-grise.pdf`;
-    const filePath = path.join('./uploads', fileName);
 
     // Save the base64 encoded file
-    fs.writeFileSync(filePath, Buffer.from(carteGrise, 'base64'));
+    const fileContent = Buffer.from(carteGrise, 'base64');
 
     // Save the vehicle with the file path
-    const newVehicle = this.vehicleRepository.save({ ...rest, carteGrise: filePath });
+    const newVehicle = this.vehicleRepository.save({ ...rest, carteGrise: fileContent })
     return newVehicle;
   }
 
@@ -39,20 +37,13 @@ export class VehicleService {
     const { carteGrise, ...rest } = vehicleDto;
     const vehicle = await this.vehicleRepository.findOneBy({ id });
   
-    // If a new file is uploaded, delete the old file and save the new file
+    // If a new file is uploaded, decode it and save it as a blob
     if (carteGrise) {
-      if (vehicle.carteGrise) {
-        fs.unlinkSync(vehicle.carteGrise); // Delete the old file
-      }
+      // Decode the base64 file content
+      const fileContent = Buffer.from(carteGrise, 'base64');
   
-      const fileName = `${Date.now()}-carte-grise.pdf`;
-      const filePath = path.join('./uploads', fileName);
-  
-      // Save the base64 encoded file
-      fs.writeFileSync(filePath, Buffer.from(carteGrise, 'base64'));
-  
-      // Update the vehicle with the new file path
-      await this.vehicleRepository.update(id, { ...rest, carteGrise: filePath });
+      // Update the vehicle with the new file content
+      await this.vehicleRepository.update(id, { ...rest, carteGrise: fileContent });
     } else {
       // If no new file is uploaded, just update the other vehicle details
       await this.vehicleRepository.update(id, rest);

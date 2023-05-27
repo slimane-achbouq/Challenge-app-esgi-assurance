@@ -18,22 +18,23 @@ export class BeneficiaryService {
     fileContents: { justificatifDomicile: string; permis: string },
   ): Promise<Beneficiary> {
     const { justificatifDomicile, permis } = fileContents;
-
-    // Save the files and get their paths
-    const justificatifDomicilePath = justificatifDomicile
-      ? this.saveFile(justificatifDomicile, 'justificatif-domicile')
+  
+    // Decode the base64 file content
+    const justificatifDomicileContent = justificatifDomicile
+      ? Buffer.from(justificatifDomicile, 'base64')
       : null;
-
-    const permisPath = permis ? this.saveFile(permis, 'permis') : null;
-
+  
+    const permisContent = permis ? Buffer.from(permis, 'base64') : null;
+  
     const newBeneficiary = new this.beneficiaryModel({
       ...beneficiaryDto,
-      justificatifDomicile: justificatifDomicilePath,
-      permis: permisPath,
+      justificatifDomicile: justificatifDomicileContent,
+      permis: permisContent,
     });
-
+  
     return newBeneficiary.save();
   }
+  
 
   async getBeneficiaries(): Promise<Beneficiary[]> {
     return this.beneficiaryModel.find().exec();
@@ -49,39 +50,25 @@ export class BeneficiaryService {
     fileContents: { justificatifDomicile: string; permis: string },
   ): Promise<Beneficiary> {
     const { justificatifDomicile, permis } = fileContents;
-    const beneficiary = await this.beneficiaryModel.findById(id).exec();
   
-    let updatedJustificatifDomicilePath: string | null = null;
-    let updatedPermisPath: string | null = null;
+    // If a new file is uploaded, decode it and save it as a blob
+    const updatedJustificatifDomicile = justificatifDomicile
+      ? Buffer.from(justificatifDomicile, 'base64')
+      : null;
   
-    if (justificatifDomicile) {
-      if (beneficiary.justificatifDomicile) {
-        fs.unlinkSync(beneficiary.justificatifDomicile); // Delete the old file
-      }
-      updatedJustificatifDomicilePath = await this.saveFile(justificatifDomicile, 'justificatif-domicile');
-    } else {
-      updatedJustificatifDomicilePath = beneficiary.justificatifDomicile;
-    }
-  
-    if (permis) {
-      if (beneficiary.permis) {
-        fs.unlinkSync(beneficiary.permis); // Delete the old file
-      }
-      updatedPermisPath = await this.saveFile(permis, 'permis');
-    } else {
-      updatedPermisPath = beneficiary.permis;
-    }
+    const updatedPermis = permis ? Buffer.from(permis, 'base64') : null;
   
     const updatedBeneficiaryDto = {
       ...beneficiaryDto,
-      justificatifDomicile: updatedJustificatifDomicilePath,
-      permis: updatedPermisPath,
+      justificatifDomicile: updatedJustificatifDomicile,
+      permis: updatedPermis,
     };
   
     return this.beneficiaryModel
       .findByIdAndUpdate(id, updatedBeneficiaryDto, { new: true })
       .exec();
   }
+  
   
 
   async deleteBeneficiary(id: string): Promise<Beneficiary> {

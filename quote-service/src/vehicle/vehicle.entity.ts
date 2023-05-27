@@ -69,8 +69,8 @@ export class Vehicle {
   @Column()
   annualMileage: number;
 
-  @Column({ nullable: true })
-  carteGrise: string;
+  @Column({ type: 'bytea', nullable: true }) 
+  carteGrise: Buffer;
 
   @OneToOne(() => Quote, (quote) => quote.vehicle)
   quote: Quote;

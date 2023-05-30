@@ -11,7 +11,6 @@
         :value="situation.label"
         name="radio-buttons"
         class="peer sr-only"
-        :checked="this.$store.state.register.situation.toLowerCase() == situation.id"
       />
       <div
         class="flex items-center bg-white text-sm font-medium text-slate-800 p-4 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out"

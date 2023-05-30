@@ -84,14 +84,4 @@ export class BeneficiaryService {
   }
   
 
-
-  private saveFile(base64Content: string, prefix: string): string {
-    const fileName = `${Date.now()}-${prefix}.pdf`;
-    const filePath = path.join('./uploads', fileName);
-
-    // Save the base64 encoded file
-    fs.writeFileSync(filePath, Buffer.from(base64Content, 'base64'));
-
-    return filePath;
-  }
 }

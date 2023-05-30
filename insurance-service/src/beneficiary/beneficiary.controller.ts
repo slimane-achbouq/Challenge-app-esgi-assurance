@@ -7,11 +7,11 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 export class BeneficiaryController {
   constructor(private readonly beneficiaryService: BeneficiaryService) {}
 
-  @MessagePattern({ cmd: 'createBeneficiary' })
-  async createBeneficiary(@Payload() data:  { beneficiaryDto: CreateBeneficiaryDto, fileContents: { justificatifDomicile: string; permis: string; } }) {
-    const { beneficiaryDto, fileContents } = data;
-    return await this.beneficiaryService.createBeneficiary(beneficiaryDto, fileContents);
-  }
+    @MessagePattern({ cmd: 'createBeneficiary' })
+    async createBeneficiary(@Payload() data:  { beneficiaryDto: CreateBeneficiaryDto, fileContents: { justificatifDomicile: string; permis: string; } }) {
+      const { beneficiaryDto, fileContents } = data;
+      return await this.beneficiaryService.createBeneficiary(beneficiaryDto, fileContents);
+    }
 
   @MessagePattern({ cmd: 'getBeneficiaries' })
   async getBeneficiaries() {

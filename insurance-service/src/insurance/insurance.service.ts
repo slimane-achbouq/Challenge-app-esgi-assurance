@@ -24,6 +24,17 @@ export class InsuranceService {
     const savedInsurance = await newInsurance.save();
     beneficiary.insurances.push(savedInsurance._id);
     await beneficiary.save();
+
+   
+    const quoteDto ={
+      insuranceId:newInsurance['_id']
+    }
+    
+    const id =newInsurance.quoteId
+    this.quoteServiceClient
+    .send({ cmd: 'updateQuote' }, { id, quoteDto })
+    .toPromise();
+
     return savedInsurance;
   }
 
@@ -52,8 +63,6 @@ export class InsuranceService {
 
     
     const quoteId = insurance['quoteId']
-    console.log(quoteDto)
-    console.log(quoteId)
     this.quoteServiceClient.send({ cmd: 'updateQuote' }, { id:quoteId, quoteDto }).toPromise();
     return updateDinsurance;
 

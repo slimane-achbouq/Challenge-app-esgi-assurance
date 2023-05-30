@@ -42,7 +42,7 @@ export class Quote {
   })
   coverage: string;
 
-  @Column()
+  @Column({ nullable: true })
   insurancePremium: number;
 
   @Column()
@@ -53,6 +53,9 @@ export class Quote {
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @CreateDateColumn({ type: 'timestamptz' })
+  coverageStartDate: Date;
 
   @Column()
   userId: string;

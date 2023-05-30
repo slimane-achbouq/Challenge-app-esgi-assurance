@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import * as argon2 from 'argon2';
@@ -77,7 +76,7 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    // return this.usersService.update(userId, { refreshToken: null });
+    return this.usersService.update(userId, { refreshToken: null });
   }
 
   hashData(data: string) {
@@ -133,21 +132,12 @@ export class AuthService {
         `User with email ${verifyProfileDto.email}  does not exist`,
       );
 
-    // if (verifyProfileDto.token === user.validationToken) {
-    //   await this.usersService.update(user._id, { isValide: true });
-    // } else {
-    //   throw new BadRequestException(`Invalid Token !`);
-    // }
-
-    // return 'Profile is activated .';
     const tokenValidation = await this.jwtService.verifyAsync(
       verifyProfileDto.token,
       {
         secret: process.env.JWT_ACCESS_SECRET,
       },
     );
-
-    console.log(tokenValidation);
 
     if (tokenValidation) {
       await this.usersService.update(user._id, { isValide: true });

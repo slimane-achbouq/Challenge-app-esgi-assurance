@@ -21,7 +21,7 @@ import { diskStorage } from 'multer';
 import { CreateQuoteDto, UpdateQuoteDto } from './dtos/quote.dto';
 import { CreateVehicleDto, UpdateVehicleDto } from './dtos/vehicle.dto';
 import { CreateVehicleQuoteDto } from './dtos/vehicle-quote.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Quote')

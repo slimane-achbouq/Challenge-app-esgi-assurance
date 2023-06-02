@@ -1,19 +1,17 @@
-FROM node:16-alpine
+# Base image
+FROM node:14-alpine
 
-# Create app directory
-WORKDIR /app/utils
+# Set the working directory
+WORKDIR /usr/src/app
 
-# Create empty dist directory
-RUN mkdir /app/utils/dist
-
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install app dependencies
+# Install dependencies
 RUN npm install
 
-# Bundle app source
+# Copy the rest of the application code
 COPY . .
 
-# Creates a "dist" folder with the production build
-RUN npm run build
+# Start the application
+CMD ["npm", "run", "start:dev"]

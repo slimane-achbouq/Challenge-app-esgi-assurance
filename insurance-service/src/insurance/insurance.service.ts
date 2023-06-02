@@ -28,7 +28,6 @@ export class InsuranceService {
   }
 
   async getInsurances(): Promise<Insurance[]> {
-    console.log("ok")
     return this.insuranceModel.find().exec();
   }
 
@@ -49,11 +48,9 @@ export class InsuranceService {
     if (insuranceDto['insurancePremium'] && insurance['insurancePremium'] !== insuranceDto['insurancePremium'] ) {
       quoteDto['insurancePremium'] = insuranceDto['insurancePremium'];
     }
-
     
     const quoteId = insurance['quoteId']
-    console.log(quoteDto)
-    console.log(quoteId)
+
     this.quoteServiceClient.send({ cmd: 'updateQuote' }, { id:quoteId, quoteDto }).toPromise();
     return updateDinsurance;
 

@@ -10,7 +10,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.userServiceClient
       .send({ cmd: 'singIn' }, { username, password })
@@ -22,14 +21,10 @@ export class AuthService {
     return user;
   }
 
-
   async login(username: string, password: string) {
     const response = await this.userServiceClient
       .send({ cmd: 'singIn' }, { username, password })
       .toPromise();
-    console.log(response)
     return response;
   }
-
-
 }

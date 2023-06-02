@@ -9,7 +9,6 @@ export class VisitController {
 
     @Post()
     async createVisit(@Body() visit: Visit) {
-        console.log(visit)
         return this.visitService.create(visit);
     }
 }

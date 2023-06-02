@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Role } from 'src/common/enums/roles.enum';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Roles } from '../common/guards/roles.decorator';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';

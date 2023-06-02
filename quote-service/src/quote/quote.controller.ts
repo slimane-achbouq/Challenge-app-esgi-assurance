@@ -19,7 +19,6 @@ export class QuoteController {
 
   @MessagePattern({ cmd: 'createQuote' })
   async createQuote(@Payload() quoteDto: CreateQuoteDto): Promise<Quote> {
-    console.log(quoteDto);
     return await this.quoteService.createQuote(quoteDto);
   }
 

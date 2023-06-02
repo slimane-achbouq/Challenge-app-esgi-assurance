@@ -16,7 +16,9 @@ export class QuoteService {
 
   async createQuote(quoteDto: CreateQuoteDto): Promise<Quote> {
     // Find the vehicle by its ID
-    const vehicle = await this.vehicleService.getVehicleById(quoteDto.vehicleId);
+    const vehicle = await this.vehicleService.getVehicleById(
+      quoteDto.vehicleId,
+    );
 
     // Check if the vehicle exists
     if (!vehicle) {
@@ -38,18 +40,15 @@ export class QuoteService {
 
   async getQuoteById(id: string): Promise<Quote> {
     return this.quoteRepository
-    .createQueryBuilder('quote')
-    .leftJoinAndSelect('quote.vehicle', 'vehicle')
-    .where('quote.id = :id', { id })
-    .getOne();
+      .createQueryBuilder('quote')
+      .leftJoinAndSelect('quote.vehicle', 'vehicle')
+      .where('quote.id = :id', { id })
+      .getOne();
   }
 
   async updateQuote(id: string, quoteDto: UpdateQuoteDto): Promise<Quote> {
-
-    const fieldName : string = "id"
-    console.log(id)
-    console.log(quoteDto)
-    await this.quoteRepository.update( { [fieldName]: id }, quoteDto);
+    const fieldName = 'id';
+    await this.quoteRepository.update({ [fieldName]: id }, quoteDto);
     return this.quoteRepository.findOneBy({ id: id });
   }
 

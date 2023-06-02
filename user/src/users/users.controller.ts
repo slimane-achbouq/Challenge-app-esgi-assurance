@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -32,7 +33,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  
   @UseGuards(RabbitMQAccessTokenGuard, RolesGuard)
   @Roles(Role.USER)
   @MessagePattern({ cmd: 'getUsers' })
@@ -42,7 +42,7 @@ export class UsersController {
 
   @MessagePattern({ cmd: 'findUserById' })
   findById(@Payload() id: string) {
-    console.log(id)
+    console.log(id);
     return this.usersService.findById(id);
   }
 

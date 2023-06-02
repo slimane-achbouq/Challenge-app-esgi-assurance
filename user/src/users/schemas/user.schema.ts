@@ -64,7 +64,7 @@ export const apiPropertiesUser: {
     format: 'Date',
     example: '19',
     description: 'User age',
-  }
+  },
 };
 @Schema({
   timestamps: { createdAt: 'created' },
@@ -102,24 +102,23 @@ export class User extends Document {
   @Prop({ required: true })
   age: Date;
 
-  
   @ApiProperty(apiPropertiesUser.password)
   @Prop({ required: true })
   password: string;
-  
+
   @Prop({ default: Statut.Inactif })
-  statut: Statut
-  
+  statut: Statut;
+
   @Prop({ default: false })
   isValide: boolean;
 
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   validationToken: string;
 
-  @Prop({ default: [Role.USER ] })
+  @Prop({ default: [Role.USER] })
   roles: Role[];
 
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   refreshToken: string;
 }
 

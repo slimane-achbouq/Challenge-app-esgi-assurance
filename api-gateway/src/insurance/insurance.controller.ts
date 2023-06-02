@@ -19,7 +19,7 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Observable } from 'rxjs';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import {
   CreateBeneficiaryDto,
   UpdateBeneficiaryDto,

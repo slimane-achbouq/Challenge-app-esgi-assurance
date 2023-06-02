@@ -126,14 +126,34 @@ services:
       - my-network
 
   utils-service: 
-    extends: 
-      file: utils/docker-compose.yml
-      service: utils-service
-  
-  utils-service-db: 
-    extends: 
-      file: utils/docker-compose.yml
-      service: utils-service-db
+    container_name: utils-service
+    hostname: utils-service
+    build: ./utils
+    volumes:
+      - ./utils:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3005:3005
+    depends_on:
+      - utils-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./utils/.env
+    networks:
+      - my-network
+  utils-database: 
+    container_name: utils-database
+    hostname: utils-database
+    image: mongo:latest
+    env_file:
+      - ./utils/.env
+    volumes:
+      - ./utils/data/db:/data/db
+    ports:
+      - "27019:27017"
+    networks:
+      - my-network
 
 networks:
   my-network:

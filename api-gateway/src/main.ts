@@ -8,7 +8,7 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { InsuranceModule } from './insurance/insurance.module';
 import { QuoteModule } from './quote/quote.module';
@@ -28,6 +28,14 @@ async function bootstrap() {
       },
     },
   });
+
+  // Global pipe validations
+  app.useGlobalPipes(
+    new ValidationPipe({
+      // transform: true,
+      // disableErrorMessages: true,
+    }),
+  );
 
   // Swagger config
   const swaggerCustomOptions: SwaggerCustomOptions = {

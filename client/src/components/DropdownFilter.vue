@@ -27,39 +27,52 @@
             <li class="py-1 px-3">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" />
-                <span class="text-sm font-medium ml-2">Direct VS Indirect</span>
+                <span class="text-sm font-medium ml-2">Subscriped</span>
               </label>
             </li>
             <li class="py-1 px-3">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" />
-                <span class="text-sm font-medium ml-2">Real Time Value</span>
+                <span class="text-sm font-medium ml-2">Not Subscriped</span>
               </label>
             </li>
             <li class="py-1 px-3">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" />
-                <span class="text-sm font-medium ml-2">Top Channels</span>
+                <span class="text-sm font-medium ml-2">Basic insurance</span>
               </label>
             </li>
             <li class="py-1 px-3">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" />
-                <span class="text-sm font-medium ml-2">Sales VS Refunds</span>
+                <span class="text-sm font-medium ml-2">Standard insurance</span>
               </label>
             </li>
             <li class="py-1 px-3">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" />
-                <span class="text-sm font-medium ml-2">Last Order</span>
+                <span class="text-sm font-medium ml-2">Premium insurance</span>
               </label>
             </li>
             <li class="py-1 px-3">
               <label class="flex items-center">
                 <input type="checkbox" class="form-checkbox" />
-                <span class="text-sm font-medium ml-2">Total Spent</span>
+                <span class="text-sm font-medium ml-2">Liability coverage</span>
               </label>
             </li>
+            <li class="py-1 px-3">
+              <label class="flex items-center">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-sm font-medium ml-2">Collision coverage</span>
+              </label>
+            </li>
+            <li class="py-1 px-3">
+              <label class="flex items-center">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-sm font-medium ml-2">Comprehensive coverage</span>
+              </label>
+            </li>
+            
           </ul>
           <div class="py-2 px-3 border-t border-slate-200 bg-slate-50">
             <ul class="flex items-center justify-between">

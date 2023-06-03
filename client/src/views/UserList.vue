@@ -277,7 +277,7 @@
             phoneNumber: this.selectedItems.phoneNumber  }
 
           try {
-            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc1ODc1OSwiZXhwIjoxNjg1Nzk0NzU5fQ.4QC_Z73uU95sCu582uiSv3NVefSZloJ-7odNJ_fbEfU'
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I'
           const response = await axios.put(`http://localhost:3000/auth/update-user/`,  data , {
               headers: {
                   'Authorization': `Bearer ${token}`

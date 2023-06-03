@@ -5,6 +5,7 @@ import UserProfile from '@/views/UserProfile.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import NewQuote from '@/views/NewQuote.vue';
 import CreateInsurance from '@/views/CreateInsurance.vue';
+import Quotes from '@/views/Quotes.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -16,6 +17,7 @@ const router = createRouter({
       { path: '/userprofile/:id', name: 'user-profile', component: UserProfile, meta: { requiresUnauth: false }},
       { path: '/newquote', name: 'user-profile', component: NewQuote, meta: { requiresUnauth: false }},
       { path: '/step4', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
+      { path: '/quotes', name: 'quotes', component: Quotes, meta: { requiresUnauth: false }},
     ]
   })
   

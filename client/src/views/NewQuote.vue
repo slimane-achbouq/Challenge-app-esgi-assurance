@@ -83,6 +83,7 @@
                       
 
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+
                       <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-country">Vehicle Type <span class="text-rose-500">*</span></label>
                           <select id="card-country" class="form-select w-full" v-model="formData.vehicleType">
@@ -95,7 +96,9 @@
                       </div>
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Brand <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="text" v-model="formData.brand" />
+                          <select id="brand" v-model="formData.brand" class="form-select w-full">
+                            <option v-for="item in brands" :key="item.brand" :value="item.brand">{{ item.brand }}</option>
+                          </select>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.brand">{{ errors.brand }}</p>
                         </div>
                       </div>
@@ -103,7 +106,10 @@
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-address">Model <span class="text-rose-500">*</span></label>
-                          <input id="card-address" class="form-input w-full" type="text"  v-model="formData.model"/>
+
+                          <select id="model" v-model="formData.model" class="form-select w-full">
+                            <option v-for="model in selectedBrandModels" :key="model" :value="model">{{ model }}</option>
+                          </select>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.model">{{ errors.model }}</p>
                         </div>
                         <div class="flex-1">
@@ -402,8 +408,29 @@ export default {
               label: 'Tell us what’s your situation ✨',
               selectedTab: 'StepOne'
           },
+          brands: [],
+          selectedBrand: null,
+          selectedModel: null,
         }
     },
+    computed: {
+      selectedBrandModels() {
+        if (!this.formData.brand) {
+          return [];
+        }
+        const brand = this.brands.find(b => b.brand === this.formData.brand);
+        return brand ? brand.models : [];
+      },
+    },
+    async mounted() {
+        const res = await fetch('./car-list.json');  
+        console.log(res)
+        this.brands = await res.json();
+        console.log(this.brands)
+        this.formData.brand = this.brands.length > 0 ? this.brands[0].brand : null;
+        this.selectedModel = this.formData.brand.length > 0 ? this.formData.brand[0] : null;
+      },
+
     methods: {
         async onQuoteCreated(){
           

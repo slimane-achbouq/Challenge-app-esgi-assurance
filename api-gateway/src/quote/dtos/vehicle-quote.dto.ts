@@ -87,6 +87,15 @@ export class CreateVehicleQuoteDto {
     @IsEnum(Coverage)
     coverage: Coverage;
 
+    @IsNotEmpty()
+    @IsNumber()
+    coverageDuration: number;
+
+    @IsNotEmpty()
+    @IsDateString()
+    coverageStartDate: Date;
+
+
 
     
 }

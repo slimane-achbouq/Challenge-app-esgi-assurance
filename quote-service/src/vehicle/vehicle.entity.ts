@@ -63,7 +63,7 @@ export class Vehicle {
   @Column()
   parkingPostalCode: string;
 
-  @Column()
+  @Column({nullable: true })
   parkingType: string;
 
   @Column()

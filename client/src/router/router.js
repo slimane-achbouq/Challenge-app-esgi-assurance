@@ -15,7 +15,7 @@ const router = createRouter({
       { path: '/dashboard/users', name: 'users', component: UserList, meta: { requiresUnauth: false } },
       { path: '/userprofile/:id', name: 'user-profile', component: UserProfile, meta: { requiresUnauth: false }},
       { path: '/newquote', name: 'user-profile', component: NewQuote, meta: { requiresUnauth: false }},
-      { path: '/step3', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
+      { path: '/step4', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
     ]
   })
   

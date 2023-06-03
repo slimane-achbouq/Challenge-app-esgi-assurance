@@ -72,7 +72,7 @@
                   <form>
                     <div class="space-y-4">
                       
-                        <label class="block text-sm font-medium mb-1" for="card-country">Driving License <span class="text-rose-500">*</span></label>
+                        <label class="block text-sm font-medium mb-1" for="card-country">Your Driving License <span class="text-rose-500">*</span></label>
                         <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" v-if="hideImageField">
                             <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
                                 <!-- Left side -->
@@ -109,7 +109,7 @@
                                                                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                                             </svg>
                                                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload Carte Grise</span> or
+                                                                <span class="font-semibold">Click to upload your Driving license </span> or
                                                                 drag and drop</p>
                                                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                                                 PDF Format Only</p>
@@ -144,7 +144,7 @@
                 </div>
                  <div class="space-y-4">
 
-                        <label class="block text-sm font-medium mb-1" for="card-country">Proof of address<span class="text-rose-500">*</span></label>
+                        <label class="block text-sm font-medium mb-1" for="card-country">Proof of your address<span class="text-rose-500">*</span></label>
 
                         <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" v-if="hideImageField">
                             <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
@@ -182,7 +182,7 @@
                                                                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                                             </svg>
                                                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload Carte Grise</span> or
+                                                                <span class="font-semibold">Click to upload the proof of your adresse</span> or
                                                                 drag and drop</p>
                                                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                                                 PDF Format Only</p>
@@ -273,7 +273,7 @@
                       </div>
         </ModalBlank>
 
-        <ModalBasic id="feedback-modal" :modalOpen="false" title="Choose your Plan">
+        <ModalBasic id="feedback-modal" :modalOpen="true" title="Choose your Plan">
                       <!-- Modal content -->
                       <div class="px-5 pt-4 pb-1">
                         <div class="text-sm">

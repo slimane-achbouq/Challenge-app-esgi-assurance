@@ -11,6 +11,9 @@
       <!-- Site header -->
       <Header :sidebarOpen="sidebarOpen" @toggle-sidebar="sidebarOpen = !sidebarOpen" />
       <main>
+      <Banner type="error" class="mb-4"  :open="Object.keys(errors).length !== 0 " v-if="true">
+                    Check the fields you filled.
+      </Banner>
       <Banner type="success" class="mb-4"  :open="true" v-if="caretCrise">
                     File uploaded successfully.
       </Banner>
@@ -64,8 +67,8 @@
                 </div>
                 <header class="mb-6">
                   <!-- Title -->
-                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2" v-if="step.id==1">Vehicle informations</h1>
-                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2" v-if="step.id==2">Quote informations</h1>
+                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2" v-if="step.id==1 || step.id==2">Vehicle informations</h1>
+                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2" v-if="step.id==3">Quote informations</h1>
                   <p></p>
                 </header>
 
@@ -78,120 +81,137 @@
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
                       <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-country">Vehicle Type <span class="text-rose-500">*</span></label>
-                          <select id="card-country" class="form-select w-full">
+                          <select id="card-country" class="form-select w-full" v-model="formData.vehicleType">
                             <option>Car</option>
                             <option>Motorcycle</option>
                             <option>Truck</option>
                           </select>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.vehicletype">{{ errors.vehicletype }}</p>
+                          
                       </div>
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Brand <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="text" value="" />
+                          <input id="card-name" class="form-input w-full" type="text" v-model="formData.brand" />
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.brand">{{ errors.brand }}</p>
                         </div>
                       </div>
                       <!-- 2nd row -->
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-address">Model <span class="text-rose-500">*</span></label>
-                          <input id="card-address" class="form-input w-full" type="text" />
+                          <input id="card-address" class="form-input w-full" type="text"  v-model="formData.model"/>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.model">{{ errors.model }}</p>
                         </div>
                         <div class="flex-1">
-                          <label class="block text-sm font-medium mb-1" for="card-city">Horse Power <span class="text-rose-500">*</span></label>
-                          <input id="card-city" class="form-input w-full" type="text" />
+                          <label class="block text-sm font-medium mb-1" for="card-city">Horse Power in HP<span class="text-rose-500">*</span></label>
+                          <input id="card-city" class="form-input w-full" type="text"  v-model="formData.horsepower" />
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.horsepower">{{ errors.horsepower }}</p>
                         </div>
                       </div>
                       <!-- 3rd row -->
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-state">License Plate <span class="text-rose-500">*</span></label>
-                          <input id="card-state" class="form-input w-full" type="text" />
+                          <input id="card-state" class="form-input w-full" type="text" v-model="formData.licensePlate"/>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplate">{{ errors.licenseplate }}</p>
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm font-medium mb-1" for="startingDate">License Obtained Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
-                             v-model="startingDate">
+                             v-model="formData.licenseObtainedDate">
+                             <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseobtaineddate">{{ errors.licenseobtaineddate }}</p>
                         </div>
                       </div>
                       <!-- 4th row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Annual Mileage (KM) <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="number" value="" />
+                          <input id="card-name" class="form-input w-full" type="number" v-model="formData.annualMileage" />
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">{{ errors.annualmileage }}</p>
                         </div>
 
-                        <div class="flex-1">
+                        <div class="flex-1" v-if="step.id==2">
                             <label class="block text-sm font-medium mb-1" for="startingDate">Vehicle Circulation Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
-                             v-model="startingDate">
+                             v-model="formData.vehicleCirculationDate">
+                            <p class="text-xs mt-1 text-rose-500" v-if="errors.vehiclecirculationdate">{{ errors.vehiclecirculationdate }}</p>
                         </div>
                       </div>
 
                       <!-- 4th row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
                         
                         <div class="flex-1">
-                          <label class="block text-sm font-medium mb-1" for="card-name">Registration Card Holder <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="text" value="" />
+                          <label class="block text-sm font-medium mb-1" for="card-name">Registration Card Holder Name<span class="text-rose-500">*</span></label>
+                          <input id="card-name" class="form-input w-full" type="text" v-model="formData.registrationCardHolder" />
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcardholder">{{ errors.registrationcardholder }}</p>
                         </div>
 
-                        <div class="flex-1">
+                        <div class="flex-1" v-if="step.id==2">
                             <label class="block text-sm font-medium mb-1" for="startingDate">Registration Card Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
-                             v-model="startingDate">
+                             v-model="formData.registrationCardDate">
+                             <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcarddate">{{ errors.registrationcarddate }}</p>
                         </div>
                       </div>
 
 
                       <!-- 4th row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-country">Purchase Mode <span class="text-rose-500">*</span></label>
-                          <select id="card-country" class="form-select w-full">
+                          <select id="card-country" class="form-select w-full" v-model="formData.purchaseMode">
                             <option>New</option>
                             <option>Used</option>
                           </select>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.purchasemode">{{ errors.purchasemode }}</p>
                       </div>
-                        <div class="flex-1">
-                          <label class="block text-sm font-medium mb-1" for="card-name">parking Postal Code <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="number" value="" />
+                        <div class="flex-1" v-if="step.id==2">
+                          <label class="block text-sm font-medium mb-1" for="card-name">Parking Postal Code <span class="text-rose-500">*</span></label>
+                          <input id="card-name" class="form-input w-full" type="text" v-model="formData.parkingPostalCode" />
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.parkingpostalcode">{{ errors.parkingpostalcode }}</p>
                         </div>
                       </div>
 
                       <!-- 1st row -->
                       
 
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4"  v-if="step.id==2">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4"  v-if="step.id==3">
                       <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-country">Insurance Type <span class="text-rose-500">*</span></label>
-                          <select id="card-country" class="form-select w-full">
+                          <select id="card-country" class="form-select w-full" v-model="formData.insuranceType">
                             <option>Liability</option>
                             <option>Collision</option>
                             <option>Comprehensive</option>
                           </select>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.insurancetype">{{ errors.insurancetype }}</p>
                       </div>
-                        <div class="flex-1">
+                        <div class="flex-1" v-if="step.id==3">
                           <label class="block text-sm font-medium mb-1" for="card-country">Coverage <span class="text-rose-500">*</span></label>
-                          <select id="card-country" class="form-select w-full">
+                          <select id="card-country" class="form-select w-full" v-model="formData.coverage">
                             <option>Basic</option>
                             <option>Standard</option>
                             <option>Premium</option>
                           </select>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.coverage">{{ errors.coverage }}</p>
                       </div>
                       </div>
                       <!-- 2nd row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==3">
                         <div class="flex-1">
-                          <label class="block text-sm font-medium mb-1" for="card-address">Coverage Duration <span class="text-rose-500">*</span></label>
-                          <input id="card-address" class="form-input w-full" type="number" />
+                          <label class="block text-sm font-medium mb-1" for="card-address">Coverage Duration by months <span class="text-rose-500">*</span></label>
+                          <input id="card-address" class="form-input w-full" type="number"  v-model="formData.coverageDuration"/>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.coverageduration">{{ errors.coverageduration }}</p>
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm font-medium mb-1" for="startingDate">Coverage Start Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
-                             v-model="startingDate">
+                             v-model="formData.startingDate" >
+                             <p class="text-xs mt-1 text-rose-500" v-if="errors.coveragestartdate">{{ errors.coveragestartdate }}</p>
                         </div>
                       </div>
                       
-                        <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" v-if="hideImageField">
+                        <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" v-if="hideImageField && step.id==1">
                             <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
                                 <!-- Left side -->
                                 <div class="flex items-start space-x-3 md:space-x-4">
@@ -239,38 +259,18 @@
                                                     </label>
                         </div>
 
-                        <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" v-if="hideImageField && step.id==1">
-                            <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
-                                <!-- Left side -->
-                                <div class="flex items-start space-x-3 md:space-x-4">
-                                    <div class="w-9 h-9 shrink-0 mt-1">
-                                        <img class="w-9 h-9 rounded-full"  src="@/images/pdf.png" width="36" height="36"  />
-                                    </div>
-                                    <div>
-                                        Carte Grise file : 
-                                        <div class="text-sm">{{caretCrise}}</div>
-                                    </div>
-                                </div>
-                                
-                                          <div class="flex items-center space-x-4 pl-10 md:pl-0">
-                                                <button >
-                                        
-                                                </button>
-                                            </div>
+                        <p class="text-xs mt-1 text-rose-500" v-if="errors.filerequired && step.id ==1">Carte grise required</p>
 
-                            </div>
-
-
-                        </div>
+                        
 
                       <div class="text-right">
 
                       
-                        <button type="" v-if="step.id==2 && step.id!=3" @click.prevent="nextStep({id: 1, label: 'Information',selectedTab: 'StepTwo' })"  class="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500">back</button>
+                        <button type="" v-if="step.id==2 || step.id==3" @click.prevent="prevStep({id: (step.id-1), label: 'Information',selectedTab: 'StepTwo' })"  class="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500">back</button>
  
-                        <button type="" v-if="step.id!=2" @click.prevent="nextStep({id: (step.id+1), label: 'Information',selectedTab: 'StepTwo' })"  class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Next step</button>
+                        <button type="" v-if="step.id!=3" @click.prevent="nextStep({id: (step.id+1), label: 'Information',selectedTab: 'StepTwo' })"  class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Next step</button>
                             
-                        <button @click.prevent="onQuoteCreated" v-if="step.id==2" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Submit</button>
+                        <button @click.prevent="onQuoteCreated" v-if="step.id==3" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Submit</button>
 
                       </div>
 
@@ -308,7 +308,7 @@
                           <!-- Modal content -->
                           <div class="text-sm mb-10">
                             <div class="space-y-2">
-                              <p>The quote has been created successfully.if you want to continue creating the contract click on " Create "</p>
+                              <p>The quote has been created successfully.if you want to continue creating the contract click on " Create contract "</p>
                             </div>
                           </div>
                           <!-- Modal footer -->
@@ -334,6 +334,7 @@ import Sidebar from '@/partials/Sidebar.vue'
 import Header from '@/partials/Header.vue'
 import Banner from '@/components/Banner.vue';
 import ModalBlank from '@/components/ModalBlank.vue'
+import axios from 'axios'
 
 
 export default {
@@ -346,6 +347,25 @@ export default {
   },
   data() {
         return {
+          errors: {},
+          formData: {
+            vehicleType: '',
+            brand: '',
+            model: '',
+            horsepower: '',
+            licensePlate: '',
+            licenseObtainedDate: '',
+            annualMileage: '',
+            vehicleCirculationDate: '',
+            registrationCardHolder: '',
+            registrationCardDate: '',
+            purchaseMode: '',
+            parkingPostalCode: '',
+            insuranceType: '',
+            coverage: '',
+            coverageDuration: '',
+            startingDate: '',
+          },
           error: null,
           selectedSituation: null,  
           selectedTab: 'StepOne',
@@ -372,11 +392,49 @@ export default {
         }
     },
     methods: {
-        onQuoteCreated(){
-            //this.quoteCreated=true
+        async onQuoteCreated(){
+
+           const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I'
+           try {
+              let response = await axios.post('http://localhost:3000/vehicles-with-quotes', this.formData, {
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          });
+              // handle success
+            } catch (error) {
+              console.log(error);
+              this.errors = this.mapErrorsToFields(error.response.data.message);
+            }
+    
         },
+        mapErrorsToFields(errorMessages) {
+            let fieldErrors = {};
+            errorMessages.forEach((message) => {
+              let fieldName = message.split(' ')[0].toLowerCase(); 
+              if (!fieldErrors[fieldName]) {
+                fieldErrors[fieldName] = message;
+              }
+            });
+            console.log(fieldErrors)
+            if ( ! this.hideImageField ) fieldErrors['filerequired']="carte Grise required"
+            return fieldErrors;
+          },
          back(object) {
           this.step = object;
+        },
+        prevStep(object) {
+            this.error = null;
+            try {
+                if (this.step.id === 1) {
+                        this.step = object;
+                } else {
+                  this.step = object;
+                }
+
+            } catch (error) {
+                this.error = error.message || 'There is an error !';
+            }
         },
         nextStep(object) {
             this.error = null;

@@ -25,10 +25,6 @@
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
               <!-- Delete button -->
               <DeleteButton :selectedItems="selectedItems" />
-              <!-- Dropdown -->
-              <DateSelect />
-              <!-- Filter button -->
-              <FilterButton align="right" />
               <!-- Add order button -->
               <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                 <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -42,11 +38,6 @@
 
           <!-- Table -->
           <QuotesTable @change-selection="updateSelectedItems($event)" />
-
-          <!-- Pagination -->
-          <div class="mt-8">
-            <PaginationClassic />
-          </div>          
 
         </div>
       </main>

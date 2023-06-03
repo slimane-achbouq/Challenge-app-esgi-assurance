@@ -424,9 +424,7 @@ export default {
     },
     async mounted() {
         const res = await fetch('./car-list.json');  
-        console.log(res)
-        this.brands = await res.json();
-        console.log(this.brands)
+        this.brands = await res.json();=
         this.formData.brand = this.brands.length > 0 ? this.brands[0].brand : null;
         this.selectedModel = this.formData.brand.length > 0 ? this.formData.brand[0] : null;
       },

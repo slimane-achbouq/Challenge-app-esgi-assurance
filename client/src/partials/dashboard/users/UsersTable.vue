@@ -175,7 +175,6 @@
       }
 
       const onEdit =(user)=>{
-        console.log("ok")
         emit('edit', user)
       }
 

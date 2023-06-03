@@ -97,8 +97,6 @@ async updateUser(
   @Body() updateUserDto,
 ): Promise<any> {
   
-  console.log(req.user.sub)
-  console.log( req.headers.authorization)
   
   return this.userServiceClient
       .send({ cmd: 'updateUser' }, { id:updateUserDto.id,updateUserDto:updateUserDto })

@@ -243,7 +243,6 @@
       }
 
       async function updateUser(){
-        console.log(this.selectedItem)
           try {
           // Get the form data from the inputs
 

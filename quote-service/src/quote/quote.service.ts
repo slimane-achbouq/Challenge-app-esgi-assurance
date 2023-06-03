@@ -35,8 +35,11 @@ export class QuoteService {
   }
 
   async getQuotes(): Promise<Quote[]> {
-    return this.quoteRepository.find();
-  }
+    return this.quoteRepository
+        .createQueryBuilder('quote')
+        .leftJoinAndSelect('quote.vehicle', 'vehicle')
+        .getMany();
+}
 
   async getQuoteById(id: string): Promise<Quote> {
     return this.quoteRepository

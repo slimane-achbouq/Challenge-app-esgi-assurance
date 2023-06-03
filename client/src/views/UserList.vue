@@ -67,16 +67,16 @@
 
                           <div class="col-span-1">
                             <label class="block text-sm font-medium mb-1" for="name">First Name<span class="text-rose-500">*</span></label>
-                            <input v-model="selectedItems.firstName" id="name" class="form-input w-full px-2 py-1" type="text" required />
+                            <input v-model="selectedItems.firstname" id="name" class="form-input w-full px-2 py-1" type="text" required />
                             <div v-if="errors.name" class="text-xs mt-1 text-rose-500">
                               {{ errors.name }}
                             </div>
                             </div>
                           <div class="col-span-1">
                             <label class="block text-sm font-medium mb-1" for="name">Last Name <span class="text-rose-500">*</span></label>
-                            <input  v-model="selectedItems.lastName" id="name" class="form-input w-full px-2 py-1" type="text" />
-                            <div v-if="errors.familyName" class="text-xs mt-1 text-rose-500">
-                            {{ errors.familyName }}
+                            <input  v-model="selectedItems.lastname" id="name" class="form-input w-full px-2 py-1" type="text" />
+                            <div v-if="errors.familyname" class="text-xs mt-1 text-rose-500">
+                            {{ errors.familyname }}
                             </div>
                             </div>
                          </div>
@@ -192,11 +192,12 @@
 
       const sidebarOpen = ref(false)
       const selectedItems = ref([])
+      const selectedItem = ref([])
       const modalOpen = ref(false)
       const modaDeletelOpen = ref(false)
       const isVerifiedv=ref(false)
       const  errors=ref({ name: "",
-                          familyName: "",
+                          familyname: "",
                           phoneNumber: "",
                           email: "",})
 
@@ -210,9 +211,11 @@
 
       const updateSelectedItems = (selected) => {
         selectedItems.value = selected
+        selectedItem.value = selected
       }
 
       function onOpenModal (selected){
+
         modalOpen.value=true
         selectedItems.value = selected
       }
@@ -224,8 +227,7 @@
 
       async function deleteItem(){
 
-
-        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/users/${this.selectedItems.id}` , {
+        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/users/${this.selectedItems}` , {
               headers: {
                   'Authorization': `Bearer ${this.$store.getters["auth/token"]}`
               }
@@ -241,15 +243,16 @@
       }
 
       async function updateUser(){
+        console.log(this.selectedItem)
           try {
           // Get the form data from the inputs
 
-          if (!this.selectedItems.firstName ) {
+          if (!this.selectedItems.firstname ) {
               errors.value.name = "Veuillez revérifier votre nom";
               return;
             }
-          if (!this.selectedItems.lastName) {
-              errors.value.familyName = "Veuillez revérifier votre prénom";
+          if (!this.selectedItems.lastname) {
+              errors.value.familyname = "Veuillez revérifier votre prénom";
               return;
             }
 
@@ -265,18 +268,19 @@
           }
 
           loading.value = true
-          console.log(this.selectedItems.isVerified)
           const data = {
+            id: this.selectedItems['_id'],
             email: this.selectedItems.email,
-            firstName: this.selectedItems.firstName,
-            lastName: this.selectedItems.lastName,
-            isVerified: this.selectedItems.isVerified=="true" ? true:false,
+            firstname: this.selectedItems.firstname,
+            lastname: this.selectedItems.lastname,
+            isValide: this.selectedItems.isVerified=="true" ? true:false,
             phoneNumber: this.selectedItems.phoneNumber  }
 
           try {
-          const response = await axios.patch(`${import.meta.env.VITE_API_URL}/users/${this.selectedItems.id}`,  data , {
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc1ODc1OSwiZXhwIjoxNjg1Nzk0NzU5fQ.4QC_Z73uU95sCu582uiSv3NVefSZloJ-7odNJ_fbEfU'
+          const response = await axios.put(`http://localhost:3000/auth/update-user/`,  data , {
               headers: {
-                  'Authorization': `Bearer ${localStorage.getItem('esgi-ws-token')}`
+                  'Authorization': `Bearer ${token}`
               }
           })
         }
@@ -300,6 +304,7 @@
       return {
         sidebarOpen,
         selectedItems,
+        selectedItem,
         modalOpen,
         updateSelectedItems,
         onOpenModal,

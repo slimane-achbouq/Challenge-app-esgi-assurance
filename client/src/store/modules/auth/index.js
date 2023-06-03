@@ -7,8 +7,8 @@ export default {
     state() {
         return {
           token: null,
-          firstName: '',
-          lastName: '',
+          firstname: '',
+          lastname: '',
           email: '',
           roles: [],
           id: '',

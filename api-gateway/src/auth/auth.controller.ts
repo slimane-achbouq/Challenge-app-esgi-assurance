@@ -7,6 +7,8 @@ import {
   Inject,
   Post,
   Req,
+  Put,
+  Param,
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -86,4 +88,20 @@ export class UserController {
       .send({ cmd: 'getUsers' }, { accessToken: req.headers.authorization })
       .toPromise();
   }
+
+
+@Put('update-user')
+@UseGuards(JwtAuthGuard)
+async updateUser(
+  @Req() req,
+  @Body() updateUserDto,
+): Promise<any> {
+  
+  console.log(req.user.sub)
+  console.log( req.headers.authorization)
+  
+  return this.userServiceClient
+      .send({ cmd: 'updateUser' }, { id:updateUserDto.id,updateUserDto:updateUserDto })
+      .toPromise();
+}
 }

@@ -58,13 +58,19 @@
                   <div class="font-semibold">Mobile</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold text-left">Status</div>
+                  <div class="font-semibold ">Status</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold text-left">Age</div>
+                  <div class="font-semibold ">Age</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold text-left">Role</div>
+                  <div class="font-semibold ">Registration</div>
+                </th>
+                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                  <div class="font-semibold ">Last update</div>
+                </th>
+                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                  <div class="font-semibold ">Role</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <span class="sr-only">Menu</span>
@@ -77,10 +83,10 @@
 
               <Customer
                 v-for="customer in customers"
-                :key="customer.id"
+                :key="customer['_id']"
                 :customer="customer"
                 v-model:selected="selected"
-                :value="customer.id"
+                :value="customer['_id']"
                 @edit="onEdit"
               />
             </tbody>
@@ -145,8 +151,10 @@
     },
     setup(props, { emit }) {
 
+      const allUsers = ref([]); // this variable will store all the users
+
       const store = useStore();
-      const  token = localStorage.getItem('esgi-ws-token')
+      let  token = localStorage.getItem('esgi-ws-token')
 
       const selectAll = ref(false)
       const selected = ref([])
@@ -162,7 +170,7 @@
       const checkAll = () => {
         selected.value = []
         if (!selectAll.value) {
-          selected.value = customers.value.map(customer => customer.id)
+          selected.value = customers.value.map(customer => customer['_id'])
         }
       }
 
@@ -178,57 +186,43 @@
 
       const fetchUsers = async() => {
 
-
-      customers.value =[ 
-            {
-                id: 1,
-                firstName: 'aaaa',
-                lastName: 'aaa',
-                email: 'aaa.doe@example.com',
-                city: 'aaa York',
-                state: 'NY',
-                codeCity: '10001',
-                phoneNumber: '555-555-5555',
-                isValide: true,
-                age: 30,
-                roles: ['user', 'admin']
-            },
-            {
-                id: 2,
-                firstName: 'aaa',
-                lastName: 'aa',
-                email: 'johaan.doe@example.com',
-                city: 'New York',
-                state: 'NY',
-                codeCity: '10001',
-                phoneNumber: '555-555-5555',
-                isValide: true,
-                age: 30,
-                roles: ['user', 'admin']
-            }
-          
-      ]
-      /*
-      try {
+        
+        customers.value =[]
+    
         loading.value = true
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc1Njc0OCwiZXhwIjoxNjg1NzkyNzQ4fQ.kAjuNu5yvxPPOHK9ZBySZSPdyO8lZAmViaa_HnYZhrA'
+        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+          const response = await axios.get(`http://localhost:3000/auth/getUsers`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
-        if(response.data["hydra:member"]){
+        
+        
+        /*if(response.data["hydra:member"]){
           customers.value = await response.data["hydra:member"];
         }
+        */
+
+        if(response.data){
+          allUsers.value = await response.data; // store all the users
+          customers.value =  allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
+          
+        }
+
+        totalResult.value = allUsers.value.length; // get the total users
+        lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
+
+
 
         customersList.value= await customers.value
+        /*
         totalResult.value=await response.data["hydra:totalItems"];
         if(response.data["hydra:view"]){
           lastPage.value=await response.data["hydra:view"]["hydra:last"].split("page=")[1];;
         }
+        */
         loading.value = false
-      } catch (error) {
-      }
-      */
     }
 
     const searchCustomers = async() =>  {
@@ -239,16 +233,20 @@
     }
 
     function nextPage() {
-        if(page.value < lastPage.value){
-          page.value++
-          fetchUsers()
-        }
+      if (page.value < lastPage.value) {
+        page.value++;
+        customers.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
+        
+      }
+      
       }
     function prevPage() {
-        if (page.value >0 ){
-          page.value--
-          fetchUsers()
-        }
+
+      if (page.value > 1) {
+        page.value--;
+        customers.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
+      }
+
     }
 
     onMounted(fetchUsers)

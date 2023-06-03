@@ -6,7 +6,7 @@ export default {
         return !!state.token;
     },
     fullName(state) {
-        return state.firstName + ' ' + state.lastName;
+        return state.firstname + ' ' + state.lastname;
     },
     role(state) {
         return state.roles[0] === 'ROLE_ADMIN' ? 'Admin' : 'Client';

@@ -70,7 +70,7 @@ export const apiPropertiesUser: {
   },
   phoneNumber: {
     required: true,
-    format: 'number',
+    format: 'string',
     example: '+33749380088',
     description: 'User phone number',
   },

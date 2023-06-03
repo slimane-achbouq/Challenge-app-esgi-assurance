@@ -1,5 +1,5 @@
 export function phoneValidation(phoneNumber) {
-    var regularExpression = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    var regularExpression = /^\+33\d{9}$/;
     return regularExpression.test(phoneNumber)
 };
 

@@ -47,9 +47,9 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  @MessagePattern({ cmd: 'updateUser' })
+  update(@Payload('id') id: string, @Payload('updateUserDto') updateUserDto: UpdateUserDto) {
+
     return this.usersService.update(id, updateUserDto);
   }
 

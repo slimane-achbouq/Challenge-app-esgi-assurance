@@ -25,7 +25,7 @@ const clientProxyProvider: Provider = {
   imports: [
     JwtModule.register({
       secret: process.env.JWT_ACCESS_SECRET,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '6000s' },
     }),
   ],
   providers: [clientProxyProvider],

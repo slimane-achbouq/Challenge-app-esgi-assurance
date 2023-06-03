@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable,NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -41,8 +41,25 @@ export class UsersService {
 
   // TDOD: verify is user profile is valide
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    // Fetch existing data
+    const existingUser = await this.userModel.findById(id).exec();
+  
+    if (!existingUser) {
+      throw new NotFoundException(`User not found with id: ${id}`);
+    }
+  
+    // Update only the fields that have changed
+    const update: any = {};
+  
+    Object.keys(updateUserDto).forEach((key) => {
+      if (existingUser[key] !== updateUserDto[key]) {
+        console.log(updateUserDto[key])
+        update[key] = updateUserDto[key];
+      }
+    });
+  
     return this.userModel
-      .findByIdAndUpdate(id, updateUserDto, { new: true })
+      .findByIdAndUpdate(id, update, { new: true })
       .exec();
   }
 

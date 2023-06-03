@@ -6,14 +6,14 @@
         <div class="flex items-center">
           <label class="inline-flex">
             <span class="sr-only">Select</span>
-            <input :id="customer.id" class="form-checkbox" type="checkbox" :value="value" @change="check" :checked="checked" />
+            <input :id="customer['_id']" class="form-checkbox" type="checkbox" :value="value" @change="check" :checked="checked" />
           </label>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center">
 
-          <div class="font-medium text-slate-800">{{customer.firstName}} {{customer.lastName}}</div>
+          <div class="font-medium text-slate-800">{{customer.firstname}} {{customer.lastname}}</div>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -26,10 +26,16 @@
         <div class="text-center">{{customer.phoneNumber}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center font-medium text-sky-500"><span v-if="customer.isValide">Verified</span><span v-if="!customer.isValide">Not verified</span></div>
+        <div class="text-center font-medium text-sky-500"><span v-if="customer.isValide==true">Verified</span><span v-if="customer.isValide!==true">Not verified</span></div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center font-medium text-emerald-500">{{customer.age}}</div>
+        <div class="text-center">{{calculateAge(customer.age)}} yo</div>
+      </td>
+      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div class="text-center">{{formatDate(customer.updatedAt) }}</div>
+      </td>
+      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div class="text-center font-medium text-emerald-500">{{formatDate(customer.created)}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="text-center">{{customer.roles[0]}}</div>
@@ -51,6 +57,8 @@
 
   <script>
   import { computed } from 'vue'
+  import moment from 'moment';
+
 
   export default {
     name: 'UsersTableItem',
@@ -60,6 +68,16 @@
 
       function edit(){
         context.emit('edit', props.customer)
+      }
+
+      function formatDate(dateString) {
+          return moment(dateString).format('YYYY-MM-DD');
+      }
+
+      function calculateAge(birthDateString) {
+      const birthDate = moment(birthDateString);
+      const now = moment();
+      return now.diff(birthDate, 'years');
       }
 
       function check() {
@@ -75,7 +93,9 @@
       return {
         check,
         checked,
-        edit
+        edit,
+        formatDate,
+        calculateAge
       }
     },
   }

@@ -16,7 +16,7 @@ import { UtilsModule } from './utils/utils.module';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule,{ cors: true });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,

@@ -54,36 +54,36 @@
       </div>
     </div>
 
-    <!-- Name and FamilyName Code -->
+    <!-- Name and Familyname Code -->
     <div class="flex space-x-4" v-if="state == 'individual'">
       <div class="flex-1">
-        <label class="block text-sm font-medium mb-1" for="firstName"
+        <label class="block text-sm font-medium mb-1" for="firstname"
           >Name: <span class="text-rose-500">*</span></label
         >
         <input
-          id="firstName"
+          id="firstname"
           class="form-input w-full"
           type="text"
-          v-model.trim="firstName"
+          v-model.trim="firstname"
           required
         />
-        <div v-if="errors.firstName" class="text-xs mt-1 text-rose-500">
-          {{ errors.firstName }}
+        <div v-if="errors.firstname" class="text-xs mt-1 text-rose-500">
+          {{ errors.firstname }}
         </div>
       </div>
       <div class="flex-1">
-        <label class="block text-sm font-medium mb-1" for="lastName"
+        <label class="block text-sm font-medium mb-1" for="lastname"
           >Family Name: <span class="text-rose-500">*</span></label
         >
         <input
-          id="lastName"
+          id="lastname"
           class="form-input w-full"
           type="text"
-          v-model.trim="lastName"
+          v-model.trim="lastname"
           required
         />
-        <div v-if="errors.lastName" class="text-xs mt-1 text-rose-500">
-          {{ errors.lastName }}
+        <div v-if="errors.lastname" class="text-xs mt-1 text-rose-500">
+          {{ errors.lastname }}
         </div>
       </div>
     </div>
@@ -265,8 +265,8 @@ export default {
       associationName: "",
       profession: "",
       comercialName: "",
-      firstName: "",
-      lastName: "",
+      firstname: "",
+      lastname: "",
       street: "",
       city: "",
       postalCode: "",
@@ -280,8 +280,8 @@ export default {
         associationName: "",
         profession: "",
         comercialName: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         street: "",
         city: "",
         postalCode: "",
@@ -329,14 +329,14 @@ export default {
       Object.keys(this.errors).forEach((key) => (this.errors[key] = ""));
 
       if (this.state == "individual") {
-        if (this.firstName.length < 2) {
+        if (this.firstname.length < 2) {
           this.formValid = false;
-          this.errors.firstName = "Please check your name";
+          this.errors.firstname = "Please check your name";
           return;
         }
-        if (this.lastName.length < 2) {
+        if (this.lastname.length < 2) {
           this.formValid = false;
-          this.errors.lastName = "Please check your last name";
+          this.errors.lastname = "Please check your last name";
           return;
         }
       }
@@ -409,8 +409,8 @@ export default {
         associationName: this.associationName,
         profession: this.profession,
         comercialName: this.comercialName,
-        firstName: this.firstName,
-        lastName: this.lastName,
+        firstname: this.firstname,
+        lastname: this.lastname,
         street: this.street,
         city: this.city,
         postalCode: this.postalCode,

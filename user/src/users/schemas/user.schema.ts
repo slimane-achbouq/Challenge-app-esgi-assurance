@@ -55,7 +55,7 @@ export const apiPropertiesUser: {
   },
   phoneNumber: {
     required: true,
-    format: 'number',
+    format: 'string',
     example: '+3349380088',
     description: 'User phone number',
   },
@@ -96,7 +96,7 @@ export class User extends Document {
 
   @ApiProperty(apiPropertiesUser.codeCity)
   @Prop({ required: true })
-  phoneNumber: number;
+  phoneNumber: string;
 
   @ApiProperty(apiPropertiesUser.age)
   @Prop({ required: true })

@@ -23,8 +23,8 @@ export default {
             const userInfos = VueJwtDecode.decode(responseData.token);
             context.commit('setUser', {
                 token: responseData.token,
-                firstName: userInfos.firstName,
-                lastName: userInfos.lastName,
+                firstname: userInfos.firstname,
+                lastname: userInfos.lastname,
                 email: userInfos.username,
                 roles: userInfos.roles,
                 id: userInfos.id
@@ -41,8 +41,8 @@ export default {
             const userInfos = VueJwtDecode.decode(token);
             context.commit('setUser', {
                 token: token,
-                firstName: userInfos.firstName,
-                lastName: userInfos.lastName,
+                firstname: userInfos.firstname,
+                lastname: userInfos.lastname,
                 email: userInfos.email,
                 roles: userInfos.roles,
                 id: userInfos.id

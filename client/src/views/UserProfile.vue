@@ -46,7 +46,7 @@
                                 <div>
                                     <div class="mb-4 flex justify-between">
                                         <div class="text-slate-800 font-semibold mb-4">Edit Information</div>
-                                        <!--                    <router-link :to="{ name: 'userannounces', params: { lastName: user.lastName }}">
+                                        <!--                    <router-link :to="{ name: 'userannounces', params: { lastname: user.lastname }}">
                                                               <a class="text-slate-800 font-semibold mb-4">See all announces</a>
                                                             </router-link>-->
                                     </div>
@@ -60,7 +60,7 @@
                                                     <label class="block text-sm font-medium mb-1" for="firstname">First
                                                         Name</label>
                                                     <input id="firstname" class="form-input w-full" type="text"
-                                                           v-model="user.firstName"/>
+                                                           v-model="user.firstname"/>
                                                     <div v-if="errors.name" class="text-xs mt-1 text-rose-500">
                                                         {{ errors.name }}
                                                     </div>
@@ -69,10 +69,10 @@
                                                     <label class="block text-sm font-medium mb-1" for="lastname">Last
                                                         Name</label>
                                                     <input id="lastname" class="form-input w-full" type="text"
-                                                           v-model="user.lastName"/>
+                                                           v-model="user.lastname"/>
 
-                                                    <div v-if="errors.familyName" class="text-xs mt-1 text-rose-500">
-                                                        {{ errors.familyName }}
+                                                    <div v-if="errors.familyname" class="text-xs mt-1 text-rose-500">
+                                                        {{ errors.familyname }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,8 +236,8 @@ export default {
         return {
             searchedAddresses: [],
             user: {
-                firstName: "",
-                lastName: "",
+                firstname: "",
+                lastname: "",
                 email: "",
                 phoneNumber: "",
                 street: "",
@@ -256,7 +256,7 @@ export default {
                 profession: "",
                 comercialName: "",
                 name: "",
-                familyName: "",
+                familyname: "",
                 street: "",
                 city: "",
                 postalCode: "",
@@ -274,12 +274,12 @@ export default {
         async updateUser() {
 
             if (this.user.roles.includes("ROLE_INDIVIDUAL")) {
-                if (!this.user.firstName) {
+                if (!this.user.firstname) {
                     this.errors.name = "Veuillez revérifier votre nom";
                     return;
                 }
-                if (!this.user.lastName) {
-                    this.errors.familyName = "Veuillez revérifier votre prénom";
+                if (!this.user.lastname) {
+                    this.errors.familyname = "Veuillez revérifier votre prénom";
                     return;
                 }
             }
@@ -299,8 +299,8 @@ export default {
 
             try {
                 let userInformations = {
-                    firstName: this.user.firstName,
-                    lastName: this.user.lastName,
+                    firstname: this.user.firstname,
+                    lastname: this.user.lastname,
                     email: this.user.email,
                     phoneNumber: this.user.phoneNumber,
                     associationName: this.user.associationName,

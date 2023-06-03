@@ -73,10 +73,6 @@ export class CreateVehicleQuoteDto {
     parkingPostalCode: string;
   
     @IsNotEmpty()
-    @IsString()
-    parkingType: string;
-  
-    @IsNotEmpty()
     annualMileage: number;  
 
     @IsNotEmpty()
@@ -88,7 +84,6 @@ export class CreateVehicleQuoteDto {
     coverage: Coverage;
 
     @IsNotEmpty()
-    @IsNumber()
     coverageDuration: number;
 
     @IsNotEmpty()

@@ -63,9 +63,6 @@ export class Vehicle {
   @Column()
   parkingPostalCode: string;
 
-  @Column({nullable: true })
-  parkingType: string;
-
   @Column()
   annualMileage: number;
 

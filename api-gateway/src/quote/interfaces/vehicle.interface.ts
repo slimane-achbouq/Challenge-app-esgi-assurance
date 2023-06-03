@@ -13,7 +13,6 @@ export interface IVehicle {
   registrationCardHolder: string;
   purchaseMode: string;
   parkingPostalCode: string;
-  parkingType: string;
   annualMileage: number;
   carteGrise: string;
   quote: IQuote;

@@ -12,3 +12,9 @@ export function passwordValidation(password) {
     var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
     return regularExpression.test(password);
 };
+
+export function licensePlateValidation(licensePlate) {
+    console.log(licensePlate)
+    var regularExpression = /^[A-Z]{2}-\d{3}-[A-Z]{2}$/;
+    return regularExpression.test(licensePlate)
+};

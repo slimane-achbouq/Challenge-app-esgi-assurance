@@ -11,6 +11,10 @@
       <!-- Site header -->
       <Header :sidebarOpen="sidebarOpen" @toggle-sidebar="sidebarOpen = !sidebarOpen" />
       <main>
+
+      <Banner type="success" class="mb-4"  :open="quoteCreated" v-if="quoteCreated">
+                    quote created successfully .
+      </Banner>
       <Banner type="error" class="mb-4"  :open="Object.keys(errors).length !== 0 " v-if="true">
                     Check the fields you filled.
       </Banner>
@@ -104,7 +108,7 @@
                         </div>
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-city">Horse Power in HP<span class="text-rose-500">*</span></label>
-                          <input id="card-city" class="form-input w-full" type="text"  v-model="formData.horsepower" />
+                          <input id="card-city" class="form-input w-full placeholder-slate-300" type="number"  v-model="formData.horsepower" placeholder="200"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.horsepower">{{ errors.horsepower }}</p>
                         </div>
                       </div>
@@ -112,8 +116,9 @@
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-state">License Plate <span class="text-rose-500">*</span></label>
-                          <input id="card-state" class="form-input w-full" type="text" v-model="formData.licensePlate"/>
+                          <input id="card-state" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.licensePlate" placeholder="AA-11-BB"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplate">{{ errors.licenseplate }}</p>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplateformat">Place Number format not correct</p>
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm font-medium mb-1" for="startingDate">License Obtained Date <span class="text-rose-500">*</span><br></label>
@@ -126,7 +131,7 @@
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Annual Mileage (KM) <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="number" v-model="formData.annualMileage" />
+                          <input id="card-name" class="form-input w-full placeholder-slate-300" type="number" v-model="formData.annualMileage" placeholder="70000"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">{{ errors.annualmileage }}</p>
                         </div>
 
@@ -143,7 +148,7 @@
                         
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Registration Card Holder Name<span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="text" v-model="formData.registrationCardHolder" />
+                          <input id="card-name" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.registrationCardHolder" placeholder="firstName lastName"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcardholder">{{ errors.registrationcardholder }}</p>
                         </div>
 
@@ -168,7 +173,7 @@
                       </div>
                         <div class="flex-1" v-if="step.id==2">
                           <label class="block text-sm font-medium mb-1" for="card-name">Parking Postal Code <span class="text-rose-500">*</span></label>
-                          <input id="card-name" class="form-input w-full" type="text" v-model="formData.parkingPostalCode" />
+                          <input id="card-name" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.parkingPostalCode" placeholder="75000"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.parkingpostalcode">{{ errors.parkingpostalcode }}</p>
                         </div>
                       </div>
@@ -200,13 +205,13 @@
                       <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==3">
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-address">Coverage Duration by months <span class="text-rose-500">*</span></label>
-                          <input id="card-address" class="form-input w-full" type="number"  v-model="formData.coverageDuration"/>
+                          <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"  v-model="formData.coverageDuration" placeholder="12"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.coverageduration">{{ errors.coverageduration }}</p>
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm font-medium mb-1" for="startingDate">Coverage Start Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
-                             v-model="formData.startingDate" >
+                             v-model="formData.coverageStartDate" >
                              <p class="text-xs mt-1 text-rose-500" v-if="errors.coveragestartdate">{{ errors.coveragestartdate }}</p>
                         </div>
                       </div>
@@ -335,6 +340,10 @@ import Header from '@/partials/Header.vue'
 import Banner from '@/components/Banner.vue';
 import ModalBlank from '@/components/ModalBlank.vue'
 import axios from 'axios'
+ import {
+    licensePlateValidation
+
+  } from "@/utils/utils-common-function";
 
 
 export default {
@@ -349,7 +358,7 @@ export default {
         return {
           errors: {},
           formData: {
-            vehicleType: '',
+            vehicleType: 'Car',
             brand: '',
             model: '',
             horsepower: '',
@@ -359,12 +368,16 @@ export default {
             vehicleCirculationDate: '',
             registrationCardHolder: '',
             registrationCardDate: '',
-            purchaseMode: '',
+            purchaseMode: 'New',
             parkingPostalCode: '',
-            insuranceType: '',
-            coverage: '',
+            insuranceType: 'Collision',
+            coverage: 'Basic',
             coverageDuration: '',
             startingDate: '',
+            coverageStartdate :'',
+            carteGrise: null,
+            licenseplateformat:null
+
           },
           error: null,
           selectedSituation: null,  
@@ -393,19 +406,60 @@ export default {
     },
     methods: {
         async onQuoteCreated(){
+          
+          if (!licensePlateValidation(this.formData.licensePlate)) {
+
+            this.errors['licenseplateformat'] = "license plate format incorrect";
+          }
+
+          // Check if startingDate is not empty
+          if (this.formData.startingDate !== '') {
+            const date = new Date(this.formData.startingDate);
+            this.formData.startingDate = date.toISOString();
+          }
+
+          if (this.formData.licenseObtainedDate !== '') {
+            const date = new Date(this.formData.licenseObtainedDate);
+            this.formData.licenseObtainedDate = date.toISOString();
+          }
+
+          if (this.formData.registrationCardDate !== '') {
+            const date = new Date(this.formData.registrationCardDate);
+            this.formData.registrationCardDate = date.toISOString();
+          }
+
+          if (this.formData.vehicleCirculationDate !== '') {
+            const date = new Date(this.formData.vehicleCirculationDate);
+            this.formData.vehicleCirculationDate = date.toISOString();
+          }
+
+          if (this.formData.annualMileage !== '') {
+            let num = parseFloat(this.formData.annualMileage);
+            console.log( typeof num)
+            this.formData.annualMileage = isNaN(num) ?  this.formData.annualMileage : num;;
+            console.log( typeof this.formData.annualMileage)
+          }
+
+          if (this.formData.coverageDuration !== '') {
+            let num = parseFloat(this.formData.coverageDuration);
+            this.formData.coverageDuration = isNaN(num) ? this.formData.coverageDuration : num;;
+          }
 
            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I'
            try {
               let response = await axios.post('http://localhost:3000/vehicles-with-quotes', this.formData, {
               headers: {
-                  'Authorization': `Bearer ${token}`
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'multipart/form-data'
               }
           });
-              // handle success
+              this.errors={}
+              this.quoteCreated=true
             } catch (error) {
-              console.log(error);
               this.errors = this.mapErrorsToFields(error.response.data.message);
             }
+
+            
     
         },
         mapErrorsToFields(errorMessages) {
@@ -416,6 +470,8 @@ export default {
                 fieldErrors[fieldName] = message;
               }
             });
+
+            if (this.errors.licenseplateformat) fieldErrors['licenseplateformat'] = "Format incorrect";
             console.log(fieldErrors)
             if ( ! this.hideImageField ) fieldErrors['filerequired']="carte Grise required"
             return fieldErrors;
@@ -452,7 +508,7 @@ export default {
         handleFile(event) {
             this.file = event.target.files[0];
             this.caretCrise = this.file.name
-            console.log(this.file)
+            this.formData.carteGrise = this.file
             this.previewSrc = URL.createObjectURL(event.target.files[0]);
             this.hideImageField = true;
         },

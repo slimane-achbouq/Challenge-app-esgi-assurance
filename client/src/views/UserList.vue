@@ -130,7 +130,7 @@
                         <div>
                           <!-- Modal header -->
                           <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800">Delete customer?</div>
+                            <div class="text-lg font-semibold text-slate-800">Delete User?</div>
                           </div>
                           <!-- Modal content -->
                           <div class="text-sm mb-10">

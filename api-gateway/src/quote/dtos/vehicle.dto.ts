@@ -57,9 +57,6 @@ export class CreateVehicleDto {
   @IsString()
   parkingPostalCode: string;
 
-  @IsNotEmpty()
-  @IsString()
-  parkingType: string;
 
   @IsNotEmpty()
   annualMileage: number;

@@ -113,7 +113,7 @@
                   password: this.password
               };
               try {
-                  await this.$store.dispatch('auth/login', actionPayload);
+                  await this.$store.dispatch('auth/signin', actionPayload);
                   const redirectUrl = '/' + (this.$route.query.redirect || 'dashboard');
                   this.$router.replace(redirectUrl);
               } catch (error) {

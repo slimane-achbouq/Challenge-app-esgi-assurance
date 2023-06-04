@@ -1,7 +1,7 @@
 import {Body, Controller, Param, Patch, Post, Put} from '@nestjs/common';
 import {Demand} from "../schema/demand.schema";
 import {DemandService} from "./demand.service";
-import {UpdateDemandDto} from "./demand.dto";
+import {CreateDemandDto, UpdateDemandDto} from "./demand.dto";
 
 @Controller("demand")
 export class DemandController {
@@ -9,8 +9,8 @@ export class DemandController {
     }
 
     @Post()
-    async createDemand(@Body() demand: Demand) {
-        console.log(demand)
+    async createDemand(@Body() demand: CreateDemandDto) {
+        console.log(demand);
         return this.demandService.create(demand);
     }
 

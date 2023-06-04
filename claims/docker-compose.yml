@@ -8,7 +8,7 @@ services:
     volumes:
       - ./data/db:/data/db
     ports:
-      - "27019:27017"
+      - "27020:27017"
     networks:
       - my-network
 
@@ -18,9 +18,9 @@ services:
         - .:/usr/src/app
         - /usr/src/app/node_modules
     ports:
-      - 3007:3007
+      - 3006:3006
     depends_on:
-      - mongodb
+      - claims-database
     env_file:
       - .env
     networks:

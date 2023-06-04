@@ -125,7 +125,7 @@ services:
     networks:
       - my-network
 
-  utils-service: 
+  utils-service:
     container_name: utils-service
     hostname: utils-service
     build: ./utils
@@ -142,7 +142,7 @@ services:
       - ./utils/.env
     networks:
       - my-network
-  utils-database: 
+  utils-database:
     container_name: utils-database
     hostname: utils-database
     image: mongo:latest
@@ -152,6 +152,19 @@ services:
       - ./utils/data/db:/data/db
     ports:
       - "27019:27017"
+    networks:
+      - my-network
+
+  claims-database:
+    container_name: claims
+    image: mongo:latest
+    hostname: claims
+    volumes:
+      - ./claims/data/db:/data/db
+    env_file:
+      - ./claims/.env
+    ports:
+      - "27020:27017"
     networks:
       - my-network
 

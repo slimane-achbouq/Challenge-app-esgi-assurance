@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {DemandModule} from "./demand/demand.module";
-import {MongooseModule} from "@nestjs/mongoose";
+import { DemandModule } from './demand/demand.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGODB_URL),
-      DemandModule
+    MongooseModule.forRoot('mongodb://claims-database:27017/db'),
+    DemandModule,
   ],
   controllers: [AppController],
   providers: [AppService],

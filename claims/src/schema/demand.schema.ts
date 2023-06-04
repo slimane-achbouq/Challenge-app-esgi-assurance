@@ -4,6 +4,9 @@ import {Document, now} from 'mongoose';
 @Schema()
 export class Demand extends Document {
     @Prop({required: true})
+    insurance_id: string;
+
+    @Prop({required: true})
     reason: string;
 
     @Prop({required: true})

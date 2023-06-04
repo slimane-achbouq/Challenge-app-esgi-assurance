@@ -14,7 +14,13 @@ export class DemandService {
         return createdDemand.save();
     }
 
-    async updateDemand(demandId: string, decision: string, additionalInfo: string): Promise<Demand> {
+    async updateDemand(demandId: string, decision: string, additionalInfo: string, insurance_id: string): Promise<Demand> {
+        const existingDemand = await this.demandModel.findOne({ insurance_id });
+
+        if (!existingDemand) {
+            throw new Error('Demand not found with this insurance_id : ' + insurance_id);
+        }
+
         const updatedDemand = await this.demandModel.findByIdAndUpdate(
             demandId,
             {decision, additionalInfo, updatedAt: now()},

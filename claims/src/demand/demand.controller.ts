@@ -16,8 +16,8 @@ export class DemandController {
 
     @Patch(':id')
     async updateDemand(@Param('id') id: string, @Body() updateDemandDto: UpdateDemandDto) {
-        const {decision, additionalInfo} = updateDemandDto;
-        const updatedDemand = await this.demandService.updateDemand(id, decision, additionalInfo);
+        const {decision, additionalInfo, insurance_id} = updateDemandDto;
+        const updatedDemand = await this.demandService.updateDemand(id, decision, additionalInfo, insurance_id);
         return updatedDemand;
     }
 }

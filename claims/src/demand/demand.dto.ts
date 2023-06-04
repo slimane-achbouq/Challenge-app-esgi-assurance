@@ -3,6 +3,10 @@ import {IsNotEmpty, IsString} from "class-validator";
 export class CreateDemandDto {
     @IsNotEmpty()
     @IsString()
+    insuarnce_id: string;
+
+    @IsNotEmpty()
+    @IsString()
     reason: string;
 
     @IsNotEmpty()
@@ -15,6 +19,10 @@ export class CreateDemandDto {
 }
 
 export class UpdateDemandDto {
+    @IsNotEmpty()
+    @IsString()
+    insurance_id: string;
+
     @IsNotEmpty()
     @IsString()
     decision: string;

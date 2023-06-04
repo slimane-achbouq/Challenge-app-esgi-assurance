@@ -48,8 +48,10 @@ export class UsersController {
 
   @ApiBearerAuth()
   @MessagePattern({ cmd: 'updateUser' })
-  update(@Payload('id') id: string, @Payload('updateUserDto') updateUserDto: UpdateUserDto) {
-
+  update(
+    @Payload('id') id: string,
+    @Payload('updateUserDto') updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.update(id, updateUserDto);
   }
 

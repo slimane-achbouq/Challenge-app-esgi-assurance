@@ -108,7 +108,6 @@ export class CreateUserDto {
   @IsNotEmpty()
   codeCity: number;
 
-
   @ApiProperty(apiPropertiesUser.phoneNumber)
   @IsPhoneNumber()
   @IsNotEmpty()
@@ -120,13 +119,12 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty(apiPropertiesUser.age)
-  @Transform( ({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   @MaxDate(new Date())
   age: number;
 
   isValide: boolean;
-
 
   refreshToken: string;
 
@@ -135,5 +133,5 @@ export class CreateUserDto {
   roles: Role[];
 }
 
-// To protect routes 
+// To protect routes
 // export type CreateUser = Omit<CreateUserDto, "statut" | ....>

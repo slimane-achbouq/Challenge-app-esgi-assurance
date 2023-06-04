@@ -6,6 +6,7 @@ import RegisterView from '@/views/RegisterView.vue';
 import NewQuote from '@/views/NewQuote.vue';
 import CreateInsurance from '@/views/CreateInsurance.vue';
 import Quotes from '@/views/Quotes.vue';
+import Quote from '@/views/Quote.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -18,6 +19,7 @@ const router = createRouter({
       { path: '/newquote', name: 'user-profile', component: NewQuote, meta: { requiresUnauth: false }},
       { path: '/step4', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
       { path: '/quotes', name: 'quotes', component: Quotes, meta: { requiresUnauth: false }},
+      { path: '/quote', contract: 'quote', component: Quote, meta: { requiresUnauth: false }},
     ]
   })
   

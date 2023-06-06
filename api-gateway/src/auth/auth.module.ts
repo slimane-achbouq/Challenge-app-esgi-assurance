@@ -1,7 +1,6 @@
 import { Module, Provider } from '@nestjs/common';
 import { UserController } from './auth.controller';
 import {
-  ClientsModule,
   Transport,
   ClientProxyFactory,
   ClientProxy,

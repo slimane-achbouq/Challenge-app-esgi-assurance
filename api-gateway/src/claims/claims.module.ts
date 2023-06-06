@@ -1,5 +1,5 @@
 import { Module, Provider } from '@nestjs/common';
-import { UtilsController } from './utils.controller';
+import { ClaimsController } from './claims.controller';
 import {
   ClientProxy,
   ClientProxyFactory,
@@ -7,22 +7,22 @@ import {
 } from '@nestjs/microservices';
 
 const clientProxyProvider: Provider = {
-  provide: 'UTILS_SERVICE',
+  provide: 'CLAIMS_SERVICE',
   useFactory: (): ClientProxy => {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
         urls: ['amqp://admin:admin_password@rabbitmq:5672'],
-        queue: 'utils_service_queue',
+        queue: 'claims_service_queue',
         queueOptions: { durable: false },
       },
     });
   },
 };
+
 @Module({
-  imports: [],
   providers: [clientProxyProvider],
-  controllers: [UtilsController],
+  controllers: [ClaimsController],
   exports: [clientProxyProvider],
 })
-export class UtilsModule {}
+export class ClaimsModule {}

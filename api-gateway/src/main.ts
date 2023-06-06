@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { InsuranceModule } from './insurance/insurance.module';
 import { QuoteModule } from './quote/quote.module';
 import { UtilsModule } from './utils/utils.module';
+import { ClaimsModule } from './claims/claims.module';
 dotenv.config();
 
 async function bootstrap() {
@@ -66,7 +67,14 @@ async function bootstrap() {
     .build();
 
   const doc = SwaggerModule.createDocument(app, config, {
-    include: [AppModule, AuthModule, InsuranceModule, QuoteModule, UtilsModule],
+    include: [
+      AppModule,
+      AuthModule,
+      InsuranceModule,
+      QuoteModule,
+      UtilsModule,
+      ClaimsModule,
+    ],
   });
   SwaggerModule.setup('api/v1', app, doc, swaggerCustomOptions);
 

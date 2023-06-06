@@ -30,8 +30,7 @@ export class RolesGuard implements CanActivate {
     try {
       decoded = this.jwtService.verify(bearerToken);
     } catch (error) {
-      console.log(new Error(error));
-      return false;
+      throw new Error(error);
     }
 
     return requiredRoles.some((role) => decoded.roles?.includes(role));

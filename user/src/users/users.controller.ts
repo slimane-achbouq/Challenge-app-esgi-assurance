@@ -33,8 +33,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(RabbitMQAccessTokenGuard, RolesGuard)
-  @Roles(Role.USER)
   @MessagePattern({ cmd: 'getUsers' })
   findAll() {
     return this.usersService.findAll();

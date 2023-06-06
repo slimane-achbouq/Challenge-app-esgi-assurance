@@ -17,16 +17,3 @@ export class CreateDemandDto {
   @IsString()
   description: string;
 }
-
-export class UpdateDemandDto {
-  @IsNotEmpty()
-  @IsString()
-  insurance_id: string;
-
-  @IsNotEmpty()
-  @IsString()
-  decision: string;
-
-  @IsString()
-  additionalInfo: string;
-}

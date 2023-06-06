@@ -15,10 +15,10 @@ export class Demand extends Document {
   @Prop({ required: true })
   description: string;
 
-  @Prop()
+  @Prop({ required: false })
   decision: string;
 
-  @Prop({ default: 'None' })
+  @Prop({ required: false, default: '' })
   additionalInfo: string;
 
   @Prop({ required: true, default: now() })

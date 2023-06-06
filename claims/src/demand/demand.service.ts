@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Demand } from '../schema/demand.schema';
-import { CreateDemandDto } from './demand.dto';
+import { CreateDemandDto } from '../dto/create-demand.dto';
 
 @Injectable()
 export class DemandService {

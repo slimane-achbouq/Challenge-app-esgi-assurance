@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginView from '@/views/LoginView.vue';
 import UserList from '@/views/UserList.vue';
 import UserProfile from '@/views/UserProfile.vue';
-import RegisterView from '@/views/RegisterView.vue';
+import Register from '@/views/Register.vue';
 import NewQuote from '@/views/NewQuote.vue';
 import CreateInsurance from '@/views/CreateInsurance.vue';
+import Dashboard from '@/views/Dashboard.vue';
 import Quotes from '@/views/Quotes.vue';
 import Quote from '@/views/Quote.vue';
 
@@ -13,7 +14,8 @@ const router = createRouter({
     routes: [
       { path: '/', name: 'home', redirect: '/login' },
       { path: '/login', name: 'login', component: LoginView, meta: { requiresUnauth: false } },
-      { path: '/register', name: 'register', component: RegisterView, meta: { requiresUnauth: false } },
+      { path: '/register', name: 'register', component: Register, meta: { requiresUnauth: false } },
+      { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresUnauth: false } },
       { path: '/dashboard/users', name: 'users', component: UserList, meta: { requiresUnauth: false } },
       { path: '/userprofile/:id', name: 'user-profile', component: UserProfile, meta: { requiresUnauth: false }},
       { path: '/newquote', name: 'user-profile', component: NewQuote, meta: { requiresUnauth: false }},

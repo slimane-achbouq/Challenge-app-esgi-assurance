@@ -1,9 +1,9 @@
 import VueJwtDecode from 'vue-jwt-decode';
 
 export default {
-    async login(context, payload) {
+    async signin(context, payload) {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -19,15 +19,18 @@ export default {
                 throw error;
             }
 
-            localStorage.setItem('esgi-ws-token', responseData.token);
-            const userInfos = VueJwtDecode.decode(responseData.token);
+            localStorage.setItem('esgi-ws-token', responseData.tokens['accessToken']);
+            // const userInfos = VueJwtDecode.decode(responseData.tokens[0]);
+            // const userInfos = VueJwtDecode.decode(responseData.tokens['accessToken']);
+            // console.log(userInfos);
             context.commit('setUser', {
-                token: responseData.token,
-                firstname: userInfos.firstname,
-                lastname: userInfos.lastname,
-                email: userInfos.username,
-                roles: userInfos.roles,
-                id: userInfos.id
+                token: responseData.tokens['accessToken'],
+                refreshToken: responseData.tokens['refreshToken'],
+                firstname: responseData.user['firstname'],
+                lastname: responseData.user['lastname'],
+                email: responseData.user['email'],
+                roles: responseData.user['role'],
+                id: responseData.user['_id']
             });
         } catch (ex) {
             const error = new Error(ex || 'Failed to authenticate. Check your login data.');
@@ -48,5 +51,35 @@ export default {
                 id: userInfos.id
             });
         }
+    },
+    async signUp(context, payload) {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    email: payload.email,
+                    adresse: payload.adresse,
+                    city: payload.city,
+                    phoneNumber: payload.phoneNumber,
+                    age: payload.age,
+                    password: payload.password,
+                    codeCity: payload.codeCity
+                }),
+            });
+            const responseData = await response.json();
+            if (!response.ok) {
+                const error = new Error(responseData.message || 'Failed to register. Check your register data.');
+                throw error;
+            }
+        } catch (ex) {
+            const error = new Error(ex || 'Failed to register. Check your register data.');
+            throw error;
+        }
+
     },
 }

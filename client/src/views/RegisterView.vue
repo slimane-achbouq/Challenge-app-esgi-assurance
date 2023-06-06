@@ -1,4 +1,5 @@
 <template>
+  <p>zakaria</p>
   <main class="bg-white">
     <div class="relative flex">
       <!-- Content -->

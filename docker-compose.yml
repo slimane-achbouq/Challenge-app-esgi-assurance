@@ -158,7 +158,7 @@ services:
   claims-database:
     container_name: claims
     image: mongo:latest
-    hostname: claims
+    hostname: claims-database
     volumes:
       - ./claims/data/db:/data/db
     env_file:

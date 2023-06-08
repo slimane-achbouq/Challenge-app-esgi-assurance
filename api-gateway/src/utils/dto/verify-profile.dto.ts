@@ -4,12 +4,6 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export const apiPropertiesUser: {
   [P in keyof Partial<VerifyDto>]: ApiPropertyOptions;
 } = {
-  email: {
-    required: true,
-    format: 'string',
-    example: 'zakaria@gmail.com',
-    description: 'User Email',
-  },
   token: {
     required: true,
     format: 'string',
@@ -18,9 +12,6 @@ export const apiPropertiesUser: {
   },
 };
 export class VerifyDto {
-  @IsEmail()
-  email: string;
-
   @IsString()
   @IsNotEmpty()
   token: string;

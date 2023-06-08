@@ -13,6 +13,7 @@ import { VerifyDto } from './dto/verify-profile.dto';
 import { User } from 'src/users/schemas/user.schema';
 import { Role } from 'src/users/enums/roles.enum';
 import { ClientProxy } from '@nestjs/microservices';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -27,16 +28,17 @@ export class AuthService {
     const userExists = await this.usersService.findByUserByEmail(
       createUserDto.email,
     );
-    if (userExists) {
-      throw new BadRequestException('User already exists');
-    }
+    if (userExists) return { message: 'User already exist !' };
 
     // Hash password
     const hash = await this.hashData(createUserDto.password);
 
+    const validationToken = uuidv4('8');
+
     const newUser = await this.usersService.create({
       ...createUserDto,
       password: hash,
+      validationToken: validationToken,
     });
 
     const tokens = await this.getTokens(
@@ -47,31 +49,41 @@ export class AuthService {
 
     const payload = {
       email: createUserDto.email,
-      token: tokens.accessToken,
+      token: newUser.validationToken,
     };
 
-    /*
-    await this.utilsService
-      .send({ cmd: 'singInConfirmationEmail' }, payload)
-      .toPromise();
+    try {
+      await this.utilsService
+        .send({ cmd: 'singInConfirmationEmail' }, payload)
+        .toPromise();
+    } catch (err) {
+      return new BadRequestException(err);
+    }
 
-      console.log("eee")
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
-    */
-    return tokens;
+
+    return 'User prfile was created with success !';
   }
 
   async signIn(data: AuthDto) {
     // Check if user exists
     const user = await this.usersService.findByUserByEmail(data.email);
-    if (!user) throw new BadRequestException('User does not exist');
+    if (!user)
+      return {
+        message: 'User does not exist !',
+      };
 
     if (!user.isValide)
-      throw new BadRequestException(`User profile is not activated !`);
+      return {
+        message: 'User profile is not activated !',
+      };
 
     const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches)
-      throw new BadRequestException('Password is incorrect');
+      return {
+        message: 'Password is incorrect !',
+      };
+
     const tokens = await this.getTokens(
       user._id,
       user.email,
@@ -138,29 +150,31 @@ export class AuthService {
     };
   }
 
-  async verifyProfile(verifyProfileDto: VerifyDto) {
-    const user: User = await this.usersService.findByUserByEmail(
-      verifyProfileDto.email,
+  async verifyProfile(verifyDto: VerifyDto) {
+    const user: User = await this.usersService.findByUserBytoken(
+      verifyDto.token,
     );
 
     if (!user)
-      throw new BadRequestException(
-        `User with email ${verifyProfileDto.email}  does not exist`,
-      );
+      return {
+        message: `Token wrong !`,
+      };
 
-    const tokenValidation = await this.jwtService.verifyAsync(
-      verifyProfileDto.token,
-      {
-        secret: process.env.JWT_ACCESS_SECRET,
-      },
-    );
+    if (user.isValide)
+      return {
+        message: `User is already activated !`,
+      };
 
-    if (tokenValidation) {
+    if (user.validationToken == verifyDto.token) {
       await this.usersService.update(user._id, { isValide: true });
-      return 'User profile activated !';
+      return {
+        message: 'User profile activated !',
+      };
     }
 
-    return new Error('Token wrong !');
+    return {
+      message: 'Token wrong !',
+    };
   }
 
   async refreshTokens(userId: string, refreshToken: string) {

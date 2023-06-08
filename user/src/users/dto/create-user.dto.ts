@@ -128,6 +128,8 @@ export class CreateUserDto {
 
   refreshToken: string;
 
+  validationToken: string;
+
   statut: Statut;
 
   roles: Role[];

@@ -31,26 +31,33 @@
               </div>
             </div>
   
-            <div class="max-w-sm mx-auto px-4 py-8">
-              <h1 class="text-3xl text-slate-800 font-bold mb-6">Sing In ✨</h1>
+            <div class="max-w-sm mx-auto px-4 py-8" v-if="state.isSignIn">
+              <h1 class="text-3xl text-slate-800 font-bold mb-6">Sign Up</h1>
               <Banner type="error" :open="!!error">
                 {{ error }}
               </Banner>
               <!-- Form -->
               <form @submit.prevent="submitForm">
+                <!-- First&lastname -->
                 <div class="space-y-4">
                   <div>
-                    <label class="block text-sm font-medium mb-1" for="text">Name: <span class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-medium mb-1" for="text">Name <span class="text-rose-500">*</span></label>
                     <input id="firstname" class="form-input w-full" type="text" required v-model.trim="firstname" />
+                    <div v-if="errors.firstname" class="text-xs mt-1 text-rose-500">
+                    {{ errors.firstname }}
+                  </div>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium mb-1" for="text">Family Name: <span class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-medium mb-1" for="text">Family Name <span class="text-rose-500">*</span></label>
                     <input id="lastname" class="form-input w-full" type="lastname" required v-model.trim="lastname" />
+                    <div v-if="errors.lastname" class="text-xs mt-1 text-rose-500">
+                    {{ errors.lastname }}
+                  </div>
                   </div>
                     <!-- Street Address -->
                 <div>
                   <label class="block text-sm font-medium mb-1" for="street"
-                    >Street Address: <span class="text-rose-500">*</span></label
+                    >Street Address <span class="text-rose-500">*</span></label
                   >
                   <input
                     autoComplete='none'
@@ -68,34 +75,55 @@
                   <div v-else-if="searchedAddresses" v-for="searchedAddress in searchedAddresses" :key="searchedAddress.properties.id">
                     <div class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <button @click="setAddress(searchedAddress)" type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-                          {{ searchedAddress.properties.label }}
+                          {{ searchedAddress.properties.label.substring(0,30)+"..." }}
                       </button>
                     </div>
                   </div>
-
-                  <!-- <div v-if="errors.street" class="text-xs mt-1 text-rose-500">
+                  <div v-if="errors.street" class="text-xs mt-1 text-rose-500">
                     {{ errors.street }}
-                  </div> -->
+                  </div>
                 </div>
 
+                <!-- phone number -->
                 <div>
-                  <label class="block text-sm font-medium mb-1" for="text">Phone Number: <span class="text-rose-500">*</span></label>
-                  <input id="phonenumber" class="form-input w-full" type="phonenumber" required v-model.trim="phonenumber" />
+                  <label class="block text-sm font-medium mb-1" for="phonenumber">Phone Number <span class="text-rose-500">*</span></label>
+                  <vue-tel-input v-model="phoneNumber" class="form-input" defaultCountry="FR"></vue-tel-input>
+                  <div v-if="errors.phoneNumber" class="text-xs mt-1 text-rose-500">
+                      {{ errors.phoneNumber }}
+                  </div>
                 </div>
-
-
+                <!-- Age -->
                 <div>
-                  <label class="block text-sm font-medium mb-1" for="text">Age: <span class="text-rose-500">*</span></label>
-                    <input id="age" class="form-input w-full" type="age" required v-model.trim="age" />
+                  <label class="block text-sm font-medium mb-1" for="text">Date of birth <span class="text-rose-500">*</span></label>
+                  <input id="age" class="form-input w-full" type="date" required v-model.trim="age" />
+                  <div v-if="errors.age" class="text-xs mt-1 text-rose-500">
+                    {{ errors.age }}
+                </div>
                 </div>
 
+                <!-- Email adresse -->
                 <div>
                   <label class="block text-sm font-medium mb-1" for="email">Email Address <span class="text-rose-500">*</span></label>
                   <input id="email" class="form-input w-full" type="email" required v-model.trim="email" />
+                  <div v-if="errors.email" class="text-xs mt-1 text-rose-500">
+                      {{ errors.email }}
+                  </div>
                 </div>
+
+                <!-- Password -->
                 <div>
                   <label class="block text-sm font-medium mb-1" for="password">Password <span class="text-rose-500">*</span></label>
-                  <input id="password" class="form-input w-full" type="password" autoComplete="on" required v-model.trim="password" />
+                  <input id="password" class="form-input w-full" type="password" autoComplete="on" required v-model.trim="password" 
+                    @input="passwordValidation($event)"/>
+                  <div v-if="errors.password" class="text-xs mt-1 text-rose-500">
+                      {{ errors.password }}
+                  </div>    
+                  <div class="text-xs mt-1 text-rose-500">
+                      <a v-if="passwordSatatus.lowerCase"> * {{ errors.passwords.lowerCase }}</a><br v-if="passwordSatatus.lowerCase">
+                      <a v-if="passwordSatatus.upperCase"> * {{ errors.passwords.upperCase }}</a><br v-if="passwordSatatus.upperCase">
+                      <a v-if="passwordSatatus.number"> * {{ errors.passwords.number }}</a><br v-if="passwordSatatus.number">
+                      <a v-if="passwordSatatus.specialChar"> * {{ errors.passwords.specialChar }}</a><br v-if="passwordSatatus.specialChar">
+                  </div> 
                 </div>
                 <div>
                 </div>
@@ -114,6 +142,9 @@
   
                 </div>
               </form>
+              <div>
+                
+              </div>
               <!-- Footer -->
               <div class="pt-5 mt-6 border-t border-slate-200">
                 <div class="text-sm">
@@ -121,14 +152,16 @@
                 </div>
               </div>
             </div>
+            <div v-if="state.isSuccess">
+              <SuccessMessage :message='successMessage'></SuccessMessage>
+            </div>
   
           </div>
         </div>
   
         <!-- Image -->
         <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
-          <img class="absolute top-1/4 -translate-x-1/4 ml-8 hidden lg:block" src="../images/register-logo.jpg" alt="Authentication" />
-          <!-- <img class="absolute top-1/4 left-0 -translate-x-1/2 ml-8 hidden lg:block" src="../images/auth-decoration.png" width="218" height="224" alt="Authentication decoration" /> -->
+          <img class="absolute top-1/4 -translate-x-1/4 ml-8 hidden lg:block" src="../images/register-logo.png" alt="Authentication" />
         </div>
   
       </div>
@@ -141,11 +174,21 @@
   phoneValidation,
   passwordValidation,
   emailValidation,
-} from "@/utils/utils-common-function";
+} from "../utils/utils-common-function";
   import Banner from '@/components/Banner.vue'
+  import { VueTelInput } from 'vue-tel-input'
+  import 'vue-tel-input/vue-tel-input.css';
+  import SuccessMessage from './SuccessMessage.vue'
+  import Swal from 'sweetalert2'
+
+
+
+
   export default {
       components: {
-        Banner
+        Banner,
+        VueTelInput,
+        SuccessMessage
       },
       data() {
           return {
@@ -171,17 +214,72 @@
               postalCode: "",
               phoneNumber: "",
               email: "",
+              passwords: {
+                upperCase: "",
+                lowerCase: "",
+                number: "",
+                specialChar: "",
+
+              },
               password: "",
               age: "",
             },
+            state: {
+              isSignIn: true,
+              isSuccess: false, 
+            },
+            successMessage: '',
+            passwordSatatus: {
+                generale: false,
+                upperCase: false,
+                lowerCase: false,
+                number: false,
+                specialChar: false,
+
+              },
           }
       },
       methods: {
           setAddress(address) {
             this.city = address.properties.city;
-            this.postalCode = address.properties.postcode;
+            this.postalCode = Number(address.properties.postcode);
             this.street = address.properties.name;
             this.searchedAddresses = [];
+          },
+          passwordValidation(event) {
+            const value = event.target.value;
+            const containsUppercase = /[A-Z]/.test(value);
+            const containsLowercase = /[a-z]/.test(value);
+            const containsNumber = /[0-9]/.test(value);
+            const containsSpecial = /[#?!@$%^&*-]/.test(value);
+
+            if (!containsUppercase) {
+              this.passwordSatatus.upperCase = true;
+              this.errors.passwords.upperCase = "Your password must contain capital letters";
+            } else {
+              this.passwordSatatus.upperCase = false;
+            }
+
+            if (!containsLowercase) {
+              this.passwordSatatus.lowerCase = true;
+              this.errors.passwords.lowerCase = "Your password must contain lowwr letters";
+            }  else {
+              this.passwordSatatus.lowerCase = false;
+            }
+
+            if (!containsNumber) {
+              this.passwordSatatus.number = true;
+              this.errors.passwords.number = "Your password must contain numbers";
+            } else {
+              this.passwordSatatus.number = false;
+            }
+
+            if (!containsSpecial) {
+              this.passwordSatatus.specialChar = true;
+              this.errors.passwords.specialChar = "Your password must contain special chars";
+            } else {
+              this.passwordSatatus.specialChar = false;
+            }
           },
           async searchStreet (event) {
             this.isAddressLoading = true;
@@ -190,46 +288,127 @@
               if (street.length <= 3) {
                 return;
               }
-              const response = await fetch(`https://api.zaidalaahazim.fr/address/` + new URLSearchParams(street));
+              const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=` + new URLSearchParams(street));
 
-              if (response.ok) {
-                  const data = await response.json();
-                  const parsedData = await JSON.parse(data);
-                  this.searchedAddresses = parsedData.features;
+              const data = await response.json();
+              if (data.features.length) {
+                this.searchedAddresses = data.features;
               }
+              if(data.features.length == 0) {
+                this.errors.address = 'There is no adresse !';
+                this.isAddressLoading = false;
+                return;
+              }
+
             } catch (error) {
               this.error = error.message || 'Failed to search for the given street';
             }
             this.isAddressLoading = false;
           },
           async submitForm() {
-              this.formIsValid = true;
-              this.error = null;
-              this.isLoading = true;
-              const actionPayload = {
-                firstname: this.firstname,
-                lastname: this.lastname,
-                street: this.street,
-                city: this.city,
-                postalCode: this.postalCode,
-                phoneNumber: this.phoneNumber,
-                age: this.age,
-                email: this.email,
-                password: this.password,
-              };
-              try {
-                  await this.$store.dispatch('auth/signUp', actionPayload);
-                  const redirectUrl = '/' + (this.$route.query.redirect || 'login');
-                  this.$router.replace(redirectUrl);
-              } catch (error) {
-                if(error.message == 'Error: Invalid credentials.') {
-                  this.error = 'Your password or email is incorrect';
-                } else {
-                  this.error = error.message || 'Failed to authenticated, try later.';
-                }
-              }
+            this.formIsValid = true;
+            this.error = null;
+            this.isLoading = true;
+            Object.keys(this.errors).forEach((key) => (this.errors[key] = ""));
+
+
+            if (this.firstname.length < 3) {
+            this.formValid = false;
+            this.isLoading = false;
+            this.errors.firstname =
+              "Please enter a valid firstname";
+              return;
+            }
+
+            if (this.lastname.length < 3) {
+            this.formValid = false;
+            this.isLoading = false;
+            this.errors.lastname =
+              "Please enter a valid firstname";
+              return;
+            }
+
+            if (!passwordValidation(this.password)) {
+            this.formValid = false;
+            this.isLoading = false;
+            this.errors.password =
+              "Please check the password if it is valid";
+              return;
+            }
+
+            if (!emailValidation(this.email)) {
+              this.formValid = false;
               this.isLoading = false;
+              this.errors.email = "Please check your email if it is valid";
+              return;
+            }
+
+            const phoneNumberOrigin = ('+33' + this.phoneNumber.slice(1)).replace(/ /g,'');
+            
+            if (!phoneValidation(phoneNumberOrigin)) {
+              this.formValid = false;
+              this.isLoading = false;
+              this.errors.phoneNumber =
+              "Please check your phone number if it is valid";
+              return;
+
+            }
+
+            const actionPayload = {
+              firstname: this.firstname,
+              lastname: this.lastname,
+              street: this.street,
+              city: this.city,
+              postalCode: this.postalCode,
+              phoneNumber: phoneNumberOrigin,
+              age: this.age,
+              email: this.email,
+              password: this.password,
+            };
+
+            try {
+                const response = await this.$store.dispatch('auth/signUp', actionPayload);
+
+                console.log(response);
+
+                if(response.message == 'User already exist !') {
+                  Swal.fire({
+                      text:   response.message,
+                      icon: 'warning',
+                  
+                  }).then(()=>{
+                      const redirectUrl = '/' + (this.$route.query.redirect || 'login');
+                      this.$router.replace(redirectUrl);
+                  });
+                  return;
+                }
+
+                this.state.isSuccess = true;
+            } catch (error) {
+              if(error.message == 'Error: Invalid credentials.') {
+                this.error = 'Your password or email is incorrect';
+              } else {
+                this.state.isSuccess = false;
+                this.error = error.message || 'Failed to authenticated, try later.';
+                Swal.fire({
+                    title: 'Sorry!',
+                    text:   error.message,
+                    icon: 'error',
+                
+                }).then(()=>{
+                    const redirectUrl = '/' + (this.$route.query.redirect || 'login');
+                    this.$router.replace(redirectUrl);
+                });
+                return;
+              }
+            } finally {
+              this.successMessage = 'Your profile has been successfully created. please verfiy your adresse mail';
+              this.state.isSignIn = false;
+              this.isLoading = false;
+            }
           }
       }
   }
   </script>
+  <style>
+</style>

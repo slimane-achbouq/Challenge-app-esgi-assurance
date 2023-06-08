@@ -113,7 +113,36 @@
                   password: this.password
               };
               try {
-                  await this.$store.dispatch('auth/signin', actionPayload);
+                  const response = await this.$store.dispatch('auth/signin', actionPayload);
+                  if(response.message == 'Password is incorrect !') {
+                    Swal.fire({
+                        text:   'Username or password incorrect !',
+                        icon: 'error',
+                    }).then(() => {
+                        const redirectUrl = '/' + (this.$route.query.redirect || 'login');
+                        this.$router.replace(redirectUrl);
+                    });
+                    return;
+                  }
+
+                  if(response.message == 'User does not exist !') {
+                    Swal.fire({
+                        text:   'Username or password incorrect !',
+                        icon: 'error',
+                    
+                    });
+                    return;
+                  }
+
+                  if(response.message == 'User profile is not activated !') {
+                    Swal.fire({
+                        title: 'Warning',
+                        text:   'You must to activate your profile',
+                        icon: 'warning',
+                    
+                    });
+                    return;
+                  }
                   const redirectUrl = '/' + (this.$route.query.redirect || 'dashboard');
                   this.$router.replace(redirectUrl);
               } catch (error) {

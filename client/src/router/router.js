@@ -8,6 +8,7 @@ import CreateInsurance from '@/views/CreateInsurance.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import Quotes from '@/views/Quotes.vue';
 import Quote from '@/views/Quote.vue';
+import VerificationCompte from '@/views/VerificationCompte.vue';
 import EditQuote from '@/views/EditQuote.vue';
 import NewContract from '@/views/NewContract.vue';
 import Contracts from '@/views/Contracts.vue';
@@ -28,6 +29,8 @@ const router = createRouter({
       { path: '/editquote/:id', name: 'editquote', component: EditQuote, meta: { requiresUnauth: false }},
       { path: '/newContract/:id', name: 'newcontract', component: NewContract, meta: { requiresUnauth: false }},
       { path: '/contracts', name: 'contracts', component: Contracts, meta: { requiresUnauth: false }},
+      { path: '/quote', contract: 'quote', component: Quote, meta: { requiresUnauth: false }},
+      { path: '/verify/:token', contract: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
     ]
   })
   

@@ -11,6 +11,10 @@ export class MailController {
 
   @MessagePattern({ cmd: 'singInConfirmationEmail' })
   sendMailtoValidateUser(@Payload() veridyDto: VerifyDto) {
-    return this.maileService.sendMailtoValidateUser(veridyDto);
+    try {
+      return this.maileService.sendMailtoValidateUser(veridyDto);
+    } catch (error) {
+      return error.message;
+    }
   }
 }

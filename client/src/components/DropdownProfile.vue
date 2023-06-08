@@ -62,7 +62,7 @@
 
 <script>
 import { ref, onMounted, onUnmounted } from 'vue'
-import UserAvatar from '@/images/user-avatar-32.png'
+import UserAvatar from '@/images/useravatar.png'
 
 export default {
   name: 'DropdownProfile',
@@ -117,7 +117,7 @@ export default {
 ,
 async created() {
         this.loading=true
-        this.role = this.$store.getters["auth/role"]
+        this.role = this.$store.getters["auth/roles"]
         this.email = this.$store.getters["auth/email"]
         let token = this.$store.getters["auth/token"]
         const response = await fetch(`${import.meta.env.VITE_API_URL}/users?email=${this.email}`, {

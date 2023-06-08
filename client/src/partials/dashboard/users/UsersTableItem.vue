@@ -75,9 +75,9 @@
       }
 
       function calculateAge(birthDateString) {
-      const birthDate = moment(birthDateString);
-      const now = moment();
-      return now.diff(birthDate, 'years');
+        const birthDate = moment(birthDateString);
+        const now = moment();
+        return now.diff(birthDate, 'years');
       }
 
       function check() {

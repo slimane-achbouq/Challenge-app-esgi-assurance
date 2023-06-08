@@ -6,39 +6,37 @@
         <div class="flex items-center">
           <label class="inline-flex">
             <span class="sr-only">Select</span>
-            <input :id="quote.id" class="form-checkbox" type="checkbox" :value="value" @change="check" :checked="checked" />
+            <input :id="quote['_id']" class="form-checkbox" type="checkbox" :value="value" @change="check" :checked="checked" />
           </label>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center text-slate-800">
-        <router-link :to="{ name: 'quote', params: { id: quote.id }}">
-          <div class="font-medium text-sky-500">{{quote.quoteNumber}}</div>
+        <router-link :to="{ name: 'quote', params: { id: quote['_id'] }}">
+          <div class="font-medium text-sky-500">{{quote.dossierNumber}}</div>
         </router-link>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div>{{quote.userId}}</div>
+        <div>{{quote.insuranceType}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="font-medium text-slate-800">{{quote.insuranceType}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-left font-medium text-emerald-500">{{quote.coverage}}</div>
+        <div class="text-left font-medium text-emerald-500">{{quote.insurancePremium}} €</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(quote.createdAt)">{{formatDate(quote.createdAt)}}</div>
+        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" >{{formatDate(quote.coverageStartDate)}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center">{{quote.coverageDuration}} Month</div>
+        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" >{{formatDate(quote.coverageEndDate)}}</div>
       </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="flex items-center">
-          <div v-html="typeIcon(quote.insuranceId)"></div>
-          <div v-if="insuranceId">Subscriped</div>
-          <div v-if="!insuranceId">Not subscriped</div>
-        </div>
+
+      <td class="p-2 whitespace-nowrap">
+        <div class="text-left text-emerald-500"><span class=" bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1" v-if="quote.status">Actif</span><span class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1" v-if="!quote.status">Inactif</span></div>
       </td>
+
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
         <div class="flex items-center">
           <button
@@ -69,23 +67,24 @@
           <thead class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-slate-200">
             <tr>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">vehicleType</div>
+                <div class="font-semibold text-left">Name</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">brand</div>
+                <div class="font-semibold text-left">Adresse</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">model</div>
+                <div class="font-semibold text-left">Phone Number</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">horsepower</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">annualMileage</div>
+                <div class="font-semibold text-left">email</div>
               </th>    
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">licensePlate</div>
-              </th>                                                     
+                <div class="font-semibold text-left">Proof of adresse</div>
+              </th>  
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">License</div>
+              </th>          
+                                                       
               </tr>
           </thead>
 
@@ -94,32 +93,32 @@
             <tr>
               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.vehicleType}}</div>
+                  <div class="font-medium text-sky-500">{{this.beneficiary.firstName}} {{this.beneficiary.lastName}}</div>
                 </div>
               </td>
               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.brand}}</div>
+                  <div class="font-medium text-sky-500">{{this.beneficiary.postalAddress}}</div>
                 </div>
               </td>
               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.model}}</div>
+                  <div class="font-medium text-sky-500">{{this.beneficiary.phoneNumber}}</div>
                 </div>
               </td>
               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.horsepower}} HP</div>
+                  <div class="font-medium text-sky-500">{{this.beneficiary.email}}</div>
                 </div>
               </td>
               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.annualMileage}} KM</div>
+                  <div class="font-medium text-sky-500 cursor-pointer"><i class="fas fa-file-download" @click="downloadFile(beneficiary.justificatifDomicile.data)"></i></div>
                 </div>
               </td>
               <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.licensePlate}}</div>
+                  <div class="font-medium text-sky-500 cursor-pointer"><i class="fas fa-file-download" @click="downloadFile(beneficiary.permis.data)"></i></div>
                 </div>
               </td>
 
@@ -135,9 +134,31 @@
 <script>
 import { ref, computed } from 'vue'
 import moment from 'moment';
+import axios from 'axios'
 
 export default {
-  name: 'QuotesTableItem',
+  name: 'ContractsTableItem',
+  data() {
+        return {
+          beneficiary:null
+        }
+    },
+    methods:{
+
+      downloadFile(data){
+          const byteArray = new Uint8Array(this.beneficiary.permis.data);
+
+          const blob = new Blob([byteArray], {type: 'application/pdf'});
+
+          // Create a URL for the blob and download it
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('target', '_blank'); // Open in new tab
+            document.body.appendChild(link);
+            link.click();
+      },
+    },
   props: ['quote', 'value', 'selected'],
   setup(props, context) {
     const checked = computed(() => props.selected.includes(props.value))
@@ -195,5 +216,22 @@ export default {
       formatDate
     }
   },
+  async created() {
+
+        const id = document.URL.substring(document.URL.lastIndexOf('/') + 1); 
+
+
+        const token = this.$store.getters["auth/token"]
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/beneficiary/${this.quote.beneficiary}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+                
+        if(response.data){
+          this.beneficiary=response.data
+        }  
+
+    }
 }
 </script>

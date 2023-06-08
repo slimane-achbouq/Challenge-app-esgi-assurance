@@ -22,7 +22,7 @@
 
               <!-- Left: Title -->
               <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Users ✨</h1>
+                <h1 class="text-2xl md:text-3xl text-slate-800 font-bold"><i class="fas fa-users"></i> Users ✨</h1>
               </div>
 
 
@@ -32,7 +32,7 @@
               <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
                 <!-- Delete button -->
-                <DeleteButton :selectedItems="selectedItems" @click="onModaDeletelOpen"/>
+                <DeleteButton v-if="showDeleteButton" :selectedItems="selectedItems" @click="onModaDeletelOpen"/>
               </div>
 
             </div>
@@ -111,7 +111,7 @@
                       <!-- Modal footer -->
                       <div class="px-5 py-4 border-t border-slate-200">
                         <div class="flex flex-wrap justify-end space-x-2">
-                          <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" @click.stop="modalOpen=false">Cancel</button>
+                          <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" @click.stop="modalOpen=false;showDeleteButton=false">Cancel</button>
                           <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white" @click="updateUser">Edit</button>
                         </div>
                       </div>
@@ -165,11 +165,10 @@
   import Header from '@/partials/Header.vue'
   import DeleteButton from '@/components/DeleteButton.vue'
   import CustomersTable from '@/partials/dashboard/users/UsersTable.vue'
-
+  import { useStore } from 'vuex';
   import ModalBasic from '@/components/Modal.vue'
   import axios from 'axios'
   import Banner from "@/components/Banner.vue"
-
   import {
     phoneValidation,
     passwordValidation,
@@ -190,6 +189,8 @@
     },
     setup() {
 
+      const showDeleteButton = ref(true)
+      const store = useStore();
       const sidebarOpen = ref(false)
       const selectedItems = ref([])
       const selectedItem = ref([])
@@ -212,6 +213,7 @@
       const updateSelectedItems = (selected) => {
         selectedItems.value = selected
         selectedItem.value = selected
+        showDeleteButton.value=true
       }
 
       function onOpenModal (selected){
@@ -227,15 +229,16 @@
 
       async function deleteItem(){
 
-        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/users/${this.selectedItems}` , {
+        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/auth/delete-user/${this.selectedItems[0]}` , {
               headers: {
-                  'Authorization': `Bearer ${this.$store.getters["auth/token"]}`
+                  'Authorization': `Bearer ${store.getters["auth/token"]}`
               }
           })
         modaDeletelOpen.value=false
         deleted.value=true
         }
         catch(e){
+          console.log(e)
           modaDeletelOpen.value=false
           deleted.value=false
         }
@@ -276,8 +279,9 @@
             phoneNumber: this.selectedItems.phoneNumber  }
 
           try {
-            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I'
-          const response = await axios.put(`http://localhost:3000/auth/update-user/`,  data , {
+            
+            const token = store.getters["auth/token"]
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/auth/update-user/`,  data , {
               headers: {
                   'Authorization': `Bearer ${token}`
               }
@@ -317,7 +321,8 @@
         updated,
         deleteItem,
         deleted,
-        onModaDeletelOpen
+        onModaDeletelOpen,
+        showDeleteButton
       }
     }
   }

@@ -32,13 +32,7 @@ export class CreateInsuranceDto {
   coverageEndDate: Date;
 
   @IsNotEmpty()
-  @IsNumber()
   insurancePremium: number;
-
-  @IsNotEmpty()
-  @IsEnum(['active', 'cancelled'])
-  insuranceStatus: string;
-
 
   @IsNotEmpty()
   @IsUUID()
@@ -50,8 +44,10 @@ export class CreateInsuranceDto {
   @IsNotEmpty()
   @IsUUID()
   vehicleId: string;
+
+  status: boolean; 
 }
 
 export class UpdateInsuranceDto extends PartialType(CreateInsuranceDto) {}
 
-export class CreateModifiedInsuranceDto extends OmitType(CreateInsuranceDto, ['insuranceType','insurancePremium', 'insuranceStatus','vehicleId','beneficiary','dossierNumber']) {}
+export class CreateModifiedInsuranceDto extends OmitType(CreateInsuranceDto, ['insuranceType','status','vehicleId','beneficiary','dossierNumber']) {}

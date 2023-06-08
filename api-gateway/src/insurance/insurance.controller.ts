@@ -69,6 +69,27 @@ export class InsuranceController {
   }
 
 
+  @Get('getoneuser/:id')
+  async getUserById(
+    @Param('id') id: string,
+  ): Promise<any> {
+
+    try {
+      const userData = await this.userServiceClient
+      .send({ cmd: 'findUserById' }, id)
+      .toPromise();
+
+     if(!userData)
+      throw new NotFoundException("User Not found");
+    
+      return userData
+    }
+      catch (err) {
+        throw new NotFoundException("User Not found");
+      }
+    
+  }
+
   @Get('insurance/:id')
 async getInsuranceById(@Param('id') id: string): Promise<any> {
   try {
@@ -385,12 +406,12 @@ async createBeneficiaryInsurance(
       insuranceType: relatedQuote.insuranceType,
       coverageStartDate: createModifiedInsuranceDto.coverageStartDate,
       coverageEndDate: createModifiedInsuranceDto.coverageEndDate,
-      insurancePremium: relatedQuote.insurancePremium,
-      insuranceStatus: 'active',
+      insurancePremium: createModifiedInsuranceDto.insurancePremium,
       quoteId: relatedQuote.id,
       dossierNumber: relatedQuote.quoteNumber,
       vehicleId: relatedQuote.vehicle.id,
       beneficiary: currentBeneficiary['_id'],
+      status : false
     };
 
     return this.insuranceServiceClient

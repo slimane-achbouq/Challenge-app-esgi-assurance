@@ -8,10 +8,12 @@ export default {
     fullName(state) {
         return state.firstname + ' ' + state.lastname;
     },
-    role(state) {
-        return state.roles[0] === 'ROLE_ADMIN' ? 'Admin' : 'Client';
+    roles(state) {
+        console.log(state.roles)
+        return state.roles[0] === 'Admin' ? 'Admin' : 'Client';
     },
     email(state){
+        console.log(state.email)
         return state.email;
     }
 };

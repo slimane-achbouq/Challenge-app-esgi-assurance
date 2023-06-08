@@ -21,18 +21,19 @@ export default {
 
             localStorage.setItem('esgi-ws-token', responseData.tokens['accessToken']);
             // const userInfos = VueJwtDecode.decode(responseData.tokens[0]);
-            // const userInfos = VueJwtDecode.decode(responseData.tokens['accessToken']);
-            // console.log(userInfos);
+             const userInfos = VueJwtDecode.decode(responseData.tokens['accessToken']);
+             console.log(responseData);
             context.commit('setUser', {
                 token: responseData.tokens['accessToken'],
                 refreshToken: responseData.tokens['refreshToken'],
                 firstname: responseData.user['firstname'],
                 lastname: responseData.user['lastname'],
                 email: responseData.user['email'],
-                roles: responseData.user['role'],
+                roles: responseData.user['roles'],
                 id: responseData.user['_id']
             });
         } catch (ex) {
+            console.log(ex)
             const error = new Error(ex || 'Failed to authenticate. Check your login data.');
             throw error;
         }

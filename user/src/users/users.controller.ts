@@ -55,10 +55,9 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AccessTokenGuard)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'deleteUserById' })
+  remove(@Payload('id') id) {
+    console.log(id)
     return this.usersService.remove(id);
   }
 }

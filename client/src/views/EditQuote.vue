@@ -13,7 +13,7 @@
       <main>
 
       <Banner type="success" class="mb-4"  :open="quoteCreated" v-if="quoteCreated">
-                    quote created successfully .
+                    vehicle edited successfully .
       </Banner>
       <Banner type="error" class="mb-4"  :open="Object.keys(errors).length !== 0 " v-if="true">
                     Check the fields you filled.
@@ -30,49 +30,10 @@
 
               <!-- Cart items -->
               <div class="mb-6 lg:mb-0">
-                <div class="mb-3">
-                   <!-- Progress bar -->
-                    <div class="px-4 pt-4 pb-8">
-                    <div class="max-w-md mx-auto w-full">
-                        <div class="relative">
-                        <div
-                            class="absolute left-0 top-1/2 -mt-px w-full h-0.5 bg-slate-200"
-                            aria-hidden="true"
-                        ></div>
-                        <ul class="relative flex justify-between w-full">
-                            <li>
-                            <a
-                                class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold bg-indigo-500 text-white"
-                                >1</a
-                            >
-                            </li>
-                            <li>
-                            <a
-                                class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold" :class="step.id >= 2 ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'"
-                                >2</a
-                            >
-                            </li>
-                            <li>
-                            <a
-                                class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold" :class="step.id >= 3 ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'"
-                                >3</a
-                            >
-                            </li>
-                            <li>
-                            <a
-                                class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold" :class="step.id >= 4 ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'"
-                                >4</a
-                            >
-                            </li>
-                        </ul>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                
                 <header class="mb-6">
                   <!-- Title -->
-                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2" v-if="step.id==1 || step.id==2"><i class="fas fa-car"></i> Vehicle informations</h1>
-                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2" v-if="step.id==3"><i class="fas fa-file-signature"></i> Quote informations</h1>
+                  <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"><i class="fas fa-car"></i> Edit Vehicle informations</h1>
                   <p></p>
                 </header>
 
@@ -82,7 +43,7 @@
                       <!-- 1st row -->
                       
 
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" >
 
                       <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-country">Vehicle Type <span class="text-rose-500">*</span></label>
@@ -96,14 +57,14 @@
                       </div>
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Brand <span class="text-rose-500">*</span></label>
-                          <select id="brand" v-model="formData.brand" class="form-select w-full">
+                          <select id="brand" v-model="formData.brand"  class="form-select w-full">
                             <option v-for="item in brands" :key="item.brand" :value="item.brand">{{ item.brand }}</option>
                           </select>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.brand">{{ errors.brand }}</p>
                         </div>
                       </div>
                       <!-- 2nd row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" >
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-address">Model <span class="text-rose-500">*</span></label>
 
@@ -119,7 +80,7 @@
                         </div>
                       </div>
                       <!-- 3rd row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==1">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" >
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-state">License Plate <span class="text-rose-500">*</span></label>
                           <input id="card-state" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.licensePlate" placeholder="AA-11-BB"/>
@@ -134,14 +95,14 @@
                         </div>
                       </div>
                       <!-- 4th row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" >
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Annual Mileage (KM) <span class="text-rose-500">*</span></label>
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="number" v-model="formData.annualMileage" placeholder="70000"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">{{ errors.annualmileage }}</p>
                         </div>
 
-                        <div class="flex-1" v-if="step.id==2">
+                        <div class="flex-1" >
                             <label class="block text-sm font-medium mb-1" for="startingDate">Vehicle Circulation Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
                              v-model="formData.vehicleCirculationDate">
@@ -150,7 +111,7 @@
                       </div>
 
                       <!-- 4th row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" >
                         
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-name">Registration Card Holder Name<span class="text-rose-500">*</span></label>
@@ -158,7 +119,7 @@
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcardholder">{{ errors.registrationcardholder }}</p>
                         </div>
 
-                        <div class="flex-1" v-if="step.id==2">
+                        <div class="flex-1" >
                             <label class="block text-sm font-medium mb-1" for="startingDate">Registration Card Date <span class="text-rose-500">*</span><br></label>
                             <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
                              v-model="formData.registrationCardDate">
@@ -168,7 +129,7 @@
 
 
                       <!-- 4th row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==2">
+                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" >
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="card-country">Purchase Mode <span class="text-rose-500">*</span></label>
                           <select id="card-country" class="form-select w-full" v-model="formData.purchaseMode">
@@ -177,52 +138,16 @@
                           </select>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.purchasemode">{{ errors.purchasemode }}</p>
                       </div>
-                        <div class="flex-1" v-if="step.id==2">
+                        <div class="flex-1" >
                           <label class="block text-sm font-medium mb-1" for="card-name">Parking Postal Code <span class="text-rose-500">*</span></label>
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.parkingPostalCode" placeholder="75000"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.parkingpostalcode">{{ errors.parkingpostalcode }}</p>
                         </div>
                       </div>
 
-                      <!-- 1st row -->
                       
-
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4"  v-if="step.id==3">
-                      <div class="flex-1">
-                          <label class="block text-sm font-medium mb-1" for="card-country">Insurance Type <span class="text-rose-500">*</span></label>
-                          <select id="card-country" class="form-select w-full" v-model="formData.insuranceType">
-                            <option>Liability</option>
-                            <option>Collision</option>
-                            <option>Comprehensive</option>
-                          </select>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.insurancetype">{{ errors.insurancetype }}</p>
-                      </div>
-                        <div class="flex-1" v-if="step.id==3">
-                          <label class="block text-sm font-medium mb-1" for="card-country">Coverage <span class="text-rose-500">*</span></label>
-                          <select id="card-country" class="form-select w-full" v-model="formData.coverage">
-                            <option>Basic</option>
-                            <option>Standard</option>
-                            <option>Premium</option>
-                          </select>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.coverage">{{ errors.coverage }}</p>
-                      </div>
-                      </div>
-                      <!-- 2nd row -->
-                      <div class="md:flex space-y-4 md:space-y-0 md:space-x-4" v-if="step.id==3">
-                        <div class="flex-1">
-                          <label class="block text-sm font-medium mb-1" for="card-address">Coverage Duration by months <span class="text-rose-500">*</span></label>
-                          <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"  v-model="formData.coverageDuration" placeholder="12"/>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.coverageduration">{{ errors.coverageduration }}</p>
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium mb-1" for="startingDate">Coverage Start Date <span class="text-rose-500">*</span><br></label>
-                            <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
-                             v-model="formData.coverageStartDate" >
-                             <p class="text-xs mt-1 text-rose-500" v-if="errors.coveragestartdate">{{ errors.coveragestartdate }}</p>
-                        </div>
-                      </div>
                       
-                        <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" v-if="hideImageField && step.id==1">
+                        <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300" >
                             <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
                                 <!-- Left side -->
                                 <div class="flex items-start space-x-3 md:space-x-4">
@@ -231,7 +156,8 @@
                                     </div>
                                     <div>
                                         Carte Grise file : 
-                                        <div class="text-sm">{{caretCrise}}</div>
+                                        <div class="text-sm" v-if="caretCrise">{{caretCrise}}</div>
+                                        <div class="text-sm" v-if="!caretCrise">carte-grise.pdf</div>
                                     </div>
                                 </div>
                                 
@@ -245,7 +171,7 @@
                         </div>
 
                       <div class="flex items-center justify-center w-full"
-                                                     v-if="!hideImageField && step.id==1">
+                                                     >
                                                     <label for="dropzone-file"
                                                            class="form-input w-full">
                                                         <div
@@ -258,7 +184,7 @@
                                                                       d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                                             </svg>
                                                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload Carte Grise</span> or
+                                                                <span class="font-semibold">Click to upload A new Carte Grise</span> or
                                                                 drag and drop</p>
                                                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                                                 PDF Format Only</p>
@@ -276,12 +202,7 @@
 
                       <div class="text-right">
 
-                      
-                        <button type="" v-if="step.id==2 || step.id==3" @click.prevent="prevStep({id: (step.id-1), label: 'Information',selectedTab: 'StepTwo' })"  class="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500">back</button>
- 
-                        <button type="" v-if="step.id!=3" @click.prevent="nextStep({id: (step.id+1), label: 'Information',selectedTab: 'StepTwo' })"  class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Next step</button>
-                            
-                        <button @click.prevent="onQuoteCreated" v-if="step.id==3" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Submit</button>
+                        <button @click.prevent="onQuoteEdited"  class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Edit</button>
 
                       </div>
 
@@ -314,18 +235,18 @@
                         <div>
                           <!-- Modal header -->
                           <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800">Quote created successfully</div>
+                            <div class="text-lg font-semibold text-slate-800">Vehicle edited successfully</div>
                           </div>
                           <!-- Modal content -->
                           <div class="text-sm mb-10">
                             <div class="space-y-2">
-                              <p>The quote has been created successfully.if you want to continue creating the contract click on " Create contract "</p>
+                              <p>The vehicle has been created successfully.if you want to back to  quotes detail  click on " Quotes detail "</p>
                             </div>
                           </div>
                           <!-- Modal footer -->
                           <div class="flex flex-wrap justify-end space-x-2">
-                            <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" >Quotes list</button>
-                            <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Create contract</button>
+                            <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" >cancele </button>
+                            <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Quotes detail</button>
                           </div>
                         </div>
                       </div>
@@ -346,6 +267,7 @@ import Header from '@/partials/Header.vue'
 import Banner from '@/components/Banner.vue';
 import ModalBlank from '@/components/ModalBlank.vue'
 import axios from 'axios'
+import { useStore } from 'vuex';
  import {
     licensePlateValidation
 
@@ -353,7 +275,7 @@ import axios from 'axios'
 
 
 export default {
-  name: 'NewQuote',
+  name: 'EditQuote',
   components: {
     Sidebar,
     Header,
@@ -364,7 +286,7 @@ export default {
         return {
           errors: {},
           formData: {
-            vehicleType: 'Car',
+            vehicleType: '',
             brand: '',
             model: '',
             horsepower: '',
@@ -376,11 +298,6 @@ export default {
             registrationCardDate: '',
             purchaseMode: 'New',
             parkingPostalCode: '',
-            insuranceType: 'Collision',
-            coverage: 'Basic',
-            coverageDuration: '',
-            startingDate: '',
-            coverageStartdate :'',
             carteGrise: null,
             licenseplateformat:null
 
@@ -391,26 +308,10 @@ export default {
           hideImageField:false,
           caretCrise:false,
           quoteCreated:false,
-          steps: [
-            {
-                id: 1,
-                label: 'Tell us what’s your situation ✨',
-                selectedTab: 'StepOne'
-            },
-            {
-                id: 2,
-                label: 'Information',
-                selectedTab: 'StepTwo'
-            }
-          ],
-          step: {
-              id: 1,
-              label: 'Tell us what’s your situation ✨',
-              selectedTab: 'StepOne'
-          },
           brands: [],
           selectedBrand: null,
           selectedModel: null,
+          vehicle:null
         }
     },
     computed: {
@@ -422,26 +323,55 @@ export default {
         return brand ? brand.models : [];
       },
     },
-    async mounted() {
-        const res = await fetch('./car-list.json');  
+    async mounted() { 
+        const res = await fetch('/car-list.json');  
         this.brands = await res.json();
         this.formData.brand = this.brands.length > 0 ? this.brands[0].brand : null;
         this.selectedModel = this.formData.brand.length > 0 ? this.formData.brand[0] : null;
+
+       const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
+
+      
+        const token = this.$store.getters["auth/token"]
+           try {
+              let response = await axios.get(`${import.meta.env.VITE_API_URL}/vehicles/`+id, {
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                      }
+              });
+
+              
+              this.errors={}
+              this.vehicle = response.data
+
+              console.log(this.vehicle.model)
+              this.formData.vehicleType = this.vehicle.vehicleType
+              this.formData.brand = this.vehicle.brand
+              this.formData.model = this.vehicle.model
+              this.formData.horsepower = this.vehicle.horsepower
+              this.formData.licensePlate  = this.vehicle.licensePlate
+              this.formData.licenseObtainedDate  = this.vehicle.licenseObtainedDate+ 'T00:00'
+              this.formData.annualMileage     = this.vehicle.annualMileage
+              this.formData.vehicleCirculationDate  = this.vehicle.vehicleCirculationDate+ 'T00:00'
+              this.formData.registrationCardHolder  = this.vehicle.registrationCardHolder
+              this.formData.registrationCardDate  = this.vehicle.registrationCardDate+ 'T00:00'
+              this.formData.purchaseMode  = this.vehicle.purchaseMode
+              this.formData.parkingPostalCode  = this.vehicle.parkingPostalCode
+              
+            } catch (error) {
+              console.log(error)
+            }
+
       },
 
     methods: {
-        async onQuoteCreated(){
+        async onQuoteEdited(){
           
           if (!licensePlateValidation(this.formData.licensePlate)) {
 
             this.errors['licenseplateformat'] = "license plate format incorrect";
           }
 
-          // Check if startingDate is not empty
-          if (this.formData.startingDate !== '') {
-            const date = new Date(this.formData.startingDate);
-            this.formData.startingDate = date.toISOString();
-          }
 
           if (this.formData.licenseObtainedDate !== '') {
             const date = new Date(this.formData.licenseObtainedDate);
@@ -470,10 +400,11 @@ export default {
             this.formData.coverageDuration = isNaN(num) ? this.formData.coverageDuration : num;;
           }
 
+          console.log(this.formData)
 
-           const token = this.$store.getters["auth/token"]
+           const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I'
            try {
-              let response = await axios.post(`${import.meta.env.VITE_API_URL}/vehicles-with-quotes`, this.formData, {
+              let response = await axios.put('http://localhost:3000/vehicles/'+this.vehicle.id, this.formData, {
               headers: {
                   'Authorization': `Bearer ${token}`,
                   'Content-Type': 'multipart/form-data'
@@ -481,8 +412,11 @@ export default {
           });
               this.errors={}
               this.quoteCreated=true
+              this.formData.licenseObtainedDate  = this.vehicle.licenseObtainedDate+ 'T00:00'
+              this.formData.vehicleCirculationDate  = this.vehicle.vehicleCirculationDate+ 'T00:00'
+              this.formData.registrationCardDate  = this.vehicle.registrationCardDate+ 'T00:00'
             } catch (error) {
-              this.errors = this.mapErrorsToFields(error.response.data.message);
+              console.log(error)
             }
 
             
@@ -502,35 +436,6 @@ export default {
             if ( ! this.hideImageField ) fieldErrors['filerequired']="carte Grise required"
             return fieldErrors;
           },
-         back(object) {
-          this.step = object;
-        },
-        prevStep(object) {
-            this.error = null;
-            try {
-                if (this.step.id === 1) {
-                        this.step = object;
-                } else {
-                  this.step = object;
-                }
-
-            } catch (error) {
-                this.error = error.message || 'There is an error !';
-            }
-        },
-        nextStep(object) {
-            this.error = null;
-            try {
-                if (this.step.id === 1) {
-                        this.step = object;
-                } else {
-                  this.step = object;
-                }
-
-            } catch (error) {
-                this.error = error.message || 'There is an error !';
-            }
-        },
         handleFile(event) {
             this.file = event.target.files[0];
             this.caretCrise = this.file.name

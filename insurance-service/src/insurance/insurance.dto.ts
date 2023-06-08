@@ -27,9 +27,6 @@ export class CreateInsuranceDto {
   @IsNumber()
   insurancePremium: number;
 
-  @IsNotEmpty()
-  @IsEnum(['active', 'cancelled'])
-  insuranceStatus: string;
 
   beneficiary: Beneficiary;
 
@@ -38,6 +35,8 @@ export class CreateInsuranceDto {
 
   @IsNotEmpty()
   quoteId: string;
+
+  status: boolean; 
 }
 
 export type UpdateInsuranceDto  = Partial<CreateInsuranceDto>;

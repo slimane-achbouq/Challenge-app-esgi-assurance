@@ -8,6 +8,9 @@ import CreateInsurance from '@/views/CreateInsurance.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import Quotes from '@/views/Quotes.vue';
 import Quote from '@/views/Quote.vue';
+import EditQuote from '@/views/EditQuote.vue';
+import NewContract from '@/views/NewContract.vue';
+import Contracts from '@/views/Contracts.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -21,7 +24,10 @@ const router = createRouter({
       { path: '/newquote', name: 'user-profile', component: NewQuote, meta: { requiresUnauth: false }},
       { path: '/step4', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
       { path: '/quotes', name: 'quotes', component: Quotes, meta: { requiresUnauth: false }},
-      { path: '/quote', contract: 'quote', component: Quote, meta: { requiresUnauth: false }},
+      { path: '/quote/:id', name: 'quote', component: Quote, meta: { requiresUnauth: false }},
+      { path: '/editquote/:id', name: 'editquote', component: EditQuote, meta: { requiresUnauth: false }},
+      { path: '/newContract/:id', name: 'newcontract', component: NewContract, meta: { requiresUnauth: false }},
+      { path: '/contracts', name: 'contracts', component: Contracts, meta: { requiresUnauth: false }},
     ]
   })
   

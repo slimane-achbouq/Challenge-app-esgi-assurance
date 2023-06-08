@@ -181,6 +181,21 @@ async deleteVehicle(@Param('id') id: string) {
   return { message: `Vehicle with ID "${id}" has been deleted successfully` };
 }
 
+@Get('prices/:id')
+async getPrices(@Param('id') id: string) {
+  const prices = await this.quoteServiceClient
+    .send({ cmd: 'getPrices' }, id)
+    .toPromise();
+
+  if (!prices) {
+    throw new NotFoundException(`Vehicle with ID "${id}" not found or could not be deleted`);
+  }
+
+  return prices;
+}
+
+
+
 
   @Post('vehicles-with-quotes')
   @UseGuards(JwtAuthGuard)

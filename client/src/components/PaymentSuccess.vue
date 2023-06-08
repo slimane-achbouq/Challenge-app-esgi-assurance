@@ -68,7 +68,7 @@ export default {
 
         this.userTokenCheck = userToken;
         this.token = token;
-        this.role = this.$store.getters["auth/role"]
+        this.role = this.$store.getters["auth/roles"]
         this.useremail = this.$store.getters["auth/email"]
 
         const response = await fetch(`${import.meta.env.VITE_API_URL}/demandes/${id}`, {

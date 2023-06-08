@@ -364,7 +364,7 @@ export default {
     async created() {
         this.loading = true
         let token = this.$store.getters["auth/token"]
-        this.role = this.$store.getters["auth/role"]
+        this.role = this.$store.getters["auth/roles"]
         this.useremail = this.$store.getters["auth/email"]
         this.basedEmail = this.useremail
 

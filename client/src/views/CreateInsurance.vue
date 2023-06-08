@@ -303,7 +303,7 @@
                                       <span class="font-semibold text-slate-800">Standard <span class="text-xs italic text-indigo-500 align-top">Recommended ✨</span></span>
                                       <span><span class="font-medium text-emerald-600">€59.00</span>/mo</span>
                                     </div>
-                                    <div class="text-sm">Our Standard coverage provides a balanced level of protection at a reasonable cost</div>
+                                    <div class="text-sm">Our Standard coverage provides a balanced level of protection at a reasonable cost.</div>
                                   </div>
                                 </div>
                               </button>
@@ -317,7 +317,7 @@
                                       <span class="font-semibold text-slate-800">Premium</span>
                                       <span><span class="font-medium text-emerald-600">€79.00</span>/mo</span>
                                     </div>
-                                    <div class="text-sm">Our Premium coverage offers the highest level of comprehensive protection for maximum peace of mind</div>
+                                    <div class="text-sm">Our Premium coverage offers the highest level of comprehensive protection for maximum peace of mind.</div>
                                   </div>
                                 </div>
                               </button>

@@ -56,5 +56,12 @@ import { CreateVehicleDto } from './vehicle.dto';
     async deleteVehicle(@Payload() id: string): Promise<void> {
       return await this.vehicleService.deleteVehicle(id);
     }
+
+    @MessagePattern({ cmd: 'getPrices' })
+    async calculateInsurancePremiums(@Payload() id: string): Promise<number[]> {
+      return await this.vehicleService.calculateInsurancePremiums(id);
+    }
+
+    
   }
   

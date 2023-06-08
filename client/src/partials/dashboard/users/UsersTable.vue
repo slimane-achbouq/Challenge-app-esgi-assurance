@@ -187,11 +187,10 @@
 
         
         customers.value =[]
-    
+  
         loading.value = true
-        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I'
-        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-          const response = await axios.get(`http://localhost:3000/auth/getUsers`, {
+        token = store.getters["auth/token"]        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/getUsers`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

@@ -50,12 +50,14 @@ export class AuthService {
       token: tokens.accessToken,
     };
 
+    /*
     await this.utilsService
       .send({ cmd: 'singInConfirmationEmail' }, payload)
       .toPromise();
 
+      console.log("eee")
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
-
+    */
     return tokens;
   }
 

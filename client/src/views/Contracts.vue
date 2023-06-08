@@ -18,7 +18,7 @@
 
             <!-- Left: Title -->
             <div class="mb-4 sm:mb-0">
-              <h1 class="text-2xl md:text-3xl text-slate-800 font-bold"><i class="fas fa-file-contract"></i> Quotes ✨</h1>
+              <h1 class="text-2xl md:text-3xl text-slate-800 font-bold"><i class="fas fa-file-contract"></i> Contracts ✨</h1>
             </div>
 
             <!-- Right: Actions  -->
@@ -32,7 +32,7 @@
                 <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                   <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-                <span class="hidden xs:block ml-2">Create Quote</span>
+                <span class="hidden xs:block ml-2">Claim</span>
               </button>  
                </router-link>            
             </div>
@@ -40,7 +40,7 @@
           </div>
 
           <!-- Table -->
-          <QuotesTable @change-selection="updateSelectedItems($event)" />
+          <ContractsTable @change-selection="updateSelectedItems($event)" />
 
         </div>
       </main>
@@ -57,18 +57,18 @@ import Header from '@/partials/Header.vue'
 import DeleteButton from '@/components/DeleteButton.vue'
 import DateSelect from '@/components/DateSelect.vue'
 import FilterButton from '@/components/DropdownFilter.vue'
-import QuotesTable from '@/partials/quotes/QuotesTable.vue'
+import ContractsTable from '@/partials/contracts/ContractsTable.vue'
 import PaginationClassic from '@/components/Pagination.vue'
 
 export default {
-  name: 'Quotes',
+  name: 'Contracts',
   components: {
     Sidebar,
     Header,
     DeleteButton,
     DateSelect,
     FilterButton,
-    QuotesTable,
+    ContractsTable,
     PaginationClassic,    
   },
   setup() {

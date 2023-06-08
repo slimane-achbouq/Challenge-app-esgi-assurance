@@ -26,8 +26,7 @@ export class Insurance extends Document {
   @Prop({ required: true, type: Number })
   insurancePremium: number;
 
-  @Prop({ required: true, enum: ['active', 'cancelled'] , default: Date.now })
-  insuranceStatus: string;
+
 
   @Prop({ required: true, type: Date, default: Date.now })
   createdAt: Date;
@@ -43,6 +42,11 @@ export class Insurance extends Document {
 
   @Prop({ required: true, type: String })
   quoteId: string;
+
+  @Prop({ type: Boolean, default: false })
+  status: boolean;
+
+  
 
 }
 

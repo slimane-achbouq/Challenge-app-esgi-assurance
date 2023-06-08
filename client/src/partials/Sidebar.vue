@@ -295,7 +295,7 @@ export default {
     },
 
     async created() {
-        this.role = this.$store.getters["auth/role"]
+        this.role = this.$store.getters["auth/roles"]
 
     }
 }

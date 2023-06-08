@@ -27,6 +27,7 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import { VerifyDto } from './dto/verify-profile.dto';
+import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
@@ -72,7 +73,7 @@ export class UserController {
   logout(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
-  
+
   @HttpCode(HttpStatus.OK)
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
@@ -82,25 +83,22 @@ export class UserController {
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @Get('getUsers')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   getUsers(@Req() req) {
     return this.userServiceClient
       .send({ cmd: 'getUsers' }, { accessToken: req.headers.authorization })
       .toPromise();
   }
 
-
-@Put('update-user')
-@UseGuards(JwtAuthGuard)
-async updateUser(
-  @Req() req,
-  @Body() updateUserDto,
-): Promise<any> {
-  
-  
-  return this.userServiceClient
-      .send({ cmd: 'updateUser' }, { id:updateUserDto.id,updateUserDto:updateUserDto })
+  @Put('update-user')
+  @UseGuards(JwtAuthGuard)
+  async updateUser(@Req() req, @Body() updateUserDto): Promise<any> {
+    return this.userServiceClient
+      .send(
+        { cmd: 'updateUser' },
+        { id: updateUserDto.id, updateUserDto: updateUserDto },
+      )
       .toPromise();
 }
 

@@ -1,4 +1,4 @@
 export enum Statut {
-   Actif = 'ACTIF',
-   Inactif = 'INACTIF'
+  Actif = 'ACTIF',
+  Inactif = 'INACTIF',
 }

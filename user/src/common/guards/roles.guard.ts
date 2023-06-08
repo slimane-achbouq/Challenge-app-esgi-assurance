@@ -6,17 +6,13 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector, private jwtService: JwtService) {
-
-   
-  }
+  constructor(private reflector: Reflector, private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
+      ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
     if (!requiredRoles) {
       return true;
@@ -34,13 +30,10 @@ export class RolesGuard implements CanActivate {
 
     try {
       decoded = this.jwtService.verify(token);
-      
     } catch (e) {
       return false;
     }
 
-    return requiredRoles.some((role) => decoded.roles?.includes(role))
-    
-   
+    return requiredRoles.some((role) => decoded.roles?.includes(role));
   }
 }

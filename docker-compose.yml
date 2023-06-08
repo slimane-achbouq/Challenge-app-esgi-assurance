@@ -125,7 +125,7 @@ services:
     networks:
       - my-network
 
-  utils-service: 
+  utils-service:
     container_name: utils-service
     hostname: utils-service
     build: ./utils
@@ -142,7 +142,7 @@ services:
       - ./utils/.env
     networks:
       - my-network
-  utils-database: 
+  utils-database:
     container_name: utils-database
     hostname: utils-database
     image: mongo:latest
@@ -155,6 +155,36 @@ services:
     networks:
       - my-network
 
+  claims-database:
+    container_name: claims
+    image: mongo:latest
+    hostname: claims
+    volumes:
+      - ./claims/data/db:/data/db
+    env_file:
+      - ./claims/.env
+    ports:
+      - "27020:27017"
+    networks:
+      - my-network
+
+  claims-service:
+    container_name: claims-service
+    hostname: claims-service
+    build: ./claims
+    volumes:
+      - ./claims:/src/app
+      - /src/app/node_modules
+    ports:
+      - 3006:3006
+    depends_on:
+      - claims-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./claims/.env
+    networks:
+      - my-network
 networks:
   my-network:
     

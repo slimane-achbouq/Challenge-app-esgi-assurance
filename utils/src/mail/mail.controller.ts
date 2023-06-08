@@ -1,5 +1,4 @@
-import {  Controller } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';

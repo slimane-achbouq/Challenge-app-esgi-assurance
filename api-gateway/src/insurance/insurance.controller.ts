@@ -42,7 +42,9 @@ export class InsuranceController {
 
   @Post('insurance')
   @UsePipes(ValidationPipe)
-  async createInsurance(@Body() insuranceDto: CreateInsuranceDto): Promise<any> {
+  async createInsurance(
+    @Body() insuranceDto: CreateInsuranceDto,
+  ): Promise<any> {
     try {
       const createdInsurance = await this.insuranceServiceClient
         .send({ cmd: 'createInsurance' }, insuranceDto)
@@ -53,7 +55,6 @@ export class InsuranceController {
       throw new BadRequestException(err.message);
     }
   }
-
 
   @Get('insurance')
   async getInsurances(): Promise<any> {
@@ -91,149 +92,140 @@ export class InsuranceController {
   }
 
   @Get('insurance/:id')
-async getInsuranceById(@Param('id') id: string): Promise<any> {
-  try {
-    const insurance = await this.insuranceServiceClient
-      .send({ cmd: 'getInsuranceById' }, id)
-      .toPromise();
+  async getInsuranceById(@Param('id') id: string): Promise<any> {
+    try {
+      const insurance = await this.insuranceServiceClient
+        .send({ cmd: 'getInsuranceById' }, id)
+        .toPromise();
 
-    if (!insurance) {
-      throw new NotFoundException(`Insurance with ID "${id}" not found`);
-    }
+      if (!insurance) {
+        throw new NotFoundException(`Insurance with ID "${id}" not found`);
+      }
 
-    return insurance;
-  } catch (err) {
-    if (err instanceof NotFoundException) {
-      throw new NotFoundException(err.message);
+      return insurance;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
     }
-    throw new BadRequestException(err.message);
   }
-}
 
+  @Put('insurance/:id')
+  @UsePipes(ValidationPipe)
+  async updateInsurance(
+    @Param('id') id: string,
+    @Body() insuranceDto: UpdateInsuranceDto,
+  ): Promise<any> {
+    try {
+      const insurance = await this.insuranceServiceClient
+        .send({ cmd: 'getInsuranceById' }, id)
+        .toPromise();
 
+      if (!insurance) {
+        throw new NotFoundException(`Insurance with ID "${id}" not found`);
+      }
 
-@Put('insurance/:id')
-@UsePipes(ValidationPipe)
-async updateInsurance(
-  @Param('id') id: string,
-  @Body() insuranceDto: UpdateInsuranceDto,
-): Promise<any> {
-  try {
-    const insurance = await this.insuranceServiceClient
-      .send({ cmd: 'getInsuranceById' }, id)
-      .toPromise();
+      const updatedInsurance = await this.insuranceServiceClient
+        .send({ cmd: 'updateInsurance' }, { id, ...insuranceDto })
+        .toPromise();
 
-    if (!insurance) {
-      throw new NotFoundException(`Insurance with ID "${id}" not found`);
+      if (!updatedInsurance) {
+        throw new NotFoundException(
+          `Insurance with ID "${id}" could not be updated`,
+        );
+      }
+
+      return updatedInsurance;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
     }
-
-    const updatedInsurance = await this.insuranceServiceClient
-      .send({ cmd: 'updateInsurance' }, { id, ...insuranceDto })
-      .toPromise();
-
-    if (!updatedInsurance) {
-      throw new NotFoundException(`Insurance with ID "${id}" could not be updated`);
-    }
-
-    return updatedInsurance;
-  } catch (err) {
-    if (err instanceof NotFoundException) {
-      throw new NotFoundException(err.message);
-    }
-    throw new BadRequestException(err.message);
   }
-}
-
-
-
 
   @Delete('insurance/:id')
-async deleteInsurance(@Param('id') id: string): Promise<any> {
-  try {
-    const deletedInsurance = await this.insuranceServiceClient
-      .send({ cmd: 'deleteInsurance' }, id)
-      .toPromise();
+  async deleteInsurance(@Param('id') id: string): Promise<any> {
+    try {
+      const deletedInsurance = await this.insuranceServiceClient
+        .send({ cmd: 'deleteInsurance' }, id)
+        .toPromise();
 
-    if (!deletedInsurance) {
-      throw new NotFoundException(`Insurance with ID "${id}" not found or could not be deleted`);
-    }
+      if (!deletedInsurance) {
+        throw new NotFoundException(
+          `Insurance with ID "${id}" not found or could not be deleted`,
+        );
+      }
 
-    return deletedInsurance;
-  } catch (err) {
-    if (err instanceof NotFoundException) {
-      throw new NotFoundException(err.message);
+      return deletedInsurance;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
     }
-    throw new BadRequestException(err.message);
   }
-}
-
-
 
   @Get('beneficiary/:id/insurances')
-async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
-  try {
-    const beneficiaryWithInsurances = await this.insuranceServiceClient
-      .send({ cmd: 'getBeneficiaryWithInsurances' }, id)
-      .toPromise();
+  async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
+    try {
+      const beneficiaryWithInsurances = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaryWithInsurances' }, id)
+        .toPromise();
 
-    if (!beneficiaryWithInsurances) {
-      throw new NotFoundException(`Beneficiary with ID "${id}" not found`);
-    }
+      if (!beneficiaryWithInsurances) {
+        throw new NotFoundException(`Beneficiary with ID "${id}" not found`);
+      }
 
-    return beneficiaryWithInsurances;
-  } catch (err) {
-    if (err instanceof NotFoundException) {
-      throw new NotFoundException(err.message);
+      return beneficiaryWithInsurances;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
     }
-    throw new BadRequestException(err.message);
   }
-}
-
-
 
   @Get('beneficiary/:id')
-async getBeneficiaryById(@Param('id') id: string): Promise<any> {
-  try {
-    const beneficiary = await this.insuranceServiceClient
-      .send({ cmd: 'getBeneficiaryById' }, id)
-      .toPromise();
+  async getBeneficiaryById(@Param('id') id: string): Promise<any> {
+    try {
+      const beneficiary = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaryById' }, id)
+        .toPromise();
 
-    if (!beneficiary) {
-      throw new NotFoundException(`Beneficiary with ID "${id}" not found`);
-    }
+      if (!beneficiary) {
+        throw new NotFoundException(`Beneficiary with ID "${id}" not found`);
+      }
 
-    return beneficiary;
-  } catch (err) {
-    if (err instanceof NotFoundException) {
-      throw new NotFoundException(err.message);
+      return beneficiary;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
     }
-    throw new BadRequestException(err.message);
   }
-}
-
-
 
   @Get('beneficiaries')
-async getBeneficiaries(): Promise<any> {
-  try {
-    const beneficiaries = await this.insuranceServiceClient
-      .send({ cmd: 'getBeneficiaries' }, {})
-      .toPromise();
+  async getBeneficiaries(): Promise<any> {
+    try {
+      const beneficiaries = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaries' }, {})
+        .toPromise();
 
-    if (!beneficiaries) {
-      throw new NotFoundException('No beneficiaries found');
-    }
+      if (!beneficiaries) {
+        throw new NotFoundException('No beneficiaries found');
+      }
 
-    return beneficiaries;
-  } catch (err) {
-    if (err instanceof NotFoundException) {
-      throw new NotFoundException(err.message);
+      return beneficiaries;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
     }
-    throw new BadRequestException(err.message);
   }
-}
-
-
 
   @Post('beneficiary')
   @UsePipes(ValidationPipe)
@@ -270,7 +262,6 @@ async getBeneficiaries(): Promise<any> {
     }
   }
 
-
   @Put('beneficiary/:id')
   @UsePipes(ValidationPipe)
   @UseInterceptors(
@@ -280,127 +271,132 @@ async getBeneficiaries(): Promise<any> {
     ]),
   )
   async updateBeneficiary(
-  @Param('id') id: string,
-  @Body() beneficiaryDto: UpdateBeneficiaryDto,
-  @UploadedFiles()
-  files: {
-    justificatifDomicile: Express.Multer.File[];
-    permis: Express.Multer.File[];
-  },
-): Promise<any> {
-  try {
-    const beneficiary = await this.insuranceServiceClient
-      .send({ cmd: 'getBeneficiaryById' }, id)
-      .toPromise();
+    @Param('id') id: string,
+    @Body() beneficiaryDto: UpdateBeneficiaryDto,
+    @UploadedFiles()
+    files: {
+      justificatifDomicile: Express.Multer.File[];
+      permis: Express.Multer.File[];
+    },
+  ): Promise<any> {
+    try {
+      const beneficiary = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaryById' }, id)
+        .toPromise();
 
-    if (!beneficiary) {
-      throw new NotFoundException(`Beneficiary with ID "${id}" not found.`);
-    }
+      if (!beneficiary) {
+        throw new NotFoundException(`Beneficiary with ID "${id}" not found.`);
+      }
 
-    const fileContents = {
-      justificatifDomicile:
-        files.justificatifDomicile && files.justificatifDomicile[0]
-          ? files.justificatifDomicile[0].buffer.toString('base64')
-          : null,
-      permis:
-        files.permis && files.permis[0]
-          ? files.permis[0].buffer.toString('base64')
-          : null,
-    };
-
-    if (!fileContents.justificatifDomicile || !fileContents.permis) {
-      throw new BadRequestException('File not uploaded');
-    }
-
-    const updatedBeneficiary = await this.insuranceServiceClient
-      .send(
-        { cmd: 'updateBeneficiary' },
-        { id, beneficiaryDto, fileContents },
-      )
-      .toPromise();
-
-    return updatedBeneficiary;
-  } catch (err) {
-    if (err.message.includes("Quote creation failed")) {
-      throw new BadRequestException('Quote creation failed');
-    }
-    throw err;
-  }
-}
-
-
-@Post('beneficiary-insurance')
-@UsePipes(ValidationPipe)
-@UseGuards(JwtAuthGuard)
-@UseInterceptors(
-  FileFieldsInterceptor([
-    { name: 'justificatifDomicile', maxCount: 1 },
-    { name: 'permis', maxCount: 1 },
-  ]),
-)
-async createBeneficiaryInsurance(
-  @Req() req,
-  @Body() createModifiedInsuranceDto: CreateModifiedInsuranceDto,
-  @UploadedFiles()
-  files: {
-    justificatifDomicile: Express.Multer.File[];
-    permis: Express.Multer.File[];
-  },
-): Promise<any> {
-  try {
-    const userData = await this.userServiceClient
-      .send({ cmd: 'findUserById' }, req.user.sub)
-      .toPromise();
-
-    if (!userData) {
-      throw new NotFoundException(`User with ID "${req.user.sub}" not found.`);
-    }
-
-    let currentBeneficiary = await this.insuranceServiceClient
-      .send({ cmd: 'getBeneficiaryByUserId' }, req.user.sub)
-      .toPromise();
-
-    const fileContents = {
-      justificatifDomicile: files.justificatifDomicile[0]
-        ? files.justificatifDomicile[0].buffer.toString('base64')
-        : null,
-      permis: files.permis[0]
-        ? files.permis[0].buffer.toString('base64')
-        : null,
-    };
-
-    if (!fileContents.justificatifDomicile || !fileContents.permis) {
-      throw new BadRequestException('Files not uploaded');
-    }
-
-    if (!currentBeneficiary) {
-      const beneficiaryInsuranceDto: CreateBeneficiaryDto = {
-        firstName: userData.firstname,
-        lastName: userData.lastname,
-        postalAddress:
-          userData.adresse + ' ' + userData.codeCity + ' ' + userData.city,
-        phoneNumber: userData.phoneNumber,
-        email: userData.email,
-        userId: userData['_id'],
+      const fileContents = {
+        justificatifDomicile:
+          files.justificatifDomicile && files.justificatifDomicile[0]
+            ? files.justificatifDomicile[0].buffer.toString('base64')
+            : null,
+        permis:
+          files.permis && files.permis[0]
+            ? files.permis[0].buffer.toString('base64')
+            : null,
       };
 
-      const beneficiary = await this.insuranceServiceClient
+      if (!fileContents.justificatifDomicile || !fileContents.permis) {
+        throw new BadRequestException('File not uploaded');
+      }
+
+      const updatedBeneficiary = await this.insuranceServiceClient
         .send(
-          { cmd: 'createBeneficiary' },
-          { beneficiaryDto: beneficiaryInsuranceDto, fileContents },
+          { cmd: 'updateBeneficiary' },
+          { id, beneficiaryDto, fileContents },
         )
         .toPromise();
 
-      currentBeneficiary = beneficiary;
+      return updatedBeneficiary;
+    } catch (err) {
+      if (err.message.includes('Quote creation failed')) {
+        throw new BadRequestException('Quote creation failed');
+      }
+      throw err;
     }
+  }
 
-    const relatedQuote = await this.quoteServiceClient
-      .send({ cmd: 'getQuoteById' }, createModifiedInsuranceDto.quoteId)
-      .toPromise();
+  @Post('beneficiary-insurance')
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'justificatifDomicile', maxCount: 1 },
+      { name: 'permis', maxCount: 1 },
+    ]),
+  )
+  async createBeneficiaryInsurance(
+    @Req() req,
+    @Body() createModifiedInsuranceDto: CreateModifiedInsuranceDto,
+    @UploadedFiles()
+    files: {
+      justificatifDomicile: Express.Multer.File[];
+      permis: Express.Multer.File[];
+    },
+  ): Promise<any> {
+    try {
+      const userData = await this.userServiceClient
+        .send({ cmd: 'findUserById' }, req.user.sub)
+        .toPromise();
 
-    if (!relatedQuote) {
-      throw new NotFoundException(`Quote with ID "${createModifiedInsuranceDto.quoteId}" not found.`);
-    }
+      if (!userData) {
+        throw new NotFoundException(
+          `User with ID "${req.user.sub}" not found.`,
+        );
+      }
+
+      let currentBeneficiary = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaryByUserId' }, req.user.sub)
+        .toPromise();
+
+      const fileContents = {
+        justificatifDomicile: files.justificatifDomicile[0]
+          ? files.justificatifDomicile[0].buffer.toString('base64')
+          : null,
+        permis: files.permis[0]
+          ? files.permis[0].buffer.toString('base64')
+          : null,
+      };
+
+      if (!fileContents.justificatifDomicile || !fileContents.permis) {
+        throw new BadRequestException('Files not uploaded');
+      }
+
+      if (!currentBeneficiary) {
+        const beneficiaryInsuranceDto: CreateBeneficiaryDto = {
+          firstName: userData.firstname,
+          lastName: userData.lastname,
+          postalAddress:
+            userData.adresse + ' ' + userData.codeCity + ' ' + userData.city,
+          phoneNumber: userData.phoneNumber,
+          email: userData.email,
+          userId: userData['_id'],
+        };
+
+        const beneficiary = await this.insuranceServiceClient
+          .send(
+            { cmd: 'createBeneficiary' },
+            { beneficiaryDto: beneficiaryInsuranceDto, fileContents },
+          )
+          .toPromise();
+
+        currentBeneficiary = beneficiary;
+      }
+
+      const relatedQuote = await this.quoteServiceClient
+        .send({ cmd: 'getQuoteById' }, createModifiedInsuranceDto.quoteId)
+        .toPromise();
+
+      if (!relatedQuote) {
+        throw new NotFoundException(
+          `Quote with ID "${createModifiedInsuranceDto.quoteId}" not found.`,
+        );
+      }
+
+      
 
     const insuranceDto: CreateInsuranceDto = {
       insuranceType: relatedQuote.insuranceType,
@@ -421,7 +417,6 @@ async createBeneficiaryInsurance(
     if (err.message.includes("Insurance creation failed")) {
       throw new BadRequestException('Insurance creation failed');
     }
-    throw err;
   }
 }
 

@@ -72,7 +72,12 @@ export class AuthService {
     const passwordMatches = await argon2.verify(user.password, data.password);
     if (!passwordMatches)
       throw new BadRequestException('Password is incorrect');
-    const tokens = await this.getTokens(user._id, user.email, user.roles);
+    const tokens = await this.getTokens(
+      user._id,
+      user.email,
+      user.roles,
+      user.isValide,
+    );
     await this.updateRefreshToken(user._id, tokens.refreshToken);
 
     const response = { tokens: tokens, user: user };
@@ -94,13 +99,19 @@ export class AuthService {
     });
   }
 
-  async getTokens(userId: string, username: string, roles: Role[]) {
+  async getTokens(
+    userId: string,
+    username: string,
+    roles: Role[],
+    isValide?: boolean,
+  ) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
           sub: userId,
           username,
           roles: roles,
+          profileStatus: isValide,
         },
         {
           secret: process.env.JWT_ACCESS_SECRET,
@@ -112,6 +123,7 @@ export class AuthService {
           sub: userId,
           username,
           roles: roles,
+          profileStatus: isValide,
         },
         {
           secret: process.env.JWT_ACCESS_SECRET,

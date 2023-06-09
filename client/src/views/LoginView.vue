@@ -50,7 +50,7 @@
                 </div>
                 <div class="flex items-center justify-between mt-6">
                   <div class="mr-1">
-                    <router-link class="text-sm underline hover:no-underline" to="/reset-password">Forgot Password?</router-link>
+                    <router-link class="text-sm underline hover:no-underline" to="reset-password-input">Forgot Password?</router-link>
                   </div>
                   <button v-if="isLoading" class="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed shadow-none" disabled>
                     <svg class="animate-spin w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">

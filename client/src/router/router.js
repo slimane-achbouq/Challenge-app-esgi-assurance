@@ -12,6 +12,8 @@ import VerificationCompte from '@/views/VerificationCompte.vue';
 import EditQuote from '@/views/EditQuote.vue';
 import NewContract from '@/views/NewContract.vue';
 import Contracts from '@/views/Contracts.vue';
+import ResetPasswordInput from '@/views/reset-password/reset-password-view.vue';
+import ResetPasswordView from '@/views/reset-password/reset-password.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -31,6 +33,9 @@ const router = createRouter({
       { path: '/contracts', name: 'contracts', component: Contracts, meta: { requiresUnauth: false }},
       { path: '/quote', contract: 'quote', component: Quote, meta: { requiresUnauth: false }},
       { path: '/verify/:token', contract: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
+      { path: '/reset-password-input', contract: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
+      { path: '/resetPassword/:token', contract: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
+
     ]
   })
   

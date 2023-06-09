@@ -28,6 +28,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { AuthDto } from './dto/auth.dto';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
+import { UpdatePasswordDto } from './dto/update-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
@@ -100,15 +102,30 @@ export class UserController {
         { id: updateUserDto.id, updateUserDto: updateUserDto },
       )
       .toPromise();
-}
+  }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('updatePassword')
+  updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
+    return this.userServiceClient
+      .send({ cmd: 'updatePassword' }, updatePasswordDto)
+      .toPromise();
+  }
 
-@Delete('delete-user/:id')
-async deleteUser(@Param('id') id: string) {
-  // Check if quote exists
-  const existingQuote = await this.userServiceClient
-    .send({ cmd: 'deleteUserById' }, {id:id})
-    .toPromise();
+  @HttpCode(HttpStatus.OK)
+  @Post('resetPassword')
+  resetPassword(@Body() resetPassword: ResetPasswordDto) {
+    return this.userServiceClient
+      .send({ cmd: 'resetPassword' }, resetPassword)
+      .toPromise();
+  }
 
-}
+  @Delete('delete-user/:id')
+  async deleteUser(@Param('id') id: string) {
+    // Check if quote exists
+    const existingQuote = await this.userServiceClient
+        .send({ cmd: 'deleteUserById' }, {id:id})
+        .toPromise();
+
+  }
 }

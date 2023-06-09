@@ -50,7 +50,7 @@
                 </div>
                 <div class="flex items-center justify-between mt-6">
                   <div class="mr-1">
-                    <router-link class="text-sm underline hover:no-underline" to="/reset-password">Forgot Password?</router-link>
+                    <router-link class="text-sm underline hover:no-underline" to="reset-password-input">Forgot Password?</router-link>
                   </div>
                   <button v-if="isLoading" class="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed shadow-none" disabled>
                     <svg class="animate-spin w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
@@ -113,7 +113,36 @@
                   password: this.password
               };
               try {
-                  await this.$store.dispatch('auth/signin', actionPayload);
+                  const response = await this.$store.dispatch('auth/signin', actionPayload);
+                  if(response.message == 'Password is incorrect !') {
+                    Swal.fire({
+                        text:   'Username or password incorrect !',
+                        icon: 'error',
+                    }).then(() => {
+                        const redirectUrl = '/' + (this.$route.query.redirect || 'login');
+                        this.$router.replace(redirectUrl);
+                    });
+                    return;
+                  }
+
+                  if(response.message == 'User does not exist !') {
+                    Swal.fire({
+                        text:   'Username or password incorrect !',
+                        icon: 'error',
+                    
+                    });
+                    return;
+                  }
+
+                  if(response.message == 'User profile is not activated !') {
+                    Swal.fire({
+                        title: 'Warning',
+                        text:   'You must to activate your profile',
+                        icon: 'warning',
+                    
+                    });
+                    return;
+                  }
                   const redirectUrl = '/' + (this.$route.query.redirect || 'dashboard');
                   this.$router.replace(redirectUrl);
               } catch (error) {

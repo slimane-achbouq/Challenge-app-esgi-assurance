@@ -45,6 +45,11 @@ export class UsersService {
     return user;
   }
 
+  async findByUserBytoken(validationToken: string): Promise<User> {
+    const user: User = await this.userModel.findOne({ validationToken }).exec();
+    return user;
+  }
+
   // TDOD: verify is user profile is valide
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     // Fetch existing data

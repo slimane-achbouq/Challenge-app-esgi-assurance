@@ -14,6 +14,8 @@ import { User } from 'src/users/schemas/user.schema';
 import { Role } from 'src/users/enums/roles.enum';
 import { ClientProxy } from '@nestjs/microservices';
 import { v4 as uuidv4 } from 'uuid';
+import { resetPasswordDto } from './dto/reset-password.dto';
+import { updatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -189,5 +191,64 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email, user.roles);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
+  }
+
+  async resetPassword(resetPassword: resetPasswordDto) {
+    const user: User = await this.usersService.findByUserByEmail(
+      resetPassword.email,
+    );
+
+    console.log(resetPassword.email);
+
+    console.log(user);
+
+    if (!user)
+      return {
+        message: `User does not exist !`,
+      };
+
+    const validationToken = uuidv4('8');
+
+    await this.usersService.update(user._id, {
+      validationToken: validationToken,
+    });
+
+    const payload = {
+      email: resetPassword.email,
+      token: validationToken,
+    };
+
+    try {
+      await this.utilsService
+        .send({ cmd: 'resetPasswordEmail' }, payload)
+        .toPromise();
+    } catch (err) {
+      return new BadRequestException(err);
+    }
+
+    return {
+      message: 'Please check your email to update password !',
+    };
+  }
+
+  async updatePassword(updatePassword: updatePasswordDto) {
+    const user: User = await this.usersService.findByUserBytoken(
+      updatePassword.token,
+    );
+
+    if (!user)
+      return {
+        message: `User does not exist !`,
+      };
+
+    const hash = await this.hashData(updatePassword.password);
+
+    await this.usersService.update(user._id, {
+      password: hash,
+    });
+
+    return {
+      message: 'User password was updated !',
+    };
   }
 }

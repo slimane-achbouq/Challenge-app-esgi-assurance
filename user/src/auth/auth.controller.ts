@@ -7,6 +7,8 @@ import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { VerifyDto } from './dto/verify-profile.dto';
+import { resetPasswordDto } from './dto/reset-password.dto';
+import { updatePasswordDto } from './dto/update-password.dto';
 
 // @ApiTags('Auth')
 @Controller({
@@ -38,6 +40,27 @@ export class AuthController {
   verify(@Payload() verifyDto: VerifyDto) {
     try {
       return this.authService.verifyProfile(verifyDto);
+    } catch (err) {
+      return err.response;
+    }
+  }
+
+  @MessagePattern({ cmd: 'updatePassword' })
+  @Post('updatePassword')
+  updatePassword(@Payload() updatePassword: updatePasswordDto) {
+    try {
+      return this.authService.updatePassword(updatePassword);
+    } catch (err) {
+      return err.response;
+    }
+  }
+
+  @MessagePattern({ cmd: 'resetPassword' })
+  @Post('resetPassword')
+  resetPassword(@Payload() reserPassword: resetPasswordDto) {
+    console.log(reserPassword);
+    try {
+      return this.authService.resetPassword(reserPassword);
     } catch (err) {
       return err.response;
     }

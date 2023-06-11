@@ -11,6 +11,7 @@ import Quote from '@/views/Quote.vue';
 import EditQuote from '@/views/EditQuote.vue';
 import NewContract from '@/views/NewContract.vue';
 import Contracts from '@/views/Contracts.vue';
+import Contract from '@/views/Contract.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -28,6 +29,7 @@ const router = createRouter({
       { path: '/editquote/:id', name: 'editquote', component: EditQuote, meta: { requiresUnauth: false }},
       { path: '/newContract/:id', name: 'newcontract', component: NewContract, meta: { requiresUnauth: false }},
       { path: '/contracts', name: 'contracts', component: Contracts, meta: { requiresUnauth: false }},
+      { path: '/contract/:id', name: 'contract', component: Contract, meta: { requiresUnauth: false }},
     ]
   })
   

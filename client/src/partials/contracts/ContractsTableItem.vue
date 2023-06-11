@@ -12,7 +12,7 @@
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center text-slate-800">
-        <router-link :to="{ name: 'quote', params: { id: quote['_id'] }}">
+        <router-link :to="{ name: 'contract', params: { id: quote['_id'] }}">
           <div class="font-medium text-sky-500">{{quote.dossierNumber}}</div>
         </router-link>
         </div>

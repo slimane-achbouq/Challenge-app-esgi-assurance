@@ -158,13 +158,13 @@ services:
   claims-database:
     container_name: claims
     image: mongo:latest
-    hostname: claims
+    hostname: claims-database
     volumes:
       - ./claims/data/db:/data/db
     env_file:
       - ./claims/.env
     ports:
-      - "27020:27017"
+      - "27021:27017"
     networks:
       - my-network
 

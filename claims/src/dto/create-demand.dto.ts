@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateDemandDto {
   @IsNotEmpty()
   @IsString()
-  insuarnce_id: string;
+  insurance_id: string;
 
   @IsNotEmpty()
   @IsString()
@@ -16,4 +16,7 @@ export class CreateDemandDto {
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @IsNotEmpty()
+  proof;
 }

@@ -26,6 +26,9 @@ export class Demand extends Document {
 
   @Prop({ default: now() })
   updatedAt: Date;
+
+  @Prop({ type: Buffer, required: false }) 
+  proof: Buffer;
 }
 
 export const DemandSchema = SchemaFactory.createForClass(Demand);

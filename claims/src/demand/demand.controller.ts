@@ -19,12 +19,8 @@ export class DemandController {
 
   @MessagePattern({ cmd: 'updateDemande' })
   async updateDemand(@Payload() updateDemandDto: UpdateDemandDto) {
-    const { id, decision, additionalInfo, insurance_id } = updateDemandDto;
     const updatedDemand = await this.demandService.updateDemand(
-      id,
-      decision,
-      additionalInfo,
-      insurance_id,
+      updateDemandDto,
     );
     return updatedDemand;
   }

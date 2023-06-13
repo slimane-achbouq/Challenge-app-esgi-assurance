@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, now } from 'mongoose';
 import { Demand } from '../schema/demand.schema';
-import { CreateDemandDto } from '../dto/create-demand.dto';
+import { UpdateDemandDto } from '../dto/update-demand.dto';
+import { CreateDemandDto } from 'src/dto/create-demand.dto';
 
 @Injectable()
 export class DemandService {
@@ -11,30 +12,47 @@ export class DemandService {
   ) {}
 
   async create(createDemandDto: CreateDemandDto): Promise<Demand> {
-    const createdDemand = new this.demandModel(createDemandDto);
+
+    const { proof, ...rest } = createDemandDto;
+    // Save the base64 encoded file
+    const fileContent = Buffer.from(proof, 'base64');
+    const createdDemand = new this.demandModel({ ...rest, proof: fileContent });
     return createdDemand.save();
   }
 
   async updateDemand(
-    demandId: string,
-    decision: string,
-    additionalInfo: string,
-    insurance_id: string,
+    updateDemandDto: UpdateDemandDto
   ): Promise<Demand> {
-    const existingDemand = await this.demandModel.findOne({ insurance_id });
+    const id = updateDemandDto.id
+    const existingDemand = await this.demandModel.findById( id );
 
     if (!existingDemand) {
       throw new Error(
-        'Demand not found with this insurance_id : ' + insurance_id,
+        'Demand not found with this id : ' + id,
       );
     }
 
-    const updatedDemand = await this.demandModel.findByIdAndUpdate(
-      demandId,
-      { decision, additionalInfo, updatedAt: now() },
-      { new: true },
-    );
+    const { proof, ...rest } = updateDemandDto;
 
-    return updatedDemand;
+    if (proof) {
+      // Decode the base64 file content
+      const fileContent = Buffer.from(proof, 'base64');
+  
+      return await this.demandModel.findByIdAndUpdate(
+        existingDemand['_id'],
+        { ...rest, proof: fileContent ,updatedAt: now()},
+        { new: true },
+      );
+
+    } else {
+      // If no new file is uploaded, just update the other vehicle details
+      return  await this.demandModel.findByIdAndUpdate(
+        existingDemand['_id'],
+        { ...rest,updatedAt: now()},
+        { new: true },
+      );
+
+    }
+
   }
 }

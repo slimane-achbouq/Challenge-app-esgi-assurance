@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateDemandDto {
+  @IsNotEmpty()
   @IsString()
   id: string;
 
@@ -14,4 +15,6 @@ export class UpdateDemandDto {
 
   @IsString()
   additionalInfo: string;
+
+  proof;
 }

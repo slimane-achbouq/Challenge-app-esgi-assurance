@@ -43,7 +43,7 @@
                 </header>
                 <!-- Billing Information -->
                 <!-- Cart items -->
-            <div class="mb-6 lg:mb-0">
+            <div class="mb-6 lg:mb-0" v-if="contract">
 
               <div class=" flex flex-col col-span-full xl:col-span-12 bg-white shadow-lg rounded-sm border border-slate-200  ">
               <button class="btn border-rose-500 hover:border-slate-300 text-rose-500" @click="modaDeletelOpen=true">
@@ -60,7 +60,7 @@
                       <div >
                         <div class="flex justify-between text-sm m-3">
                           <div class="font-medium text-slate-800">Status </div>
-                          <div class="  "> <span class=" bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1" >valid</span><span class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1" >invalid</span> </div>
+                          <div class="  "> <span class=" bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1" v-if="contract.status">valid</span><span class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1" v-if="!contract.status">invalid</span> </div>
                         </div>
                       </div>
 
@@ -86,32 +86,26 @@
 
                       <div>
                         <div class="flex justify-between text-sm m-3">
-                          <div class="font-medium text-slate-800">Coverage</div>
-                          <div class="">{{contract.dossierNumber}}</div>
-                        </div>
-                      </div>
-                      <div>
-                        <div class="flex justify-between text-sm m-3">
-                          <div class="font-medium text-slate-800">Coverage Duration</div>
-                          <div class="">{{contract.coverageEndDate}} Months</div>
+                          <div class="font-medium text-slate-800">Coverage End date</div>
+                          <div class="">{{processDate(contract.coverageStartDate )}}</div>
                         </div>
                       </div>
                       <div>
                         <div class="flex justify-between text-sm m-3">
                           <div class="font-medium text-slate-800">Coverage Start Date</div>
-                          <div class="">{{contract.coverageStartDate}}</div>
+                          <div class="">{{processDate(contract.coverageEndDate) }}</div>
                         </div>
                       </div>
                       <div>
                         <div class="flex justify-between text-sm m-3">
                           <div class="font-medium text-slate-800">Creating Date</div>
-                          <div class="">{{contract.createdAt}}</div>
+                          <div class="">{{processDate(contract.createdAt)}}</div>
                         </div>
                       </div>
                       <div>
                         <div class="flex justify-between text-sm m-3">
                           <div class="font-medium text-slate-800">Last update </div>
-                          <div class="">{{contract.updatedAt}}</div>
+                          <div class="">{{processDate(contract.updatedAt)}}</div>
                         </div>
                       </div>
                       
@@ -137,7 +131,7 @@
                   <div class="space-y-6">
 
                     <!-- Sidebar -->
-            <div class="h-full px-5 py-2">
+            <div class="h-full px-5 py-2" v-if="user">
                   <!-- Details -->
                   <div class=" justify-center">
                     <div class="text-xs text-slate-500 font-semibold uppercase mb-3"><i class="fas fa-user"></i> Beneficiary</div>
@@ -242,9 +236,76 @@
           </div>
 
         </div>
+
+        <ModalBasic id="feedback-modal" :modalOpen="modalOpen"   title="Edit Quote">
+
+                      <!-- Modal content -->
+                      <div class="px-5 py-4">
+                        <div class="space-y-3 ">
+                         <div class="grid grid-cols-2 gap-4" >
+
+
+                          <div class="col-span-1">
+                              <label class="block text-sm font-medium mb-1" for="card-country">Status <span class="text-rose-500">*</span></label>
+                              <select id="card-country" class="form-select w-full" >
+                                <option>Valid</option>
+                                <option>Invalid</option>
+                              </select>
+                            <p class="text-xs mt-1 text-rose-500" ></p>
+                            <div  class="text-xs mt-1 text-rose-500">
+                              
+                            </div>
+                            </div>
+
+                          <div class="col-span-1">
+                              <label class="block text-sm font-medium mb-1" for="card-country">Insurance Type <span class="text-rose-500">*</span></label>
+                              <select id="card-country" class="form-select w-full" >
+                                <option>Liability</option>
+                                <option>Collision</option>
+                                <option>Comprehensive</option>
+                              </select>
+                            <p class="text-xs mt-1 text-rose-500" ></p>
+                            <div  class="text-xs mt-1 text-rose-500">
+                              
+                            </div>
+                            </div>
+            
+                         </div>
+
+                         <div class="grid grid-cols-2 gap-4" >
+                          <div class="col-span-1">
+                            <label class="block text-sm font-medium mb-1" for="startingDate">Coverage Start Date <span class="text-rose-500">*</span><br></label>
+                            <input type="date" class="form-input w-full" id="startingDate" name="startingDate" >
+                             <p class="text-xs mt-1 text-rose-500" ></p>
+                          </div>
+                          <div class="col-span-1">
+                            <label class="block text-sm font-medium mb-1" for="startingDate">Coverage End Date <span class="text-rose-500">*</span><br></label>
+                            <input type="date" class="form-input w-full" id="startingDate" name="startingDate" >
+                             <p class="text-xs mt-1 text-rose-500" ></p>
+                          </div>
+                         </div>
+
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-sm font-medium mb-1" for="card-address">Price <span class="text-rose-500">*</span></label>
+                          <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"   placeholder="12"/>
+                          <p class="text-xs mt-1 text-rose-500" ></p>
+                            <div  class="text-xs mt-1 text-rose-500"></div>
+                          </div>
+                      </div>
+                      <!-- Modal footer -->
+                      <div class="px-5 py-4 border-t border-slate-200">
+                        <div class="flex flex-wrap justify-end space-x-2">
+                          <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" @click="modalOpen=false">Cancel</button>
+                          <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white" @click="onUpdate">Edit</button>
+                        </div>
+                      </div>
+            </ModalBasic>
       </main>
 
     </div>
+    
+    
 
   </div>
 </template>
@@ -254,6 +315,7 @@ import { ref } from 'vue'
 import Sidebar from '@/partials/Sidebar.vue'
 import Header from '@/partials/Header.vue'
 import axios from 'axios'
+import ModalBasic from '@/components/Modal.vue'
 
 
 export default {
@@ -261,11 +323,21 @@ export default {
   components: {
     Sidebar,
     Header,
+    ModalBasic
   },
   data() {
         return {
             contract: null,
-            user:null
+            user:null,
+            formData: {
+                insuranceType: 'Collision',
+                coverage: 'Basic',
+                coverageStartDate: '',
+                insurancePremium:'',
+                coverageEndDate:''
+          },
+          modalOpen:false,
+          contractUpdated:false,
         }
   },
    methods:{
@@ -283,6 +355,34 @@ export default {
             document.body.appendChild(link);
             link.click();
       },
+      processDate(date) {
+            let dateObject = new Date(date);
+
+            let year = dateObject.getUTCFullYear();
+            let month = dateObject.getUTCMonth() + 1; // JS months are 0-11
+            let day = dateObject.getUTCDate();
+
+            // pad with 0 if needed
+            month = month < 10 ? '0' + month : month;
+            day = day < 10 ? '0' + day : day;
+
+            return `${year}-${month}-${day}`;
+      },
+      async onUpdate(){
+
+        console.log(this.formData)
+         const token = this.$store.getters["auth/token"]
+        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+          const response = await axios.put(`${import.meta.env.VITE_API_URL}/quotes/${this.quote.id}`,this.formData, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        
+
+        this.quoteUpdated=true
+        this.modalOpen=false
+      }
    },
   setup() {
 
@@ -311,17 +411,21 @@ export default {
         
 
         if(response.data){
+          
           this.contract=response.data
+          console.log(this.contract)
         }  
 
-      
-        /*
-        this.formData.insuranceType= this.quote.insuranceType
-        this.formData.coverage= this.quote.coverage
-        this.formData.coverageDuration= this.quote.coverageDuration
-        this.formData.coverageStartDate=(this.processDate(this.quote.coverageStartDate))
+  
+        
+        this.formData.insuranceType= this.contract.insuranceType
+        this.formData.coverageDuration= this.contract.coverageDuration
+        this.formData.coverageStartDate=(this.processDate(this.contract.coverageStartDate))
+        this.formData.coverageEndDate=(this.processDate(this.contract.coverageEndDate))
+        this.formData.insurancePremium=(this.processDate(this.contract.insurancePremium))
 
-        */
+        console.log(this.formData)
+        
         const response1 = await axios.get(`http://localhost:3000/beneficiary/${this.contract.beneficiary}`, {
           headers: {
             Authorization: `Bearer ${token}`

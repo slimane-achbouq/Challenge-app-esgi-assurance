@@ -2,15 +2,13 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {HydratedDocument, Model, now} from 'mongoose';
 import {Demand} from '../schema/demand.schema';
-import {Insurance} from '../../../insurance-service/src/insurance/insurance.schema';
 import {UpdateDemandDto} from '../dto/update-demand.dto';
 import {CreateDemandDto} from 'src/dto/create-demand.dto';
 
 @Injectable()
 export class DemandService {
     constructor(
-        @InjectModel('Demand') private readonly demandModel: Model<Demand>,
-        @InjectModel('Insurance') private readonly insuranceModel: Model<Insurance>,
+        @InjectModel('Demand') private readonly demandModel: Model<Demand>
     ) {
     }
 

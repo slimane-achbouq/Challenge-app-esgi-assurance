@@ -11,6 +11,15 @@
       <Header :sidebarOpen="sidebarOpen" @toggle-sidebar="sidebarOpen = !sidebarOpen" />
 
       <main>
+
+      <Banner type="success" class="mb-4"  :open="contractUpdated" v-if="contractUpdated">
+                    Contract edited successfully .
+      </Banner>
+
+      <Banner2 type="warning" :open="true">
+                    We’re currently experiencing an increase in inquiries. There may be a delay in responses from the Support.
+                  </Banner2>
+
         <div class="lg:relative lg:flex">
 
           <!-- Content -->
@@ -259,7 +268,7 @@
 
                           <div class="col-span-1">
                               <label class="block text-sm font-medium mb-1" for="card-country">Insurance Type <span class="text-rose-500">*</span></label>
-                              <select id="card-country" class="form-select w-full" >
+                              <select id="card-country" class="form-select w-full" v-model="formData.insuranceType" >
                                 <option>Liability</option>
                                 <option>Collision</option>
                                 <option>Comprehensive</option>
@@ -275,12 +284,12 @@
                          <div class="grid grid-cols-2 gap-4" >
                           <div class="col-span-1">
                             <label class="block text-sm font-medium mb-1" for="startingDate">Coverage Start Date <span class="text-rose-500">*</span><br></label>
-                            <input type="date" class="form-input w-full" id="startingDate" name="startingDate" >
+                            <input type="date" class="form-input w-full" id="startingDate" name="startingDate" v-model="formData.coverageStartDate">
                              <p class="text-xs mt-1 text-rose-500" ></p>
                           </div>
                           <div class="col-span-1">
                             <label class="block text-sm font-medium mb-1" for="startingDate">Coverage End Date <span class="text-rose-500">*</span><br></label>
-                            <input type="date" class="form-input w-full" id="startingDate" name="startingDate" >
+                            <input type="date" class="form-input w-full" id="startingDate" name="startingDate" v-model="formData.coverageEndDate">
                              <p class="text-xs mt-1 text-rose-500" ></p>
                           </div>
                          </div>
@@ -288,7 +297,7 @@
                         </div>
                         <div class="col-span-1">
                             <label class="block text-sm font-medium mb-1" for="card-address">Price <span class="text-rose-500">*</span></label>
-                          <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"   placeholder="12"/>
+                          <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"   v-model="formData.insurancePremium" placeholder="12"/>
                           <p class="text-xs mt-1 text-rose-500" ></p>
                             <div  class="text-xs mt-1 text-rose-500"></div>
                           </div>
@@ -316,6 +325,7 @@ import Sidebar from '@/partials/Sidebar.vue'
 import Header from '@/partials/Header.vue'
 import axios from 'axios'
 import ModalBasic from '@/components/Modal.vue'
+import Banner from '@/components/Banner.vue';
 
 
 export default {
@@ -323,7 +333,8 @@ export default {
   components: {
     Sidebar,
     Header,
-    ModalBasic
+    ModalBasic,
+    Banner
   },
   data() {
         return {
@@ -373,14 +384,14 @@ export default {
         console.log(this.formData)
          const token = this.$store.getters["auth/token"]
         // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-          const response = await axios.put(`${import.meta.env.VITE_API_URL}/quotes/${this.quote.id}`,this.formData, {
+          const response = await axios.put(`${import.meta.env.VITE_API_URL}/insurance/${this.contract['_id']}`,this.formData, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
         
 
-        this.quoteUpdated=true
+        this.contractUpdated=true
         this.modalOpen=false
       }
    },
@@ -413,7 +424,7 @@ export default {
         if(response.data){
           
           this.contract=response.data
-          console.log(this.contract)
+          console.log(this.contract.insurancePremium)
         }  
 
   
@@ -422,7 +433,7 @@ export default {
         this.formData.coverageDuration= this.contract.coverageDuration
         this.formData.coverageStartDate=(this.processDate(this.contract.coverageStartDate))
         this.formData.coverageEndDate=(this.processDate(this.contract.coverageEndDate))
-        this.formData.insurancePremium=(this.processDate(this.contract.insurancePremium))
+        this.formData.insurancePremium=(this.contract.insurancePremium)
 
         console.log(this.formData)
         

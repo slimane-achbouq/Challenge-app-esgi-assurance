@@ -222,11 +222,11 @@
           </thead>
           <!-- Table body -->
           <ClaimsTableItem
-            v-for="quote in quotes"
-            :key="quote.id"
-            :quote="quote"
+            v-for="claim in claims"
+            :key="claim.id"
+            :claim="claim"
             v-model:selected="selected"
-            :value="quote.id"
+            :value="claim.id"
           />
         </table>
 
@@ -280,13 +280,13 @@ export default {
     const selectAll = ref(false)
     const selected = ref([])
     const selected1 = ref(2)
-    const quotes = ref([])
+    const claims = ref([])
     const totalResult = ref(0)
     const lastPage = ref(0)
     const perPage = ref(5)
     const page = ref(1)
     const searchTerm = ref([])
-    const quoteList= ref([])
+    const claimList= ref([])
     const dropdownOpen1 = ref(false)
 
     const dropdownOpen = ref(false)
@@ -330,11 +330,11 @@ export default {
 
 
     const clearFilters = () => {
-        quotes.value = quoteList.value
+        claims.value = claimList.value
 
-        quotes.value =  quoteList.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
+        claims.value =  claimList.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
         
-        totalResult.value = quoteList.value.length; // get the total users
+        totalResult.value = claimList.value.length; // get the total users
         lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
 
         dropdownOpen.value = false
@@ -351,21 +351,21 @@ export default {
       let twelveMonthsAgo = moment().subtract(12, 'months');
       
 
-    if (selected=="4") quotes.value = quoteList.value; 
+    if (selected=="4") claims.value = claimList.value; 
     else 
-    quotes.value = quoteList.value.filter(quote => {
-    let quoteCreationDate = moment(quote.createdAt);
+    claims.value = claimList.value.filter(claim => {
+    let claimCreationDate = moment(claim.createdAt);
     
 
-    if (selected=="0" && quoteCreationDate.isSame(now, 'day')) return true;
-    if (selected=="1" && quoteCreationDate.isAfter(sevenDaysAgo) && quoteCreationDate.isBefore(now)) return true;
-    if (selected=="2" && quoteCreationDate.isAfter(oneMonthAgo) && quoteCreationDate.isBefore(now)) return true;
-    if (selected=="3" && quoteCreationDate.isAfter(twelveMonthsAgo) && quoteCreationDate.isBefore(now)) return true;
-    if (selected=="4") quotes.value = quoteList.value;
+    if (selected=="0" && claimCreationDate.isSame(now, 'day')) return true;
+    if (selected=="1" && claimCreationDate.isAfter(sevenDaysAgo) && claimCreationDate.isBefore(now)) return true;
+    if (selected=="2" && claimCreationDate.isAfter(oneMonthAgo) && claimCreationDate.isBefore(now)) return true;
+    if (selected=="3" && claimCreationDate.isAfter(twelveMonthsAgo) && claimCreationDate.isBefore(now)) return true;
+    if (selected=="4") claims.value = claimList.value;
 
   });
-        totalResult.value = quotes.value.length;
-        quotes.value =  quotes.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
+        totalResult.value = claims.value.length;
+        claims.value =  claims.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
          // get the total users
         lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
 
@@ -374,36 +374,36 @@ export default {
 
     const applyFilters = () => {
 
-        quotes.value = quoteList.value
-        quotes.value = quotes.value.filter(quote => {
+        claims.value = claimList.value
+        claims.value = claims.value.filter(claim => {
 
-        if (filters.value.subscribed && quote.insuranceId) return true; 
-        if (filters.value.notSubscribed && !quote.subscribed) return true;
+        if (filters.value.subscribed && claim.insuranceId) return true; 
+        if (filters.value.notSubscribed && !claim.subscribed) return true;
         if (!filters.value.notSubscribed && !filters.value.subscribed) return true
         if (filters.value.notSubscribed && filters.value.subscribed) return true
         
 
       });
 
-      quotes.value = quotes.value.filter(quote => {
+      claims.value = claims.value.filter(claim => {
 
-        if (filters.value.basicInsurance && quote.coverage =='Basic') return true
-        if (filters.value.standardInsurance && quote.coverage =='Standard') return true  
-        if (filters.value.premiumInsurance && quote.coverage =='Premium') return true
+        if (filters.value.basicInsurance && claim.coverage =='Basic') return true
+        if (filters.value.standardInsurance && claim.coverage =='Standard') return true  
+        if (filters.value.premiumInsurance && claim.coverage =='Premium') return true
         if (!filters.value.basicInsurance && !filters.value.standardInsurance && !filters.value.premiumInsurance) return true
 
       });
 
-      quotes.value = quotes.value.filter(quote => {
+      claims.value = claims.value.filter(claim => {
 
-        if (filters.value.liabilityCoverage && quote.insuranceType =='Liability') return true;
-        if (filters.value.collisionCoverage && quote.insuranceType =='Collision') return true;
-        if (filters.value.comprehensiveCoverage && quote.insuranceType =='Comprehensive') return true;
+        if (filters.value.liabilityCoverage && claim.insuranceType =='Liability') return true;
+        if (filters.value.collisionCoverage && claim.insuranceType =='Collision') return true;
+        if (filters.value.comprehensiveCoverage && claim.insuranceType =='Comprehensive') return true;
         if (!filters.value.liabilityCoverage && !filters.value.collisionCoverage && !filters.value.comprehensiveCoverage) return true
 
       });
 
-      totalResult.value = quotes.value.length; 
+      totalResult.value = claims.value.length; 
       dropdownOpen.value = false
     };
     
@@ -420,20 +420,22 @@ export default {
       dropdownOpen.value = false
     }
 
-    const fetchQuotes = async() => {
+    const fetchClaims = async() => {
 
         
         const token = store.getters["auth/token"]
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/quotes`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
-        })
+        }).catch((error) => {
+          console.log(error)
+        });
         
       
         if(response.data){
           allUsers.value = await response.data; // store all the users
-          quotes.value =  allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
+          claims.value =  allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
           
         }
 
@@ -441,7 +443,7 @@ export default {
         lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
 
   
-        quoteList.value=response.data
+        claimList.value=response.data
         /*
         totalResult.value=await response.data["hydra:totalItems"];
         if(response.data["hydra:view"]){
@@ -453,26 +455,26 @@ export default {
 
     const searchCustomers = async() =>  {
       
-      quotes.value=quoteList.value
+      claims.value=claimList.value
 
      if(searchTerm.value!=="")
-      quotes.value= quoteList.value.filter(quote => {
-              return quote.quoteNumber == searchTerm.value
+      claims.value= claimList.value.filter(claim => {
+              return claim.claimNumber == searchTerm.value
 
       } )
 
-      console.log(JSON.stringify(quotes.value))
+      console.log(JSON.stringify(claims.value))
     }
 
     const checkAll = () => {
       selected.value = []
       if (!selectAll.value) {
-        selected.value = quotes.value.map(quote => quote.id)
+        selected.value = claims.value.map(claim => claim.id)
       }
     }
     
     watch(selected, () => {
-      selectAll.value = quotes.value.length === selected.value.length ? true : false
+      selectAll.value = claims.value.length === selected.value.length ? true : false
       emit('change-selection', selected.value)
     })    
 
@@ -481,7 +483,7 @@ export default {
     function nextPage() {
       if (page.value < lastPage.value) {
         page.value++;
-        quotes.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
+        claims.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
           
       }
       
@@ -490,14 +492,14 @@ export default {
 
       if (page.value > 1) {
         page.value--;
-        quotes.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
+        claims.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
       }
 
     }
     
     
 
-    onMounted(fetchQuotes)
+    onMounted(fetchClaims)
 
     return {
       dropdownOpen,
@@ -509,8 +511,8 @@ export default {
       selectAll,
       selected,
       checkAll,
-      quotes,
-      fetchQuotes,
+      claims,
+      fetchClaims,
       nextPage,
       prevPage,
       lastPage,

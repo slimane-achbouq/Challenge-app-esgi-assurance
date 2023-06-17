@@ -38,8 +38,9 @@ const router = createRouter({
       { path: '/verify/:token', contract: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
       { path: '/reset-password-input', contract: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
       { path: '/resetPassword/:token', contract: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
-      { path: '/claims', contract: 'claims', component: Claims, meta: { requiresUnauth: false }},
-      { path: '/claims/new/:id', contract: 'new_claim', component: NewClaim, meta: { requiresUnauth: false }},
+      { path: '/claims', name: 'claims', component: Claims, meta: { requiresUnauth: false }},
+      { path: '/claims/new/:insurance_id', name: 'new_claim', component: NewClaim, meta: { requiresUnauth: false }},
+      { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
 
     ]
   })

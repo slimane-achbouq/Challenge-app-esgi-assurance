@@ -16,6 +16,10 @@
           Claim created successfully .
         </Banner>
 
+        <Banner type="failure" class="mb-4" :open="generalError" v-if="generalError">
+          {{ generalError }}
+        </Banner>
+
         <Banner type="success" class="mb-4" :open="true" v-if="ifProof">
           Proof image uploaded successfully.
         </Banner>
@@ -45,10 +49,20 @@
                 <form>
                   <div class="space-y-3">
 
+                    <div class="flex-1" v-if="contract">
+                      <p>
+                        Claim for the contract :
+                        <router-link :to="{ name: 'contract', params: { id: contract._id }}"
+                                     class="text-blue-500 hover:underline">
+                          {{ contract.insuranceType }} - [{{ contract._id }}]
+                        </router-link>
+                      </p>
+                    </div>
+
                     <div class="flex-1">
                       <label class="block text-sm font-medium mb-1" for="card-state">Title <span
                           class="text-rose-500">*</span></label>
-                      <input id="card-state" class="form-input w-full placeholder-slate-300" type="text" v-model="title"
+                      <input id="card-state" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.title"
                              placeholder=""/>
                       <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.title }}</p>
                     </div>
@@ -58,14 +72,14 @@
                           class="text-rose-500">*</span></label>
                       <textarea id="message" rows="4"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Explain here..." v-model="description"></textarea>
+                                placeholder="Explain here..." v-model="formData.description"></textarea>
                       <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.description }}</p>
                     </div>
 
                     <div class="flex-1">
                       <label class="block text-sm font-medium mb-1" for="card-country">Reason <span
                           class="text-rose-500">*</span></label>
-                      <select id="card-country" class="form-select w-full" v-model="reason">
+                      <select id="card-country" class="form-select w-full" v-model="formData.reason">
                         <option>Car</option>
                         <option>Motorcycle</option>
                         <option>Truck</option>
@@ -209,14 +223,17 @@ export default {
   },
   data() {
     return {
-      reason: null,
-      title: null,
-      description: null,
+      contract: null,
       errors: null,
+      generalError: null,
       hideProof: null,
       ifProof: false,
       formData: {
+        insurance_id: null,
         proof: null,
+        reason: null,
+        title: null,
+        description: null,
       },
       claimCreated: false,
     };
@@ -234,11 +251,14 @@ export default {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
+      }).catch((error) => {
+        console.log(error);
+        this.generalError = error.response.data.message[0]
       });
 
-      if (response.data) {
-        this.claimCreated = true;
-      }
+      console.log("ici")
+      console.log(response.data)
+      // this.claimCreated = true;
     }
   },
   setup() {
@@ -252,16 +272,19 @@ export default {
     const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
     const token = this.$store.getters["auth/token"]
-    let response = await axios.get(`${import.meta.env.VITE_API_URL}/claims/${id}`, {
+    let response = await axios.get(`${import.meta.env.VITE_API_URL}/insurance/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    })
+    }).catch((error) => {
+      console.log(error)
+      if (error.response.status != 200) {
+        this.$router.push({name: 'contracts'})
+      }
+    });
 
-    console.log()
-    if (response.data) {
-      this.contract = response.data
-    }
+    this.contract = response.data
+    this.formData.insurance_id = this.contract._id
   }
 }
 </script>

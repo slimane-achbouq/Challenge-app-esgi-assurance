@@ -251,14 +251,13 @@ export default {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
+      }).then(() => {
+        this.claimCreated = true;
+        console.log(response.data)
       }).catch((error) => {
         console.log(error);
         this.generalError = error.response.data.message[0]
       });
-
-      console.log("ici")
-      console.log(response.data)
-      // this.claimCreated = true;
     }
   },
   setup() {

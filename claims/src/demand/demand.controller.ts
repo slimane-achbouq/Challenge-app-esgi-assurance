@@ -35,4 +35,9 @@ export class DemandController {
         );
         return updatedDemand;
     }
+
+    @MessagePattern({cmd: 'deleteDemande'})
+    async deleteDemand(@Payload() id: string) {
+        return this.demandService.deleteDemand(id);
+    }
 }

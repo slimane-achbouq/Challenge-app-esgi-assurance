@@ -1,9 +1,9 @@
 <template>
 
-  
+
   <!-- Search form -->
     <div class="mb-5 flex justify-between">
-    
+
                     <form class="relative">
                     <label for="app-search" class="sr-only" >Search by claim number</label>
                     <input id="app-search" class="form-input w-full pl-9 py-3 focus:border-slate-300" type="search" placeholder="Search by claim number" v-model="searchTerm" @input="searchCustomers"/>
@@ -19,7 +19,7 @@
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
               <!-- Delete button -->
               <DeleteButton :selectedItems="selectedItems" />
-              
+
               <!-- Filter button -->
 
               <div class="relative inline-flex">
@@ -95,7 +95,7 @@
                             <span class="text-sm font-medium ml-2">Comprehensive coverage</span>
                           </label>
                         </li>
-                        
+
                       </ul>
                       <div class="py-2 px-3 border-t border-slate-200 bg-slate-50">
                         <ul class="flex items-center justify-between">
@@ -106,7 +106,7 @@
                             <button class="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white" @click="applyFilters" @focusout="dropdownOpen = false">Apply</button>
                           </li>
                         </ul>
-                      </div>          
+                      </div>
                     </div>
                   </div>
                 </transition>
@@ -114,7 +114,7 @@
 
 
               <!-- Dropdown -->
-              
+
               <div class="relative">
                   <button
                     ref="trigger"
@@ -161,20 +161,20 @@
                             <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                           </svg>
                           <span>{{option.period}}</span>
-                        </button>          
+                        </button>
                       </div>
                     </div>
                   </transition>
                 </div>
 
-              <!-- Add order button -->          
+              <!-- Add order button -->
             </div>
 
     </div>
-    
+
 
   <div class="bg-white shadow-lg rounded-sm border border-slate-200 relative">
-  
+
     <header class="px-5 py-4">
       <h2 class="font-semibold text-slate-800">All Claims <span class="text-slate-400 font-medium">{{totalResult}}</span></h2>
     </header>
@@ -198,25 +198,16 @@
                 <div class="font-semibold text-left">Claim number</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Customer</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">insuranceType</div>
+                <div class="font-semibold text-left">insurance Type</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">coverage</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Start Date</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Duration</div>
+                <div class="font-semibold text-left">Created At</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">Status</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Vehicle</div>
               </th>
             </tr>
           </thead>
@@ -272,7 +263,7 @@ export default {
     ClaimsTableItem,
     FilterButton,
     DateSelect
-  },  
+  },
   props: ['selectedItems'],
   setup(props, { emit }) {
     const store = useStore()
@@ -333,7 +324,7 @@ export default {
         claims.value = claimList.value
 
         claims.value =  claimList.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
-        
+
         totalResult.value = claimList.value.length; // get the total users
         lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
 
@@ -349,13 +340,13 @@ export default {
       let sevenDaysAgo = moment().subtract(7, 'days');
       let oneMonthAgo = moment().subtract(1, 'months');
       let twelveMonthsAgo = moment().subtract(12, 'months');
-      
 
-    if (selected=="4") claims.value = claimList.value; 
-    else 
+
+    if (selected=="4") claims.value = claimList.value;
+    else
     claims.value = claimList.value.filter(claim => {
     let claimCreationDate = moment(claim.createdAt);
-    
+
 
     if (selected=="0" && claimCreationDate.isSame(now, 'day')) return true;
     if (selected=="1" && claimCreationDate.isAfter(sevenDaysAgo) && claimCreationDate.isBefore(now)) return true;
@@ -377,18 +368,18 @@ export default {
         claims.value = claimList.value
         claims.value = claims.value.filter(claim => {
 
-        if (filters.value.subscribed && claim.insuranceId) return true; 
+        if (filters.value.subscribed && claim.insuranceId) return true;
         if (filters.value.notSubscribed && !claim.subscribed) return true;
         if (!filters.value.notSubscribed && !filters.value.subscribed) return true
         if (filters.value.notSubscribed && filters.value.subscribed) return true
-        
+
 
       });
 
       claims.value = claims.value.filter(claim => {
 
         if (filters.value.basicInsurance && claim.coverage =='Basic') return true
-        if (filters.value.standardInsurance && claim.coverage =='Standard') return true  
+        if (filters.value.standardInsurance && claim.coverage =='Standard') return true
         if (filters.value.premiumInsurance && claim.coverage =='Premium') return true
         if (!filters.value.basicInsurance && !filters.value.standardInsurance && !filters.value.premiumInsurance) return true
 
@@ -403,10 +394,10 @@ export default {
 
       });
 
-      totalResult.value = claims.value.length; 
+      totalResult.value = claims.value.length;
       dropdownOpen.value = false
     };
-    
+
 
     // close on click outside
     const clickHandler = ({ target }) => {
@@ -422,7 +413,7 @@ export default {
 
     const fetchClaims = async() => {
 
-        
+
         const token = store.getters["auth/token"]
           const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims`, {
           headers: {
@@ -431,18 +422,19 @@ export default {
         }).catch((error) => {
           console.log(error)
         });
-        
-      
+
+      console.log(response.data)
+
         if(response.data){
           allUsers.value = await response.data; // store all the users
           claims.value =  allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
-          
+
         }
 
         totalResult.value = allUsers.value.length; // get the total users
         lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
 
-  
+
         claimList.value=response.data
         /*
         totalResult.value=await response.data["hydra:totalItems"];
@@ -454,7 +446,7 @@ export default {
 
 
     const searchCustomers = async() =>  {
-      
+
       claims.value=claimList.value
 
      if(searchTerm.value!=="")
@@ -472,21 +464,21 @@ export default {
         selected.value = claims.value.map(claim => claim.id)
       }
     }
-    
+
     watch(selected, () => {
       selectAll.value = claims.value.length === selected.value.length ? true : false
       emit('change-selection', selected.value)
-    })    
+    })
 
-    
+
 
     function nextPage() {
       if (page.value < lastPage.value) {
         page.value++;
         claims.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // update the customers list according to the new page
-          
+
       }
-      
+
       }
     function prevPage() {
 
@@ -496,8 +488,8 @@ export default {
       }
 
     }
-    
-    
+
+
 
     onMounted(fetchClaims)
 

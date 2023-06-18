@@ -6,127 +6,25 @@
         <div class="flex items-center">
           <label class="inline-flex">
             <span class="sr-only">Select</span>
-            <input :id="quote.id" class="form-checkbox" type="checkbox" :value="value" @change="check" :checked="checked" />
+            <input :id="claim.id" class="form-checkbox" type="checkbox" :value="value" @change="check" :checked="checked" />
           </label>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center text-slate-800">
-        <router-link :to="{ name: 'quote', params: { id: quote.id }}">
-          <div class="font-medium text-sky-500">{{quote.quoteNumber}}</div>
+        <router-link :to="{ name: 'claim', params: { id: claim._id }}">
+          <div class="font-medium text-sky-500">{{claim._id}}</div>
         </router-link>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div>{{quote.userId}}</div>
+        <div class="font-medium text-slate-800">{{claim.insuranceType}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="font-medium text-slate-800">{{quote.insuranceType}}</div>
+        <div class="text-left font-medium text-emerald-500">{{claim.coverage}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-left font-medium text-emerald-500">{{quote.coverage}}</div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(quote.createdAt)">{{formatDate(quote.createdAt)}}</div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center">{{quote.coverageDuration}} Month</div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="flex items-center">
-          <div v-html="typeIcon(quote.insuranceId)"></div>
-          <div v-if="insuranceId">Subscriped</div>
-          <div v-if="!insuranceId">Not subscriped</div>
-        </div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-        <div class="flex items-center">
-          <button
-            class="text-slate-400 hover:text-slate-500 transform"
-            :class="descriptionOpen && 'rotate-180'"
-            :aria-expanded="descriptionOpen"
-            @click.prevent="descriptionOpen = !descriptionOpen"
-            :aria-controls="`description-${quote.id}`"
-          >
-            <span class="sr-only">Menu</span>
-            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-              <path d="M16 20l-5.4-5.4 1.4-1.4 4 4 4-4 1.4 1.4z" />
-            </svg>
-          </button>
-        </div>
-      </td>
-    </tr>
-    <!--
-    Example of content revealing when clicking the button on the right side:
-    Note that you must set a "colSpan" attribute on the <td> element,
-    and it should match the number of columns in your table
-    -->
-    <tr :id="`description-${quote.id}`" role="region" :class="!descriptionOpen && 'hidden'">
-      <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3">
-        <div class="flex items-center bg-slate-200 p-3 -mt-3">
-          <table class="table-auto w-full divide-y divide-slate-200">
-          <!-- Table header -->
-          <thead class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-slate-200">
-            <tr>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">vehicleType</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">brand</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">model</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">horsepower</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">annualMileage</div>
-              </th>    
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">licensePlate</div>
-              </th>                                                     
-              </tr>
-          </thead>
-
-          <tbody class="text-sm">
-            <!-- Row -->
-            <tr>
-              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.vehicleType}}</div>
-                </div>
-              </td>
-              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.brand}}</div>
-                </div>
-              </td>
-              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.model}}</div>
-                </div>
-              </td>
-              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.horsepower}} HP</div>
-                </div>
-              </td>
-              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.annualMileage}} KM</div>
-                </div>
-              </td>
-              <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="flex items-center text-slate-800">
-                  <div class="font-medium text-sky-500">{{quote.vehicle.licensePlate}}</div>
-                </div>
-              </td>
-
-              </tr>
-              </tbody>
-          </table>
-        </div>
+        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(claim.createdAt)">{{formatDate(claim.createdAt)}}</div>
       </td>
     </tr>
   </tbody>
@@ -138,7 +36,7 @@ import moment from 'moment';
 
 export default {
   name: 'ClaimsTableItem',
-  props: ['quote', 'value', 'selected'],
+  props: ['claim', 'value', 'selected'],
   setup(props, context) {
     const checked = computed(() => props.selected.includes(props.value))
 

@@ -1,4 +1,4 @@
-import {Body, Controller, Inject, Param, Post, Get, Put, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Inject, Param, Post, Get, Put, Delete, UploadedFile, UseInterceptors} from '@nestjs/common';
 import {ClientProxy} from '@nestjs/microservices';
 import {ApiTags} from '@nestjs/swagger';
 import {UpdateDemandDto} from './dto/update-demand.dto';
@@ -60,6 +60,27 @@ export class ClaimsController {
     async getDemandes() {
         const claims = await this.claimsService
             .send({cmd: 'getDemandes'}, '')
+            .toPromise();
+
+        return claims;
+    }
+
+    @Get(":id")
+    @UseInterceptors(FileInterceptor('proof'))
+    async getDemande(@Param('id') id: string) {
+        const claims = await this.claimsService
+            .send({cmd: 'getDemande'}, {_id: id})
+            .toPromise();
+
+        return claims;
+    }
+
+    @Delete(":id")
+    @UseInterceptors(FileInterceptor('proof'))
+    async deleteDemande(@Param('id') id: string,) {
+        console.log(id)
+        const claims = await this.claimsService
+            .send({cmd: 'deleteDemande'}, {_id: id})
             .toPromise();
 
         return claims;

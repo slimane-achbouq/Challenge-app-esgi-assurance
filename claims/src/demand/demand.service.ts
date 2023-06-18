@@ -64,4 +64,8 @@ export class DemandService {
         }
 
     }
+
+    async deleteDemand(id: string): Promise<Demand> {
+        return this.demandModel.findByIdAndDelete(id).exec();
+    }
 }

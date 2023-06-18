@@ -17,6 +17,7 @@ import ResetPasswordInput from '@/views/reset-password/reset-password-view.vue';
 import ResetPasswordView from '@/views/reset-password/reset-password.vue';
 import Claims from "@/views/Claims.vue";
 import NewClaim from "@/views/NewClaim.vue";
+import Claim from "@/views/Claim.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -39,7 +40,7 @@ const router = createRouter({
       { path: '/reset-password-input', contract: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
       { path: '/resetPassword/:token', contract: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
       { path: '/claims', name: 'claims', component: Claims, meta: { requiresUnauth: false }},
-      { path: '/claim/:id', name: 'claim', component: Claims, meta: { requiresUnauth: false }},
+      { path: '/claim/:id', name: 'claim', component: Claim, meta: { requiresUnauth: false }},
       { path: '/claims/new/:insurance_id', name: 'new_claim', component: NewClaim, meta: { requiresUnauth: false }},
       { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
 

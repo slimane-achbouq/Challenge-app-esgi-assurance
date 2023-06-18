@@ -186,28 +186,20 @@
           <!-- Table header -->
           <thead class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-slate-200">
             <tr>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                <div class="flex items-center">
-                  <label class="inline-flex">
-                    <span class="sr-only">Select all</span>
-                    <input class="form-checkbox" type="checkbox" v-model="selectAll" @click="checkAll" />
-                  </label>
-                </div>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Status</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">Claim number</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">insurance Type</div>
+                <div class="font-semibold text-left">Insurance</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">coverage</div>
+                <div class="font-semibold text-left">Title</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">Created At</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Status</div>
               </th>
             </tr>
           </thead>

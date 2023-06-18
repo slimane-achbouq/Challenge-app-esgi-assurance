@@ -6,6 +6,9 @@ export class Demand extends Document {
   @Prop({ required: true })
   insurance_id: string;
 
+  @Prop({ required: false, default: '0' })
+  status: string;
+
   @Prop({ required: true })
   reason: string;
 

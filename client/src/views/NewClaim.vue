@@ -283,7 +283,8 @@ export default {
     });
 
     this.contract = response.data
-    this.formData.insurance_id = this.contract._id
+    console.log(id)
+    this.formData.insurance_id = id
   }
 }
 </script>

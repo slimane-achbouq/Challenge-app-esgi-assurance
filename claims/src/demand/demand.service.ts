@@ -4,6 +4,7 @@ import {HydratedDocument, Model, now} from 'mongoose';
 import {Demand} from '../schema/demand.schema';
 import {UpdateDemandDto} from '../dto/update-demand.dto';
 import {CreateDemandDto} from 'src/dto/create-demand.dto';
+import { createGzip, createGunzip } from 'zlib';
 
 @Injectable()
 export class DemandService {
@@ -12,12 +13,32 @@ export class DemandService {
     ) {
     }
 
-    async create(createDemandDto: CreateDemandDto): Promise<Demand> {
+    /*async create(createDemandDto: CreateDemandDto): Promise<Demand> {
 
         const {proof, ...rest} = createDemandDto;
         // Save the base64 encoded file
         const fileContent = Buffer.from(proof, 'base64');
         const createdDemand = new this.demandModel({...rest, proof: fileContent});
+        return createdDemand.save();
+    }*/
+
+    async create(createDemandDto: CreateDemandDto): Promise<Demand> {
+        const { proof, ...rest } = createDemandDto;
+
+        // Compress the file content using gzip
+        const compressedContent = await new Promise<Buffer>((resolve, reject) => {
+            const gzip = createGzip();
+            const buffers: Buffer[] = [];
+
+            gzip.on('error', reject);
+            gzip.on('data', (data: Buffer) => buffers.push(data));
+            gzip.on('end', () => resolve(Buffer.concat(buffers)));
+
+            gzip.write(Buffer.from(proof, 'base64'));
+            gzip.end();
+        });
+
+        const createdDemand = new this.demandModel({ ...rest, proof: compressedContent });
         return createdDemand.save();
     }
 
@@ -26,7 +47,22 @@ export class DemandService {
     }
 
     async findById(id: string): Promise<Demand> {
-        return this.demandModel.findById(id).exec();
+        const claim = await this.demandModel.findById(id).exec();
+
+        const buffers = [];
+        const gunzip = createGunzip();
+
+        const decompressedContent = await new Promise<Buffer>((resolve, reject) => {
+            gunzip.on('error', reject);
+            gunzip.on('data', (data: Buffer) => buffers.push(data));
+            gunzip.on('end', () => resolve(Buffer.concat(buffers)));
+
+            gunzip.write(claim.proof);
+            gunzip.end();
+        });
+
+        claim.proof = decompressedContent;
+        return claim;
     }
 
     async updateDemand(

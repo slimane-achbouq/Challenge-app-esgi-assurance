@@ -12,13 +12,17 @@
 
       <main>
 
-      <Banner type="success" class="mb-4"  :open="contractUpdated" v-if="contractUpdated">
+      <Banner type="success" class="mb-1"  :open="contractUpdated" v-if="contractUpdated">
                     Contract edited successfully .
       </Banner>
 
-      <Banner2 type="warning" :open="true">
-                    We’re currently experiencing an increase in inquiries. There may be a delay in responses from the Support.
-                  </Banner2>
+      <Banner type="success" class="mb-1"  :open="deleted" v-if="deleted">
+                    Contract deleted successfully.
+      </Banner>
+
+      <Banner type="warning" :open="true">
+                    To edit the inforamtions of the contract you must create a demand <a class="cursor-pointer text-blue-900/100"> here.</a> 
+      </Banner>
 
         <div class="lg:relative lg:flex">
 
@@ -310,6 +314,41 @@
                         </div>
                       </div>
             </ModalBasic>
+
+
+            <ModalBasic id="danger-modal" :modalOpen="modaDeletelOpen" >
+                      <div class="p-5 flex w-full space-x-4">
+                        <!-- Icon -->
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-rose-100">
+                          <svg class="w-4 h-4 shrink-0 fill-current text-rose-500" viewBox="0 0 16 16">
+                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+                          </svg>
+                        </div>
+                        <!-- Content -->
+                        <div>
+                          <!-- Modal header -->
+                          <div class="mb-2">
+                            <div class="text-lg font-semibold text-slate-800">Delete Contract?</div>
+                          </div>
+                          <!-- Modal content -->
+                          <div class="text-sm mb-10">
+                            <div class="">
+                              <p>Are you sure you want to delete the Contract?</p>
+                            </div>
+                          </div>
+                          <!-- Modal footer -->
+
+                        </div>
+
+
+                      </div>
+
+                      <div class="flex flex-wrap justify-end space-x-2 m-6">
+                            <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" @click.stop="modaDeletelOpen=false">Cancel</button>
+                            <button class="btn-sm bg-rose-500 hover:bg-rose-600 text-white" @click="deleteItem">Yes, Delete it</button>
+                      </div>
+                    </ModalBasic>
+
       </main>
 
     </div>
@@ -349,6 +388,8 @@ export default {
           },
           modalOpen:false,
           contractUpdated:false,
+          modaDeletelOpen:false,
+          deleted:false
         }
   },
    methods:{
@@ -379,6 +420,33 @@ export default {
 
             return `${year}-${month}-${day}`;
       },
+      onModaDeletelOpen(){
+
+        this.modaDeletelOpen=true
+      },
+
+      async  deleteItem(){
+
+
+        const token = this.$store.getters["auth/token"]
+
+        
+        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/insurance/${this.contract['_id']}` , {
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          })
+        this.modaDeletelOpen=false
+        this.deleted=true
+        }
+        catch(e){
+         this. modaDeletelOpen=false
+        this.deleted=false
+        }
+
+
+      },
+
       async onUpdate(){
 
         console.log(this.formData)

@@ -15,6 +15,7 @@ import Contracts from '@/views/Contracts.vue';
 import Contract from '@/views/Contract.vue';
 import ResetPasswordInput from '@/views/reset-password/reset-password-view.vue';
 import ResetPasswordView from '@/views/reset-password/reset-password.vue';
+import Profile from '@/views/Account.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -33,9 +34,10 @@ const router = createRouter({
       { path: '/newContract/:id', name: 'newcontract', component: NewContract, meta: { requiresUnauth: false }},
       { path: '/contracts', name: 'contracts', component: Contracts, meta: { requiresUnauth: false }},
       { path: '/contract/:id', name: 'contract', component: Contract, meta: { requiresUnauth: false }},
-      { path: '/verify/:token', contract: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
-      { path: '/reset-password-input', contract: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
-      { path: '/resetPassword/:token', contract: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
+      { path: '/verify/:token', name: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
+      { path: '/reset-password-input', name: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
+      { path: '/resetPassword/:token', name: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
+      { path: '/profile', name: 'profile', component: Profile, meta: { requiresUnauth: false }},
 
     ]
   })

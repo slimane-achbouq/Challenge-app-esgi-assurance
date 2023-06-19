@@ -62,7 +62,7 @@
           </div>
 
 
-          <div>
+          <div v-if="claim">
             <div
                 class="lg:sticky lg:top-16 bg-slate-50 lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar lg:shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 lg:w-[520px] xl:w-[552px] 2xl:w-[calc(552px+80px)] lg:h-[calc(100vh-64px)]">
               <div class="py-8 px-4 ">
@@ -77,116 +77,32 @@
                       <div class=" justify-center">
                         <div class="text-xs text-slate-500 font-semibold uppercase mb-3"><i
                             class="fas fa-user"></i>
-                          Beneficiary
+                          Response from an administator
                         </div>
                         <div class="divide-y divide-slate-300 m-3">
                           <div>
-                            <div class="flex justify-between text-sm m-2">
-                              <div class="text-slate-800">Name</div>
-                              <div class="text-slate-400 italic">{{ user.firstName }} {{ user.firstName }}</div>
-                            </div>
-                            <div class="divide-y divide-slate-300 m-3">
-                              <div>
-                                <div class="flex justify-between text-sm m-2">
-                                  <div class="text-slate-800">Name</div>
-                                  <div class="text-slate-400 italic">{{ user.firstName }} {{
-                                      user.firstName
-                                    }}
-                                  </div>
-                                </div>
-                              </div>
-                              <div>
-                                <div class="flex justify-between text-sm m-2">
-                                  <div class="text-slate-800">Adresse</div>
-                                  <div class="text-slate-400 italic">{{ user.postalAddress }}</div>
-                                </div>
-                              </div>
-                              <div>
-                                <div class="flex justify-between text-sm m-2">
-                                  <div class="text-slate-800">Phone Number</div>
-                                  <div class="text-slate-400 italic">{{ user.phoneNumber }}</div>
-                                </div>
-                              </div>
-                              <div>
-                                <div class="flex justify-between text-sm m-2">
-                                  <div class="text-slate-800">Email</div>
-                                  <div class="text-slate-400 italic">{{ user.email }}</div>
-                                </div>
-                              </div>
-                              <div>
-                                <div class="flex justify-between text-sm m-2">
-                                  <div class="text-slate-800">License</div>
-                                  <div class="text-slate-400 italic"><i class="fas fa-download cursor-pointer"
-                                                                        @click="downloadFile(user.permis)"></i>
-                                  </div>
-                                </div>
-                              </div>
-                              <div>
-                                <div class="flex justify-between text-sm m-2">
-                                  <div class="text-slate-800">Proof of adresse</div>
-                                  <div class="text-slate-400 italic"><i class="fas fa-download cursor-pointer"
-                                                                        @click="downloadFile(user.justificatifDomicile)"></i>
-                                  </div>
-                                </div>
+                            <div class="m-2 mt-5">
+                              <div class="text-slate-800 font-semibold">Decision</div>
+                              <div class="text-slate-400">
+                                <span class="inline-flex text-md rounded-full text-center px-2.5 py-0.5"
+                                      :class="statusColor(claim.status)">{{
+                                    statusLabels(claim.status)
+                                  }}</span> - {{ claim.decision }}
                               </div>
                             </div>
+                            <div class="m-2 mt-5">
+                              <div class="text-slate-800 font-semibold">Additional information</div>
+                              <div class="text-slate-400 italic" v-if="claim.additionalInfo">{{
+                                  claim.additionalInfo
+                                }}
+                              </div>
+                              <div v-else>None</div>
+                            </div>
+                            <hr class="mt-5">
+                            <p class="mt-5" v-if="claim.status == '1'">Please contact us as soon as possible to begin the decision process.</p>
+                            <p class="mt-5" v-else>Please contact us if you would like to get addiotional information for this decision.</p>
                           </div>
                         </div>
-
-                        <div>
-                          <!-- For contract component -->
-                          <div class="col-span-full bg-white shadow-lg rounded-sm border border-slate-200 px-5">
-
-                            <header class=" py-4 border-b border-slate-100">
-                              <h2 class="font-semibold text-slate-800"><i class="fas fa-money-check-alt"></i>
-                                Paiment
-                                History</h2>
-                            </header>
-                            <div class="p-3">
-
-                              <!-- Table -->
-                              <div class="overflow-x-auto">
-                                <table class="table-auto w-full">
-                                  <!-- Table header -->
-                                  <thead class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm">
-                                  <tr>
-                                    <th class=" whitespace-nowrap p-4">
-                                      <div class="font-semibold text-left">Transcation id</div>
-                                    </th>
-                                    <th class="p-2 whitespace-nowrap">
-                                      <div class="font-semibold text-left">Paiment date</div>
-                                    </th>
-                                    <th class="p-2 whitespace-nowrap p-2">
-                                      <div class="font-semibold text-left">total</div>
-                                    </th>
-                                  </tr>
-                                  </thead>
-                                  <!-- Table body -->
-                                  <tbody class="text-sm font-medium divide-y divide-slate-100">
-                                  <!-- Row -->
-                                  <tr>
-                                    <td class="p-2 whitespace-nowrap md:w-1/2 p-3">
-                                      <div class="flex items-center">
-                                        <div>
-                                          <div class="text-slate-800 uppercase">#12345</div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td class="p-2 whitespace-nowrap">
-                                      <div class="font-normal text-left">33.94B</div>
-                                    </td>
-                                    <td class="p-2 whitespace-nowrap">
-                                      <div class="text-left text-emerald-500">+$12.20</div>
-                                    </td>
-                                  </tr>
-                                  </tbody>
-                                </table>
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
 
                       </div>
                     </div>
@@ -220,6 +136,7 @@ import axios from 'axios'
 import pako from 'pako';
 import moment from "moment/moment";
 import Banner from "@/components/Banner.vue";
+import {useStore} from "vuex";
 
 export default {
   name: 'Claim',
@@ -289,11 +206,14 @@ export default {
     }
   },
   async created() {
-
+    const store = useStore()
+    const token = store.getters["auth/token"];
+    if (!token) {
+      this.$router.push({name: "home"});
+    }
     const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
 
-    const token = this.$store.getters["auth/token"]
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`

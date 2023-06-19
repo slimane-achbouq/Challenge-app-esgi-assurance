@@ -238,6 +238,9 @@ export default {
     const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
     const token = this.$store.getters["auth/token"]
+    if (!token) {
+      this.$router.push({name: "home"});
+    }
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`

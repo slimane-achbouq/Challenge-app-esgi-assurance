@@ -60,7 +60,9 @@
 
               <div class=" flex flex-col col-span-full xl:col-span-12 bg-white shadow-lg rounded-sm border border-slate-200  ">
               <button class="btn border-rose-500 hover:border-slate-300 text-rose-500" @click="modaDeletelOpen=true">
-                      <span class="ml-2"><i class="fas fa-file-signature"></i> Create a claim</span>
+                      <router-link :to="{ name: 'new_claim', params: { insurance_id: contract._id }}">
+                        <span class="ml-2"><i class="fas fa-file-signature"></i> Create a claim</span>
+                      </router-link>
                     </button>
                 <header class="pr-10 pl-5 py-4 border-b border-slate-100 flex items-center justify-between">
                     <h2 class="font-semibold text-slate-800"><i class="fas fa-file-contract"></i> Contract informations</h2>

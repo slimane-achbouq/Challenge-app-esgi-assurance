@@ -54,7 +54,7 @@ export class AuthService {
       token: newUser.validationToken,
     };
 
-    try {
+    /* try {
       await this.utilsService
         .send({ cmd: 'singInConfirmationEmail' }, payload)
         .toPromise();
@@ -62,6 +62,7 @@ export class AuthService {
       return new BadRequestException(err);
     }
 
+    */
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
 
     return 'User prfile was created with success !';

@@ -3,7 +3,7 @@
   <!-- Row -->
   <tr>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-      <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(claim.createdAt)">{{ statusLabels(claim.status) }}</div>
+      <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(claim.status)">{{ statusLabels(claim.status) }}</div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class="flex items-center text-slate-800">

@@ -19,35 +19,187 @@
 
               <!-- Cart items -->
               <div class="mb-6 lg:mb-0">
-                <header class="mb-6 flex w-full justify-between">
+                <header class="mb-6 w-full">
                   <!-- Title -->
                   <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"><i class="fas fa-file-claim"></i>
-                    Claim n°{{ claim._id }} - {{ claim.status }}✨ </h1>
+                    Claim n°{{ claim._id }}✨
+                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                      <router-link :to="{name: 'decide_claim', params: {id: claim._id}}">
+                        Review
+                      </router-link>
+                    </button>
+                  </h1>
+                  <small class="ms-2 inline-flex font-medium rounded-full text-center px-2.5 py-0.5"
+                         :class="statusColor(claim.status)">{{ statusLabels(claim.status) }}</small>
                 </header>
+                <div class=" lg:mx-10">
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <div class="ms-5 text-xl md:text-xl text-slate-800 font-bold mb-5">
+                        <h1>Client's information</h1>
+                      </div>
+                      <div class="ms-5"><b>{{ claim.title }}</b></div>
+                      <div class="ms-5 mt-4">
+                        <p>Description : {{ claim.description }}</p>
+                      </div>
+                      <div class="ms-5 mt-4">
+                        <p>Reason : {{ claim.reason }}</p>
+                      </div>
 
-                <hr class="my-6 border-t border-slate-200">
-
-                <div class="mb-6 lg:mb-0">
-                  <div>
-                    <div class="ms-5"><b>{{ claim.title }}</b></div>
-                    <div class="ms-5 mt-4">
-                      <p>Description : {{ claim.description }}</p>
+                      <div class="text-slate-400 italic ms-5 mt-4">
+                        <i class="fas fa-download cursor-pointer" @click="downloadFile(claim.proof)"></i> Download
+                        proof
+                      </div>
+                      <div class="ms-5 mt-4">
+                        <small>Created at {{ formatDate(claim.createdAt) }}</small>
+                      </div>
                     </div>
-                    <div class="ms-5 mt-4">
-                      <p>Reason : {{ claim.reason }}</p>
-                    </div>
 
-                    <div class="text-slate-400 italic ms-5 mt-4">
-                      <i class="fas fa-download cursor-pointer" @click="downloadFile(claim.proof)"></i>Download proof
-                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                    <div class="ms-5 mt-4">
-                      <small>Created at {{ formatDate(claim.createdAt) }}</small>
+
+          <div>
+            <div
+                class="lg:sticky lg:top-16 bg-slate-50 lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar lg:shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 lg:w-[520px] xl:w-[552px] 2xl:w-[calc(552px+80px)] lg:h-[calc(100vh-64px)]">
+              <div class="py-8 px-4 ">
+                <div class="max-w-sm mx-auto lg:max-w-none">
+                  <h2 class="text-2xl text-slate-800 font-bold mb-6">Insurance's decision</h2>
+                  <div class="space-y-6">
+
+                    <!-- Sidebar -->
+
+                    <div class="h-full px-5 py-2" v-if="claim.decision">
+                      <!-- Details -->
+                      <div class=" justify-center">
+                        <div class="text-xs text-slate-500 font-semibold uppercase mb-3"><i
+                            class="fas fa-user"></i>
+                          Beneficiary
+                        </div>
+                        <div class="divide-y divide-slate-300 m-3">
+                          <div>
+                            <div class="flex justify-between text-sm m-2">
+                              <div class="text-slate-800">Name</div>
+                              <div class="text-slate-400 italic">{{ user.firstName }} {{ user.firstName }}</div>
+                            </div>
+                            <div class="divide-y divide-slate-300 m-3">
+                              <div>
+                                <div class="flex justify-between text-sm m-2">
+                                  <div class="text-slate-800">Name</div>
+                                  <div class="text-slate-400 italic">{{ user.firstName }} {{
+                                      user.firstName
+                                    }}
+                                  </div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm m-2">
+                                  <div class="text-slate-800">Adresse</div>
+                                  <div class="text-slate-400 italic">{{ user.postalAddress }}</div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm m-2">
+                                  <div class="text-slate-800">Phone Number</div>
+                                  <div class="text-slate-400 italic">{{ user.phoneNumber }}</div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm m-2">
+                                  <div class="text-slate-800">Email</div>
+                                  <div class="text-slate-400 italic">{{ user.email }}</div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm m-2">
+                                  <div class="text-slate-800">License</div>
+                                  <div class="text-slate-400 italic"><i class="fas fa-download cursor-pointer"
+                                                                        @click="downloadFile(user.permis)"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm m-2">
+                                  <div class="text-slate-800">Proof of adresse</div>
+                                  <div class="text-slate-400 italic"><i class="fas fa-download cursor-pointer"
+                                                                        @click="downloadFile(user.justificatifDomicile)"></i>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <!-- For contract component -->
+                          <div class="col-span-full bg-white shadow-lg rounded-sm border border-slate-200 px-5">
+
+                            <header class=" py-4 border-b border-slate-100">
+                              <h2 class="font-semibold text-slate-800"><i class="fas fa-money-check-alt"></i>
+                                Paiment
+                                History</h2>
+                            </header>
+                            <div class="p-3">
+
+                              <!-- Table -->
+                              <div class="overflow-x-auto">
+                                <table class="table-auto w-full">
+                                  <!-- Table header -->
+                                  <thead class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm">
+                                  <tr>
+                                    <th class=" whitespace-nowrap p-4">
+                                      <div class="font-semibold text-left">Transcation id</div>
+                                    </th>
+                                    <th class="p-2 whitespace-nowrap">
+                                      <div class="font-semibold text-left">Paiment date</div>
+                                    </th>
+                                    <th class="p-2 whitespace-nowrap p-2">
+                                      <div class="font-semibold text-left">total</div>
+                                    </th>
+                                  </tr>
+                                  </thead>
+                                  <!-- Table body -->
+                                  <tbody class="text-sm font-medium divide-y divide-slate-100">
+                                  <!-- Row -->
+                                  <tr>
+                                    <td class="p-2 whitespace-nowrap md:w-1/2 p-3">
+                                      <div class="flex items-center">
+                                        <div>
+                                          <div class="text-slate-800 uppercase">#12345</div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td class="p-2 whitespace-nowrap">
+                                      <div class="font-normal text-left">33.94B</div>
+                                    </td>
+                                    <td class="p-2 whitespace-nowrap">
+                                      <div class="text-left text-emerald-500">+$12.20</div>
+                                    </td>
+                                  </tr>
+                                  </tbody>
+                                </table>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <div v-else>
+                      <p>No decision yet. Please wait for us to analyze and decide.</p>
+                      <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white mt-4">
+                        <router-link :to="{name: 'claims'}">
+                          <i class="fas fa-arrow-left"></i> Claims
+                        </router-link>
+                      </button>
                     </div>
                   </div>
-
                 </div>
-
               </div>
 
             </div>
@@ -67,10 +219,12 @@ import Header from '@/partials/Header.vue'
 import axios from 'axios'
 import pako from 'pako';
 import moment from "moment/moment";
+import Banner from "@/components/Banner.vue";
 
 export default {
   name: 'Claim',
   components: {
+    Banner,
     Sidebar,
     Header,
   },
@@ -101,11 +255,37 @@ export default {
       return moment(dateString).format('YYYY-MM-DD');
     }
 
-    const sidebarOpen = ref(false)
+    const sidebarOpen = ref(false);
+
+    const statusLabels = (status) => {
+      switch (status) {
+        case '0':
+          return 'Pending review';
+        case '1':
+          return 'Approved';
+        case '2':
+          return 'Rejected';
+        default:
+          return 'Unknown status';
+      }
+    }
+
+    const statusColor = (status) => {
+      switch (status) {
+        case '1':
+          return 'bg-emerald-100 text-emerald-600'
+        case '2':
+          return 'bg-rose-100 text-rose-600'
+        default:
+          return 'bg-amber-100 text-amber-500'
+      }
+    }
 
     return {
       sidebarOpen,
-      formatDate
+      formatDate,
+      statusLabels,
+      statusColor
     }
   },
   async created() {

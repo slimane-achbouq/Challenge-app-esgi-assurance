@@ -68,23 +68,25 @@
                     </div>
 
                     <div class="flex-1">
+                      <label class="block text-sm font-medium mb-1" for="card-country">Reason <span
+                          class="text-rose-500">*</span></label>
+                      <select id="card-country" class="form-select w-full" required v-model="formData.reason">
+                        <option>Vandalized vehicle</option>
+                        <option>Theft</option>
+                        <option>Animal accident</option>
+                        <option>Material accident</option>
+                        <option>Other</option>
+                      </select>
+                      <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.reason }}</p>
+                    </div>
+
+                    <div class="flex-1">
                       <label class="block text-sm font-medium mb-1" for="card-state">Description <span
                           class="text-rose-500">*</span></label>
                       <textarea id="message" rows="4"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Explain here..." v-model="formData.description"></textarea>
                       <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.description }}</p>
-                    </div>
-
-                    <div class="flex-1">
-                      <label class="block text-sm font-medium mb-1" for="card-country">Reason <span
-                          class="text-rose-500">*</span></label>
-                      <select id="card-country" class="form-select w-full" v-model="formData.reason">
-                        <option>Car</option>
-                        <option>Motorcycle</option>
-                        <option>Truck</option>
-                      </select>
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.reason }}</p>
                     </div>
 
                     <div class="space-y-3">

@@ -15,7 +15,7 @@ export class DemandController {
 
     @MessagePattern({cmd: 'getDemandes'})
     async getDemandes() {
-        return this.demandService.findAll();
+        return this.demandService.findAllWithoutProof();
     }
 
     @MessagePattern({cmd: 'getDemande'})

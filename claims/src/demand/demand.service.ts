@@ -46,6 +46,11 @@ export class DemandService {
         return this.demandModel.find().exec();
     }
 
+    // Create a new method to get all the claims but without the field "proof"
+    async findAllWithoutProof(): Promise<Demand[]> {
+        return this.demandModel.find({}, {proof: 0}).exec();
+    }
+
     async findById(id: string): Promise<Demand> {
         const claim = await this.demandModel.findById(id).exec();
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative inline-flex">
+  <div class="relative inline-flex" v-if="email">
     <button
       ref="trigger"
       class="inline-flex justify-center items-center group"

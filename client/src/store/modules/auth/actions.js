@@ -65,12 +65,12 @@ export default {
                     firstname: payload.firstname,
                     lastname: payload.lastname,
                     email: payload.email,
-                    adresse: payload.adresse,
+                    adresse: payload.street,
                     city: payload.city,
+                    codeCity: payload.postalCode,
                     phoneNumber: payload.phoneNumber,
-                    age: payload.age,
                     password: payload.password,
-                    codeCity: payload.codeCity
+                    age: payload.age,
                 }),
             });
             const responseData = await response.json();

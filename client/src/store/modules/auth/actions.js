@@ -21,18 +21,18 @@ export default {
 
             localStorage.setItem('esgi-ws-token', responseData.tokens['accessToken']);
 
-            // const userInfos = VueJwtDecode.decode(responseData.tokens[0]);
-            // const userInfos = VueJwtDecode.decode(responseData.tokens['accessToken']);
-            // console.log(userInfos);
-            // context.commit('setUser', {
-            //     token: responseData.tokens['accessToken'],
-            //     refreshToken: responseData.tokens['refreshToken'],
-            //     firstname: responseData.user['firstname'],
-            //     lastname: responseData.user['lastname'],
-            //     email: responseData.user['email'],
-            //     roles: responseData.user['role'],
-            //     id: responseData.user['_id']
-            // });
+             //const userInfos = VueJwtDecode.decode(responseData.tokens[0]);
+             const userInfos = VueJwtDecode.decode(responseData.tokens['accessToken']);
+             console.log(userInfos);
+             context.commit('setUser', {
+                 token: responseData.tokens['accessToken'],
+                 refreshToken: responseData.tokens['refreshToken'],
+                 firstname: responseData.user['firstname'],
+                 lastname: responseData.user['lastname'],
+                 email: responseData.user['email'],
+                 roles: responseData.user['role'],
+                 id: responseData.user['_id']
+             });
             return responseData;
         } catch (ex) {
             const error = new Error(ex || 'Failed to authenticate. Check your login data.');

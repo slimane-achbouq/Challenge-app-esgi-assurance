@@ -15,5 +15,9 @@ export default {
     email(state){
         console.log(state.email)
         return state.email;
+    },
+    id(state){
+        console.log(state.id)
+        return state.id;
     }
 };

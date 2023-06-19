@@ -289,7 +289,7 @@ export default {
         return {
             
           modaVlidateOpen:false,
-          modaDeletelOpen :false
+          modaDeletelOpen :false,
         }
   },
 
@@ -349,6 +349,13 @@ export default {
     return {
       sidebarOpen,
     }  
-  }
+  },
+  async created() {
+
+        console.log( this.$store.getters["auth/email"])
+        console.log( this.$store.getters["auth/isAuthenticated"])
+        console.log( this.$store.getters["auth/id"])
+
+    }
 }
 </script>

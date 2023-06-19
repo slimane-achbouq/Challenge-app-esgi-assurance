@@ -111,6 +111,27 @@ export class InsuranceController {
     }
   }
 
+
+  @Get('insurance-user/:userId')
+  async getInsurancesByUserId(@Param('userId') userId: string): Promise<any> {
+    try {
+      const insurance = await this.insuranceServiceClient
+        .send({ cmd: 'getInsurancesByUserId' }, userId)
+        .toPromise();
+
+      if (!insurance) {
+        throw new NotFoundException(`Insurance with ID  not found`);
+      }
+
+      return insurance;
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
+      throw new BadRequestException(err.message);
+    }
+  }
+
   @Put('insurance/:id')
   @UsePipes(ValidationPipe)
   async updateInsurance(

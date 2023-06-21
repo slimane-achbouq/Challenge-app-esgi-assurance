@@ -18,3 +18,13 @@ export function licensePlateValidation(licensePlate) {
     var regularExpression = /^[A-Z]{2}-\d{3}-[A-Z]{2}$/;
     return regularExpression.test(licensePlate)
 };
+    // Calculate the date 18 years ago
+
+export function verifyIfHas18yo(age) {
+    const today = new Date();
+    const birthdate = new Date(age);
+    const diffTime = today - birthdate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    if(diffDays >= 6570) return true
+    return false;
+}

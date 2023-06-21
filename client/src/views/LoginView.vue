@@ -76,7 +76,6 @@
         <!-- Image -->
         <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
           <img class="absolute top-1/4 -translate-x-1/4 ml-8 hidden lg:block" src="../images/bg-login.svg" alt="Authentication" />
-          <!-- <img class="absolute top-1/4 left-0 -translate-x-1/2 ml-8 hidden lg:block" src="../images/auth-decoration.png" width="218" height="224" alt="Authentication decoration" /> -->
         </div>
   
       </div>
@@ -114,33 +113,22 @@
               };
               try {
                   const response = await this.$store.dispatch('auth/signin', actionPayload);
+                  
                   if(response.message == 'Password is incorrect !') {
-                    Swal.fire({
-                        text:   'Username or password incorrect !',
-                        icon: 'error',
-                    }).then(() => {
-                        const redirectUrl = '/' + (this.$route.query.redirect || 'login');
-                        this.$router.replace(redirectUrl);
-                    });
+                    this.isLoading = false;
+                    this.error = 'Your password or email is incorrect';
                     return;
                   }
 
                   if(response.message == 'User does not exist !') {
-                    Swal.fire({
-                        text:   'Username or password incorrect !',
-                        icon: 'error',
-                    
-                    });
+                    this.isLoading = false;
+                    this.error = 'Your password or email is incorrect';
                     return;
                   }
 
                   if(response.message == 'User profile is not activated !') {
-                    Swal.fire({
-                        title: 'Warning',
-                        text:   'You must to activate your profile',
-                        icon: 'warning',
-                    
-                    });
+                    this.isLoading = false;
+                    this.error = 'User profile is not activated !';
                     return;
                   }
                   const redirectUrl = '/' + (this.$route.query.redirect || 'dashboard');

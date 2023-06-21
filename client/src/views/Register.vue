@@ -174,6 +174,7 @@
   phoneValidation,
   passwordValidation,
   emailValidation,
+  verifyIfHas18yo,
 } from "../utils/utils-common-function";
   import Banner from '@/components/Banner.vue'
   import { VueTelInput } from 'vue-tel-input'
@@ -351,6 +352,14 @@
               this.errors.phoneNumber =
               "Please check your phone number if it is valid";
               return;
+            }
+
+            if (!verifyIfHas18yo(this.age)) {
+              this.formValid = false;
+              this.isLoading = false;
+              this.errors.age =
+              "You must be of legal age (18 years and over)";
+              return;
 
             }
 
@@ -367,29 +376,30 @@
             };
 
             try {
-                const response = await this.$store.dispatch('auth/signUp', actionPayload);
+              const response = await this.$store.dispatch('auth/signUp', actionPayload);
 
-                console.log(response);
+              const responseData = await response.json();
 
-                if(response.message == 'User already exist !') {
-                  Swal.fire({
-                      text:   response.message,
-                      icon: 'warning',
-                  
-                  }).then(()=>{
-                      const redirectUrl = '/' + (this.$route.query.redirect || 'login');
-                      this.$router.replace(redirectUrl);
-                  });
-                  return;
-                }
+              if(responseData.message == 'User already exist !') {
+                Swal.fire({
+                    text:   responseData.message,
+                    icon: 'warning',
+                
+                }).then(()=>{
+                    const redirectUrl = '/' + (this.$route.query.redirect || 'login');
+                    this.$router.replace(redirectUrl);
+                });
+                return;
+              }
 
-                this.state.isSuccess = true;
+              this.state.isSuccess = true;
             } catch (error) {
+              console.log(error);
               if(error.message == 'Error: Invalid credentials.') {
                 this.error = 'Your password or email is incorrect';
               } else {
                 this.state.isSuccess = false;
-                this.error = error.message || 'Failed to authenticated, try later.';
+                this.error = error.message || 'Failed to create your a compte, please try later.';
                 Swal.fire({
                     title: 'Sorry!',
                     text:   error.message,

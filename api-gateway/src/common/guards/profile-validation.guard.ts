@@ -1,12 +1,6 @@
 // guards/roles.guard.ts
-import {
-  BadRequestException,
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from './roles.decorator';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -32,6 +26,8 @@ export class ProfileValidationGuard implements CanActivate {
     } catch (error) {
       throw new Error(error);
     }
+
+    console.log(decoded.profileStatus);
 
     if (decoded.profileStatus) {
       return true;

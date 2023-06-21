@@ -35,6 +35,7 @@ export class AuthService {
     // Hash password
     const hash = await this.hashData(createUserDto.password);
 
+    // token for profile validation
     const validationToken = uuidv4('8');
 
     const newUser = await this.usersService.create({
@@ -43,8 +44,11 @@ export class AuthService {
       validationToken: validationToken,
     });
 
+    // create token that contain id, emai, roles of user
     const tokens = await this.getTokens(
       newUser._id,
+      newUser.firstname,
+      newUser.lastname,
       newUser.email,
       newUser.roles,
     );
@@ -54,7 +58,8 @@ export class AuthService {
       token: newUser.validationToken,
     };
 
-    /* try {
+    // call utils ms for send email validation to the new profile
+    try {
       await this.utilsService
         .send({ cmd: 'singInConfirmationEmail' }, payload)
         .toPromise();
@@ -62,10 +67,11 @@ export class AuthService {
       return new BadRequestException(err);
     }
 
-    */
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
 
-    return 'User prfile was created with success !';
+    return {
+      message: 'User profile was created with success !',
+    };
   }
 
   async signIn(data: AuthDto) {
@@ -76,6 +82,7 @@ export class AuthService {
         message: 'User does not exist !',
       };
 
+    // Check if user profile is valide
     if (!user.isValide)
       return {
         message: 'User profile is not activated !',
@@ -89,14 +96,15 @@ export class AuthService {
 
     const tokens = await this.getTokens(
       user._id,
+      user.firstname,
+      user.lastname,
       user.email,
       user.roles,
       user.isValide,
     );
     await this.updateRefreshToken(user._id, tokens.refreshToken);
 
-    const response = { tokens: tokens, user: user };
-    return response;
+    return tokens;
   }
 
   async logout(userId: string) {
@@ -116,15 +124,19 @@ export class AuthService {
 
   async getTokens(
     userId: string,
-    username: string,
+    firstname: string,
+    lastname: string,
+    email: string,
     roles: Role[],
     isValide?: boolean,
   ) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          sub: userId,
-          username,
+          id: userId,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
           roles: roles,
           profileStatus: isValide,
         },
@@ -135,8 +147,10 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
-          sub: userId,
-          username,
+          id: userId,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
           roles: roles,
           profileStatus: isValide,
         },
@@ -189,7 +203,13 @@ export class AuthService {
       refreshToken,
     );
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
-    const tokens = await this.getTokens(user.id, user.email, user.roles);
+    const tokens = await this.getTokens(
+      user.id,
+      user.firstname,
+      user.lastname,
+      user.email,
+      user.roles,
+    );
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
@@ -198,10 +218,6 @@ export class AuthService {
     const user: User = await this.usersService.findByUserByEmail(
       resetPassword.email,
     );
-
-    console.log(resetPassword.email);
-
-    console.log(user);
 
     if (!user)
       return {

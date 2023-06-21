@@ -13,26 +13,31 @@ export default {
                     password: payload.password
                 }),
             });
-            const responseData = await response.json();
+
             if (!response.ok) {
-                const error = new Error(responseData.message || 'Failed to authenticate. Check your login data.');
+                const error = new Error(response.message || 'Failed to authenticate. Check your login data.');
                 throw error;
             }
 
-            localStorage.setItem('esgi-ws-token', responseData.tokens['accessToken']);
+            const responseData = await response.json();
 
-             //const userInfos = VueJwtDecode.decode(responseData.tokens[0]);
-             const userInfos = VueJwtDecode.decode(responseData.tokens['accessToken']);
-             console.log(userInfos);
-             context.commit('setUser', {
-                 token: responseData.tokens['accessToken'],
-                 refreshToken: responseData.tokens['refreshToken'],
-                 firstname: responseData.user['firstname'],
-                 lastname: responseData.user['lastname'],
-                 email: responseData.user['email'],
-                 roles: responseData.user['role'],
-                 id: responseData.user['_id']
-             });
+            if(responseData.message == 'User profile is not activated !') return responseData;
+            if(responseData.message == 'User does not exist !') return responseData;
+            if(responseData.message == 'User profile is not activated !') return responseData;
+
+            localStorage.setItem('esgi-ws-token', responseData.accessToken);
+
+            const userInfos = VueJwtDecode.decode(responseData.accessToken);
+            context.commit('setUser', {
+                token: responseData.accessToken,
+                refreshToken: responseData.refreshToken,
+                firstname: userInfos.firstname,
+                lastname: userInfos.lastname,
+                email: userInfos.email,
+                roles: userInfos.roles,
+                id: userInfos.id
+            });
+
             return responseData;
         } catch (ex) {
             const error = new Error(ex || 'Failed to authenticate. Check your login data.');
@@ -73,14 +78,14 @@ export default {
                     age: payload.age,
                 }),
             });
-            const responseData = await response.json();
+
             if (!response.ok) {
-                const error = new Error(responseData.message || 'Failed to register. Check your register data.');
+                const error = new Error(response.message || 'Failed to register. Check your register data.');
                 throw error;
             }
-            return responseData;
-        } catch (ex) {
-            const error = new Error(ex || 'Failed to register. Check your register data.');
+            return response;
+        } catch (err) {
+            const error = new Error(err || 'Failed to register. Check your register data.');
             throw error;
         }
 

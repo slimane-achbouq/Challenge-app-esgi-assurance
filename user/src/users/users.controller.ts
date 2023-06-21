@@ -1,23 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
-import { Role } from './enums/roles.enum';
-import { RolesGuard } from '../common/guards/roles.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RabbitMQAccessTokenGuard } from 'src/common/guards/RabbitMQAccessTokenGuard';
 import { Roles } from 'src/common/guards/roles.decorator';
 
 @ApiTags('user')
@@ -55,7 +41,6 @@ export class UsersController {
 
   @MessagePattern({ cmd: 'deleteUserById' })
   remove(@Payload('id') id) {
-    console.log(id)
     return this.usersService.remove(id);
   }
 }

@@ -7,11 +7,21 @@ import {
   IsPhoneNumber,
   IsString,
   MaxDate,
+  MinDate,
   MinLength,
 } from 'class-validator';
 import { Statut } from '../enums/statut.enum';
 import { Role } from '../enums/roles.enum';
 import { Transform } from 'class-transformer';
+
+const today = new Date();
+
+// Calculate the date 18 years ago
+const minDate = new Date(
+  today.getFullYear() - 18,
+  today.getMonth(),
+  today.getDate(),
+);
 
 export const apiPropertiesUser: {
   [P in keyof Partial<CreateUserDto>]: ApiPropertyOptions;
@@ -122,6 +132,7 @@ export class CreateUserDto {
   @Transform(({ value }) => new Date(value))
   @IsDate()
   @MaxDate(new Date())
+  @MinDate(minDate)
   age: number;
 
   isValide: boolean;

@@ -35,7 +35,7 @@ export default {
                 lastname: userInfos.lastname,
                 email: userInfos.email,
                 roles: userInfos.roles,
-                id: userInfos.id
+                userId: userInfos.id
             });
 
             return responseData;
@@ -55,7 +55,7 @@ export default {
                 lastname: userInfos.lastname,
                 email: userInfos.email,
                 roles: userInfos.roles,
-                id: userInfos.id
+                userId: userInfos.id
             });
         }
     },

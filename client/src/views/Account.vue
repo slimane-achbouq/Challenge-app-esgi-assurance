@@ -12,6 +12,10 @@
 
       <main>
 
+      <Banner type="success" class="mb-4"  :open="true" v-if="updated">
+                    User information updated successfully.
+      </Banner>
+
         <Banner type="warning" :open="true">
                               This user is not yet valid, click <a class="cursor-pointer text-blue-900/100"  @click="modaVlidateOpen=true"> here</a>  to validate the user
         </Banner>
@@ -48,8 +52,8 @@
                     </div>
 
                     <div class="mr-4">
-                      <p class="">Name :</p>
-                      <span class="">Email :</span>
+                      <p class="">Name : {{user.firstname}} {{user.lastname}}</p>
+                      <span class="">Email : {{user.email}}</span>
                     </div>
                     
                   </div>
@@ -64,19 +68,19 @@
                                                               <label class="block text-sm font-medium mb-1" for="firstname">First
                                                                   Name</label>
                                                               <input id="firstname" class="form-input w-full" type="text"
-                                                                    />
-                                                              <div  class="text-xs mt-1 text-rose-500">
-                                                                  
-                                                              </div>
+                                                                    v-model.trim="user.firstname" />
+                                                              <div v-if="errors.name" class="text-xs mt-1 text-rose-500">
+                                                                  {{errors.name}}
+                                                              </div>  
                                                           </div>
                                                           <div class="flex-1">
                                                               <label class="block text-sm font-medium mb-1" for="lastname">Last
                                                                   Name</label>
                                                               <input id="lastname" class="form-input w-full" type="text"
-                                                                    />
+                                                                   v-model.trim="user.lastname"  />
 
-                                                              <div v-if="true" class="text-xs mt-1 text-rose-500">
-                                                                  zefzefe
+                                                              <div v-if="errors.familyname" class="text-xs mt-1 text-rose-500">
+                                                                  {{errors.familyname}}
                                                               </div>
                                                           </div>
 
@@ -84,10 +88,12 @@
                                                               <label class="block text-sm font-medium mb-1"
                                                                     for="address">E-mail:</label>
                                                               <input id="address" class="form-input w-full" type="text"
-                                                                    />
-                                                              <div  class="text-xs mt-1 text-rose-500">
-                                                                  zaazdaz
+                                                                    v-model.trim="user.email" />
+
+                                                              <div v-if="emailExist" class="text-xs mt-1 text-rose-500">
+                                                                this mail already exists
                                                               </div>
+
                                                           </div>
                                                       </div>
                                                       <!-- 2nd row -->
@@ -97,8 +103,9 @@
                                                               <label class="block text-sm font-medium mb-1" for="card-city">Phone
                                                                   Number</label>
                                                               <input id="card-city" class="form-input w-full"
-                                                                      type="text"/>
-                                                              <div v-if="true" class="text-xs mt-1 text-rose-500">er
+                                                                       v-model.trim="user.phoneNumber" type="text"/>
+                                                              <div v-if="error" class="text-xs mt-1 text-rose-500">
+                                                                {{ error }}
                                                               </div>
                                                           </div>
                                                       </div>
@@ -118,10 +125,11 @@
                                                               id="street"
                                                               class="form-input w-full"
                                                               type="text"
-                                                              
+                                                              v-model.trim="street"
+                                                              @input="searchStreet($event)"
                                                           />
 
-                                                          <div class="" >
+                                                          <div class="" v-if="isAddressLoading">
                                                               <svg class="animate-spin w-4 h-4 fill-current shrink-0"
                                                                   viewBox="0 0 16 16">
                                                                   <path
@@ -129,15 +137,16 @@
                                                               </svg>
                                                           </div>
 
-                                                          <div 
-                                                              >
-                                                              <div
-                                                                  class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                                  <button  type="button"
-                                                                          class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-                                                                    
-                                                                  </button>
-                                                              </div>
+                                                          <div v-else-if="searchedAddresses" v-for="searchedAddress in searchedAddresses" :key="searchedAddress.properties.id">
+                                                            <div class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                              <button @click="setAddress(searchedAddress)" type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+                                                                  {{ searchedAddress.properties.label.substring(0,30)+"..." }}
+                                                              </button>
+                                                            </div>
+                                                          </div>
+
+                                                          <div v-if="errors.street" class="text-xs mt-1 text-rose-500">
+                                                            {{ errors.street }}
                                                           </div>
 
                                                       </div>
@@ -147,20 +156,20 @@
                                                               <label class="block text-sm font-medium mb-1" for="card-vat">Street
                                                                   Address:</label>
                                                               <input id="card-vat" class="form-input w-full cursor-not-allowed"
-                                                                    type="text"  disabled/>
+                                                                    type="text" v-model="user.adresse"  disabled/>
                                                           </div>
                                                           <div class="flex-1">
                                                               <label class="block text-sm font-medium mb-1"
                                                                     for="card-vat">City</label>
                                                               <input id="card-vat" class="form-input w-full cursor-not-allowed"
-                                                                    type="text"  disabled/>
+                                                                    type="text" v-model="user.city"  disabled/>
                                                           </div>
                                                           <div class="flex-1">
                                                               <label class="block text-sm font-medium mb-1" for="card-postcode">Postcode</label>
 
                                                               <input id="card-postcode"
                                                                     class="form-input w-full cursor-not-allowed" type="text"
-                                                                      disabled/>
+                                                                     v-model="user.codeCity"  disabled/>
                                                           </div>
 
                                                       </div>
@@ -176,7 +185,7 @@
               
                 <div class="flex flex-col px-6 py-5 border-t border-slate-200">
                   <div class="flex self-end">
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">Save Changes</button>
+                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3" @click.prevent="updateUser">Save Changes</button>
                   </div>
                 </div>
 
@@ -274,6 +283,14 @@ import Header from '@/partials/Header.vue'
 import SettingsSidebar from '@/partials/settings/SettingsSidebar.vue'
 import Banner from '@/components/Banner.vue';
 import ModalBasic from '@/components/Modal.vue'
+import axios from 'axios'
+
+import {
+    phoneValidation,
+    passwordValidation,
+    emailValidation,
+
+  } from "@/utils/utils-common-function";
 
 export default {
   name: 'Account',
@@ -287,15 +304,38 @@ export default {
   },
   data() {
         return {
-            
+          searchedAddresses: [],
+          isAddressLoading: false,
           modaVlidateOpen:false,
           modaDeletelOpen :false,
+          user: {
+                firstname: "",
+                lastname: "",
+                email: "",
+                adresse: "",
+                city: "",
+                codeCity: "",
+                phoneNumber: "",
+                street: "",
+            },
+
+          errors : { name: "",
+                          familyname: "",
+                          phoneNumber: "",
+                          email: "",
+                          street: "",
+                           },
+
+          error:null,
+          emailExist :false,
+
+          updated : false
+          
         }
   },
 
   methods:{ 
     async  validuser(){
-
 
         const token = this.$store.getters["auth/token"]
 
@@ -319,6 +359,39 @@ export default {
 
 
       },
+
+      setAddress(address) {
+            this.city = address.properties.city;
+            this.postalCode = Number(address.properties.postcode);
+            this.street = address.properties.name;
+            this.searchedAddresses = [];
+          },
+
+      async searchStreet (event) {
+            this.isAddressLoading = true;
+            try {
+              const street = event.target.value;
+              if (street.length <= 3) {
+                return;
+              }
+              const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=` + new URLSearchParams(street));
+
+              const data = await response.json();
+              if (data.features.length) {
+                this.searchedAddresses = data.features;
+              }
+              if(data.features.length == 0) {
+                this.errors.address = 'There is no adresse !';
+                this.isAddressLoading = false;
+                return;
+              }
+
+            } catch (error) {
+              this.error = error.message || 'Failed to search for the given street';
+            }
+            this.isAddressLoading = false;
+          },
+
       async  deleteItem(){
 
 
@@ -341,10 +414,80 @@ export default {
 
       },
 
+      async  updateUser(){
+          try {
+          // Get the form data from the inputs
+
+          console.log(this.user)
+          if (!this.user.firstname ) {
+              this.errors.name = "Veuillez revérifier votre nom";
+              return;
+            }
+          if (!this.user.lastname) {
+              this.errors.familyname = "Veuillez revérifier votre prénom";
+              return;
+            }
+
+          if (!emailValidation(this.user.email)) {
+             this.errors.email = "Veuillez revérifier votre email s'il est valide";
+              return;
+          }
+
+
+          if (!phoneValidation(this.user.phoneNumber)) {
+            this.error =
+              "Veuillez revérifier votre numéro de téléphone s'il est valide";
+            return;
+          }
+
+
+          const id = this.$store.getters["auth/id"]
+          
+
+          const data = {
+            id: id,
+            email: this.user.email,
+            firstname: this.user.firstname,
+            lastname: this.user.lastname,
+            phoneNumber: this.user.phoneNumber
+            
+            }
+
+          try {
+            
+            const token = this.$store.getters["auth/token"]
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/auth/update-user/`,  data , {
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          })
+        }
+        catch (error) {
+          console.log(error)
+        if(error.message="Request failed with status code 500") this.emailExist=true
+        return
+      }
+
+
+      } catch (error) {
+          console.log(error)
+      }
+
+      this.updated = true
+
+
+  }
+
   },
   setup() {
 
     const sidebarOpen = ref(false)
+
+    
+
+    
+
+    
 
     return {
       sidebarOpen,
@@ -354,7 +497,30 @@ export default {
 
         console.log( this.$store.getters["auth/email"])
         console.log( this.$store.getters["auth/isAuthenticated"])
-        console.log( this.$store.getters["auth/id"])
+
+        const id = this.$store.getters["auth/id"]
+
+
+        const token = this.$store.getters["auth/token"]
+
+        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/getoneuser/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        
+        /*if(response.data["hydra:member"]){
+          customers.value = await response.data["hydra:member"];
+        }*/
+        
+
+        if(response.data){
+          this.user=response.data
+          console.log(this.user)
+        }  
+
+
 
     }
 }

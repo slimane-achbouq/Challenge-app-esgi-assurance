@@ -18,11 +18,18 @@ import ResetPasswordView from '@/views/reset-password/reset-password.vue';
 import Profile from '@/views/Account.vue';
 import Claims from "@/views/Claims.vue";
 import NewClaim from "@/views/NewClaim.vue";
+import Home from "@/views/home/HomeView.vue";
+import About from "@/views/home/AboutUs.vue";
+import Contact from "@/views/home/ContactUs.vue";
+import Services from "@/views/home/HomeServices.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-      { path: '/', name: 'home', redirect: '/login' },
+      { path: '/', name: 'home', component: Home, meta: { requiresUnauth: false} },
+      { path: '/about', name: 'about', component: About, meta: { requiresUnauth: false} },
+      { path: '/contact', name: 'contact', component: Contact, meta: { requiresUnauth: false} },
+      { path: '/services', name: 'services', component: Services, meta: { requiresUnauth: false} },
       { path: '/login', name: 'login', component: LoginView, meta: { requiresUnauth: false } },
       { path: '/register', name: 'register', component: Register, meta: { requiresUnauth: false } },
       { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresUnauth: false } },

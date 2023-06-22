@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm cache clean --force && rm -rf node_modules && npm install
 
 # Copy the rest of the application code
 COPY . .

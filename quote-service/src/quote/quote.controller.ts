@@ -32,6 +32,16 @@ export class QuoteController {
     return await this.quoteService.getQuoteById(id);
   }
 
+  @MessagePattern({ cmd: 'getQuoteByIdUser' })
+  async getQuoteByIdUser(@Payload() id: string): Promise<Quote> {
+    return await this.quoteService.getQuoteByIdUser(id);
+  }
+
+  @MessagePattern({ cmd: 'getQuoteByUserId' })
+  async getQuotesByUserId(@Param('userId') userId: string) : Promise<Quote[]> {
+    return this.quoteService.getQuotesByUserId(userId);
+  }
+
   @MessagePattern({ cmd: 'updateQuote' })
   async updateQuote(@Payload() data:{ id: string ,quoteDto :UpdateQuoteDto } ): Promise<Quote> {
     const { id, quoteDto } = data;
@@ -39,7 +49,7 @@ export class QuoteController {
   }
 
   @MessagePattern({ cmd: 'deleteQuote' })
-  async deleteQuote(@Payload() id: number): Promise<void> {
+  async deleteQuote(@Payload() id: string): Promise<void> {
     return await this.quoteService.deleteQuote(id);
   }
 }

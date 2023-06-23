@@ -49,14 +49,67 @@ export class QuoteService {
       .getOne();
   }
 
+  async getQuoteByIdUser(id: string): Promise<Quote> {
+    return this.quoteRepository
+      .createQueryBuilder('quote')
+      .leftJoinAndSelect('quote.vehicle', 'vehicle')
+      .where('quote.id = :id', { id })
+      .select([
+        'quote.id',
+        'quote.insuranceType',
+        'quote.coverage',
+        'quote.insurancePremium',
+        'quote.coverageDuration',
+        'quote.createdAt',
+        'quote.updatedAt',
+        'quote.coverageStartDate',
+        'vehicle.id',
+        'vehicle.vehicleType',
+        'vehicle.brand',
+        'vehicle.model',
+        'vehicle.horsepower',
+        'vehicle.licensePlate',
+        'vehicle.licenseObtainedDate',
+        'vehicle.vehicleCirculationDate',
+        'vehicle.registrationCardDate',
+        'vehicle.registrationCardHolder',
+        'vehicle.purchaseMode',
+        'vehicle.parkingPostalCode',
+        'vehicle.annualMileage'
+      ])
+      .getOne();
+  }
+
+  async getQuotesByUserId(userId: string): Promise<Quote[]> {
+    return this.quoteRepository.find({
+      where: { userId: userId },
+      select: [
+        'id',
+        'insuranceType',
+        'coverage',
+        'insurancePremium',
+        'coverageDuration',
+        'createdAt',
+        'updatedAt',
+        'coverageStartDate',
+      ],
+      relations: ['vehicle'],
+    });
+  }
+  
+  
+
   async updateQuote(id: string, quoteDto: UpdateQuoteDto): Promise<Quote> {
     const fieldName = 'id';
     await this.quoteRepository.update({ [fieldName]: id }, quoteDto);
     return this.quoteRepository.findOneBy({ id: id });
   }
 
-  async deleteQuote(id: number): Promise<void> {
-    await this.quoteRepository.delete(id);
+  async deleteQuote(id: string): Promise<void> {
+    const quote = await this.quoteRepository.findOneBy({ id: id });
+    if (quote) {
+      await this.quoteRepository.delete({ id: quote.id, quoteNumber: quote.quoteNumber });
+    }
   }
 
 }

@@ -22,6 +22,11 @@ export class InsuranceController {
   async getInsuranceById(@Payload() id: string) {
     return this.insuranceService.getInsuranceById(id);
   }
+
+  @MessagePattern({ cmd: 'getInsurancesByUserId' })
+    async getInsurancesByUserId(@Payload() userId: string) {
+      return this.insuranceService.getInsurancesByUserId(userId);
+    }
   
   @MessagePattern({ cmd: 'updateInsurance' })
   async updateInsurance(@Payload() data: {id:string ,insuranceDto:UpdateInsuranceDto}) {

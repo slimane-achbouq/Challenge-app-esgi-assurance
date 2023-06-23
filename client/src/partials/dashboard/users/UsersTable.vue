@@ -227,7 +227,7 @@
 
       customers.value=customersList.value
       customers.value=JSON.parse(JSON.stringify(customers.value)).filter(customer =>  customer.email.toLowerCase().includes(searchTerm.value.toLowerCase()))
-      return customersV;
+      return ;
     }
 
     function nextPage() {

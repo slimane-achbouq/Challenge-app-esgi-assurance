@@ -13,7 +13,10 @@
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center">
 
-          <div class="font-medium text-slate-800">{{customer.firstname}} {{customer.lastname}}</div>
+        <router-link :to="{ name: 'user-profile', params: { id: customer['_id'] }}">
+         <div class="font-medium text-slate-800">{{customer.firstname}} {{customer.lastname}}</div>
+        </router-link>
+   
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

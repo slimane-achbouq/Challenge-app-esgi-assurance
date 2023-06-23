@@ -48,6 +48,11 @@ export class QuoteController {
     return this.quoteServiceClient.send({ cmd: 'getQuotes' }, {}).toPromise();
   }
 
+  @Get('quote/:userId')
+  async getQuoteByUserId(@Param('userId') userId: string) {
+    return this.quoteServiceClient.send({ cmd: 'getQuoteByUserId' }, {userId : userId}).toPromise();
+  }
+
   @Get('quotes/:id')
   async getQuoteById(@Param('id') id: string) {
     // Verify if ID is a valid UUID
@@ -57,6 +62,25 @@ export class QuoteController {
 
     const quote = await this.quoteServiceClient
       .send({ cmd: 'getQuoteById' }, id)
+      .toPromise();
+
+    // If quote doesn't exist, throw exception
+    if (!quote) {
+      throw new NotFoundException('Quote not found');
+    }
+
+    return quote;
+  }
+
+  @Get('quote-user/:id')
+  async getQuoteByIdUser(@Param('id') id: string) {
+    // Verify if ID is a valid UUID
+    if (!validate(id)) {
+      throw new BadRequestException('Invalid UUID');
+    }
+
+    const quote = await this.quoteServiceClient
+      .send({ cmd: 'getQuoteByIdUser' }, id)
       .toPromise();
 
     // If quote doesn't exist, throw exception
@@ -228,9 +252,9 @@ async getPrices(@Param('id') id: string) {
   // Create quote with the created vehicle's ID
   const quoteDtoWithVehicleId = {
     ...createVehicleQuoteDto,
-    insurancePremium: 33,
-    coverageDuration: 22,
-    userId: req.user.sub,
+    insurancePremium: 0,
+    coverageDuration: createVehicleQuoteDto.coverageDuration,
+    userId: req.user.id,
     vehicleId: createdVehicle.id,
   };
   const createdQuote = await this.quoteServiceClient

@@ -18,7 +18,7 @@
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div>{{quote.userId}}</div>
+        <div v-if="customer">{{customer.firstname}} {{customer.lastname}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="font-medium text-slate-800">{{quote.insuranceType}}</div>
@@ -135,11 +135,20 @@
 <script>
 import { ref, computed } from 'vue'
 import moment from 'moment';
+import axios from 'axios'
 
 export default {
   name: 'QuotesTableItem',
   props: ['quote', 'value', 'selected'],
+  data() {
+        return {
+          customer:null
+        }
+  },
   setup(props, context) {
+
+    const quote = props.quote;
+
     const checked = computed(() => props.selected.includes(props.value))
 
     function check() {
@@ -195,5 +204,30 @@ export default {
       formatDate
     }
   },
+
+  async created() {
+
+
+
+        const token = this.$store.getters["auth/token"]
+        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        
+        /*if(response.data["hydra:member"]){
+          customers.value = await response.data["hydra:member"];
+        }*/
+        
+
+        if(response.data){
+          this.customer=response.data
+        }  
+
+       
+
+    }
 }
 </script>

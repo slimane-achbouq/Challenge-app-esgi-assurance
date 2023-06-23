@@ -46,6 +46,11 @@ export class InsuranceService {
     return this.insuranceModel.findById(id).exec();
   }
 
+  async getInsurancesByUserId(userId: string): Promise<Insurance[]> {
+    console.log(userId)
+    return this.insuranceModel.find({ 'beneficiary': userId }).select('-dossierNumber').exec();
+  }
+
   async updateInsurance(id: string, insuranceDto: UpdateInsuranceDto): Promise<Insurance> {
     let  insurance = await this.insuranceModel.findById(id).exec();
     const updateDinsurance = this.insuranceModel.findByIdAndUpdate(id, insuranceDto, { new: true }).exec();

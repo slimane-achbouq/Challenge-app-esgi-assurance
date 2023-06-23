@@ -86,6 +86,17 @@
                                     </router-link>
                                 </ul>
                             </div>
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block" >
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                    <router-link to="/profile" custom v-slot="{ href, navigate, isExactActive }">
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Profile </span>
+                                            </a>
+                                        </li>
+                                    </router-link>
+                                </ul>
+                            </div>
                         </SidebarLinkGroup>
                         <!-- Finance -->
                         <SidebarLinkGroup v-slot="parentLink" >
@@ -117,7 +128,7 @@
                                         </li>
                                     </router-link>
 
-                                    <router-link to="/userannounces/myannouncement" custom v-slot="{ href, navigate, isExactActive }" > 
+                                    <router-link to="/user-quotes" custom v-slot="{ href, navigate, isExactActive }" > 
                                         <li class="mb-1 last:mb-0" >
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
                                                 <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Devis list</span>
@@ -167,6 +178,19 @@
                                     </router-link>
                                 </ul>
                             </div>
+
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                    <router-link to="/contracts" custom v-slot="{ href, navigate, isExactActive }">
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Contracts</span>
+                                            </a>
+                                        </li>
+                                    </router-link>
+                                </ul>
+                            </div>
+
                         </SidebarLinkGroup>
 
                         <SidebarLinkGroup v-slot="parentLink" >
@@ -194,6 +218,17 @@
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
                                                 <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Claims list</span>
+                                            </a>
+                                        </li>
+                                    </router-link>
+                                </ul>
+                            </div>
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                    <router-link to="/dashboard/disputes" custom v-slot="{ href, navigate, isExactActive }">
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
+                                                <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Claims list</span>
                                             </a>
                                         </li>
                                     </router-link>

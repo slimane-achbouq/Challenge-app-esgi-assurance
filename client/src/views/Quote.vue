@@ -326,61 +326,7 @@
 
             
 
-            <!-- For contract component -->
-                <div class="col-span-full bg-white shadow-lg rounded-sm border border-slate-200">
-                
-                    <header class="px-5 py-4 border-b border-slate-100">
-                      <h2 class="font-semibold text-slate-800">Paiment History</h2>
-                    </header>
-                    <div class="p-3">
-
-                      <!-- Table -->
-                      <div class="overflow-x-auto">
-                        <table class="table-auto w-full">
-                          <!-- Table header -->
-                          <thead class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm">
-                            <tr>
-                              <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-left">Transcation id</div>
-                              </th>
-                              <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-left">Paiment date</div>
-                              </th>
-                              <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-left">total</div>
-                              </th>
-                              <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-left">Status</div>
-                              </th>
-                            </tr>
-                          </thead>
-                          <!-- Table body -->
-                          <tbody class="text-sm font-medium divide-y divide-slate-100">
-                            <!-- Row -->
-                            <tr>
-                              <td class="p-2 whitespace-nowrap md:w-1/2">
-                                <div class="flex items-center">
-                                  <div>
-                                    <div class="text-slate-800 uppercase">#12345</div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="p-2 whitespace-nowrap">
-                                <div class="font-normal text-left">33.94B</div>
-                              </td>
-                              <td class="p-2 whitespace-nowrap">
-                                <div class="text-left text-emerald-500">+$12.20</div>
-                              </td>
-                              <td class="p-2 whitespace-nowrap">
-                                <div class="text-left">$43.07</div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-
-                      </div>
-                    </div>
-                  </div>
+            
 
           </div>
 
@@ -569,7 +515,6 @@ export default {
         this.deleted=true
         }
         catch(e){
-          console.log(e)
          this. modaDeletelOpen=false
         this.deleted=false
         }
@@ -577,7 +522,6 @@ export default {
       },
       async onUpdate(){
 
-        console.log(this.formData)
          const token = this.$store.getters["auth/token"]
         // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
           const response = await axios.put(`${import.meta.env.VITE_API_URL}/quotes/${this.quote.id}`,this.formData, {
@@ -642,7 +586,6 @@ export default {
         
         if(response1.data){
           this.user=response1.data
-          console.log(this.user)
         } 
 
     }

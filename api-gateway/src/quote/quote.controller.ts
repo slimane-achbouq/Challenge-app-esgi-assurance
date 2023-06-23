@@ -252,9 +252,9 @@ async getPrices(@Param('id') id: string) {
   // Create quote with the created vehicle's ID
   const quoteDtoWithVehicleId = {
     ...createVehicleQuoteDto,
-    insurancePremium: 33,
-    coverageDuration: 22,
-    userId: req.user.sub,
+    insurancePremium: 0,
+    coverageDuration: createVehicleQuoteDto.coverageDuration,
+    userId: req.user.id,
     vehicleId: createdVehicle.id,
   };
   const createdQuote = await this.quoteServiceClient

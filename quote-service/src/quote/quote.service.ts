@@ -82,7 +82,7 @@ export class QuoteService {
 
   async getQuotesByUserId(userId: string): Promise<Quote[]> {
     return this.quoteRepository.find({
-      where: { userId },
+      where: { userId: userId },
       select: [
         'id',
         'insuranceType',
@@ -105,8 +105,11 @@ export class QuoteService {
     return this.quoteRepository.findOneBy({ id: id });
   }
 
-  async deleteQuote(id: number): Promise<void> {
-    await this.quoteRepository.delete(id);
+  async deleteQuote(id: string): Promise<void> {
+    const quote = await this.quoteRepository.findOneBy({ id: id });
+    if (quote) {
+      await this.quoteRepository.delete({ id: quote.id, quoteNumber: quote.quoteNumber });
+    }
   }
 
 }

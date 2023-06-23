@@ -16,12 +16,25 @@
                     User information updated successfully.
       </Banner>
 
+      <Banner type="success" class="mb-4"  :open="true" v-if="deleted">
+                    User deleted successfully.
+      </Banner>
+
+        <Banner type="warning" :open="true">
+                              This user is not yet validated
+        </Banner>
         <div class="px-4 sm:px-6 lg:px-8 py-4 w-full max-w-9xl mx-auto" style="background-color:#F1F5F9">
 
           <!-- Page header -->
           <div class="mb-5 flex justify-between">
             <!-- Title -->
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold"> <i class="far fa-edit"></i> Account Settings ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Account Settings ✨</h1>
+            <button class="btn border-slate-200 hover:border-slate-300 text-rose-500" @click="modaDeletelOpen=true">
+                      <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
+                      </svg>
+                      <span class="ml-2">Delete</span>
+            </button>
           </div>
 
           <!-- Content --> 
@@ -116,7 +129,7 @@
                                                               id="street"
                                                               class="form-input w-full"
                                                               type="text"
-                                                              v-model.trim="user.adresse"
+                                                              v-model.trim="street"
                                                               @input="searchStreet($event)"
                                                           />
 
@@ -352,9 +365,9 @@ export default {
       },
 
       setAddress(address) {
-            this.user.city = address.properties.city;
-            this.user.codeCity = Number(address.properties.citycode);
-            this.user.adresse = address.properties.name;
+            this.city = address.properties.city;
+            this.postalCode = Number(address.properties.postcode);
+            this.street = address.properties.name;
             this.searchedAddresses = [];
           },
 
@@ -377,8 +390,6 @@ export default {
                 return;
               }
 
-              console.log(this.searchedAddresses)
-
             } catch (error) {
               this.error = error.message || 'Failed to search for the given street';
             }
@@ -390,8 +401,9 @@ export default {
 
         const token = this.$store.getters["auth/token"]
 
-        /*
-        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/insurance/${this.contract['_id']}` , {
+        const id = document.URL.substring(document.URL.lastIndexOf('/') + 1); 
+        
+        try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/auth/delete-user/${id}` , {
               headers: {
                   'Authorization': `Bearer ${token}`
               }
@@ -402,7 +414,7 @@ export default {
         catch(e){
          this. modaDeletelOpen=false
         this.deleted=false
-        } */
+        } 
 
 
       },
@@ -411,7 +423,6 @@ export default {
           try {
           // Get the form data from the inputs
 
-          console.log(this.user.adresse)
           if (!this.user.firstname ) {
               this.errors.name = "Veuillez revérifier votre nom";
               return;
@@ -442,10 +453,7 @@ export default {
             email: this.user.email,
             firstname: this.user.firstname,
             lastname: this.user.lastname,
-            phoneNumber: this.user.phoneNumber,
-            codeCity: this.user.codeCity,
-            city: this.user.city,
-            adresse: this.user.adresse
+            phoneNumber: this.user.phoneNumber
             
             }
 
@@ -491,10 +499,9 @@ export default {
   },
   async created() {
 
-        console.log( this.$store.getters["auth/email"])
-        console.log( this.$store.getters["auth/isAuthenticated"])
 
-        const id = this.$store.getters["auth/id"]
+        const id = document.URL.substring(document.URL.lastIndexOf('/') + 1); 
+
 
 
         const token = this.$store.getters["auth/token"]
@@ -513,7 +520,6 @@ export default {
 
         if(response.data){
           this.user=response.data
-          console.log(this.user)
         }  
 
 

@@ -16,7 +16,7 @@
           quote created successfully .
         </Banner>
         <Banner type="error" class="mb-4" :open="Object.keys(errors).length !== 0 " v-if="true">
-          Check the fields you filled.
+          Check the fields.
         </Banner>
         <Banner type="success" class="mb-4" :open="true" v-if="caretCrise">
           File uploaded successfully.
@@ -131,7 +131,8 @@
                               class="text-rose-500">*</span></label>
                           <input id="card-city" class="form-input w-full placeholder-slate-300" type="number"
                                  v-model="formData.horsepower" placeholder="200"/>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.horsepower">{{ errors.horsepower }}</p>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.horsepower">Horse Power should not be empty
+                          </p>
                         </div>
                       </div>
                       <!-- 3rd row -->
@@ -140,8 +141,9 @@
                           <label class="block text-sm font-medium mb-1" for="card-state">License Plate <span
                               class="text-rose-500">*</span></label>
                           <input id="card-state" class="form-input w-full placeholder-slate-300" type="text"
-                                 v-model="formData.licensePlate" placeholder="AA-11-BB"/>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplate">{{ errors.licenseplate }}</p>
+                                 v-model="formData.licensePlate" placeholder="AA-123-BB"/>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplate">License Plate should not be empty
+                          </p>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplateformat">Place Number format not
                             correct</p>
                         </div>
@@ -151,7 +153,7 @@
                           <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
                                  v-model="formData.licenseObtainedDate">
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseobtaineddate">
-                            {{ errors.licenseobtaineddate }}</p>
+                            Date not valid</p>
                         </div>
                       </div>
                       <!-- 4th row -->
@@ -161,9 +163,8 @@
                               class="text-rose-500">*</span></label>
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="number"
                                  v-model="formData.annualMileage" placeholder="70000"/>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">{{
-                              errors.annualmileage
-                            }}</p>
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">Annual Mileage should not be empty
+                          </p>
                         </div>
 
                         <div class="flex-1" v-if="step.id==2">
@@ -172,7 +173,7 @@
                           <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
                                  v-model="formData.vehicleCirculationDate">
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.vehiclecirculationdate">
-                            {{ errors.vehiclecirculationdate }}</p>
+                            Date not valid</p>
                         </div>
                       </div>
 
@@ -183,9 +184,9 @@
                           <label class="block text-sm font-medium mb-1" for="card-name">Registration Card Holder
                             Name<span class="text-rose-500">*</span></label>
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="text"
-                                 v-model="formData.registrationCardHolder" placeholder="firstName lastName"/>
+                                 v-model="formData.registrationCardHolder" placeholder="First Name, Last Name"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcardholder">
-                            {{ errors.registrationcardholder }}</p>
+                            Registration Card Holder should not be empty  </p>
                         </div>
 
                         <div class="flex-1" v-if="step.id==2">
@@ -194,7 +195,7 @@
                           <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
                                  v-model="formData.registrationCardDate">
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcarddate">
-                            {{ errors.registrationcarddate }}</p>
+                            Date not valid</p>
                         </div>
                       </div>
 
@@ -216,7 +217,7 @@
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="text"
                                  v-model="formData.parkingPostalCode" placeholder="75000"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.parkingpostalcode">
-                            {{ errors.parkingpostalcode }}</p>
+                            Parking Postal C  ode should not be empty</p>
                         </div>
                       </div>
 
@@ -255,7 +256,7 @@
                           <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"
                                  v-model="formData.coverageDuration" placeholder="12"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.coverageduration">
-                            {{ errors.coverageduration }}</p>
+                            Coverage Duration should not be empty</p>
                         </div>
                         <div class="flex-1">
                           <label class="block text-sm font-medium mb-1" for="startingDate">Coverage Start Date <span
@@ -263,7 +264,7 @@
                           <input type="datetime-local" class="form-input w-full" id="startingDate" name="startingDate"
                                  v-model="formData.coverageStartDate">
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.coveragestartdate">
-                            {{ errors.coveragestartdate }}</p>
+                            Date not valid</p>
                         </div>
                       </div>
 
@@ -320,7 +321,7 @@
                         required</p>
 
 
-                      <div class="text-right">
+                      <div class="text-right" v-if="!quoteCreated">
 
 
                         <button type="" v-if="step.id==2 || step.id==3"
@@ -330,11 +331,11 @@
 
                         <button type="" v-if="step.id!=3"
                                 @click.prevent="nextStep({id: (step.id+1), label: 'Information',selectedTab: 'StepTwo' })"
-                                class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Next step
+                                class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white ">Next step
                         </button>
 
                         <button @click.prevent="onQuoteCreated" v-if="step.id==3"
-                                class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Submit
+                                class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white mx-5">Submit
                         </button>
 
                       </div>
@@ -380,7 +381,12 @@
               </div>
               <!-- Modal footer -->
               <div class="flex flex-wrap justify-end space-x-2">
-                <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">Quotes list</button>
+              
+
+              <router-link :to="{ name: 'quotes' }"> 
+                  <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">Quotes list</button>
+                </router-link>
+                
                 <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Create contract</button>
               </div>
             </div>
@@ -516,10 +522,8 @@ export default {
 
       if (this.formData.annualMileage !== '') {
         let num = parseFloat(this.formData.annualMileage);
-        console.log(typeof num)
         this.formData.annualMileage = isNaN(num) ? this.formData.annualMileage : num;
         ;
-        console.log(typeof this.formData.annualMileage)
       }
 
       if (this.formData.coverageDuration !== '') {
@@ -555,7 +559,7 @@ export default {
       });
 
       if (this.errors.licenseplateformat) fieldErrors['licenseplateformat'] = "Format incorrect";
-      console.log(fieldErrors)
+      
       if (!this.hideImageField) fieldErrors['filerequired'] = "carte Grise required"
       return fieldErrors;
     },

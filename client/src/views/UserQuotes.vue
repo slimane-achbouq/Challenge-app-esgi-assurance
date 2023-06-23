@@ -94,7 +94,7 @@ import Header from '@/partials/Header.vue'
 import DeleteButton from '@/components/DeleteButton.vue'
 import DateSelect from '@/components/DateSelect.vue'
 import FilterButton from '@/components/DropdownFilter.vue'
-import QuotesTable from '@/partials/quotes/QuotesTable.vue'
+import QuotesTable from '@/partials/userquotes/QuotesTable.vue'
 import PaginationClassic from '@/components/Pagination.vue'
   import ModalBasic from '@/components/Modal.vue'
   import { useStore } from 'vuex';
@@ -102,7 +102,7 @@ import PaginationClassic from '@/components/Pagination.vue'
   import axios from 'axios'
 
 export default {
-  name: 'Quotes',
+  name: 'UserQuotes',
   components: {
     Sidebar,
     Header,
@@ -143,6 +143,7 @@ export default {
             
             }
             catch(e){
+              console.log(e)
               modaDeletelOpen.value=false
               deleted.value=false
             } 

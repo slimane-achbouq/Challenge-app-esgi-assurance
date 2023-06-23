@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginView from '@/views/LoginView.vue';
 import UserList from '@/views/UserList.vue';
-import UserProfile from '@/views/UserProfile.vue';
 import Register from '@/views/Register.vue';
 import NewQuote from '@/views/NewQuote.vue';
 import CreateInsurance from '@/views/CreateInsurance.vue';
@@ -18,6 +17,8 @@ import ResetPasswordView from '@/views/reset-password/reset-password.vue';
 import Profile from '@/views/Account.vue';
 import Claims from "@/views/Claims.vue";
 import NewClaim from "@/views/NewClaim.vue";
+import UserProfile from "@/views/User-profile.vue";
+import UserQuotes from '@/views/UserQuotes.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -27,8 +28,7 @@ const router = createRouter({
       { path: '/register', name: 'register', component: Register, meta: { requiresUnauth: false } },
       { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresUnauth: false } },
       { path: '/dashboard/users', name: 'users', component: UserList, meta: { requiresUnauth: false } },
-      { path: '/userprofile/:id', name: 'user-profile', component: UserProfile, meta: { requiresUnauth: false }},
-      { path: '/newquote', name: 'user-profile', component: NewQuote, meta: { requiresUnauth: false }},
+      { path: '/newquote', name: 'newquote', component: NewQuote, meta: { requiresUnauth: false }},
       { path: '/step4', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
       { path: '/quotes', name: 'quotes', component: Quotes, meta: { requiresUnauth: false }},
       { path: '/quote/:id', name: 'quote', component: Quote, meta: { requiresUnauth: false }},
@@ -43,6 +43,8 @@ const router = createRouter({
       { path: '/claims', name: 'claims', component: Claims, meta: { requiresUnauth: false }},
       { path: '/claims/new/:insurance_id', name: 'new_claim', component: NewClaim, meta: { requiresUnauth: false }},
       { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
+      { path: '/user-profile/:id', name: 'user-profile', component: UserProfile,meta: { requiresUnauth: false }},
+      { path: '/user-quotes', name: 'user_quotes', component: UserQuotes, meta: { requiresUnauth: false }},
 
     ]
   })

@@ -194,26 +194,26 @@
                 </div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Quote number</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Customer</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">insuranceType</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">coverage</div>
               </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Start Date</div>
-              </th>
+              
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">Duration</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">Status</div>
               </th>
+
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Created date</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Last Update</div>
+              </th>
+
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold">Vehicle</div>
               </th>
@@ -421,9 +421,9 @@ export default {
 
     const fetchQuotes = async() => {
 
-        
+        const id = store.getters["auth/id"]
         const token = store.getters["auth/token"]
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/quotes`, {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/quote/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -455,12 +455,12 @@ export default {
       quotes.value=quoteList.value
 
      if(searchTerm.value!=="")
-      quotes.value= quoteList.value.filter(quote => {
-              return quote.quoteNumber == searchTerm.value
+      quotes.value= quoteList.value.filter(quote => {   
+              const insuranceTypeLower = quote.insuranceType.toLowerCase();
+              return insuranceTypeLower.includes(searchTermLower);
 
       } )
 
-      console.log(JSON.stringify(quotes.value))
     }
 
     const checkAll = () => {

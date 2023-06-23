@@ -2,6 +2,9 @@
   <tbody class="text-sm">
     <!-- Row -->
     <tr>
+
+    
+        
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
         <div class="flex items-center">
           <label class="inline-flex">
@@ -11,26 +14,15 @@
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="flex items-center text-slate-800">
-        <router-link :to="{ name: 'quote', params: { id: quote.id }}">
-          <div class="font-medium text-sky-500">{{quote.quoteNumber}}</div>
-        </router-link>
-        </div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div v-if="customer">{{customer.firstname}} {{customer.lastname}}</div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <router-link :to="{ name: 'quote', params: { id: quote.id }}">
         <div class="font-medium text-slate-800">{{quote.insuranceType}}</div>
+      </router-link>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="text-left font-medium text-emerald-500">{{quote.coverage}}</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(quote.createdAt)">{{formatDate(quote.createdAt)}}</div>
-      </td>
-      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div class="text-center">{{quote.coverageDuration}} Month</div>
+        <div class="">{{quote.coverageDuration}} Month</div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center">
@@ -38,6 +30,13 @@
           <div v-if="insuranceId">Subscriped</div>
           <div v-if="!insuranceId">Not subscriped</div>
         </div>
+      </td>
+      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(quote.createdAt)">{{formatDate(quote.createdAt)}}</div>
+      </td>
+      <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5" :class="statusColor(quote.createdAt)">{{formatDate(quote.updatedAt)}}</div>
+      
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
         <div class="flex items-center">
@@ -55,6 +54,7 @@
           </button>
         </div>
       </td>
+      
     </tr>
     <!--
     Example of content revealing when clicking the button on the right side:
@@ -207,25 +207,7 @@ export default {
 
   async created() {
 
-
-
-        const token = this.$store.getters["auth/token"]
-        // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        
-        /*if(response.data["hydra:member"]){
-          customers.value = await response.data["hydra:member"];
-        }*/
-        
-
-        if(response.data){
-          this.customer=response.data
-        }  
-
+  
        
 
     }

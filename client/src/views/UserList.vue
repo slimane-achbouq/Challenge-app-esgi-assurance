@@ -92,7 +92,7 @@
                           </div>
                           <div class="col-span-1">
                             <label class="block text-sm font-medium mb-1" for="name">Status <span class="text-rose-500">*</span></label>
-                            <select class="form-select"  v-model="selectedItems.isValide">
+                            <select class="form-select" v-model="selectedItems.isVerified">
                                 <option value="true">Actived</option>
                                 <option value="false">Not Actived</option>
                             </select>

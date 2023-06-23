@@ -49,7 +49,7 @@ export class QuoteController {
   }
 
   @MessagePattern({ cmd: 'deleteQuote' })
-  async deleteQuote(@Payload() id: number): Promise<void> {
+  async deleteQuote(@Payload() id: string): Promise<void> {
     return await this.quoteService.deleteQuote(id);
   }
 }

@@ -360,17 +360,17 @@ export class InsuranceController {
   ): Promise<any> {
     try {
       const userData = await this.userServiceClient
-        .send({ cmd: 'findUserById' }, req.user.sub)
+        .send({ cmd: 'findUserById' }, req.user.id)
         .toPromise();
 
       if (!userData) {
         throw new NotFoundException(
-          `User with ID "${req.user.sub}" not found.`,
+          `User with ID "${req.user.id}" not found.`,
         );
       }
 
       let currentBeneficiary = await this.insuranceServiceClient
-        .send({ cmd: 'getBeneficiaryByUserId' }, req.user.sub)
+        .send({ cmd: 'getBeneficiaryByUserId' }, req.user.id)
         .toPromise();
 
       const fileContents = {

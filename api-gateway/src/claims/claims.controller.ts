@@ -1,9 +1,10 @@
-import {Body, Controller, Inject, Param, Post, Get, Put, Delete, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Inject, Param, Post, Get, Put, Delete, UploadedFile, UseInterceptors, UseGuards} from '@nestjs/common';
 import {ClientProxy} from '@nestjs/microservices';
 import {ApiTags} from '@nestjs/swagger';
 import {UpdateDemandDto} from './dto/update-demand.dto';
 import {CreateDemandDto} from './dto/create-demand.dto';
 import {FileInterceptor} from '@nestjs/platform-express';
+import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 
 @ApiTags('Claims')
 @Controller({
@@ -17,6 +18,7 @@ export class ClaimsController {
 
     @Post()
     @UseInterceptors(FileInterceptor('proof'))
+    @UseGuards(JwtAuthGuard)
     async createDemand(
         @Body() demand: CreateDemandDto,
         @UploadedFile() file: Express.Multer.File) {
@@ -35,6 +37,7 @@ export class ClaimsController {
 
     @Put(':id')
     @UseInterceptors(FileInterceptor('proof'))
+    @UseGuards(JwtAuthGuard)
     async updateDemand(
         @Param('id') id: string,
         @Body() updateDemandDto: UpdateDemandDto,
@@ -57,6 +60,7 @@ export class ClaimsController {
 
     @Get()
     @UseInterceptors(FileInterceptor('proof'))
+    @UseGuards(JwtAuthGuard)
     async getDemandes() {
         const claims = await this.claimsService
             .send({cmd: 'getDemandes'}, '')
@@ -67,6 +71,7 @@ export class ClaimsController {
 
     @Get(":id")
     @UseInterceptors(FileInterceptor('proof'))
+    @UseGuards(JwtAuthGuard)
     async getDemande(@Param('id') id: string) {
         const claims = await this.claimsService
             .send({cmd: 'getDemande'}, {_id: id})
@@ -77,6 +82,7 @@ export class ClaimsController {
 
     @Delete(":id")
     @UseInterceptors(FileInterceptor('proof'))
+    @UseGuards(JwtAuthGuard)
     async deleteDemande(@Param('id') id: string,) {
         console.log(id)
         const claims = await this.claimsService

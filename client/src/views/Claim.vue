@@ -23,7 +23,7 @@
                   <!-- Title -->
                   <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"><i class="fas fa-file-claim"></i>
                     Claim n°{{ claim._id }}✨
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" v-if="role && role == 'Admin' && claim.status == 0">
                       <router-link :to="{name: 'decide_claim', params: {id: claim._id}}">
                         Review
                       </router-link>
@@ -149,6 +149,7 @@ export default {
     return {
       claim: null,
       user: null,
+      role: null,
     }
   },
   methods: {
@@ -211,8 +212,9 @@ export default {
     if (!token) {
       this.$router.push({name: "home"});
     }
-    const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
+    this.role = store.getters["auth/roles"];
+    const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims/${id}`, {
       headers: {
@@ -221,6 +223,10 @@ export default {
     });
 
     this.claim = response.data;
+
+    if (this.role == "Client" && this.claim.userMail != store.getters["auth/email"]) {
+      this.$router.push({name: "claims"});
+    }
   }
 }
 </script>

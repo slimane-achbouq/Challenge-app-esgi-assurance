@@ -167,6 +167,7 @@ import Header from '@/partials/Header.vue'
 import axios from 'axios'
 import Banner from '@/components/Banner.vue';
 import ModalBlank from '@/components/ModalBlank.vue'
+import {useStore} from "vuex";
 
 export default {
   name: 'NewClaim',
@@ -236,11 +237,18 @@ export default {
   },
   async created() {
     const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
+    const store = useStore();
 
-    const token = this.$store.getters["auth/token"]
+    const token = store.getters["auth/token"]
     if (!token) {
       this.$router.push({name: "home"});
     }
+
+    this.role = store.getters["auth/roles"];
+    if (this.role != 'Admin') {
+      this.$router.push({name: "claim", params: {id: id}});
+    }
+
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -248,6 +256,9 @@ export default {
     });
 
     this.claim = response.data;
+    if (this.claim.status != 0) {
+      this.$router.push({name: "claim", params: {id: id}});
+    }
   }
 }
 </script>

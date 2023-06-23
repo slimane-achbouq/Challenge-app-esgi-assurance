@@ -62,7 +62,8 @@
                     <div class="flex-1">
                       <label class="block text-sm font-medium mb-1" for="card-state">Title <span
                           class="text-rose-500">*</span></label>
-                      <input id="card-state" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.title"
+                      <input id="card-state" class="form-input w-full placeholder-slate-300" type="text"
+                             v-model="formData.title"
                              placeholder=""/>
                       <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.title }}</p>
                     </div>
@@ -193,8 +194,14 @@
               </div>
               <!-- Modal footer -->
               <div class="flex flex-wrap justify-end space-x-2">
-                <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">Claims list</button>
-                <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">My Contract</button>
+                <router-link :to="{name: 'claims'}">
+                  <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">
+                    Claims list
+                  </button>
+                </router-link>
+                <router-link :to="{ name: 'contract', params: { id: formData.insurance_id }}">
+                  <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">My Contract</button>
+                </router-link>
               </div>
             </div>
           </div>
@@ -236,6 +243,7 @@ export default {
         reason: null,
         title: null,
         description: null,
+        userMail: null,
       },
       claimCreated: false,
     };
@@ -247,6 +255,7 @@ export default {
       this.hideProof = true;
     },
     async onCreatedClaim() {
+      console.log(this.formData)
       const token = this.$store.getters["auth/token"]
       let response = await axios.post(`${import.meta.env.VITE_API_URL}/claims`, this.formData, {
         headers: {
@@ -277,6 +286,8 @@ export default {
       this.$router.push({name: "home"});
     }
 
+    this.formData.userMail = this.$store.getters["auth/email"];
+
     let response = await axios.get(`${import.meta.env.VITE_API_URL}/insurance/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -289,7 +300,6 @@ export default {
     });
 
     this.contract = response.data
-    console.log(id)
     this.formData.insurance_id = id
   }
 }

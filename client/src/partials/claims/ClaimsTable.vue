@@ -428,6 +428,8 @@ export default {
 
     const fetchClaims = async () => {
       const token = store.getters["auth/token"];
+      let role = store.getters["auth/roles"];
+      let userMail = store.getters["auth/email"];
 
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/claims`, {
         headers: {
@@ -437,8 +439,20 @@ export default {
         console.log(error)
       });
 
+      let finalClaimsData = [];
+
       if (response.data) {
-        allUsers.value = await response.data; // store all the users
+        if (role == "Client") {
+          for (let claim of response.data) {
+            if (claim.userMail == userMail) {
+              finalClaimsData.push(claim);
+            }
+          }
+        }
+        else {
+          finalClaimsData = response.data;
+        }
+        allUsers.value = finalClaimsData;
         claims.value = allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
 
       }

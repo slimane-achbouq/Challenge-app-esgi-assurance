@@ -55,11 +55,11 @@
                         <span class="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6" aria-hidden="true">•••</span>
                         <span class="lg:hidden lg:sidebar-expanded:block 2xl:block">Pages</span>
                     </h3>
-                    <ul class="mt-3">
+                    <ul class="mt-3" v-if="role">
                         <!-- Community -->
-                        <SidebarLinkGroup v-slot="parentLink" v-if="role && role == 'Admin'">
+                        <SidebarLinkGroup v-slot="parentLink" >
                             <a class="block text-slate-200 hover:text-white truncate transition duration-150" :class="currentRoute.fullPath.includes('community') && 'hover:text-slate-200'" href="#0" @click.prevent="sidebarExpanded ? parentLink.handleClick() : sidebarExpanded = true">
-                                <div class="flex items-center justify-between">
+                                <div class="flex items-center justify-between" >
                                     <div class="flex items-center">
                                         <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
                                             <path class="fill-current text-slate-600" :class=" 'text-indigo-500'" d="M18.974 8H22a2 2 0 012 2v6h-2v5a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5h-2v-6a2 2 0 012-2h.974zM20 7a2 2 0 11-.001-3.999A2 2 0 0120 7zM2.974 8H6a2 2 0 012 2v6H6v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5H0v-6a2 2 0 012-2h.974zM4 7a2 2 0 11-.001-3.999A2 2 0 014 7z" />
@@ -76,7 +76,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block" >
-                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'" v-if="role==='Admin'">
                                     <router-link to="/dashboard/users" custom v-slot="{ href, navigate, isExactActive }">
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
@@ -87,7 +87,7 @@
                                 </ul>
                             </div>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block" >
-                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'" v-if="role==='User'">
                                     <router-link to="/profile" custom v-slot="{ href, navigate, isExactActive }">
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
@@ -119,7 +119,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'" v-if="role==='Admin'">
                                     <router-link to="/quotes" custom v-slot="{ href, navigate, isExactActive }">
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
@@ -128,7 +128,7 @@
                                         </li>
                                     </router-link>
 
-                                    <router-link to="/user-quotes" custom v-slot="{ href, navigate, isExactActive }" > 
+                                    <router-link to="/user-quotes" custom v-slot="{ href, navigate, isExactActive }" v-if="role==='User'"> 
                                         <li class="mb-1 last:mb-0" >
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
                                                 <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Devis list</span>
@@ -136,7 +136,7 @@
                                         </li>
                                     </router-link>
 
-                                    <router-link to="/newquote" custom v-slot="{ href, navigate, isExactActive }">
+                                    <router-link to="/newquote" custom v-slot="{ href, navigate, isExactActive }" v-if="role==='User'">
                                         <li class="mb-1 last:mb-0" >
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
                                                 <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Create Devis</span>
@@ -168,7 +168,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'" v-if="role==='Admin'">
                                     <router-link to="/contracts" custom v-slot="{ href, navigate, isExactActive }">
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
@@ -179,7 +179,7 @@
                                 </ul>
                             </div>
 
-                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block" v-if="role==='User'">
                                 <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
                                     <router-link to="/user-contracts" custom v-slot="{ href, navigate, isExactActive }">
                                         <li class="mb-1 last:mb-0">
@@ -320,6 +320,7 @@ export default {
 
     async created() {
         this.role = this.$store.getters["auth/roles"]
+        console.log(this.role)
 
     }
 }

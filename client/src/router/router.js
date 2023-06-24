@@ -14,6 +14,8 @@ import Contracts from '@/views/Contracts.vue';
 import Contract from '@/views/Contract.vue';
 import ResetPasswordInput from '@/views/reset-password/reset-password-view.vue';
 import ResetPasswordView from '@/views/reset-password/reset-password.vue';
+import Claim from "@/views/Claim.vue";
+import DecideClaim from "@/views/DecideClaim.vue";
 import Profile from '@/views/Account.vue';
 import Claims from "@/views/Claims.vue";
 import NewClaim from "@/views/NewClaim.vue";
@@ -26,6 +28,7 @@ import Services from "@/views/home/HomeServices.vue";
 import PlansPanel from "@/views/PlansPanel.vue";
 import PaymentSuccess from "@/components/PaymentSuccess.vue";
 import PaymentFailed from "@/components/PaymentFailed.vue";
+import UserContracts from '@/views/UserContracts.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -46,18 +49,24 @@ const router = createRouter({
       { path: '/newContract/:id', name: 'newcontract', component: NewContract, meta: { requiresUnauth: false }},
       { path: '/contracts', name: 'contracts', component: Contracts, meta: { requiresUnauth: false }},
       { path: '/contract/:id', name: 'contract', component: Contract, meta: { requiresUnauth: false }},
+      { path: '/verify/:token', contract: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
+      { path: '/reset-password-input', contract: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
+      { path: '/resetPassword/:token', contract: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
+      { path: '/claims', name: 'claims', component: Claims, meta: { requiresUnauth: false }},
+      { path: '/claim/:id', name: 'claim', component: Claim, meta: { requiresUnauth: false }},
+      { path: '/claim/decision/:id', name: 'decide_claim', component: DecideClaim, meta: { requiresUnauth: false }},
+      { path: '/claims/new/:insurance_id', name: 'new_claim', component: NewClaim, meta: { requiresUnauth: false }},
+      { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
       { path: '/verify/:token', name: 'verify', component: VerificationCompte, meta: { requiresUnauth: false }},
       { path: '/reset-password-input', name: 'ResetPasswordInput', component: ResetPasswordInput, meta: { requiresUnauth: false }},
       { path: '/resetPassword/:token', name: 'resetPassword', component: ResetPasswordView, meta: { requiresUnauth: false }},
       { path: '/profile', name: 'profile', component: Profile, meta: { requiresUnauth: false }},
-      { path: '/claims', name: 'claims', component: Claims, meta: { requiresUnauth: false }},
-      { path: '/claims/new/:insurance_id', name: 'new_claim', component: NewClaim, meta: { requiresUnauth: false }},
-      { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
       { path: '/user-profile/:id', name: 'user-profile', component: UserProfile,meta: { requiresUnauth: false }},
       { path: '/user-quotes', name: 'user_quotes', component: UserQuotes, meta: { requiresUnauth: false }},
       { path: '/payment/:insurance_id', name: 'new_payment', component: PlansPanel, meta: { requiresUnauth: false }},
       { path: '/payment/success/:token/:id/:price', name: 'payment_success', component: PaymentSuccess, meta: { requiresUnauth: false }},
       { path: '/payment/failed', name: 'payment_failed', component: PaymentFailed, meta: { requiresUnauth: false }},
+      { path: '/user-contracts', name: 'user-contracts', component: UserContracts, meta: { requiresUnauth: false }},
 
     ]
   })

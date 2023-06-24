@@ -5,7 +5,7 @@
     <div class="mb-5 flex justify-between">
     
                     <form class="relative">
-                    <label for="app-search" class="sr-only" >Search by quote number</label>
+                    <label for="app-search" class="sr-only" >Search by contracts number</label>
                     <input id="app-search" class="form-input w-full pl-9 py-3 focus:border-slate-300" type="search" placeholder="Search by quote number" v-model="searchTerm" @input="searchCustomers"/>
                     <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                         <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +17,6 @@
 
     <!-- Right: Actions  -->
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-              <!-- Delete button -->
               
               <!-- Filter button -->
 
@@ -49,13 +48,13 @@
                         <li class="py-1 px-3">
                           <label class="flex items-center">
                             <input type="checkbox" class="form-checkbox" v-model="filters.subscribed"/>
-                            <span class="text-sm font-medium ml-2" >Subscriped</span>
+                            <span class="text-sm font-medium ml-2" >Active</span>
                           </label>
                         </li>
                         <li class="py-1 px-3">
                           <label class="flex items-center">
                             <input type="checkbox" class="form-checkbox" v-model="filters.notSubscribed" />
-                            <span class="text-sm font-medium ml-2">Not Subscriped</span>
+                            <span class="text-sm font-medium ml-2">Incative</span>
                           </label>
                         </li>
                         <li class="py-1 px-3">
@@ -70,24 +69,7 @@
                             <span class="text-sm font-medium ml-2">Standard insurance</span>
                           </label>
                         </li>
-                        <li class="py-1 px-3">
-                          <label class="flex items-center">
-                            <input type="checkbox" class="form-checkbox" v-model="filters.premiumInsurance"/>
-                            <span class="text-sm font-medium ml-2">Premium insurance</span>
-                          </label>
-                        </li>
-                        <li class="py-1 px-3">
-                          <label class="flex items-center">
-                            <input type="checkbox" class="form-checkbox" v-model="filters.liabilityCoverage"/>
-                            <span class="text-sm font-medium ml-2">Liability coverage</span>
-                          </label>
-                        </li>
-                        <li class="py-1 px-3">
-                          <label class="flex items-center">
-                            <input type="checkbox" class="form-checkbox" v-model="filters.collisionCoverage"/>
-                            <span class="text-sm font-medium ml-2">Collision coverage</span>
-                          </label>
-                        </li>
+                        
                         <li class="py-1 px-3">
                           <label class="flex items-center">
                             <input type="checkbox" class="form-checkbox" v-model="filters.comprehensiveCoverage"/>
@@ -175,7 +157,7 @@
   <div class="bg-white shadow-lg rounded-sm border border-slate-200 relative">
   
     <header class="px-5 py-4">
-      <h2 class="font-semibold text-slate-800">All Quotes <span class="text-slate-400 font-medium">{{totalResult}}</span></h2>
+      <h2 class="font-semibold text-slate-800">All Contracts <span class="text-slate-400 font-medium">{{totalResult}}</span></h2>
     </header>
     <div>
 
@@ -185,42 +167,34 @@
           <!-- Table header -->
           <thead class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-slate-200">
             <tr>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                <div class="flex items-center">
-                  <label class="inline-flex">
-                    <span class="sr-only">Select all</span>
-                    <input class="form-checkbox" type="checkbox" v-model="selectAll" @click="checkAll" />
-                  </label>
-                </div>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Number</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">insuranceType</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">coverage</div>
+                <div class="font-semibold text-left">Covrage</div>
               </th>
-              
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Duration</div>
+                <div class="font-semibold text-left">Price / mo</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Start Date</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">End Date</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold text-left">Status</div>
               </th>
-
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Created date</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Last Update</div>
-              </th>
-
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Vehicle</div>
+                <div class="font-semibold">Beneficiary</div>
               </th>
             </tr>
           </thead>
           <!-- Table body -->
-          <QuotesTableItem
+          <ContractsTableItem
             v-for="quote in quotes"
             :key="quote.id"
             :quote="quote"
@@ -258,7 +232,7 @@
 <script>
 import { ref, watch,onMounted } from 'vue'
 import axios from 'axios'
-import QuotesTableItem from './QuotesTableItem.vue'
+import ContractsTableItem from './ContractsTableItem.vue'
 import FilterButton from '@/components/DropdownFilter.vue'
 import DateSelect from '@/components/DateSelect.vue'
 import moment from 'moment';
@@ -266,9 +240,9 @@ import { useStore } from 'vuex'
 
 
 export default {
-  name: 'QuotesTable',
+  name: 'ContractsTable',
   components: {
-    QuotesTableItem,
+    ContractsTableItem,
     FilterButton,
     DateSelect
   },  
@@ -376,8 +350,8 @@ export default {
         quotes.value = quoteList.value
         quotes.value = quotes.value.filter(quote => {
 
-        if (filters.value.subscribed && quote.insuranceId) return true; 
-        if (filters.value.notSubscribed && !quote.subscribed) return true;
+        if (filters.value.subscribed && quote.status) return true; 
+        if (filters.value.notSubscribed && !quote.status) return true;
         if (!filters.value.notSubscribed && !filters.value.subscribed) return true
         if (filters.value.notSubscribed && filters.value.subscribed) return true
         
@@ -421,20 +395,21 @@ export default {
 
     const fetchQuotes = async() => {
 
-        const id = store.getters["auth/id"]
+        
         const token = store.getters["auth/token"]
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/quote-user/${id}`, {
+        const id = store.getters["auth/id"]
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/insurance-user/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
         
+        console.log(response.data)
       
         if(response.data){
           allUsers.value = await response.data; // store all the users
-          quotes.value =  allUsers.value.slice((page.value - 1) * perPage.value, page.value * perPage.value); // assign only the corresponding users to the current page
-          
-        }
+          quotes.value =  allUsers.value
+        } 
 
         totalResult.value = allUsers.value.length; // get the total users
         lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
@@ -455,12 +430,12 @@ export default {
       quotes.value=quoteList.value
 
      if(searchTerm.value!=="")
-      quotes.value= quoteList.value.filter(quote => {   
-              const insuranceTypeLower = quote.insuranceType.toLowerCase();
-              return insuranceTypeLower.includes(searchTermLower);
+      quotes.value= quoteList.value.filter(quote => {
+              return quote.dossierNumber == searchTerm.value
 
       } )
 
+      console.log(JSON.stringify(quotes.value))
     }
 
     const checkAll = () => {
@@ -495,7 +470,6 @@ export default {
     }
     
     
-
     onMounted(fetchQuotes)
 
     return {

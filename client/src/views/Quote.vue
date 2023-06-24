@@ -31,16 +31,16 @@
             </div>
 
             <!-- Right: Actions -->
-            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2" v-if="this.quote.insurancePremium==0">
 
-            <button class="btn border-slate-200 hover:border-slate-300 text-slate-600" @click="modalOpen=true">
+            <button class="btn border-slate-200 hover:border-slate-300 text-slate-600" @click="modalOpen=true" v-if="this.quote.insurancePremium==0">
                       <svg class="w-4 h-4 fill-current text-slate-500 shrink-0" viewBox="0 0 16 16">
                         <path d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
                       </svg>
                       <span class="ml-2">Edit Quote</span>
             </button>
 
-            <button class="btn border-slate-200 hover:border-slate-300 text-rose-500" @click="modaDeletelOpen=true">
+            <button class="btn border-slate-200 hover:border-slate-300 text-rose-500" @click="modaDeletelOpen=true" v-if="this.quote.insurancePremium==0">
                       <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                         <path d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
                       </svg>
@@ -53,7 +53,7 @@
                 <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                   <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                 </svg>
-                <span class="hidden xs:block ml-2">Choose my plan</span>
+                <span class="hidden xs:block ml-2" v-if="role==='User'">Choose my plan</span>
               </button>
               </router-link>
 
@@ -149,7 +149,7 @@
             <div class=" flex flex-col col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200  ">
                 <header class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                     <h2 class="font-semibold text-slate-800"><i class="fas fa-file-contract"></i> Quote informations</h2>
-                    <i class="far fa-edit cursor-pointer" @click="modalOpen=true"></i>
+                    <i class="far fa-edit cursor-pointer" @click="modalOpen=true" v-if="this.quote.insurancePremium==0"></i>
                 </header>
 
                 <div class="px-10  divide-y divide-slate-100 space-y-3">
@@ -215,7 +215,7 @@
                 <header class=" px-5 py-4 border-b border-slate-600 flex items-center justify-between font-semibold ">
                   <h2 class="font-semibold text-slate-200"><i class="fas fa-bus"></i> Vehicle informations</h2>
                   <router-link class="block"  :to="{ name: 'editquote', params: { id: quote.vehicle.id }}">
-                    <i class="far fa-edit font-semibold text-slate-200 cursor-pointer"></i>
+                    <i class="far fa-edit font-semibold text-slate-200 cursor-pointer" v-if="this.quote.insurancePremium==0"></i>
                   </router-link>
 
                 </header>
@@ -462,7 +462,8 @@ export default {
           modalOpen:false,
           quoteUpdated:false,
           modaDeletelOpen:false,
-          deleted:false
+          deleted:false,
+          role: null,
 
         }
     },
@@ -549,6 +550,7 @@ export default {
 
   async created() {
 
+        this.role = this.$store.getters["auth/roles"]
         const id = document.URL.substring(document.URL.lastIndexOf('/') + 1); 
 
 
@@ -568,6 +570,7 @@ export default {
         if(response.data){
           this.quote=response.data
         }  
+
 
       
         this.formData.insuranceType= this.quote.insuranceType

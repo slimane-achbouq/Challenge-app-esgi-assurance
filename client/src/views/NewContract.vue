@@ -302,7 +302,7 @@
                     </button>
                   </li>
                 </ul>
-                <div>
+                <div v-if="quote">
                   <router-link :to="{name: 'new_payment', params: {insurance_id: quote.id}}">
                     <button class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Proceed to payment</button>
                   </router-link>
@@ -489,7 +489,6 @@ export default {
       }
     })
 
-
     if (response.data) {
       this.quote = response.data
     }
@@ -501,7 +500,6 @@ export default {
     })
 
     this.existingPayment = existingPayment.data;
-
 
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
     response = await axios.get(`${import.meta.env.VITE_API_URL}/prices/${this.quote.vehicle.id}`, {

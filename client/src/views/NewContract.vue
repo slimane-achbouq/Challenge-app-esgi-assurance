@@ -13,7 +13,7 @@
       <main>
 
         <Banner type="success" class="mb-4" :open="contractCreated" v-if="contractCreated">
-          Contract created successfully .
+          Proceed to payment .
         </Banner>
 
         <div class="flex flex-col col-span-full bg-white shadow-lg rounded-sm border border-slate-200 mx-8 my-3">
@@ -229,7 +229,7 @@
 
 
                       <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
-                              @click.prevent="onCreatedContract" v-if="!contractCreated">Submit
+                              @click.prevent="onCreatedContract" v-if="!contractCreated">Confirm and proceed to payment
                       </button>
 
                     </div>
@@ -306,36 +306,6 @@
 
 
         </div>
-
-        <ModalBlank id="success-modal" :modalOpen="contractCreated" v-if="contractCreated ">
-          <div class="p-5 flex space-x-4">
-            <!-- Icon -->
-            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-emerald-100">
-              <svg class="w-4 h-4 shrink-0 fill-current text-emerald-500" viewBox="0 0 16 16">
-                <path
-                    d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z"/>
-              </svg>
-            </div>
-            <!-- Content -->
-            <div>
-              <!-- Modal header -->
-              <div class="mb-2">
-                <div class="text-lg font-semibold text-slate-800">Contract created successfully</div>
-              </div>
-              <!-- Modal content -->
-              <div class="text-sm mb-10">
-                <div class="space-y-2">
-                  <p>The contract has been created successfully.wait until the validation by the admin</p>
-                </div>
-              </div>
-              <!-- Modal footer -->
-              <div class="flex flex-wrap justify-end space-x-2">
-                <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">Contract list</button>
-                <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Quote list</button>
-              </div>
-            </div>
-          </div>
-        </ModalBlank>
 
       </main>
 
@@ -419,12 +389,11 @@ export default {
 
 
       this.formData.insurancePremium = Number(this.formData.insurancePremium)
-      console.log(this.formData.insurancePremium)
 
 
       const token = this.$store.getters["auth/token"]
       // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-      let response = await axios.post(`${import.meta.env.VITE_API_URL}/beneficiary-insurance`, this.formData, {
+      /*let response = await axios.post(`${import.meta.env.VITE_API_URL}/beneficiary-insurance`, this.formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -434,7 +403,7 @@ export default {
 
       if (response.data) {
         this.contractCreated = true
-      }
+      }*/
 
 
     }

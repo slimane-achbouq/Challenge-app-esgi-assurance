@@ -23,6 +23,8 @@ import Home from "@/views/home/HomeView.vue";
 import About from "@/views/home/AboutUs.vue";
 import Contact from "@/views/home/ContactUs.vue";
 import Services from "@/views/home/HomeServices.vue";
+import NewPayment from "@/views/NewPayment.vue";
+import PlansPanel from "@/views/PlansPanel.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -52,6 +54,7 @@ const router = createRouter({
       { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
       { path: '/user-profile/:id', name: 'user-profile', component: UserProfile,meta: { requiresUnauth: false }},
       { path: '/user-quotes', name: 'user_quotes', component: UserQuotes, meta: { requiresUnauth: false }},
+      { path: '/payment/:insurance_id', name: 'new_payment', component: PlansPanel, meta: { requiresUnauth: false }},
 
     ]
   })

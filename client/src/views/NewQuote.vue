@@ -142,7 +142,8 @@
                               class="text-rose-500">*</span></label>
                           <input id="card-state" class="form-input w-full placeholder-slate-300" type="text"
                                  v-model="formData.licensePlate" placeholder="AA-123-BB"/>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplate">License Plate should not be empty
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplate">License Plate should not be
+                            empty
                           </p>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.licenseplateformat">Place Number format not
                             correct</p>
@@ -163,7 +164,8 @@
                               class="text-rose-500">*</span></label>
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="number"
                                  v-model="formData.annualMileage" placeholder="70000"/>
-                          <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">Annual Mileage should not be empty
+                          <p class="text-xs mt-1 text-rose-500" v-if="errors.annualmileage">Annual Mileage should not be
+                            empty
                           </p>
                         </div>
 
@@ -186,7 +188,7 @@
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="text"
                                  v-model="formData.registrationCardHolder" placeholder="First Name, Last Name"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.registrationcardholder">
-                            Registration Card Holder should not be empty  </p>
+                            Registration Card Holder should not be empty </p>
                         </div>
 
                         <div class="flex-1" v-if="step.id==2">
@@ -217,7 +219,7 @@
                           <input id="card-name" class="form-input w-full placeholder-slate-300" type="text"
                                  v-model="formData.parkingPostalCode" placeholder="75000"/>
                           <p class="text-xs mt-1 text-rose-500" v-if="errors.parkingpostalcode">
-                            Parking Postal C  ode should not be empty</p>
+                            Parking Postal C ode should not be empty</p>
                         </div>
                       </div>
 
@@ -375,19 +377,18 @@
               <!-- Modal content -->
               <div class="text-sm mb-10">
                 <div class="space-y-2">
-                  <p>The quote has been created successfully.if you want to continue creating the contract click on "
-                    Create contract "</p>
+                  <p>Quote created successfully ! Your plans are now ready. Please proceed and select the best option
+                    for you.</p>
                 </div>
               </div>
               <!-- Modal footer -->
               <div class="flex flex-wrap justify-end space-x-2">
-              
 
-              <router-link :to="{ name: 'quotes' }"> 
-                  <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">Quotes list</button>
+
+                <router-link :to="{ name: 'newcontract', params: {id: quote_id} }">
+                  <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Choose my plans</button>
                 </router-link>
-                
-                <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Create contract</button>
+
               </div>
             </div>
           </div>
@@ -424,6 +425,7 @@ export default {
   },
   data() {
     return {
+      quote_id: null,
       errors: {},
       formData: {
         vehicleType: 'Car',
@@ -541,6 +543,8 @@ export default {
             'Content-Type': 'multipart/form-data'
           }
         });
+
+        this.quote_id = response.data.quote.id;
         this.errors = {}
         this.quoteCreated = true
       } catch (error) {
@@ -559,7 +563,7 @@ export default {
       });
 
       if (this.errors.licenseplateformat) fieldErrors['licenseplateformat'] = "Format incorrect";
-      
+
       if (!this.hideImageField) fieldErrors['filerequired'] = "carte Grise required"
       return fieldErrors;
     },

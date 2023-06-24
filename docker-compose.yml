@@ -6,8 +6,8 @@ services:
     container_name: api-gateway
     build: ./api-gateway
     volumes:
-        - ./api-gateway:/usr/src/app
-        - /usr/src/app/node_modules
+      - ./api-gateway:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - 3000:3000
     networks:
@@ -18,12 +18,12 @@ services:
 
   rabbitmq:
     container_name: rabbitmq
-    image:  rabbitmq:3-management
+    image: rabbitmq:3-management
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin_password
     hostname: rabbitmq
-    volumes: 
+    volumes:
       - /var/lib/rabbitmq
     ports:
       - "5672:5672"
@@ -46,8 +46,8 @@ services:
     container_name: insurance-api
     build: ./insurance-service
     volumes:
-        - ./insurance-service:/usr/src/app
-        - /usr/src/app/node_modules
+      - ./insurance-service:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - 3001:3001
     depends_on:
@@ -73,7 +73,7 @@ services:
       - /usr/src/app/node_modules
 
     env_file:
-      - ./quote-service/.env 
+      - ./quote-service/.env
     networks:
       - my-network
 
@@ -183,6 +183,37 @@ services:
       - rabbitmq
     env_file:
       - ./claims/.env
+    networks:
+      - my-network
+
+  payment-database:
+    container_name: payment
+    image: mongo:latest
+    hostname: payment-database
+    volumes:
+      - ./payment/data/db:/data/db
+    env_file:
+      - ./payment/.env
+    ports:
+      - "27022:27017"
+    networks:
+      - my-network
+
+  payment-service:
+    container_name: payment-service
+    hostname: payment-service
+    build: ./payment
+    volumes:
+      - ./payment:/src/app
+      - /src/app/node_modules
+    ports:
+      - 3007:3007
+    depends_on:
+      - payment-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./payment/.env
     networks:
       - my-network
 networks:

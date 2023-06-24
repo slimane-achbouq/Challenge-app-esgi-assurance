@@ -90,4 +90,31 @@ export default {
         }
 
     },
+
+    async sendMessageContact(context, payload) {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/mail/createMessageContact`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    email: payload.email,
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    object: payload.object,
+                    message: payload.street,
+                }),
+            });
+
+            if (!response.ok) {
+                const error = new Error(response.message || 'Failed to register. Check your register data.');
+                throw error;
+            }
+            return response;
+        } catch (err) {
+            const error = new Error(err || 'Failed to register. Check your register data.');
+            throw error;
+        }
+    }
 }

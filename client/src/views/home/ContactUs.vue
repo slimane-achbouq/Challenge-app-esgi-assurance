@@ -32,10 +32,110 @@
                 </div>
             </div>
         </nav>
-        <br>
-        <br>
-        <br>
-        <p>Contact</p>
+        <div class="px-4 mx-auto max-w-screen-xl pb-16">
+            <div class="mb-5">
+                        <div class="px-4 mx-auto max-w-screen-xl text-center pt-24">            
+                            <h1 class="flex items-center text-slate-800 text-5xl font-extrabold dark:text-slate-800">Contact Us<span class="bg-blue-100 text-blue-800 text-2xl font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2">AZULANCE</span></h1>
+                        </div>
+                    </div>
+            <div class="grid md:grid-cols-2 gap-2 pt-3">
+                
+                <div class="max-w-sm mx-auto px-4 py-8">
+                
+                <form @submit.prevent="submitForm">
+                    <!-- Email adresse -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1 pt-3" for="email">Email Address <span class="text-rose-500">*</span></label>
+                        <input id="email" class="form-input w-full" type="email" required v-model.trim="email" />
+                        <div v-if="errors.email" class="text-xs mt-1 text-rose-500">
+                        {{ errors.email }}
+                        </div>
+                    </div>   
+                <!-- First&lastname -->
+                    <div class="grid md:grid-cols-2 gap-2 pt-3">
+                        <div>
+                        <label class="block text-sm font-medium mb-1" for="text">Name <span class="text-rose-500">*</span></label>
+                        <input id="firstname" class="form-input w-full" type="text" required v-model.trim="firstname" />
+                        <div v-if="errors.firstname" class="text-xs mt-1 text-rose-500">
+                            {{ errors.firstname }}
+                        </div>
+                        </div>
+                        <div>
+                        <label class="block text-sm font-medium mb-1" for="text">Family Name <span class="text-rose-500">*</span></label>
+                        <input id="lastname" class="form-input w-full" type="lastname" required v-model.trim="lastname" />
+                        <div v-if="errors.lastname" class="text-xs mt-1 text-rose-500">
+                            {{ errors.lastname }}
+                        </div>
+                        </div>
+                    
+                        <div>
+                        </div>
+
+                    </div>
+
+                    <!-- Object adresse -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1 pt-3" for="text">Object <span class="text-rose-500">*</span></label>
+                        <input id="object" class="form-input w-full" type="text" required v-model.trim="object" />
+                        <div v-if="errors.object" class="text-xs mt-1 text-rose-500">
+                        {{ errors.object }}
+                        </div>
+                    </div>   
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1 pt-3" for="text">Message <span class="text-rose-500">*</span></label>
+                        <textarea id="message" rows="4" class="form-input w-full " type="text" placeholder="Write your thoughts here..." required v-model.trim="message"></textarea>
+                        <div v-if="errors.message" class="text-xs mt-1 text-rose-500">
+                            {{ errors.message }}
+                            </div>
+                        </div>
+                    <div class="flex items-center justify-between mt-6">
+                        <div class="mr-1">
+                        </div>
+                        <button v-if="isLoading" class="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed shadow-none" disabled>
+                        <svg class="animate-spin w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                            <path d="M8 16a7.928 7.928 0 01-3.428-.77l.857-1.807A6.006 6.006 0 0014 8c0-3.309-2.691-6-6-6a6.006 6.006 0 00-5.422 8.572l-1.806.859A7.929 7.929 0 010 8c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" />
+                        </svg>
+                        <span class="ml-2">Loading</span>
+                        </button>
+                        <button v-else class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3" type="submit" >Send</button>
+                </div>
+                </form>
+            </div>
+            <div>
+                <img class="object-contain" src="../../images/contact-home.png"/>
+            </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="px-4 mx-auto max-w-screen-xl text-center py-7 pt-4">
+                <h4 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-gray-900 md:text-5xl lg:text-6xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-indigo-600 from-indigo-300">Azulance App</span> You can also contact us via the mobile application!</h4>
+            </div>
+            <div style="text-align: -webkit-center;">
+                <img class="object-contain h-60 w-76" src="../../images/iphone-application.png"/>
+            </div>
+            <div class="w-full p-4 text-center bg-white rounded-lg">
+                <h5 class="mb-2 text-3xl font-bold text-gray-900">Work fast from anywhere</h5>
+                <p class="mb-5 text-base text-gray-500 sm:text-lg dark:text-gray-400">Stay up to date and move work forward with Flowbite on iOS & Android. Download the app today.</p>
+                <div class="items-center justify-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+                    <a href="#" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                        <svg class="mr-3 w-7 h-7" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="apple" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+                        <div class="text-left">
+                            <div class="mb-1 text-xs">Download on the</div>
+                            <div class="-mt-1 font-sans text-sm font-semibold">Mac App Store</div>
+                        </div>
+                    </a>
+                    <a href="#" class="w-full sm:w-auto bg-gray-800 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 text-white rounded-lg inline-flex items-center justify-center px-4 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                        <svg class="mr-3 w-7 h-7" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google-play" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"></path></svg>
+                        <div class="text-left">
+                            <div class="mb-1 text-xs">Get in on</div>
+                            <div class="-mt-1 font-sans text-sm font-semibold">Google Play</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
 
         <section class="pt-20">        
         <footer class="bg-indigo-100 dark:bg-gray-900">
@@ -141,13 +241,120 @@
   </template>
   
   <script>
+import {
+  emailValidation,
+} from "../../utils/utils-common-function";
+import Swal from 'sweetalert2'
+
   export default {
+
     components: {
     },
     data() {
-      return {}   
+      return {
+        email: "",
+        firstname: "",
+        lastname: "",
+        object: "",
+        message: "",
+        formValid: true,
+        isLoading: false,
+        error: null,
+        errors: {
+            email: "",
+            firstname: "",
+            lastname: "",
+            object: "",
+            message: "",
+        }
+      }   
     },
     methods: {
+    async submitForm() {
+      this.formIsValid = true;
+      this.error = null;
+      this.isLoading = true;
+      Object.keys(this.errors).forEach((key) => (this.errors[key] = ""));
+
+
+      if (this.firstname.length < 3) {
+        this.formValid = false;
+        this.isLoading = false;
+        this.errors.firstname =
+            "Please enter a valid firstname";
+        return;
+      }
+
+      if (this.lastname.length < 3) {
+        this.formValid = false;
+        this.isLoading = false;
+        this.errors.lastname =
+            "Please enter a valid firstname";
+        return;
+      }
+
+      if (this.object.length < 3) {
+        this.formValid = false;
+        this.isLoading = false;
+        this.errors.lastname =
+            "Please enter a valid object";
+        return;
+      }
+
+      if (this.message.length < 3) {
+        this.formValid = false;
+        this.isLoading = false;
+        this.errors.lastname =
+            "Please enter a wrie your message";
+        return;
+      }
+
+      if (!emailValidation(this.email)) {
+        this.formValid = false;
+        this.isLoading = false;
+        this.errors.email = "Please check your email if it is valid";
+        return;
+      }
+
+
+      const actionPayload = {
+        email: this.email,
+        firstname: this.firstname,
+        lastname: this.lastname,
+        object: this.object,
+        message: this.message
+      };
+
+      debugger;
+
+      try {
+        const response = await this.$store.dispatch('auth/sendMessageContact', actionPayload);
+
+        const responseData = await response.json();
+
+        if(responseData.message == 'Message was created with success !') {
+          Swal.fire({
+            text:   'Your message has been sent to the administration',
+            icon: 'success',
+
+          });
+          return;
+        }
+        return responseData;
+      } catch (error) {
+        this.state.isSuccess = false;
+        this.error = error.message || 'Failed to send your message, please try later.';
+        Swal.fire({
+        title: 'Sorry!',
+        text:   error.message,
+        icon: 'error',
+        });
+        return;
+    
+      } finally {
+        this.isLoading = false;
+      }
+    }
     }
   }
   </script>

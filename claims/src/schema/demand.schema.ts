@@ -6,6 +6,9 @@ export class Demand extends Document {
   @Prop({ required: true })
   insurance_id: string;
 
+  @Prop({ required: false, default: '0' })
+  status: string;
+
   @Prop({ required: true })
   reason: string;
 
@@ -29,6 +32,9 @@ export class Demand extends Document {
 
   @Prop({ type: Buffer, required: false }) 
   proof: Buffer;
+
+  @Prop({ required: true, default: 'admin@admin.fr' })
+  userMail: string;
 }
 
 export const DemandSchema = SchemaFactory.createForClass(Demand);

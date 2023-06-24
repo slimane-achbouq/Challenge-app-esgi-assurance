@@ -15,7 +15,7 @@ export class DemandController {
 
     @MessagePattern({cmd: 'getDemandes'})
     async getDemandes() {
-        return this.demandService.findAll();
+        return this.demandService.findAllWithoutProof();
     }
 
     @MessagePattern({cmd: 'getDemande'})
@@ -34,5 +34,10 @@ export class DemandController {
             updateDemandDto,
         );
         return updatedDemand;
+    }
+
+    @MessagePattern({cmd: 'deleteDemande'})
+    async deleteDemand(@Payload() id: string) {
+        return this.demandService.deleteDemand(id);
     }
 }

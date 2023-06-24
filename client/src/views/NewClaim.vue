@@ -62,9 +62,23 @@
                     <div class="flex-1">
                       <label class="block text-sm font-medium mb-1" for="card-state">Title <span
                           class="text-rose-500">*</span></label>
-                      <input id="card-state" class="form-input w-full placeholder-slate-300" type="text" v-model="formData.title"
+                      <input id="card-state" class="form-input w-full placeholder-slate-300" type="text"
+                             v-model="formData.title"
                              placeholder=""/>
                       <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.title }}</p>
+                    </div>
+
+                    <div class="flex-1">
+                      <label class="block text-sm font-medium mb-1" for="card-country">Reason <span
+                          class="text-rose-500">*</span></label>
+                      <select id="card-country" class="form-select w-full" required v-model="formData.reason">
+                        <option>Vandalized vehicle</option>
+                        <option>Theft</option>
+                        <option>Animal accident</option>
+                        <option>Material accident</option>
+                        <option>Other</option>
+                      </select>
+                      <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.reason }}</p>
                     </div>
 
                     <div class="flex-1">
@@ -74,17 +88,6 @@
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Explain here..." v-model="formData.description"></textarea>
                       <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.description }}</p>
-                    </div>
-
-                    <div class="flex-1">
-                      <label class="block text-sm font-medium mb-1" for="card-country">Reason <span
-                          class="text-rose-500">*</span></label>
-                      <select id="card-country" class="form-select w-full" v-model="formData.reason">
-                        <option>Car</option>
-                        <option>Motorcycle</option>
-                        <option>Truck</option>
-                      </select>
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">{{ errors.reason }}</p>
                     </div>
 
                     <div class="space-y-3">
@@ -191,8 +194,14 @@
               </div>
               <!-- Modal footer -->
               <div class="flex flex-wrap justify-end space-x-2">
-                <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">Claims list</button>
-                <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">My Contract</button>
+                <router-link :to="{name: 'claims'}">
+                  <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600">
+                    Claims list
+                  </button>
+                </router-link>
+                <router-link :to="{ name: 'contract', params: { id: formData.insurance_id }}">
+                  <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">My Contract</button>
+                </router-link>
               </div>
             </div>
           </div>
@@ -234,6 +243,7 @@ export default {
         reason: null,
         title: null,
         description: null,
+        userMail: null,
       },
       claimCreated: false,
     };
@@ -245,20 +255,20 @@ export default {
       this.hideProof = true;
     },
     async onCreatedClaim() {
+      console.log(this.formData)
       const token = this.$store.getters["auth/token"]
       let response = await axios.post(`${import.meta.env.VITE_API_URL}/claims`, this.formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
+      }).then(() => {
+        this.claimCreated = true;
+        console.log(response.data)
       }).catch((error) => {
         console.log(error);
         this.generalError = error.response.data.message[0]
       });
-
-      console.log("ici")
-      console.log(response.data)
-      // this.claimCreated = true;
     }
   },
   setup() {
@@ -272,6 +282,12 @@ export default {
     const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
     const token = this.$store.getters["auth/token"]
+    if (!token) {
+      this.$router.push({name: "home"});
+    }
+
+    this.formData.userMail = this.$store.getters["auth/email"];
+
     let response = await axios.get(`${import.meta.env.VITE_API_URL}/insurance/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -284,7 +300,7 @@ export default {
     });
 
     this.contract = response.data
-    this.formData.insurance_id = this.contract._id
+    this.formData.insurance_id = id
   }
 }
 </script>

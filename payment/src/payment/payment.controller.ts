@@ -18,8 +18,8 @@ export class PaymentController {
     }
 
     @MessagePattern({cmd: 'getPayment'})
-    async getPayment(@Payload() id: string) {
-        return this.paymentService.findById(id);
+    async getPayment(@Payload() id) {
+        return this.paymentService.findByQuoteId(id);
     }
 
     @MessagePattern({cmd: 'createPayment'})

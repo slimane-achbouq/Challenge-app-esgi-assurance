@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4 mb-8" v-if="token && token == userTokenCheck" style="margin-top: 100px">
+  <div class="space-y-4 mb-8" style="margin-top: 100px">
     <div class="text-center">
       <div class="success-checkmark">
         <div class="check-icon">
@@ -9,19 +9,10 @@
           <div class="icon-fix"></div>
         </div>
       </div>
-      <h1 class="text-3xl text-slate-800 font-bold mb-8">Payment successful !</h1>
+    <h1 class="text-3xl text-slate-800 font-bold mb-8">An error occurred... </h1>
       <router-link class="btn bg-indigo-500 hover:bg-indigo-600 text-white" style="margin-top: 50px"
-                   :to="{name: 'newcontract', params: {id: id}}">
-        Go to the quote page -&gt;
-      </router-link>
-    </div>
-  </div>
-  <div v-else>
-    <div class="text-center" style="margin-top: 100px">
-      <h1 class="text-3xl text-slate-800 font-bold mb-8">You seem lost.. !</h1>
-      <router-link class="btn bg-indigo-500 hover:bg-indigo-600 text-white"
-                   to="/">Go back to the home page
-        -&gt;
+                   to="/">
+        Go to the home page -&gt;
       </router-link>
     </div>
   </div>

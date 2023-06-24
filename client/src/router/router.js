@@ -25,6 +25,7 @@ import Contact from "@/views/home/ContactUs.vue";
 import Services from "@/views/home/HomeServices.vue";
 import PlansPanel from "@/views/PlansPanel.vue";
 import PaymentSuccess from "@/components/PaymentSuccess.vue";
+import PaymentFailed from "@/components/PaymentFailed.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -55,7 +56,8 @@ const router = createRouter({
       { path: '/user-profile/:id', name: 'user-profile', component: UserProfile,meta: { requiresUnauth: false }},
       { path: '/user-quotes', name: 'user_quotes', component: UserQuotes, meta: { requiresUnauth: false }},
       { path: '/payment/:insurance_id', name: 'new_payment', component: PlansPanel, meta: { requiresUnauth: false }},
-      { path: '/payment/success/:token/:id', name: 'payment_success', component: PaymentSuccess, meta: { requiresUnauth: false }},
+      { path: '/payment/success/:token/:id/:price', name: 'payment_success', component: PaymentSuccess, meta: { requiresUnauth: false }},
+      { path: '/payment/failed', name: 'payment_failed', component: PaymentFailed, meta: { requiresUnauth: false }},
 
     ]
   })

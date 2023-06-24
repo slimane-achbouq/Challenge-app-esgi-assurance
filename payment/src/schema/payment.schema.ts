@@ -4,7 +4,7 @@ import { Document, now } from 'mongoose';
 @Schema()
 export class Payment extends Document {
   @Prop({ required: true })
-  insurance_id: string;
+  quote_id: string;
 
   @Prop({ required: true })
   price: number;

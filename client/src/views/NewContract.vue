@@ -229,7 +229,13 @@
 
 
                       <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
-                              @click.prevent="onCreatedContract" v-if="!contractCreated">Confirm and proceed to payment
+                              @click.prevent="onCreatedContract" v-if="!contractCreated && !existingPayment">Confirm and proceed to payment
+                      </button>
+                      <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
+                              @click.prevent="onCreatedContract" v-else-if="contractCreated && !existingPayment">Proceed to payment
+                      </button>
+                      <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
+                              @click.prevent="onCreatedContract" v-else-if="!contractCreated && existingPayment">Confirm
                       </button>
 
                     </div>
@@ -248,7 +254,8 @@
 
             <!-- Sidebar -->
             <div>
-              <div class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
+              <div v-if="!existingPayment"
+                   class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
                 <div class="text-sm text-slate-800 font-semibold mb-3"><i class="fab fa-buffer"></i> Choose the plan :
                 </div>
                 <ul class="space-y-2 sm:flex sm:space-y-0 sm:space-x-2 lg:space-y-2 lg:space-x-0 lg:flex-col mb-4"
@@ -295,7 +302,60 @@
                     </button>
                   </li>
                 </ul>
+                <div>
+                  <router-link :to="{name: 'new_payment', params: {insurance_id: quote.id}}">
+                    <button class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Proceed to payment</button>
+                  </router-link>
+                </div>
                 <div class="text-xs text-slate-500 italic text-center">The available plans are based on your vehicle
+                  inforamtions<a class="underline hover:no-underline" href="#0"></a>.
+                </div>
+              </div>
+              <div v-else class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
+                <div class="text-sm text-slate-800 font-semibold mb-3"><i class="fab fa-buffer"></i> My plan :
+                </div>
+                <ul class="space-y-2 sm:flex sm:space-y-0 sm:space-x-2 lg:space-y-2 lg:space-x-0 lg:flex-col mb-4"
+                    v-if="prices">
+                  <li v-if="existingPayment.price == Math.round(prices[0])">
+                    <button
+                        :class="{'border-2 border-indigo-400': existingPayment.price == Math.round(prices[0]), 'border border-emerald-200 hover:border-slate-300': existingPayment.price == Math.round(prices[0])}"
+                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out">
+                      <div class="flex flex-wrap items-center justify-between mb-0.5">
+                        <span class="font-semibold text-slate-800">Basic</span>
+                        <span class="font-medium text-emerald-600">{{ Math.round(prices[0]) }} /mo</span>
+                      </div>
+                      <div class="text-sm">Our Basic coverage offers essential protection at an affordable price.</div>
+                    </button>
+                  </li>
+                  <li v-if="existingPayment.price == Math.round(prices[1])">
+                    <button
+                        :class="{'border-2 border-indigo-400': existingPayment.price == Math.round(prices[1]), 'border border-emerald-200 hover:border-slate-300': existingPayment.price == Math.round(prices[1])}"
+                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out">
+                      <div class="flex flex-wrap items-center justify-between mb-0.5">
+                        <span class="font-semibold text-slate-800">Standard <span
+                            class="text-xs italic text-indigo-500 align-top">Best Value ✨</span></span>
+                        <span class="font-medium text-emerald-600">{{ Math.round(prices[1]) }} /mo</span>
+                      </div>
+                      <div class="text-sm">Our Standard coverage provides a balanced level of protection at a reasonable
+                        cost.
+                      </div>
+                    </button>
+                  </li>
+                  <li v-if="existingPayment.price == Math.round(prices[2])">
+                    <button
+                        :class="{'border-2 border-indigo-400': existingPayment.price == Math.round(prices[2]), 'border border-emerald-200 hover:border-slate-300': existingPayment.price == Math.round(prices[2])}"
+                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out">
+                      <div class="flex flex-wrap items-center justify-between mb-0.5">
+                        <span class="font-semibold text-slate-800">Premium</span>
+                        <span class="font-medium text-emerald-600">{{ Math.round(prices[2]) }} /mo</span>
+                      </div>
+                      <div class="text-sm">Our Premium coverage offers the highest level of comprehensive protection for
+                        maximum peace of mind.
+                      </div>
+                    </button>
+                  </li>
+                </ul>
+                <div v-if="!existingPayment" class="text-xs text-slate-500 italic text-center">The available plans are based on your vehicle
                   inforamtions<a class="underline hover:no-underline" href="#0"></a>.
                 </div>
               </div>
@@ -333,6 +393,7 @@ export default {
   data() {
     return {
       selectedPlan: "Basic",
+      existingPayment: null,
       drivingLicense: null,
       hideImageFielddrivingLicense: null,
       adresse: null,
@@ -433,6 +494,15 @@ export default {
       this.quote = response.data
     }
 
+    let existingPayment = await axios.get(`${import.meta.env.VITE_API_URL}/payment/${this.quote.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    this.existingPayment = existingPayment.data;
+
+
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
     response = await axios.get(`${import.meta.env.VITE_API_URL}/prices/${this.quote.vehicle.id}`, {
       headers: {
@@ -440,14 +510,11 @@ export default {
       }
     })
 
-
     if (response.data) {
       this.prices = response.data
-      console.log(this.prices)
     }
 
     this.price = Math.round(this.prices[0])
-
   }
 }
 </script>

@@ -342,6 +342,16 @@ export default {
 
     const id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
+    const request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    });
+
+    if (request.data) {
+      this.$router.push({name: 'newcontract', params: {id:  id}});
+    }
+
     let response = await axios.get(`${import.meta.env.VITE_API_URL}/quotes/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`

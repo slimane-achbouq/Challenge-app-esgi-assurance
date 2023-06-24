@@ -30,6 +30,15 @@ export class PaymentController {
         return payment;
     }
 
+    @Get(":id")
+    async getPayment(@Param('id') id: string) {
+        const payment = await this.paymentService
+            .send({cmd: 'getPayment'}, id)
+            .toPromise();
+
+        return payment;
+    }
+
     @Get("getSession/:title/:tarif/:token/:insurance_id")
     async getSession(@Param('title') title: string, @Param('tarif') tarif: string, @Param('token') token: string, @Param('insurance_id') insurance_id: string) {
         const payment = await this.paymentService

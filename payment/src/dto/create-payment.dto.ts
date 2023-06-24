@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 export class CreatePaymentDto {
   @IsNotEmpty()
   @IsString()
-  insurance_id: string;
+  quote_id: string;
 
   @IsNotEmpty()
   @IsNumber()

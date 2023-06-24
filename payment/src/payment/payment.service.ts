@@ -25,4 +25,8 @@ export class PaymentService {
     async findById(id: string): Promise<Payment> {
         return this.paymentModel.findById(id).exec();
     }
+
+    async getSession(): Promise<any> {
+
+    }
 }

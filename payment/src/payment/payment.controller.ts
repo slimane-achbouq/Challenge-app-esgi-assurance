@@ -26,4 +26,9 @@ export class PaymentController {
     async createPayment(@Payload() payment: CreatePaymentDto) {
         return this.paymentService.create(payment);
     }
+
+    @MessagePattern({cmd: 'getPaymentSession'})
+    async getPaymentSession() {
+        return this.paymentService.getSession();
+    }
 }

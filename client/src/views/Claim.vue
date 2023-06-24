@@ -133,7 +133,6 @@ import {ref} from 'vue'
 import Sidebar from '@/partials/Sidebar.vue'
 import Header from '@/partials/Header.vue'
 import axios from 'axios'
-import pako from 'pako';
 import moment from "moment/moment";
 import Banner from "@/components/Banner.vue";
 import {useStore} from "vuex";

@@ -34,18 +34,18 @@ export class PaymentService {
         return this.paymentModel.findById(id).exec();
     }
 
-    async getSession(): Promise<any> {
-        const stripe = require('stripe')(process.env.STRIPE_SECRET);
+    async getSession(title, tarif): Promise<any> {
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
         const checkoutSession = await stripe.checkout.sessions.create({
-            success_url: '/success',
-            cancel_url: '/error',
+            success_url: 'http://localhost:5173/success',
+            cancel_url: 'http://localhost:5173/error',
             line_items: [{
                 price_data: {
                     currency: 'eur',
-                    unit_amount: 50,
+                    unit_amount: tarif * 100,
                     product_data: {
-                        name: "Tshirt",
+                        name: title,
                     },
                 },
                 quantity: 1,

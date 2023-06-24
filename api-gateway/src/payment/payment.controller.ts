@@ -30,12 +30,20 @@ export class PaymentController {
         return payment;
     }
 
-    @Get("getSession")
-    async getPaymentSession() {
+    @Get("getSession/:title/:tarif")
+    async getSession(@Param('title') title: string, @Param('tarif') tarif: string) {
+        const payment = await this.paymentService
+            .send({cmd: 'getPaymentSession'}, {title, tarif})
+            .toPromise();
+
+        return payment;
+    }
+
+    /*async getPaymentSession() {
         const payment = await this.paymentService
             .send({cmd: 'getPaymentSession'}, '')
             .toPromise();
 
         return payment;
-    }
+    }*/
 }

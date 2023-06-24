@@ -42,7 +42,7 @@
                 </div>
                 <!-- CTA -->
                 <button class="btn bg-emerald-500 hover:bg-indigo-600 text-white w-full"
-                        @click="proceedToPayment(Math.round(prices[0]))">Choose
+                        @click="submit('Azulance - Basic option', Math.round(prices[0]))">Choose
                 </button>
               </div>
               <div class="px-5 pt-4 pb-5">
@@ -106,7 +106,7 @@
                 </div>
                 <!-- CTA -->
                 <button class="btn bg-sky-500 hover:bg-indigo-600 text-white w-full"
-                        @click="proceedToPayment(Math.round(prices[1]))">Choose
+                        @click="submit('Azulance - Advanced option', Math.round(prices[1]))">Choose
                 </button>
               </div>
               <div class=" px-5 pt-4 pb-5
@@ -195,7 +195,7 @@
                 </div>
                 <!-- CTA -->
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white w-full"
-                        @click="proceedToPayment(Math.round(prices[2]))">Choose
+                        @click="submit('Azulance - Premium option', Math.round(prices[2]))">Choose
                 </button>
               </div>
               <div class="px-5 pt-4 pb-5">
@@ -270,8 +270,6 @@
               </div>
             </div>
           </div>
-          <button @click="submit">Checkout!</button>
-
         </div>
       </main>
     </div>
@@ -319,16 +317,14 @@ export default {
     }
   },
   methods: {
-    submit: async function() {
+    submit: async function(title, tarif) {
+      await this.getStripeSession(title, tarif);
       this.$refs.checkoutRef.redirectToCheckout();
     },
-    proceedToPayment: function (tarif) {
-      console.log(this.quote, tarif)
-    },
-    getStripeSession: async function () {
+    getStripeSession: async function (title, tarif) {
       let token = this.$store.getters["auth/token"];
-
-      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession`, {
+      console.log(title, tarif)
+      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession/${title}/${tarif}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -361,7 +357,7 @@ export default {
     });
     this.prices = response.data;
 
-    await this.getStripeSession();
+    // await this.getStripeSession();
   }
 }
 </script>

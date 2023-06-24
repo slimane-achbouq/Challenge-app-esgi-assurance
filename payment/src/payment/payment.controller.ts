@@ -28,7 +28,7 @@ export class PaymentController {
     }
 
     @MessagePattern({cmd: 'getPaymentSession'})
-    async getPaymentSession() {
-        return this.paymentService.getSession();
+    async getPaymentSession(@Payload() data) {
+        return this.paymentService.getSession(data.title, data.tarif);
     }
 }

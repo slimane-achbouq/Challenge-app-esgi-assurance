@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4 mb-8" style="margin-top: 100px">
     <div class="text-center">
-      <div class="success-checkmark">
+      <div class="checkmark">
         <div class="check-icon">
           <span class="icon-line line-tip"></span>
           <span class="icon-line line-long"></span>

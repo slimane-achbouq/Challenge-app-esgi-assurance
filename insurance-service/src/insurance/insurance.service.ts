@@ -27,7 +27,8 @@ export class InsuranceService {
 
    
     const quoteDto ={
-      insuranceId:newInsurance['_id']
+      insuranceId:newInsurance['_id'],
+      insurancePremium: newInsurance['insurancePremium']
     }
     
     const id =newInsurance.quoteId
@@ -47,8 +48,13 @@ export class InsuranceService {
   }
 
   async getInsurancesByUserId(userId: string): Promise<Insurance[]> {
-    console.log(userId)
-    return this.insuranceModel.find({ 'beneficiary': userId }).select('-dossierNumber').exec();
+    const beneficiary = await this.beneficiaryModel.findOne({ userId }).exec();
+
+    const idbeneficiary = beneficiary._id.toString()
+    if (!beneficiary) {
+      return []; // Return an empty array if no beneficiary is found with the provided userId
+    }
+    return this.insuranceModel.find({beneficiary: idbeneficiary }).exec();
   }
 
   async updateInsurance(id: string, insuranceDto: UpdateInsuranceDto): Promise<Insurance> {

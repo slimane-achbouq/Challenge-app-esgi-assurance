@@ -72,15 +72,15 @@ export class QuoteController {
     return quote;
   }
 
-  @Get('quote-user/:id')
-  async getQuoteByIdUser(@Param('id') id: string) {
+  @Get('quote-user/:userId')
+  async getQuoteByIdUser(@Param('userId') userId: string) {
     // Verify if ID is a valid UUID
-    if (!validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
+    
+
+
 
     const quote = await this.quoteServiceClient
-      .send({ cmd: 'getQuoteByIdUser' }, id)
+      .send({ cmd: 'getQuoteByUserId' }, {id:userId})
       .toPromise();
 
     // If quote doesn't exist, throw exception

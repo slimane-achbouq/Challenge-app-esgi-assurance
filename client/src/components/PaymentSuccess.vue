@@ -10,15 +10,6 @@
                 </div>
             </div>
             <h1 class="text-3xl text-slate-800 font-bold mb-8">Payment successful !</h1>
-            <p v-if="annonce">
-                Total amount :
-                <span class="text-indigo-500" v-if="annonce.isPerHour">
-                {{ pricePerHour }}€
-            </span>
-                <span class="text-indigo-500" v-else>
-                {{ annonce.price }}€
-            </span>
-            </p>
             <router-link class="btn bg-indigo-500 hover:bg-indigo-600 text-white" style="margin-top: 50px"
                          to="/dashboard">
                 Go back to the homepage -&gt;
@@ -62,7 +53,7 @@ export default {
         }
         let id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
         this.id = id;
-        let token = document.URL.split('/')[7];
+        let token = document.URL.split('/')[5];
         let userToken = this.$store.getters["auth/token"]
 
 

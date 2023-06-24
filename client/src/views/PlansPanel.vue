@@ -323,8 +323,7 @@ export default {
     },
     getStripeSession: async function (title, tarif) {
       let token = this.$store.getters["auth/token"];
-      console.log(title, tarif)
-      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession/${title}/${tarif}`, {
+      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession/${title}/${tarif}/${token}/${this.quote.id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -356,8 +355,6 @@ export default {
       }
     });
     this.prices = response.data;
-
-    // await this.getStripeSession();
   }
 }
 </script>

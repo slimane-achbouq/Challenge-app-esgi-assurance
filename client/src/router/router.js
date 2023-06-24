@@ -55,7 +55,7 @@ const router = createRouter({
       { path: '/user-profile/:id', name: 'user-profile', component: UserProfile,meta: { requiresUnauth: false }},
       { path: '/user-quotes', name: 'user_quotes', component: UserQuotes, meta: { requiresUnauth: false }},
       { path: '/payment/:insurance_id', name: 'new_payment', component: PlansPanel, meta: { requiresUnauth: false }},
-      { path: '/payment/success', name: 'payment_success', component: PaymentSuccess, meta: { requiresUnauth: false }},
+      { path: '/payment/success/:token/:id', name: 'payment_success', component: PaymentSuccess, meta: { requiresUnauth: false }},
 
     ]
   })

@@ -34,12 +34,12 @@ export class PaymentService {
         return this.paymentModel.findById(id).exec();
     }
 
-    async getSession(title, tarif): Promise<any> {
+    async getSession(title, tarif, token, insurance_id) {
         const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
         const checkoutSession = await stripe.checkout.sessions.create({
-            success_url: 'http://localhost:5173/success',
-            cancel_url: 'http://localhost:5173/error',
+            success_url: `http://localhost:5173/success/${token}/${insurance_id}`,
+            cancel_url: `http://localhost:5173/error/${token}/${insurance_id}`,
             line_items: [{
                 price_data: {
                     currency: 'eur',

@@ -105,7 +105,9 @@
                     class="text-slate-500 font-medium text-sm">/mo</span>
                 </div>
                 <!-- CTA -->
-                <button class="btn bg-sky-500 hover:bg-indigo-600 text-white w-full" @click="proceedToPayment(Math.round(prices[1]))">Choose</button>
+                <button class="btn bg-sky-500 hover:bg-indigo-600 text-white w-full"
+                        @click="proceedToPayment(Math.round(prices[1]))">Choose
+                </button>
               </div>
               <div class=" px-5 pt-4 pb-5
                 ">
@@ -192,7 +194,9 @@
                     class="text-slate-500 font-medium text-sm">/mo</span>
                 </div>
                 <!-- CTA -->
-                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white w-full" @click="proceedToPayment(Math.round(prices[2]))">Choose</button>
+                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white w-full"
+                        @click="proceedToPayment(Math.round(prices[2]))">Choose
+                </button>
               </div>
               <div class="px-5 pt-4 pb-5">
                 <div class="text-xs text-slate-800 font-semibold uppercase mb-4">What's included</div>
@@ -266,10 +270,21 @@
               </div>
             </div>
           </div>
+          <button @click="submit">Checkout!</button>
+
         </div>
       </main>
     </div>
   </div>
+
+  <div v-if="sessionId && publishableKey">
+    <stripe-checkout
+        ref="checkoutRef"
+        :pk="publishableKey"
+        :session-id="sessionId"
+    />
+  </div>
+
 </template>
 
 <script>
@@ -278,14 +293,19 @@ import Header from "@/partials/Header.vue";
 import Banner from "@/components/Banner.vue";
 import Sidebar from "@/partials/Sidebar.vue";
 import axios from "axios";
+import {StripeCheckout} from '@vue-stripe/vue-stripe';
+import {useStore} from "vuex";
 
 export default {
   name: 'PlansPanel',
-  components: {Sidebar, Banner, Header},
+  components: {Sidebar, Banner, Header, StripeCheckout},
   data() {
     return {
       prices: null,
       quote: null,
+      loading: false,
+      sessionId: null,
+      publishableKey: "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
     };
   },
   setup() {
@@ -299,27 +319,23 @@ export default {
     }
   },
   methods: {
+    submit: async function() {
+      this.$refs.checkoutRef.redirectToCheckout();
+    },
     proceedToPayment: function (tarif) {
       console.log(this.quote, tarif)
     },
     getStripeSession: async function () {
       let token = this.$store.getters["auth/token"];
-      let id = document.URL.substring(document.URL.lastIndexOf('/') + 1);
 
-      const formData = new FormData();
-      formData.append('title', this.annonce.title);
-      formData.append('image', this.annonce.image);
-      formData.append('token', token);
-      formData.append('request_id', id);
-
-      const request = await axios.get(`${import.meta.env.VITE_API_URL}/stripe/getSession`, formData, {
+      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
-      const response = request.data;
-      this.sessionId = response.id;
+      this.sessionId = request.data.id
+      console.log(request.data)
     },
   },
   async created() {

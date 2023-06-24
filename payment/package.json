@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^9.0.0",
@@ -30,7 +31,8 @@
     "class-validator": "^0.14.0",
     "mongoose": "^7.0.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "stripe": "^12.10.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

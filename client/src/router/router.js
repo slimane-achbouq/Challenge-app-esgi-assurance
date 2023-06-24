@@ -23,7 +23,6 @@ import Home from "@/views/home/HomeView.vue";
 import About from "@/views/home/AboutUs.vue";
 import Contact from "@/views/home/ContactUs.vue";
 import Services from "@/views/home/HomeServices.vue";
-import NewPayment from "@/views/NewPayment.vue";
 import PlansPanel from "@/views/PlansPanel.vue";
 
 const router = createRouter({

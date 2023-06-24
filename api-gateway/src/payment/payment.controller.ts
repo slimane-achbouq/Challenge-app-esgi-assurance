@@ -29,4 +29,13 @@ export class PaymentController {
 
         return payment;
     }
+
+    @Get("getSession")
+    async getPaymentSession() {
+        const payment = await this.paymentService
+            .send({cmd: 'getPaymentSession'}, '')
+            .toPromise();
+
+        return payment;
+    }
 }

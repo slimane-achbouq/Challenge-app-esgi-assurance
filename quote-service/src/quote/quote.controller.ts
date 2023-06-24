@@ -38,8 +38,8 @@ export class QuoteController {
   }
 
   @MessagePattern({ cmd: 'getQuoteByUserId' })
-  async getQuotesByUserId(@Param('userId') userId: string) : Promise<Quote[]> {
-    return this.quoteService.getQuotesByUserId(userId);
+  async getQuotesByUserId(@Payload('id') id: string) : Promise<Quote[]> {
+    return this.quoteService.getQuotesByUserId(id);
   }
 
   @MessagePattern({ cmd: 'updateQuote' })

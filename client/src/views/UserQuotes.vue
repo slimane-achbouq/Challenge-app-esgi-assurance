@@ -135,7 +135,7 @@ export default {
         const token = store.getters["auth/token"]
         for (let i = 0; i < selectedItems.value.length; i++) {
         
-            try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/quotes/${this.selectedItems[i]}` , {
+            try {const response = await axios.delete(`${import.meta.env.VITE_API_URL}/quote/${this.selectedItems[i]}` , {
                   headers: {
                       'Authorization': `Bearer ${store.getters["auth/token"]}`
                   }

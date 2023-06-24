@@ -21,7 +21,7 @@
       </Banner>
 
       <Banner type="warning" :open="true">
-                    To edit the inforamtions of the contract you must create a demand <a class="cursor-pointer text-blue-900/100"> here.</a> 
+                    To edit the inforamtions of the contract you must create a request <a class="cursor-pointer text-blue-900/100"> here.</a> 
       </Banner>
 
         <div class="lg:relative lg:flex">

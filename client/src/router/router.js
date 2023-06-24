@@ -23,6 +23,7 @@ import Home from "@/views/home/HomeView.vue";
 import About from "@/views/home/AboutUs.vue";
 import Contact from "@/views/home/ContactUs.vue";
 import Services from "@/views/home/HomeServices.vue";
+import UserContracts from '@/views/UserContracts.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -52,6 +53,7 @@ const router = createRouter({
       { path: '/insurance/:insurance_id', name: 'getContract', meta: { requiresUnauth: false }},
       { path: '/user-profile/:id', name: 'user-profile', component: UserProfile,meta: { requiresUnauth: false }},
       { path: '/user-quotes', name: 'user_quotes', component: UserQuotes, meta: { requiresUnauth: false }},
+      { path: '/user-contracts', name: 'user-contracts', component: UserContracts, meta: { requiresUnauth: false }},
 
     ]
   })

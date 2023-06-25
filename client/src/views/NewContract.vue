@@ -232,7 +232,8 @@
                               @click.prevent="onCreatedContract" v-if="!contractCreated && !existingPayment">Confirm and proceed to payment
                       </button>
                       <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
-                              @click.prevent="onCreatedContract" v-else-if="contractCreated && !existingPayment">Proceed to payment
+                              @click.prevent="onCreatedContract" v-else-if="contractCreated && !existingPayment">
+                              Proceed to payment
                       </button>
                       <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                               @click.prevent="onCreatedContract" v-else-if="!contractCreated && existingPayment">Confirm
@@ -451,10 +452,10 @@ export default {
 
       this.formData.insurancePremium = Number(this.formData.insurancePremium)
 
-
+      console.log(this.formData.insurancePremium)
       const token = this.$store.getters["auth/token"]
       // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-      /*let response = await axios.post(`${import.meta.env.VITE_API_URL}/beneficiary-insurance`, this.formData, {
+      let response = await axios.post(`${import.meta.env.VITE_API_URL}/beneficiary-insurance`, this.formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -464,7 +465,7 @@ export default {
 
       if (response.data) {
         this.contractCreated = true
-      }*/
+      }
 
 
     }

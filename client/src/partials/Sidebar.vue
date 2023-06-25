@@ -350,8 +350,6 @@ export default {
 
     async created() {
         this.role = this.$store.getters["auth/roles"]
-        console.log(this.role)
-
     }
 }
 </script>

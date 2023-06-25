@@ -12,12 +12,24 @@ export class ContactService {
   ) {}
 
   createMessageContact(messageDto: MessageFormDto) {
-    console.log(messageDto);
     const messageContact = new this.messageContactModel(messageDto);
     messageContact.save();
 
     return {
       message: 'Message was created with success !',
     };
+  }
+
+  getAllMessages() {
+    const messages = this.messageContactModel.find();
+    return messages;
+  }
+
+  async validateMessage(id: string) {
+    const message = await this.messageContactModel.findById(id).exec();
+
+    return this.messageContactModel
+      .findByIdAndUpdate(id, { isValide: true })
+      .exec();
   }
 }

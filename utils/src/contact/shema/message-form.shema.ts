@@ -1,28 +1,27 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { apiPropertiesMessageForm } from '../dto/message-form.dto';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+@Schema({
+  timestamps: { createdAt: 'created' },
+})
 export class MessageForm extends Document {
-  @ApiProperty(apiPropertiesMessageForm.email)
   @Prop({ required: true })
   email: string;
 
-  @ApiProperty(apiPropertiesMessageForm.firstname)
   @Prop({ required: true })
   firstname: string;
 
-  @ApiProperty(apiPropertiesMessageForm.lastname)
   @Prop({ required: true })
   lastname: string;
 
-  @ApiProperty(apiPropertiesMessageForm.object)
   @Prop({ required: true })
   object: string;
 
-  @ApiProperty(apiPropertiesMessageForm.message)
   @Prop({ required: true })
   message: string;
+
+  @Prop({ default: false })
+  isValide: boolean;
 }
 
 export const MessageFormShema = SchemaFactory.createForClass(MessageForm);

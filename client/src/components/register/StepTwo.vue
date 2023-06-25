@@ -94,7 +94,7 @@
         >Street Address: <span class="text-rose-500">*</span></label
       >
       <input
-        autoComplete='none'
+        autoComplete="none"
         id="street"
         class="form-input w-full"
         type="text"
@@ -102,14 +102,29 @@
         @input="searchStreet($event)"
       />
       <div class="" v-if="isAddressLoading">
-          <svg class="animate-spin w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-              <path d="M8 16a7.928 7.928 0 01-3.428-.77l.857-1.807A6.006 6.006 0 0014 8c0-3.309-2.691-6-6-6a6.006 6.006 0 00-5.422 8.572l-1.806.859A7.929 7.929 0 010 8c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" />
-          </svg>
+        <svg
+          class="animate-spin w-4 h-4 fill-current shrink-0"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 16a7.928 7.928 0 01-3.428-.77l.857-1.807A6.006 6.006 0 0014 8c0-3.309-2.691-6-6-6a6.006 6.006 0 00-5.422 8.572l-1.806.859A7.929 7.929 0 010 8c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"
+          />
+        </svg>
       </div>
-      <div v-else-if="searchedAddresses" v-for="searchedAddress in searchedAddresses" :key="searchedAddress.properties.id">
-        <div class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-          <button @click="setAddress(searchedAddress)" type="button" class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
-              {{ searchedAddress.properties.label }}
+      <div
+        v-else-if="searchedAddresses"
+        v-for="searchedAddress in searchedAddresses"
+        :key="searchedAddress.properties.id"
+      >
+        <div
+          class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        >
+          <button
+            @click="setAddress(searchedAddress)"
+            type="button"
+            class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
+          >
+            {{ searchedAddress.properties.label }}
           </button>
         </div>
       </div>
@@ -163,7 +178,9 @@
         v-model.trim="phoneNumber"
         required
       />
-      <div v-if="errors.phoneNumber" class="text-xs mt-1 text-rose-500">{{ errors.phoneNumber }}</div>
+      <div v-if="errors.phoneNumber" class="text-xs mt-1 text-rose-500">
+        {{ errors.phoneNumber }}
+      </div>
     </div>
 
     <!-- Email Code -->
@@ -197,51 +214,75 @@
       />
     </div>
 
-    <div class="flex items-center justify-center w-full"
-                                                     v-if="!hideImageField">
-                                                    <label for="dropzone-file"
-                                                           class="form-input w-full">
-                                                        <div
-                                                            class="flex flex-col items-center justify-center pt-5 pb-6">
-                                                            <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400"
-                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                      stroke-width="2"
-                                                                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload</span> or
-                                                                drag and drop</p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                                PNG, JPG or JPEG</p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                                REQUIRED</p>
-                                                        </div>
-                                                        <input id="dropzone-file" type="file" class="hidden" required
-                                                               @change="handleFile"/>
-                                                    </label>
-                                                </div>
-                                                <div class="flex items-center justify-center w-full"
-                                                     v-if="hideImageField">
-                                                    <img :src="previewSrc" alt="Preview image" id="previewImg">
-                                                </div>
-
-
+    <div class="flex items-center justify-center w-full" v-if="!hideImageField">
+      <label for="dropzone-file" class="form-input w-full">
+        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+          <svg
+            aria-hidden="true"
+            class="w-10 h-10 mb-3 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            ></path>
+          </svg>
+          <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+            <span class="font-semibold">Click to upload</span> or drag and drop
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            PNG, JPG or JPEG
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">REQUIRED</p>
+        </div>
+        <input
+          id="dropzone-file"
+          type="file"
+          class="hidden"
+          required
+          @change="handleFile"
+        />
+      </label>
+    </div>
+    <div class="flex items-center justify-center w-full" v-if="hideImageField">
+      <img :src="previewSrc" alt="Preview image" id="previewImg" />
+    </div>
 
     <div v-if="errors.password" class="text-xs mt-1 text-rose-500">
       {{ errors.password }}
     </div>
-    <p v-if="error">{{error}}</p>
+    <p v-if="error">{{ error }}</p>
     <div class="flex items-center justify-between">
-        <a class="text-sm underline hover:no-underline"  @click="back()">&lt;- Back</a>
-                <button v-if="isLoading" class="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed shadow-none" disabled>
-                      <svg class="animate-spin w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                        <path d="M8 16a7.928 7.928 0 01-3.428-.77l.857-1.807A6.006 6.006 0 0014 8c0-3.309-2.691-6-6-6a6.006 6.006 0 00-5.422 8.572l-1.806.859A7.929 7.929 0 010 8c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z" />
-                      </svg>
-                      <span class="ml-2">Loading</span>
-                </button>
-                <button v-else class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto" @click="submitRegister">Register</button>
+      <a class="text-sm underline hover:no-underline" @click="back()"
+        >&lt;- Back</a
+      >
+      <button
+        v-if="isLoading"
+        class="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed shadow-none"
+        disabled
+      >
+        <svg
+          class="animate-spin w-4 h-4 fill-current shrink-0"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 16a7.928 7.928 0 01-3.428-.77l.857-1.807A6.006 6.006 0 0014 8c0-3.309-2.691-6-6-6a6.006 6.006 0 00-5.422 8.572l-1.806.859A7.929 7.929 0 010 8c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"
+          />
+        </svg>
+        <span class="ml-2">Loading</span>
+      </button>
+      <button
+        v-else
+        class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto"
+        @click="submitRegister"
+      >
+        Register
+      </button>
     </div>
   </div>
 </template>
@@ -256,7 +297,7 @@ import Banner from "@/components/Banner.vue";
 
 export default {
   components: {
-      Banner
+    Banner,
   },
   data() {
     return {
@@ -293,11 +334,11 @@ export default {
   },
   methods: {
     back() {
-        this.$emit("back", {
-              id: 1,
-              label: 'Tell us what’s your situation ✨',
-              selectedTab: 'StepOne'
-          });
+      this.$emit("back", {
+        id: 1,
+        label: "Tell us what’s your situation ✨",
+        selectedTab: "StepOne",
+      });
     },
     setAddress(address) {
       this.city = address.properties.city;
@@ -305,22 +346,24 @@ export default {
       this.street = address.properties.name;
       this.searchedAddresses = [];
     },
-    async searchStreet (event) {
+    async searchStreet(event) {
       this.isAddressLoading = true;
       try {
         const street = event.target.value;
         if (street.length <= 3) {
           return;
         }
-        const response = await fetch(`https://api.zaidalaahazim.fr/address/` + new URLSearchParams(street));
+        const response = await fetch(
+          `https://api.zaidalaahazim.fr/address/` + new URLSearchParams(street)
+        );
 
         if (response.ok) {
-            const data = await response.json();
-            const parsedData = await JSON.parse(data);
-            this.searchedAddresses = parsedData.features;
-		    }
+          const data = await response.json();
+          const parsedData = await JSON.parse(data);
+          this.searchedAddresses = parsedData.features;
+        }
       } catch (error) {
-        this.error = error.message || 'Failed to search for the given street';
+        this.error = error.message || "Failed to search for the given street";
       }
       this.isAddressLoading = false;
     },
@@ -386,8 +429,7 @@ export default {
 
       if (!passwordValidation(this.password)) {
         this.formValid = false;
-        this.errors.password =
-          "Please check the password if it is valid";
+        this.errors.password = "Please check the password if it is valid";
         return;
       }
 
@@ -422,35 +464,35 @@ export default {
       console.log(this.dataPayload);
 
       try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(this.dataPayload)
-            });
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(this.dataPayload),
+        });
 
-            if (response.ok) {
-                this.$emit('nextStep', {
-                    id: 3,
-                    label: '',
-                    selectedTab: 'StepThreeSuccess'
-                  })
-            } else {
-              this.error = 'You already have an account on our platform';
-                this.$emit('nextStep', {
-                    id: 3,
-                    label: this.error,
-                    selectedTab: 'StepThreeError'
-                  })
-            }
-            } catch (error) {
-              this.error = 'Failed to register try again later.';
-                this.$emit('nextStep', {
-                    id: 3,
-                    label: 'Error',
-                    selectedTab: 'StepThreeError'
-                  })
+        if (response.ok) {
+          this.$emit("nextStep", {
+            id: 3,
+            label: "",
+            selectedTab: "StepThreeSuccess",
+          });
+        } else {
+          this.error = "You already have an account on our platform";
+          this.$emit("nextStep", {
+            id: 3,
+            label: this.error,
+            selectedTab: "StepThreeError",
+          });
+        }
+      } catch (error) {
+        this.error = "Failed to register try again later.";
+        this.$emit("nextStep", {
+          id: 3,
+          label: "Error",
+          selectedTab: "StepThreeError",
+        });
       }
 
       this.isLoading = false;

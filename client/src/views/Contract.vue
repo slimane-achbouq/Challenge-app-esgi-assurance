@@ -16,7 +16,7 @@
           Contract edited successfully .
         </Banner>
 
-        <Banner type="error" class="mb-1" :open="true" v-if="!payment">
+        <Banner type="error" class="mb-1" :open="true" v-if="!payment && role==='User'"  >
                     You have not yet paid for this contract, click  <a class="cursor-pointer text-blue-900/100" @click="submit(`Azulance -  option`, this.price)"> here.</a>  to start payment
       </Banner>
 
@@ -29,7 +29,7 @@
                     To edit the inforamtions of the contract you must create a request <a class="cursor-pointer text-blue-900/100"> here.</a> 
       </Banner>
 
-      <Banner type="warning" class="mb-1" :open="true" v-if="!contract.status">
+      <Banner type="warning" class="mb-1" :open="true" v-if="!contract.status && role==='User'"   >
                     this contract is not yet validated by the admin  
       </Banner>
 
@@ -77,12 +77,19 @@
 
                   <div
                       class=" flex flex-col col-span-full xl:col-span-12 bg-white shadow-lg rounded-sm border border-slate-200  ">
-                    <button class="btn border-rose-500 hover:border-slate-300 text-rose-500"
+                    <button class="btn border-rose-500 hover:border-slate-300 text-rose-500 m-3"
                             @click="modaDeletelOpen=true" v-if="role==='User'">
                       <router-link :to="{ name: 'new_claim', params: { insurance_id: contract._id }}">
                         <span class="ml-2"><i class="fas fa-file-signature"></i> Create a claim</span>
                       </router-link>
                     </button>
+
+                    <button class="btn border-green-500 hover:border-slate-300 text-green-500 m-3"
+                            @click="modaValidateOpen=true" v-if="role==='Admin' && !contract.status">
+                        <span class="ml-2"><i class="fas fa-file-signature"></i> Validate contract</span>
+                    </button>
+
+
                     <header class="pr-10 pl-5 py-4 border-b border-slate-100 flex items-center justify-between">
                       <h2 class="font-semibold text-slate-800"><i class="fas fa-file-contract"></i> Contract
                         informations</h2>
@@ -97,9 +104,11 @@
                           <div class="font-medium text-slate-800">Status</div>
                           <div class="  "><span
                               class=" bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
-                              v-if="contract.status">valid</span><span
+                              v-if="contract.status">Valid</span><span
                               class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
-                              v-if="!contract.status">invalid</span></div>
+                              v-if="!contract.status">Invalid</span> <span
+                              class="bg-amber-100 text-amber-600 font-medium rounded-full bg-rose-100 text-rose-600 text-center px-2.5 py-1"
+                              v-if="!payment">Unpaid</span> </div>
                         </div>
                       </div>
 
@@ -290,18 +299,15 @@
                   <div class="grid grid-cols-2 gap-4">
 
 
+                    
                     <div class="col-span-1">
-                      <label class="block text-sm font-medium mb-1" for="card-country">Status <span
-                          class="text-rose-500">*</span></label>
-                      <select id="card-country" class="form-select w-full">
-                        <option>Valid</option>
-                        <option>Invalid</option>
-                      </select>
-                      <p class="text-xs mt-1 text-rose-500"></p>
-                      <div class="text-xs mt-1 text-rose-500">
-
-                      </div>
-                    </div>
+                  <label class="block text-sm font-medium mb-1" for="card-address">Price <span
+                      class="text-rose-500">*</span></label>
+                  <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"
+                         v-model="formData.insurancePremium" placeholder="12"/>
+                  <p class="text-xs mt-1 text-rose-500"></p>
+                  <div class="text-xs mt-1 text-rose-500"></div>
+                </div>
 
                     <div class="col-span-1">
                       <label class="block text-sm font-medium mb-1" for="card-country">Insurance Type <span
@@ -336,15 +342,10 @@
                     </div>
                   </div>
 
+                  
+
                 </div>
-                <div class="col-span-1">
-                  <label class="block text-sm font-medium mb-1" for="card-address">Price <span
-                      class="text-rose-500">*</span></label>
-                  <input id="card-address" class="form-input w-full placeholder-slate-300" type="number"
-                         v-model="formData.insurancePremium" placeholder="12"/>
-                  <p class="text-xs mt-1 text-rose-500"></p>
-                  <div class="text-xs mt-1 text-rose-500"></div>
-                </div>
+                
               </div>
               <!-- Modal footer -->
               <div class="px-5 py-4 border-t border-slate-200">
@@ -394,6 +395,46 @@
                 </button>
               </div>
             </ModalBasic>
+
+
+            <ModalBasic id="danger-modal" :modalOpen="modaValidateOpen">
+              <div class="p-5 flex w-full space-x-4">
+                <!-- Icon -->
+                <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-green-100">
+                  <svg class="w-4 h-4 shrink-0 fill-current text-green-500" viewBox="0 0 16 16">
+                    <path
+                        d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z"/>
+                  </svg>
+                </div>
+                <!-- Content -->
+                <div>
+                  <!-- Modal header -->
+                  <div class="mb-2">
+                    <div class="text-lg font-semibold text-slate-800">Validate Contract?</div>
+                  </div>
+                  <!-- Modal content -->
+                  <div class="text-sm mb-10">
+                    <div class="">
+                      <p>Are you sure you want to vaidate the Contract?</p>
+                    </div>
+                  </div>
+                  <!-- Modal footer -->
+
+                </div>
+
+
+              </div>
+
+              <div class="flex flex-wrap justify-end space-x-2 m-6">
+                <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
+                        @click.stop="modaValidateOpen=false">Cancel
+                </button>
+                <button class="btn-sm bg-green-500 hover:bg-green-600 text-white" @click="validateItem">Yes, Validate it
+                </button>
+              </div>
+            </ModalBasic>
+
+
           </div>
         </div>
       </main>
@@ -446,6 +487,7 @@ export default {
       modalOpen: false,
       contractUpdated: false,
       modaDeletelOpen: false,
+      modaValidateOpen : false,
       deleted: false,
       role: null,
       payment :null,
@@ -506,6 +548,24 @@ export default {
     onModaDeletelOpen() {
 
       this.modaDeletelOpen = true
+    },
+
+
+    async validateItem(){
+
+
+        console.log(this.formData)
+      const token = this.$store.getters["auth/token"]
+      // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/insurance/${this.contract['_id']}`, {status : true}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+
+      this.contractUpdated = true
+      this.modaValidateOpen = false
     },
 
     async deleteItem() {

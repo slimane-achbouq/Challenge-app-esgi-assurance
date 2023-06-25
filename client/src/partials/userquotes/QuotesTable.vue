@@ -457,7 +457,7 @@ export default {
      if(searchTerm.value!=="")
       quotes.value= quoteList.value.filter(quote => {   
               const insuranceTypeLower = quote.insuranceType.toLowerCase();
-              return insuranceTypeLower.includes(searchTermLower);
+              return insuranceTypeLower.includes(searchTerm.value);
 
       } )
 

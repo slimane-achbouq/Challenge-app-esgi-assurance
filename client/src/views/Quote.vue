@@ -211,7 +211,7 @@
               </div>
 
             <!-- Quote detail -->
-            <div class=" xl:col-span-6 bg-gradient-to-b from-slate-700 to-slate-800 shadow-lg rounded-sm border border-slate-800">
+            <div class="col-span-full xl:col-span-6 bg-gradient-to-b from-slate-700 to-slate-800 shadow-lg rounded-sm border border-slate-800">
                 <header class=" px-5 py-4 border-b border-slate-600 flex items-center justify-between font-semibold ">
                   <h2 class="font-semibold text-slate-200"><i class="fas fa-bus"></i> Vehicle informations</h2>
                   <router-link class="block"  :to="{ name: 'editquote', params: { id: quote.vehicle.id }}">

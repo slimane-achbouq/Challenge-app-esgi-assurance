@@ -374,7 +374,7 @@
 
 
                     <div class="flex items-center justify-center w-full"
-                         v-if="!hideImageFieladresse">
+                         v-if="! hideImageFielddrivingLicense">
                       <label for="dropzone-file"
                              class="form-input w-full">
                         <div
@@ -397,11 +397,11 @@
                       </label>
                     </div>
                     <div v-if="errors" class="text-xs mt-1 text-rose-500">
-                      {{ errors.adresse }}
+                      {{ errors.license }}
                     </div>
 
                     <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
-                         v-if="hideImageFieladresse">
+                         v-if="hideImageFielddrivingLicense">
                       <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
                         <!-- Left side -->
                         <div class="flex items-start space-x-3 md:space-x-4">
@@ -428,7 +428,7 @@
                       <label class="block text-sm font-medium mb-1" for="card-country">Proof of your adresse <span
                           class="text-rose-500">*</span></label>
                       <div class="flex items-center justify-center w-full"
-                           v-if="!hideImageFielddrivingLicense">
+                           v-if="!hideImageFieladresse">
                         <label for="dropzone-file"
                                class="form-input w-full">
                           <div
@@ -455,7 +455,7 @@
                       </div>
 
                       <div class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
-                           v-if="hideImageFielddrivingLicense">
+                           v-if="hideImageFieladresse">
                         <div class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
                           <!-- Left side -->
                           <div class="flex items-start space-x-3 md:space-x-4">
@@ -602,7 +602,10 @@ export default {
       hideImageFieladresse: null,
       quote: null,
       prices: null,
-      errors: null,
+      errors: {
+        license:null,
+        adress:null
+      },
       price: null,
       contractCreated: false,
       formData: {
@@ -636,10 +639,12 @@ export default {
     },
     handleFile(event) {
       this.file = event.target.files[0];
+      this.errors.license=null
       this.drivingLicense = this.file.name
       this.formData.permis = this.file
       this.previewSrc = URL.createObjectURL(event.target.files[0]);
       this.hideImageFielddrivingLicense = true;
+      this.errors.license=null
     },
     handleFile1(event) {
       this.file = event.target.files[0];
@@ -647,6 +652,7 @@ export default {
       this.formData.justificatifDomicile = this.file
       this.previewSrc = URL.createObjectURL(event.target.files[0]);
       this.hideImageFieladresse = true;
+      this.errors.adresse=null
     },
     processDate(date) {
       let dateObject = new Date(date);
@@ -662,6 +668,9 @@ export default {
       return `${year}-${month}-${day}`;
     },
     async onCreatedContract() {
+
+      if(!this.drivingLicense) this.errors.license = " the Driving License is mandatory"
+      if(!this.adresse) this.errors["adresse"] = " the proof of the adress is mandatory"
 
       this.formData.coverageStartDate = this.quote.coverageStartDate
       this.formData.coverageEndDate = this.quote.coverageStartDate

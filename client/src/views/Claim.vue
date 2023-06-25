@@ -223,7 +223,7 @@ export default {
 
     this.claim = response.data;
 
-    if (this.role == "Client" && this.claim.userMail != store.getters["auth/email"]) {
+    if (this.role == "User" && this.claim.userMail != store.getters["auth/email"]) {
       this.$router.push({name: "claims"});
     }
   }

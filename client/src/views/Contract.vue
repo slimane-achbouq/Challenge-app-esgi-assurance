@@ -16,7 +16,7 @@
           Contract edited successfully .
         </Banner>
 
-        <Banner type="error" :open="true" v-if="!payment">
+        <Banner type="error" class="mb-1" :open="true" v-if="!payment">
                     You have not yet paid for this contract, click  <a class="cursor-pointer text-blue-900/100" @click="submit(`Azulance -  option`, this.price)"> here.</a>  to start payment
       </Banner>
 
@@ -25,11 +25,11 @@
         </Banner>
 
 
-      <Banner type="warning" :open="true" v-if="role==='User'">
+      <Banner type="warning" class="mb-1" :open="true" v-if="role==='User'">
                     To edit the inforamtions of the contract you must create a request <a class="cursor-pointer text-blue-900/100"> here.</a> 
       </Banner>
 
-      <Banner type="warning" :open="true" v-if="!contract.status">
+      <Banner type="warning" class="mb-1" :open="true" v-if="!contract.status">
                     this contract is not yet validated by the admin  
       </Banner>
 

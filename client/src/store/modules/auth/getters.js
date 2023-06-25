@@ -9,7 +9,7 @@ export default {
         return state.firstname + ' ' + state.lastname;
     },
     roles(state) {
-        return state.roles[0] === 'Admin' ? 'Admin' : 'Client';
+        return state.roles[0] === 'Admin' ? 'Admin' : 'User';
     },
     email(state){
         return state.email;

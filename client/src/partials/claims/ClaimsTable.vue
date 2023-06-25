@@ -442,7 +442,7 @@ export default {
       let finalClaimsData = [];
 
       if (response.data) {
-        if (role == "Client") {
+        if (role == "User") {
           for (let claim of response.data) {
             if (claim.userMail == userMail) {
               finalClaimsData.push(claim);

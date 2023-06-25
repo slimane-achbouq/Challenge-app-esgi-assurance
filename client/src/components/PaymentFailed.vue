@@ -9,9 +9,14 @@
           <div class="icon-fix"></div>
         </div>
       </div>
-    <h1 class="text-3xl text-slate-800 font-bold mb-8">An error occurred... </h1>
-      <router-link class="btn bg-indigo-500 hover:bg-indigo-600 text-white" style="margin-top: 50px"
-                   to="/">
+      <h1 class="text-3xl text-slate-800 font-bold mb-8">
+        An error occurred...
+      </h1>
+      <router-link
+        class="btn bg-indigo-500 hover:bg-indigo-600 text-white"
+        style="margin-top: 50px"
+        to="/"
+      >
         Go to the home page -&gt;
       </router-link>
     </div>
@@ -29,35 +34,41 @@ export default {
       userTokenCheck: null,
       id: null,
       price: null,
-    }
+    };
   },
   methods: {},
   setup() {
-    return {}
+    return {};
   },
   async created() {
     if (!this.$store.getters["auth/isAuthenticated"]) {
-      this.$router.push('/');
+      this.$router.push("/");
     }
-    let token = document.URL.split('/')[5];
-    let userToken = this.$store.getters["auth/token"]
+    let token = document.URL.split("/")[5];
+    let userToken = this.$store.getters["auth/token"];
 
-    this.id = document.URL.split('/')[6];
-    this.price = document.URL.split('/')[7];
+    this.id = document.URL.split("/")[6];
+    this.price = document.URL.split("/")[7];
 
     this.userTokenCheck = userToken;
     this.token = token;
-    this.role = this.$store.getters["auth/roles"]
-    this.useremail = this.$store.getters["auth/email"]
+    this.role = this.$store.getters["auth/roles"];
+    this.useremail = this.$store.getters["auth/email"];
 
-    const request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/${this.id}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    });
+    const request = await axios.get(
+      `${import.meta.env.VITE_API_URL}/payment/${this.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (request.data) {
-      this.$router.push({name: 'newcontract', params: {insurance_id: this.id}});
+      this.$router.push({
+        name: "newcontract",
+        params: { insurance_id: this.id },
+      });
     }
 
     let formData = {
@@ -66,20 +77,21 @@ export default {
     };
 
     if (!request.data) {
-      const request2 = await axios.post(`${import.meta.env.VITE_API_URL}/payment`, formData
-          , {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-          });
+      const request2 = await axios.post(
+        `${import.meta.env.VITE_API_URL}/payment`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log(request2.data);
     }
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

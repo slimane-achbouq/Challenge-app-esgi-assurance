@@ -37,10 +37,12 @@
       ></div>
     </label>
     <div class="flex items-center justify-between">
-        <button
-            class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto"
-            @click="nextStep()"
-        >Next Step -&gt;</button>
+      <button
+        class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto"
+        @click="nextStep()"
+      >
+        Next Step -&gt;
+      </button>
     </div>
   </div>
 </template>
@@ -75,12 +77,12 @@ export default {
       this.$store.dispatch("register/setSituation", selectedSituation);
     },
     nextStep() {
-        this.$emit("nextStep", {
-                id: 2,
-                label: 'Information',
-                selectedTab: 'StepTwo'
-        });
-    }
+      this.$emit("nextStep", {
+        id: 2,
+        label: "Information",
+        selectedTab: "StepTwo",
+      });
+    },
   },
 };
 </script>

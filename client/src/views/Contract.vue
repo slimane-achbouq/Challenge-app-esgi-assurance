@@ -16,6 +16,10 @@
           Contract edited successfully .
         </Banner>
 
+        <Banner type="error" :open="true" v-if="!payment">
+                    You have not yet paid for this contract, click  <a class="cursor-pointer text-blue-900/100" @click="submit(`Azulance -  option`, this.price)"> here.</a>  to start payment
+      </Banner>
+
         <Banner type="success" class="mb-1" :open="deleted" v-if="deleted">
           Contract deleted successfully.
         </Banner>
@@ -24,6 +28,12 @@
       <Banner type="warning" :open="true" v-if="role==='User'">
                     To edit the inforamtions of the contract you must create a request <a class="cursor-pointer text-blue-900/100"> here.</a> 
       </Banner>
+
+      <Banner type="warning" :open="true" v-if="!contract.status">
+                    this contract is not yet validated by the admin  
+      </Banner>
+
+      
 
 
         <div class="lg:relative lg:flex">
@@ -242,19 +252,19 @@
                               <!-- Table body -->
                               <tbody class="text-sm font-medium divide-y divide-slate-100">
                               <!-- Row -->
-                              <tr>
+                              <tr v-if="payment">
                                 <td class="p-2 whitespace-nowrap md:w-1/2 p-3">
                                   <div class="flex items-center">
                                     <div>
-                                      <div class="text-slate-800 uppercase">#12345</div>
+                                      <div class="text-slate-800 uppercase">#{{payment._id}}</div>
                                     </div>
                                   </div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                  <div class="font-normal text-left">33.94B</div>
+                                  <div class="font-normal text-left">{{formatDate(payment.createdAt)}}</div>
                                 </td>
                                 <td class="p-2 whitespace-nowrap">
-                                  <div class="text-left text-emerald-500">+$12.20</div>
+                                  <div class="text-left text-emerald-500">{{payment.price}}€</div>
                                 </td>
                               </tr>
                               </tbody>
@@ -392,6 +402,14 @@
 
 
   </div>
+
+  <div v-if="sessionId && publishableKey">
+          <stripe-checkout
+              ref="checkoutRef"
+              :pk="publishableKey"
+              :session-id="sessionId"
+          />
+      </div>
 </template>
 
 <script>
@@ -401,6 +419,8 @@ import Header from '@/partials/Header.vue'
 import axios from 'axios'
 import ModalBasic from '@/components/Modal.vue'
 import Banner from '@/components/Banner.vue';
+import moment from 'moment';
+import {StripeCheckout} from '@vue-stripe/vue-stripe';
 
 
 export default {
@@ -409,7 +429,8 @@ export default {
     Sidebar,
     Header,
     ModalBasic,
-    Banner
+    Banner,
+    StripeCheckout
   },
   data() {
     return {
@@ -427,10 +448,35 @@ export default {
       modaDeletelOpen: false,
       deleted: false,
       role: null,
+      payment :null,
+      sessionId: null,
+      publishableKey: "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
+  
+      
     }
   },
   methods: {
 
+    submit: async function(title, tarif) {
+      await this.getStripeSession(title, Number(this.contract.insurancePremium));
+      this.$refs.checkoutRef.redirectToCheckout();
+    },
+
+    getStripeSession: async function (title, tarif) {
+      let token = this.$store.getters["auth/token"];
+      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession/${title}/${tarif}/${token}/${this.contract.quoteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      this.sessionId = request.data.id
+      console.log(request.data)
+    },
+
+    formatDate(dateString) {
+          return moment(dateString).format('YYYY-MM-DD');
+      },
     downloadFile(file) {
       const byteArray = new Uint8Array(file.data);
 
@@ -528,7 +574,7 @@ export default {
     if (response.data) {
 
       this.contract = response.data
-      console.log(this.contract.insurancePremium)
+      console.log(this.contract.quoteId)
     }
 
 
@@ -553,6 +599,18 @@ export default {
     if (response1.data) {
       this.user = response1.data
       console.log(this.user)
+    }
+
+
+    const response2 = await axios.get(`http://localhost:3000/payment/${this.contract.quoteId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (response2.data) {
+      this.payment = response2.data
+      console.log(this.payment)
     }
 
   }

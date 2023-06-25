@@ -90,4 +90,77 @@ export default {
         }
 
     },
+
+    async sendMessageContact(context, payload) {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/mail/createMessageContact`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    email: payload.email,
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    object: payload.object,
+                    message: payload.message,
+                }),
+            });
+
+            if (!response.ok) {
+                const error = new Error(response.message || 'Failed to register. Check your register data.');
+                throw error;
+            }
+            return response;
+        } catch (err) {
+            const error = new Error(err || 'Failed to register. Check your register data.');
+            throw error;
+        }
+    },
+    async getContactMessages() {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/mail/getAllMessages`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'GET',
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                const error = new Error('Failed to get messages list!');
+                throw error;
+            }
+
+            return responseData;
+
+        } catch(err) {
+            const error = new Error(err);
+            throw error;
+        }
+    },
+    async validateMessage(context, payload) {
+        console.log(payload);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/mail/validateMessage`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'PUT',
+                body: JSON.stringify({
+                    _id: payload.id,
+                }),
+            });
+
+            if (!response.ok) {
+                const error = new Error(response.message || 'Failed to validate. Check your validate data.');
+                throw error;
+            }
+            return response;
+        } catch (err) {
+            const error = new Error(err || 'Failed to validate. Check your validate data.');
+            throw error;
+        }
+    },
 }

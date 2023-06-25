@@ -25,6 +25,7 @@ import Home from "@/views/home/HomeView.vue";
 import About from "@/views/home/AboutUs.vue";
 import Contact from "@/views/home/ContactUs.vue";
 import Services from "@/views/home/HomeServices.vue";
+import MessageList from "@/views/Contact/MessageList.vue";
 import PlansPanel from "@/views/PlansPanel.vue";
 import PaymentSuccess from "@/components/PaymentSuccess.vue";
 import PaymentFailed from "@/components/PaymentFailed.vue";
@@ -41,6 +42,7 @@ const router = createRouter({
       { path: '/register', name: 'register', component: Register, meta: { requiresUnauth: false } },
       { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresUnauth: false } },
       { path: '/dashboard/users', name: 'users', component: UserList, meta: { requiresUnauth: false } },
+      { path: '/contact/messageList', name: 'messageList', component: MessageList, meta: { requiresUnauth: false } },
       { path: '/newquote', name: 'newquote', component: NewQuote, meta: { requiresUnauth: false }},
       { path: '/step4', name: 'step3', component: CreateInsurance, meta: { requiresUnauth: false }},
       { path: '/quotes', name: 'quotes', component: Quotes, meta: { requiresUnauth: false }},

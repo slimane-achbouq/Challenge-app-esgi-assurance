@@ -1,5 +1,5 @@
 import { ApiPropertyOptions, ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export const apiPropertiesResetPassword: {
   [P in keyof Partial<ResetPasswordDto>]: ApiPropertyOptions;
@@ -16,12 +16,6 @@ export const apiPropertiesResetPassword: {
     example: 'zsmdj-sl45D-FFZFK-Z4fsd-fssd',
     description: 'User token to update email',
   },
-  // password: {
-  //   required: true,
-  //   format: 'string',
-  //   example: 'zakaria1998',
-  //   description: 'User password',
-  // },
 };
 
 export class ResetPasswordDto {
@@ -32,9 +26,4 @@ export class ResetPasswordDto {
   @ApiProperty(apiPropertiesResetPassword.token)
   @IsString()
   token: string;
-
-  // @ApiProperty(apiPropertiesUpdatePassword.password)
-  // @IsString()
-  // @MinLength(8)
-  // password: string;
 }

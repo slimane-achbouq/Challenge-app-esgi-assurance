@@ -1,9 +1,10 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Put } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { MessageFormDto } from './dto/message-form.dto';
+import { ValidateMessageDto } from './dto/validate-message.dto';
 
 @ApiTags('Utils')
 @Controller({
@@ -50,6 +51,18 @@ export class UtilsController {
   async sendMailResetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.utilsService
       .send({ cmd: 'resetPasswordEmail' }, resetPasswordDto)
+      .toPromise();
+  }
+
+  @Get('getAllMessages')
+  async getAllMessagesOfContact() {
+    return this.utilsService.send({ cmd: 'getAllMessages' }, '').toPromise();
+  }
+
+  @Put('validateMessage')
+  async validateMessage(@Body() validateMessageDto: ValidateMessageDto) {
+    return this.utilsService
+      .send({ cmd: 'validateMessage' }, validateMessageDto)
       .toPromise();
   }
 }

@@ -54,5 +54,6 @@ export class MessageFormDto {
   object: string;
 
   @ApiProperty(apiPropertiesMessageForm.message)
+  @IsString()
   message: string;
 }

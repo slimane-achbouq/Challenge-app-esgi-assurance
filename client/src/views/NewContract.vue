@@ -13,7 +13,7 @@
       <main>
 
         <Banner type="success" class="mb-4" :open="contractCreated" v-if="contractCreated">
-          Proceed to payment .
+          Contract created successfully to payment .
         </Banner>
 
         <div class="flex flex-col col-span-full bg-white shadow-lg rounded-sm border border-slate-200 mx-8 my-3">
@@ -109,9 +109,265 @@
 
               <hr class="my-3 border-t border-slate-200"/>
 
+              <div class=" w-full max-w-9xl mx-auto" v-if="prices">
+          <!-- Pricing tabs -->
+          <div class="grid grid-cols-12 gap-6">
+            <!-- Tab 1 -->
+            <div
+                class="relative col-span-full xl:col-span-4 bg-white shadow-md rounded-sm border border-slate-200 mt-10">
+              <div class="absolute top-0 left-0 right-0 h-0.5 "   :class="{'bg-emerald-500': selectedPlan === 'Basic', 'bg-sky-500': selectedPlan !== 'Basic'}" aria-hidden="true"></div>
+              <div class="px-5 pt-5 pb-6 border-b border-slate-200">
+                <header class="flex items-center mb-2">
+                  <div class="w-6 h-6 rounded-full shrink-0 bg-gradient-to-tr  mr-3" :class="{'from-emerald-500 to-emerald-300': selectedPlan === 'Basic', 'from-indigo-500 to-indigo-300': selectedPlan !== 'Basic'}">
+                  
+                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
+                      <path
+                          d="M12 17a.833.833 0 01-.833-.833 3.333 3.333 0 00-3.334-3.334.833.833 0 110-1.666 3.333 3.333 0 003.334-3.334.833.833 0 111.666 0 3.333 3.333 0 003.334 3.334.833.833 0 110 1.666 3.333 3.333 0 00-3.334 3.334c0 .46-.373.833-.833.833z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-lg text-slate-800 font-semibold">Basic</h3>
+                </header>
+                <div class="text-sm mb-2">The minimal option for tranquility.</div>
+                <!-- Price -->
+                <div class="text-slate-800 font-bold mb-4">
+                  <span class="text-2xl">$</span><span class="text-3xl">{{ Math.round(prices[0]) }}</span><span
+                    class="text-slate-500 font-medium text-sm">/mo</span>
+                </div>
+                <!-- CTA -->
+                <button class="btn  text-white w-full" :class="{'bg-emerald-500': selectedPlan === 'Basic', 'bg-sky-500': selectedPlan !== 'Basic'}"
+                        @click="price =Math.round(prices[0]) ; selectedPlan = 'Basic'">Choose
+                </button>
+              </div>
+              <div class="px-5 pt-4 pb-5">
+                <div class="text-xs text-slate-800 font-semibold uppercase mb-4">What's included</div>
+                <!-- List -->
+                <ul>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Civilian responsability</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Criminal defense</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Broken windshield</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Assistance service</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Tab 2 -->
+            <div class="col-span-full xl:col-span-4 bg-white shadow-md rounded-sm border border-slate-200">
+              <div>
+                <Banner type="success" :open="true">
+                  Recommended option.
+                </Banner>
+              </div>
+              <div class="relative absolute top-0 left-0 right-0 h-0.5 " :class="{'bg-emerald-500': selectedPlan === 'Standard', 'bg-sky-500': selectedPlan !== 'Standard'}" aria-hidden="true"></div>
+              <div class="px-5 pt-5 pb-6 border-b border-slate-200">
+                <header class="flex items-center mb-2">
+                  <div class="w-6 h-6 rounded-full shrink-0 bg-gradient-to-tr  mr-3" :class="{'from-emerald-500 to-emerald-300': selectedPlan === 'Standard', 'from-indigo-500 to-indigo-300': selectedPlan !== 'Standard'}">
+                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
+                      <path
+                          d="M12 17a.833.833 0 01-.833-.833 3.333 3.333 0 00-3.334-3.334.833.833 0 110-1.666 3.333 3.333 0 003.334-3.334.833.833 0 111.666 0 3.333 3.333 0 003.334 3.334.833.833 0 110 1.666 3.333 3.333 0 00-3.334 3.334c0 .46-.373.833-.833.833z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-lg text-slate-800 font-semibold">Advanced</h3>
+                </header>
+                <div class="text-sm mb-2">A confortable reinforced option.</div>
+                <!-- Price -->
+                <div class="text-slate-800 font-bold mb-4">
+                  <span class="text-2xl">$</span><span class="text-3xl">{{ Math.round(prices[1]) }}</span><span
+                    class="text-slate-500 font-medium text-sm">/mo</span>
+                </div>
+                <!-- CTA -->
+                <button class="btn     text-white w-full" :class="{'bg-emerald-500': selectedPlan === 'Standard', 'bg-sky-500': selectedPlan !== 'Standard'}"
+                        @click="price =Math.round(prices[1]) ;selectedPlan = 'Standard'">Choose
+                </button>
+              </div>
+              <div class=" px-5 pt-4 pb-5
+                ">
+                <div class="text-xs text-slate-800 font-semibold uppercase mb-4">What's included</div>
+                <!-- List -->
+                <ul>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Civilian responsability</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Criminal defense</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Broken windshield</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Assistance service</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="text-sky-500 w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Vehicle theft</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="text-sky-500 w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Fire</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="text-sky-500 w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Climatic events and attack</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="text-sky-500 w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Natural and technological catastrophies</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Tab 3 -->
+            <div
+                class="relative col-span-full xl:col-span-4 bg-white shadow-md rounded-sm border border-slate-200 mt-10">
+              <div class="absolute top-0 left-0 right-0 h-0.5 " :class="{'bg-emerald-500': selectedPlan === 'Premium', 'bg-sky-500': selectedPlan !== 'Premium'}" aria-hidden="true"></div>
+              <div class="px-5 pt-5 pb-6 border-b border-slate-200">
+                <header class="flex items-center mb-2">
+                  <div class="w-6 h-6 rounded-full shrink-0 bg-gradient-to-tr  mr-3" :class="{'from-emerald-500 to-emerald-300': selectedPlan === 'Premium', 'from-indigo-500 to-indigo-300': selectedPlan !== 'Premium'}">
+                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
+                      <path
+                          d="M12 17a.833.833 0 01-.833-.833 3.333 3.333 0 00-3.334-3.334.833.833 0 110-1.666 3.333 3.333 0 003.334-3.334.833.833 0 111.666 0 3.333 3.333 0 003.334 3.334.833.833 0 110 1.666 3.333 3.333 0 00-3.334 3.334c0 .46-.373.833-.833.833z"/>
+                    </svg>
+                  </div>
+                  <h3 class="text-lg text-slate-800 font-semibold">Premium</h3>
+                </header>
+                <div class="text-sm mb-2">Protection in all circumstances.</div>
+                <!-- Price -->
+                <div class="text-slate-800 font-bold mb-4">
+                  <span class="text-2xl">$</span><span class="text-3xl">{{ Math.round(prices[2]) }}</span><span
+                    class="text-slate-500 font-medium text-sm">/mo</span>
+                </div>
+                <!-- CTA -->
+                <button class="btn  text-white w-full" :class="{'bg-emerald-500': selectedPlan === 'Premium', 'bg-sky-500': selectedPlan !== 'Premium'}"
+                        @click="price =Math.round(prices[2]) ;selectedPlan = 'Premium'">Choose
+                </button>
+              </div>
+              <div class="px-5 pt-4 pb-5">
+                <div class="text-xs text-slate-800 font-semibold uppercase mb-4">What's included</div>
+                <!-- List -->
+                <ul>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Civilian responsability</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Criminal defense</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Broken windshield</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Assistance service</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Vehicle theft</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Fire</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Climatic events and attack</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">Natural and technological catastrophies</div>
+                  </li>
+                  <li class="flex items-center py-1">
+                    <svg class="text-indigo-500 w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2"
+                         viewBox="0 0 12 12">
+                      <path
+                          d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z"/>
+                    </svg>
+                    <div class="text-sm">All accidents damages</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
               <div>
                 <form>
-                  <div class="space-y-3">
+                  <div class="space-y-3 my-5">
 
                     <label class="block text-sm font-medium mb-1" for="card-country">Your Driving License <span
                         class="text-rose-500">*</span></label>
@@ -225,7 +481,7 @@
 
                     </div>
 
-                    <div class="text-right">
+                    <div class="text-right" v-if="!contractCreated">
 
 
                       <button type="" class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
@@ -253,114 +509,7 @@
 
             </div>
 
-            <!-- Sidebar -->
-            <div>
-              <div v-if="!existingPayment"
-                   class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
-                <div class="text-sm text-slate-800 font-semibold mb-3"><i class="fab fa-buffer"></i> Choose the plan :
-                </div>
-                <ul class="space-y-2 sm:flex sm:space-y-0 sm:space-x-2 lg:space-y-2 lg:space-x-0 lg:flex-col mb-4"
-                    v-if="prices">
-                  <li>
-                    <button
-                        :class="{'border-2 border-indigo-400': selectedPlan === 'Basic', 'border border-slate-200 hover:border-slate-300': selectedPlan !== 'Basic'}"
-                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out"
-                        @click="price =Math.round(prices[0]) ; selectedPlan = 'Basic'">
-                      <div class="flex flex-wrap items-center justify-between mb-0.5">
-                        <span class="font-semibold text-slate-800">Basic</span>
-                        <span class="font-medium text-emerald-600">{{ Math.round(prices[0]) }} /mo</span>
-                      </div>
-                      <div class="text-sm">Our Basic coverage offers essential protection at an affordable price.</div>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                        :class="{'border-2 border-indigo-400': selectedPlan === 'Standard', 'border border-slate-200 hover:border-slate-300': selectedPlan !== 'Standard'}"
-                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out"
-                        @click="price =Math.round(prices[1]) ;;selectedPlan = 'Standard'">
-                      <div class="flex flex-wrap items-center justify-between mb-0.5">
-                        <span class="font-semibold text-slate-800">Standard <span
-                            class="text-xs italic text-indigo-500 align-top">Best Value ✨</span></span>
-                        <span class="font-medium text-emerald-600">{{ Math.round(prices[1]) }} /mo</span>
-                      </div>
-                      <div class="text-sm">Our Standard coverage provides a balanced level of protection at a reasonable
-                        cost.
-                      </div>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                        :class="{'border-2 border-indigo-400': selectedPlan === 'Premium', 'border border-slate-200 hover:border-slate-300': selectedPlan !== 'Premium'}"
-                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out"
-                        @click="price =Math.round(prices[2]) ;selectedPlan = 'Premium'">
-                      <div class="flex flex-wrap items-center justify-between mb-0.5">
-                        <span class="font-semibold text-slate-800">Premium</span>
-                        <span class="font-medium text-emerald-600">{{ Math.round(prices[2]) }} /mo</span>
-                      </div>
-                      <div class="text-sm">Our Premium coverage offers the highest level of comprehensive protection for
-                        maximum peace of mind.
-                      </div>
-                    </button>
-                  </li>
-                </ul>
-                <div v-if="quote">
-                  <router-link :to="{name: 'new_payment', params: {insurance_id: quote.id}}">
-                    <button class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white">Proceed to payment</button>
-                  </router-link>
-                </div>
-                <div class="text-xs text-slate-500 italic text-center">The available plans are based on your vehicle
-                  inforamtions<a class="underline hover:no-underline" href="#0"></a>.
-                </div>
-              </div>
-              <div v-else class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
-                <div class="text-sm text-slate-800 font-semibold mb-3"><i class="fab fa-buffer"></i> My plan :
-                </div>
-                <ul class="space-y-2 sm:flex sm:space-y-0 sm:space-x-2 lg:space-y-2 lg:space-x-0 lg:flex-col mb-4"
-                    v-if="prices">
-                  <li v-if="existingPayment.price == Math.round(prices[0])">
-                    <button
-                        :class="{'border-2 border-indigo-400': existingPayment.price == Math.round(prices[0]), 'border border-emerald-200 hover:border-slate-300': existingPayment.price == Math.round(prices[0])}"
-                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out">
-                      <div class="flex flex-wrap items-center justify-between mb-0.5">
-                        <span class="font-semibold text-slate-800">Basic</span>
-                        <span class="font-medium text-emerald-600">{{ Math.round(prices[0]) }} /mo</span>
-                      </div>
-                      <div class="text-sm">Our Basic coverage offers essential protection at an affordable price.</div>
-                    </button>
-                  </li>
-                  <li v-if="existingPayment.price == Math.round(prices[1])">
-                    <button
-                        :class="{'border-2 border-indigo-400': existingPayment.price == Math.round(prices[1]), 'border border-emerald-200 hover:border-slate-300': existingPayment.price == Math.round(prices[1])}"
-                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out">
-                      <div class="flex flex-wrap items-center justify-between mb-0.5">
-                        <span class="font-semibold text-slate-800">Standard <span
-                            class="text-xs italic text-indigo-500 align-top">Best Value ✨</span></span>
-                        <span class="font-medium text-emerald-600">{{ Math.round(prices[1]) }} /mo</span>
-                      </div>
-                      <div class="text-sm">Our Standard coverage provides a balanced level of protection at a reasonable
-                        cost.
-                      </div>
-                    </button>
-                  </li>
-                  <li v-if="existingPayment.price == Math.round(prices[2])">
-                    <button
-                        :class="{'border-2 border-indigo-400': existingPayment.price == Math.round(prices[2]), 'border border-emerald-200 hover:border-slate-300': existingPayment.price == Math.round(prices[2])}"
-                        class="w-full h-full text-left py-3 px-4 rounded bg-white shadow-sm duration-150 ease-in-out">
-                      <div class="flex flex-wrap items-center justify-between mb-0.5">
-                        <span class="font-semibold text-slate-800">Premium</span>
-                        <span class="font-medium text-emerald-600">{{ Math.round(prices[2]) }} /mo</span>
-                      </div>
-                      <div class="text-sm">Our Premium coverage offers the highest level of comprehensive protection for
-                        maximum peace of mind.
-                      </div>
-                    </button>
-                  </li>
-                </ul>
-                <div v-if="!existingPayment" class="text-xs text-slate-500 italic text-center">The available plans are based on your vehicle
-                  inforamtions<a class="underline hover:no-underline" href="#0"></a>.
-                </div>
-              </div>
-            </div>
+
 
 
           </div>
@@ -368,11 +517,61 @@
 
         </div>
 
+        
+
+
       </main>
 
     </div>
 
   </div>
+  <ModalBlank id="success-modal" :modalOpen="contractCreated" v-if="contractCreated">
+          <div class="p-5 flex space-x-4">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-emerald-100">
+              <svg class="w-4 h-4 shrink-0 fill-current text-emerald-500" viewBox="0 0 16 16">
+                <path
+                    d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zM7 11.4L3.6 8 5 6.6l2 2 4-4L12.4 6 7 11.4z"/>
+              </svg>
+            </div>
+            <!-- Content -->
+            <div>
+              <!-- Modal header -->
+              <div class="mb-2">
+                <div class="text-lg font-semibold text-slate-800">Contract created successfully</div>
+              </div>
+              <!-- Modal content -->
+              <div class="text-sm mb-10">
+                <div class="space-y-2">
+                  <p>Contract created successfully ! You can pay now or later , after your payment the admin will check the informations and validate it.</p>
+                </div>
+              </div>
+              <!-- Modal footer -->
+              <div class="flex flex-wrap justify-end space-x-2">
+
+
+                <router-link :to="{ name: 'user-contracts' }">
+                  <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Contracts List</button>
+                </router-link>
+
+                
+                  <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white" @click="submit(`Azulance - ${selectedPlan} option`, this.price)" >Proceeded payment</button>
+                
+                
+                
+
+              </div>
+            </div>
+          </div>
+        </ModalBlank>
+
+        <div v-if="sessionId && publishableKey">
+          <stripe-checkout
+              ref="checkoutRef"
+              :pk="publishableKey"
+              :session-id="sessionId"
+          />
+      </div>
 </template>
 
 <script>
@@ -382,6 +581,7 @@ import Header from '@/partials/Header.vue'
 import axios from 'axios'
 import Banner from '@/components/Banner.vue';
 import ModalBlank from '@/components/ModalBlank.vue'
+import {StripeCheckout} from '@vue-stripe/vue-stripe';
 
 export default {
   name: 'NewContract',
@@ -389,7 +589,8 @@ export default {
     Sidebar,
     Header,
     Banner,
-    ModalBlank
+    ModalBlank,
+    StripeCheckout
   },
   data() {
     return {
@@ -411,10 +612,28 @@ export default {
         coverageEndDate: null,
         quoteId: null,
         insurancePremium: null
-      }
+      },
+      sessionId: null,
+      publishableKey: "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
     };
   },
   methods: {
+
+    submit: async function(title, tarif) {
+      await this.getStripeSession(title, tarif);
+      this.$refs.checkoutRef.redirectToCheckout();
+    },
+    getStripeSession: async function (title, tarif) {
+      let token = this.$store.getters["auth/token"];
+      let request = await axios.get(`${import.meta.env.VITE_API_URL}/payment/getSession/${title}/${tarif}/${token}/${this.quote.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      this.sessionId = request.data.id
+      console.log(request.data)
+    },
     handleFile(event) {
       this.file = event.target.files[0];
       this.drivingLicense = this.file.name

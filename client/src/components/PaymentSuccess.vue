@@ -11,8 +11,8 @@
       </div>
       <h1 class="text-3xl text-slate-800 font-bold mb-8">Payment successful !</h1>
       <router-link class="btn bg-indigo-500 hover:bg-indigo-600 text-white" style="margin-top: 50px"
-                   :to="{name: 'newcontract', params: {id: id}}">
-        Go to the quote page -&gt;
+                   :to="{name: 'user-contracts'}">
+        Go to the Contract list -&gt;
       </router-link>
     </div>
   </div>
@@ -66,7 +66,7 @@ export default {
     });
 
     if (request.data) {
-      this.$router.push({name: 'newcontract', params: {insurance_id: this.id}});
+      this.$router.push({name: 'user-contracts'});
     }
 
     let formData = {

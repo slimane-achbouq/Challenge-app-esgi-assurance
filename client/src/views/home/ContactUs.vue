@@ -325,7 +325,7 @@ import Swal from 'sweetalert2'
         message: this.message
       };
 
-      debugger;
+      console.log(actionPayload);
 
       try {
         const response = await this.$store.dispatch('auth/sendMessageContact', actionPayload);

@@ -77,13 +77,23 @@
                     </li>
                     <li>
                       <a
-                        class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold" :class="step.id >= 2 ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'"
+                        class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold"
+                        :class="
+                          step.id >= 2
+                            ? 'bg-indigo-500 text-white'
+                            : 'bg-slate-100 text-slate-500'
+                        "
                         >2</a
                       >
                     </li>
                     <li>
                       <a
-                        class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold" :class="step.id >= 3 ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'"
+                        class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold"
+                        :class="
+                          step.id >= 3
+                            ? 'bg-indigo-500 text-white'
+                            : 'bg-slate-100 text-slate-500'
+                        "
                         >3</a
                       >
                     </li>
@@ -98,12 +108,28 @@
               <h1 class="text-3xl text-slate-800 font-bold mb-6">
                 {{ step.label }}
               </h1>
-                <Banner type="error" :open="!!error">
-                  {{ error }}
-                </Banner>
+              <Banner type="error" :open="!!error">
+                {{ error }}
+              </Banner>
               <!-- Form -->
               <form @submit.prevent>
-                <component @back="step.id==1 ? back({id: 2, label: 'Information',selectedTab: 'StepTwo' }) : back({id: 3, label: 'Information',selectedTab: 'StepTwo' })" @nextStep="nextStep" :is="step.selectedTab" ></component>
+                <component
+                  @back="
+                    step.id == 1
+                      ? back({
+                          id: 2,
+                          label: 'Information',
+                          selectedTab: 'StepTwo',
+                        })
+                      : back({
+                          id: 3,
+                          label: 'Information',
+                          selectedTab: 'StepTwo',
+                        })
+                  "
+                  @nextStep="nextStep"
+                  :is="step.selectedTab"
+                ></component>
               </form>
             </div>
           </div>
@@ -128,63 +154,60 @@
 </template>
 
 <script>
-import Banner from '@/components/Banner.vue';
-import StepOne from '@/components/register/StepOne.vue';
-import StepTwo from '@/components/register/StepTwo.vue';
-import StepThreeSuccess from '@/components/register/StepThreeSuccess.vue';
-import StepThreeError from '@/components/register/StepThreeError.vue';
+import Banner from "@/components/Banner.vue";
+import StepOne from "@/components/register/StepOne.vue";
+import StepTwo from "@/components/register/StepTwo.vue";
+import StepThreeSuccess from "@/components/register/StepThreeSuccess.vue";
+import StepThreeError from "@/components/register/StepThreeError.vue";
 
 export default {
-    components: {
-        StepOne,
-        StepTwo,
-        Banner,
-        StepThreeSuccess,
-        StepThreeError
+  components: {
+    StepOne,
+    StepTwo,
+    Banner,
+    StepThreeSuccess,
+    StepThreeError,
+  },
+  data() {
+    return {
+      error: null,
+      selectedSituation: null,
+      selectedTab: "StepOne",
+      steps: [
+        {
+          id: 1,
+          label: "Tell us what’s your situation ✨",
+          selectedTab: "StepOne",
+        },
+        {
+          id: 2,
+          label: "Information",
+          selectedTab: "StepTwo",
+        },
+      ],
+      step: {
+        id: 1,
+        label: "Tell us what’s your situation ✨",
+        selectedTab: "StepOne",
+      },
+    };
+  },
+  methods: {
+    back(object) {
+      this.step = object;
     },
-    data() {
-        return {
-          error: null,
-          selectedSituation: null,  
-          selectedTab: 'StepOne',
-          steps: [
-            {
-                id: 1,
-                label: 'Tell us what’s your situation ✨',
-                selectedTab: 'StepOne'
-            },
-            {
-                id: 2,
-                label: 'Information',
-                selectedTab: 'StepTwo'
-            }
-          ],
-          step: {
-              id: 1,
-              label: 'Tell us what’s your situation ✨',
-              selectedTab: 'StepOne'
-          },
-        }
-    },
-    methods: {
-        back(object) {
+    nextStep(object) {
+      this.error = null;
+      try {
+        if (this.step.id === 1) {
           this.step = object;
-        },
-        nextStep(object) {
-            this.error = null;
-            try {
-                if (this.step.id === 1) {
-                        this.step = object;
-                    
-                } else {
-                  this.step = object;
-                }
-
-            } catch (error) {
-                this.error = error.message || 'There is an error !';
-            }
-        },
-    }
-  
+        } else {
+          this.step = object;
+        }
+      } catch (error) {
+        this.error = error.message || "There is an error !";
+      }
+    },
+  },
 };
 </script>

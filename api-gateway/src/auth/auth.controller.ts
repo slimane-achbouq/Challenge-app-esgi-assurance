@@ -10,7 +10,7 @@ import {
   Put,
   Param,
   UseGuards,
-  Delete
+  Delete,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
@@ -124,8 +124,7 @@ export class UserController {
   async deleteUser(@Param('id') id: string) {
     // Check if quote exists
     const existingQuote = await this.userServiceClient
-        .send({ cmd: 'deleteUserById' }, {id:id})
-        .toPromise();
-
+      .send({ cmd: 'deleteUserById' }, { id: id })
+      .toPromise();
   }
 }

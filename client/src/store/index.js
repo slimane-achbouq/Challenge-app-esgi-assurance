@@ -1,15 +1,13 @@
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
 
-import authModule from '@/store/modules/auth/index.js';
-import createPersistedState from 'vuex-persistedstate';
+import authModule from "@/store/modules/auth/index.js";
+import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
   modules: {
-    auth: authModule
+    auth: authModule,
   },
-  plugins: [
-    createPersistedState(),
-  ],
+  plugins: [createPersistedState()],
 });
 
 export default store;

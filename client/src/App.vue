@@ -1,12 +1,11 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
   <router-view v-slot="slotProps">
-            <component :is="slotProps.Component"></component>
+    <component :is="slotProps.Component"></component>
   </router-view>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -110,11 +110,23 @@
                 <!-- Cart items -->
                 <div v-if="contract" class="mb-6 lg:mb-0">
                   <div
-                      class=" flex flex-col col-span-full xl:col-span-12 bg-white shadow-lg rounded-sm border border-slate-200  ">
-                    <button class="btn border-rose-500 hover:border-slate-300 text-rose-500 m-3"
-                            @click="modaDeletelOpen=true" v-if="role==='User' && contract.status">
-                      <router-link :to="{ name: 'new_claim', params: { insurance_id: contract._id }}">
-                        <span class="ml-2"><i class="fas fa-file-signature"></i> Create a claim</span>
+                    class="flex flex-col col-span-full xl:col-span-12 bg-white shadow-lg rounded-sm border border-slate-200"
+                  >
+                    <button
+                      class="btn border-rose-500 hover:border-slate-300 text-rose-500 m-3"
+                      @click="modaDeletelOpen = true"
+                      v-if="role === 'User' && contract.status"
+                    >
+                      <router-link
+                        :to="{
+                          name: 'new_claim',
+                          params: { insurance_id: contract._id },
+                        }"
+                      >
+                        <span class="ml-2"
+                          ><i class="fas fa-file-signature"></i> Create a
+                          claim</span
+                        >
                       </router-link>
                     </button>
 

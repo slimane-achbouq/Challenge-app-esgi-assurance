@@ -659,7 +659,7 @@
                           type="file"
                           class="hidden"
                           required
-                          @change="handleFile1"
+                          @change="handleFile"
                         />
                       </label>
                     </div>
@@ -742,7 +742,7 @@
                             type="file"
                             class="hidden"
                             required
-                            @change="handleFile"
+                            @change="handleFile1"
                           />
                         </label>
                       </div>

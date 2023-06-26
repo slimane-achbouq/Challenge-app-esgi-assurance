@@ -151,6 +151,7 @@
 
 <script>
 import Banner from "@/components/Banner.vue";
+import axios from "axios";
 export default {
   components: {
     Banner,
@@ -204,9 +205,54 @@ export default {
           this.error = "User profile is not activated !";
           return;
         }
-        const redirectUrl = "/" + (this.$route.query.redirect || "dashboard");
-        this.$router.replace(redirectUrl);
+
+        let quote = localStorage.getItem('quote');
+
+        if(quote) {
+
+
+          const base64Data = quote.split(';base64,').pop();
+          quote  =JSON.parse(quote)
+          quote.carteGrise = base64Data
+
+          const token = this.$store.getters["auth/token"];
+            try {
+              let response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/vehicles-with-quote-local-storage`,
+                quote,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`
+                  },
+                }
+              );
+
+              localStorage.removeItem("quote");
+
+              const redirectUrl = "/" + (this.$route.query.redirect || `newContract/${response.data.quote.id}`);
+              this.$router.replace(redirectUrl);
+            } catch (error) {
+              console.log(error)
+            }
+
+
+        }
+
+
+        else {
+            const redirectUrl = "/" + (this.$route.query.redirect || "dashboard");
+            this.$router.replace(redirectUrl);
+            
+
+        }
+        
+
+
+        
+
+        
       } catch (error) {
+        console.log(error)
         if (error.message == "Error: Invalid credentials.") {
           this.error = "Your password or email is incorrect";
         } else {
@@ -215,6 +261,26 @@ export default {
       }
       this.isLoading = false;
     },
+
+    base64ToFile(base64, fileName, mimeType) {
+        const byteCharacters = atob(base64);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+          const slice = byteCharacters.slice(offset, offset + 512);
+          const byteNumbers = new Array(slice.length);
+
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+
+        return new File(byteArrays, fileName, { type: mimeType });
+    }
+
   },
 };
 </script>

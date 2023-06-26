@@ -155,21 +155,6 @@ export default {
     this.role = this.$store.getters["auth/roles"];
     this.email = this.$store.getters["auth/email"];
     let token = this.$store.getters["auth/token"];
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/users?email=${this.email}`,
-      {
-        method: "GET",
-        headers: {
-          // 'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    let data = await response.json();
-    if (data["hydra:member"]) {
-      this.user = await data["hydra:member"][0];
-    }
     this.loading = false;
   },
 };

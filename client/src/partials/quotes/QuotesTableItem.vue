@@ -51,8 +51,8 @@
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center">
           <div v-html="typeIcon(quote.insuranceId)"></div>
-          <div v-if="insuranceId">Subscriped</div>
-          <div v-if="!insuranceId">Not subscriped</div>
+          <div v-if="quote.insuranceId">Subscriped</div>
+          <div v-if="!quote.insuranceId">Not subscriped</div>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">

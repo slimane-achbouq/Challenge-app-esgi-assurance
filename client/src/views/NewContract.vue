@@ -1028,6 +1028,23 @@ export default {
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
 
     const token = this.$store.getters["auth/token"];
+    let existingPayment = await axios.get(
+      `${import.meta.env.VITE_API_URL}/payment/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    this.existingPayment = existingPayment.data;
+
+    if(this.existingPayment ) {
+      const redirectUrl = "/" + (this.$route.query.redirect || "contracts");
+      this.$router.replace(redirectUrl);
+    }
+
+
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
     let response = await axios.get(
       `${import.meta.env.VITE_API_URL}/quotes/${id}`,
@@ -1041,15 +1058,6 @@ export default {
     if (response.data) {
       this.quote = response.data;
     }
-
-    let existingPayment = await axios.get(
-      `${import.meta.env.VITE_API_URL}/payment/${this.quote.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
 
     this.existingPayment = existingPayment.data;
 

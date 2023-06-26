@@ -817,6 +817,8 @@ export default {
         }
       );
 
+      this.contract.status=true
+
       this.contractUpdated = true;
       this.modaValidateOpen = false;
     },

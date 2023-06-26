@@ -89,7 +89,7 @@
                 </div>
               </div>
 
-              <div v-if="messageNotAnswered > 0">
+              <div v-if="messageAnswered > 0">
                 <div class="mb-8">
                   <h1
                     class="text-2xl md:text-3xl text-slate-800 font-bold pt-5"
@@ -190,10 +190,13 @@ export default {
       try {
         const fetchedMessages = await store.dispatch("auth/getContactMessages");
         messages.value = fetchedMessages;
+        messageAnswered.value = 0;
+        messageNotAnswered.value = 0;
 
         messages.value.map((elem) => {
           elem.isValide ? messageAnswered.value++ : messageNotAnswered.value++;
         });
+        console.log(messageAnswered.value, messageNotAnswered.value);
       } catch (error) {
         console.log(error);
       }

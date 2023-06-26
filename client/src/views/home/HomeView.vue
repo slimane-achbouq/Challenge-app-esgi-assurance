@@ -54,8 +54,8 @@
           <UserMenu align="right" class="dark:text-white" />
         </div>
         <div
-          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
         >
           <ul
             class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
@@ -110,14 +110,14 @@
           Find out my pricing
         </p>
         <div
-          class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4"
           v-if="!token"
+          class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4"
         >
           <router-link
             to="/register"
             class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
           >
-            Register
+            Get Started
             <svg
               aria-hidden="true"
               class="ml-2 -mr-1 w-4 h-4"
@@ -133,21 +133,21 @@
             </svg>
           </router-link>
           <router-link
-            to="/login"
+            to="/register"
             class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
           >
-            Login
+            Register
           </router-link>
         </div>
         <div
-          class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4"
           v-if="token"
+          class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4"
         >
           <router-link
-            to="/dashboard"
+            to="/newquote"
             class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
           >
-            Dashboard
+            Get Started
             <svg
               aria-hidden="true"
               class="ml-2 -mr-1 w-4 h-4"
@@ -360,21 +360,21 @@
               <path id="welcome-e" d="M40 0l40 80-40-12.5L0 80z" />
               <path id="welcome-g" d="M40 0l40 80-40-12.5L0 80z" />
               <linearGradient
+                id="welcome-b"
                 x1="50%"
                 y1="0%"
                 x2="50%"
                 y2="100%"
-                id="welcome-b"
               >
                 <stop stop-color="#A5B4FC" offset="0%" />
                 <stop stop-color="#818CF8" offset="100%" />
               </linearGradient>
               <linearGradient
+                id="welcome-c"
                 x1="50%"
                 y1="24.537%"
                 x2="50%"
                 y2="100%"
-                id="welcome-c"
               >
                 <stop stop-color="#4338CA" offset="0%" />
                 <stop stop-color="#6366F1" stop-opacity="0" offset="100%" />

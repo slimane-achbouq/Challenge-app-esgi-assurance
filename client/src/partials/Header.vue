@@ -7,9 +7,9 @@
           <!-- Hamburger button -->
           <button
             class="text-slate-500 hover:text-slate-600 lg:hidden"
-            @click.stop="$emit('toggle-sidebar')"
             aria-controls="sidebar"
             :aria-expanded="sidebarOpen"
+            @click.stop="$emit('toggle-sidebar')"
           >
             <span class="sr-only">Open sidebar</span>
             <svg
@@ -28,8 +28,8 @@
         <div class="flex items-center space-x-3">
           <SearchModal
             id="search-modal"
-            searchId="search"
-            :modalOpen="searchModalOpen"
+            search-id="search"
+            :modal-open="searchModalOpen"
             @open-modal="searchModalOpen = true"
             @close-modal="searchModalOpen = false"
           />
@@ -53,13 +53,13 @@ import UserMenu from "@/components/DropdownProfile.vue";
 
 export default {
   name: "Header",
-  props: ["sidebarOpen"],
   components: {
     SearchModal,
     Notifications,
     Help,
     UserMenu,
   },
+  props: ["sidebarOpen"],
   setup() {
     const searchModalOpen = ref(false);
     return {

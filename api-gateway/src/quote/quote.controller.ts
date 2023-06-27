@@ -232,7 +232,6 @@ async getPrices(@Param('id') id: string) {
     @UploadedFile() file: Express.Multer.File,
   ) {
   const fileContent = file ? file.buffer.toString('base64') : null;
-  console.log(fileContent)
   if (!fileContent) {
     throw new BadRequestException('File not uploaded');
   }

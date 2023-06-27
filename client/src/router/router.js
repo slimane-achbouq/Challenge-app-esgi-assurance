@@ -31,6 +31,7 @@ import PaymentSuccess from "@/components/PaymentSuccess.vue";
 import PaymentFailed from "@/components/PaymentFailed.vue";
 import UserContracts from "@/views/UserContracts.vue";
 import NewQuoteNotConnected from "@/views/NewQuoteNotConnected.vue";
+import PageNotFound from "@/views/PageNotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -250,6 +251,7 @@ const router = createRouter({
       component: NewQuoteNotConnected,
       meta: { requiresUnauth: false },
     },
+    { path: '/pagnotfound', name: 'pagnotfound', component: PageNotFound, meta: { requiresUnauth: false } },
   ],
 });
 

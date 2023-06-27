@@ -26,6 +26,7 @@ import { CreateVehicleQuoteDto } from './dtos/vehicle-quote.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { validate } from 'uuid';
+import { QuoteLocalStorage } from './dtos/quote-localStorage.dto';
 
 @ApiTags('Quote')
 @Controller()
@@ -231,6 +232,7 @@ async getPrices(@Param('id') id: string) {
     @UploadedFile() file: Express.Multer.File,
   ) {
   const fileContent = file ? file.buffer.toString('base64') : null;
+  console.log(fileContent)
   if (!fileContent) {
     throw new BadRequestException('File not uploaded');
   }
@@ -272,4 +274,105 @@ async getPrices(@Param('id') id: string) {
   };
 }
 
+  @Post('vehicles-with-quotes-nc')
+  @UsePipes(ValidationPipe)
+  async createVehicleWithQuoteNC(
+    @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
+  ) {
+
+  return this.calculateInsurancePremiums(createVehicleQuoteDto)
 }
+
+
+async calculateInsurancePremiums(createVehicleQuoteDto: CreateVehicleQuoteDto): Promise<number[]> {
+
+  let { horsepower, vehicleCirculationDate, registrationCardDate } = createVehicleQuoteDto;
+
+  // Calculate the age of the vehicle
+  vehicleCirculationDate = new Date(vehicleCirculationDate)
+  const vehicleAge = new Date().getFullYear() - vehicleCirculationDate.getFullYear();
+
+  // Calculate the years since the registration card date
+  registrationCardDate = new Date(registrationCardDate)
+  const registrationCardAge = new Date().getFullYear() - registrationCardDate.getFullYear();
+
+  // Base price
+  let basePrice = 12;
+
+  // Apply a discount or increase based on horsepower
+  if (horsepower < 100) {
+    basePrice *= 0.5; // 10% discount for vehicles with less than 100 horsepower
+  } else if (horsepower > 200) {
+    basePrice *= 1.4; // 20% increase for vehicles with more than 200 horsepower
+  }
+
+  // Apply a discount or increase based on the age of the vehicle
+  if (vehicleAge < 5) {
+    basePrice *= 0.85; // 5% discount for vehicles less than 5 years old
+  } else if (vehicleAge > 10) {
+    basePrice *= 1.2; // 10% increase for vehicles more than 10 years old
+  }
+
+  // Apply a discount or increase based on the age of the registration card
+  if (registrationCardAge < 1) {
+    basePrice *= 0.95; // 5% discount for registration cards less than 1 year old
+  } else if (registrationCardAge > 5) {
+    basePrice *= 1; // 10% increase for registration cards more than 5 years old
+    
+  }
+
+  // Return three price suggestions: base price, base price + 10%, base price + 20%
+  return [basePrice, basePrice * 1.1, basePrice * 1.2];
+}
+
+
+
+@Post('vehicles-with-quote-local-storage')
+  @UseGuards(JwtAuthGuard)
+  async createVehicleWithQuoteFromLocalStorage(
+    @Req() req,
+    @Body() createVehicleQuoteDto: QuoteLocalStorage
+  ) {
+  const fileContent = createVehicleQuoteDto.carteGrise;
+
+  const vehicleQuoteDto: CreateVehicleDto = { ...createVehicleQuoteDto };
+
+  // Create vehicle first
+  const createdVehicle = await this.quoteServiceClient
+    .send(
+      { cmd: 'createVehicle' },
+      { ...vehicleQuoteDto, carteGrise: fileContent },
+    )
+    .toPromise();
+
+  if (!createdVehicle) {
+    throw new BadRequestException('Vehicle creation failed');
+  }
+
+  // Create quote with the created vehicle's ID
+  const quoteDtoWithVehicleId = {
+    ...createVehicleQuoteDto,
+    insurancePremium: 0,
+    coverageDuration: createVehicleQuoteDto.coverageDuration,
+    userId: req.user.id,
+    vehicleId: createdVehicle.id,
+  };
+  const createdQuote = await this.quoteServiceClient
+    .send({ cmd: 'createQuote' }, quoteDtoWithVehicleId)
+    .toPromise();
+
+  if (!createdQuote) {
+    throw new BadRequestException('Quote creation failed');
+  }
+
+  // Return both the created vehicle and quote
+  return {
+    vehicle: createdVehicle,
+    quote: createdQuote,
+  };
+}
+
+
+
+}
+

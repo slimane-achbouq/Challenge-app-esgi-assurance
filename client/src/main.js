@@ -24,8 +24,19 @@ router.beforeEach((to,from)=>{
 
         const role = store.state.auth.roles[0]
 
+
+        if (to.fullPath.startsWith("/contract/") || to.fullPath.startsWith("/quote/") || to.fullPath.startsWith("/claim/")|| to.fullPath.startsWith("/editquote/") || to.fullPath.startsWith("/newContract/") || to.fullPath.startsWith("/user-profile/") || to.fullPath.startsWith("/verify/") || to.fullPath.startsWith("/resetPassword/") || to.fullPath.startsWith("/claims/") || to.fullPath.startsWith("/resetPassword/") || to.fullPath.startsWith("/resetPassword/")  || to.fullPath.startsWith("/payment/")  ){
+
+
+            return
+        }
+
+        else {
+
+
         if( !routes.includes(to.fullPath)){
 
+             console.log(to.fullPath)
              router.push('pagnotfound')
 
         } 
@@ -48,6 +59,9 @@ router.beforeEach((to,from)=>{
 
 
     }
+
+}
+
     return 
 })
 

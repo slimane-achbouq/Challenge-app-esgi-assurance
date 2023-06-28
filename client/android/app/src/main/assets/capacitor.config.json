@@ -1,0 +1,8 @@
+{
+	"appId": "azulance.app",
+	"appName": "Azulance App",
+	"webDir": "dist",
+	"server": {
+		"cleartext": true
+	}
+}

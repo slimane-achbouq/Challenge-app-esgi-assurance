@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuoteModule } from './quote/quote.module';
 import { VehicleModule } from './vehicle/vehicle.module';
+import {WinstonModule} from "nest-winston";
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import { VehicleModule } from './vehicle/vehicle.module';
     }),
     QuoteModule,
     VehicleModule,
+    WinstonModule.forRoot({
+    }),
 
   ],
   controllers: [AppController],

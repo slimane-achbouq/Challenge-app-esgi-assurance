@@ -18,7 +18,7 @@ export class UsersService {
 
     if (user) {
       throw new BadRequestException(
-        'You have already a compte in our database !',
+        'You have already an account in our database !',
       );
     }
 

@@ -10,7 +10,7 @@ import {format, transports} from "winston";
 
 @Injectable()
 export class QuoteService {
-    private logger = null
+    private logger = null;
 
     constructor(
         @InjectRepository(Quote)
@@ -46,7 +46,7 @@ export class QuoteService {
 
         // Check if the vehicle exists
         if (!vehicle) {
-            this.logger.error("debug", "createQuote error : Vehicle not found => " + JSON.stringify(quoteDto));
+            this.logger.error("createQuote error : Vehicle not found => " + JSON.stringify(quoteDto), "error");
             throw new Error('Vehicle not found');
         }
 
@@ -77,7 +77,7 @@ export class QuoteService {
                 .getOne();
         }
         catch (e) {
-            this.logger.error("error", "getQuoteById => Error Quote ID " + id + " not found");
+            this.logger.error("getQuoteById => Error Quote ID " + id + " not found", "error");
             throw new Error('Quote not found');
         }
 
@@ -148,7 +148,7 @@ export class QuoteService {
         if (quote) {
             await this.quoteRepository.delete({id: quote.id, quoteNumber: quote.quoteNumber});
         }
-        this.logger.error("error", "deleteQuote => Error Quote ID " + id + " not found");
+        this.logger.error("deleteQuote => Error Quote ID " + id + " not found", "error");
     }
 
 }

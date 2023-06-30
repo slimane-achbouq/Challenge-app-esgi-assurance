@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#FFFFFF</color>
-    <string name="app_name">Azulance App</string>
+    <string name="app_name">Azulance app</string>
     <string name="custom_url_scheme">azulance.app</string>
     <string name="package_name">azulance.app</string>
-    <string name="title_activity_main">Azulance App</string>
+    <string name="title_activity_main">Azulance app</string>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         
         <item name="colorPrimary">@color/colorPrimary</item>

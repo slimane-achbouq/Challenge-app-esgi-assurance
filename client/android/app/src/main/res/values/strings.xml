@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Azulance app</string>
+    <string name="title_activity_main">Azulance app</string>
+    <string name="package_name">azulance.app</string>
+    <string name="custom_url_scheme">azulance.app</string>
+</resources>

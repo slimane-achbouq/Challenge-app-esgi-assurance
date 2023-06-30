@@ -54,8 +54,8 @@
           <UserMenu align="right" class="dark:text-white" />
         </div>
         <div
-          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
         >
           <ul
             class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
@@ -116,10 +116,10 @@
               >
               <input
                 id="email"
+                v-model.trim="email"
                 class="form-input w-full"
                 type="email"
                 required
-                v-model.trim="email"
               />
               <div v-if="errors.email" class="text-xs mt-1 text-rose-500">
                 {{ errors.email }}
@@ -133,10 +133,10 @@
                 >
                 <input
                   id="firstname"
+                  v-model.trim="firstname"
                   class="form-input w-full"
                   type="text"
                   required
-                  v-model.trim="firstname"
                 />
                 <div v-if="errors.firstname" class="text-xs mt-1 text-rose-500">
                   {{ errors.firstname }}
@@ -148,17 +148,15 @@
                 >
                 <input
                   id="lastname"
+                  v-model.trim="lastname"
                   class="form-input w-full"
                   type="lastname"
                   required
-                  v-model.trim="lastname"
                 />
                 <div v-if="errors.lastname" class="text-xs mt-1 text-rose-500">
                   {{ errors.lastname }}
                 </div>
               </div>
-
-              <div></div>
             </div>
 
             <!-- Object adresse -->
@@ -168,10 +166,10 @@
               >
               <input
                 id="object"
+                v-model.trim="object"
                 class="form-input w-full"
                 type="text"
                 required
-                v-model.trim="object"
               />
               <div v-if="errors.object" class="text-xs mt-1 text-rose-500">
                 {{ errors.object }}
@@ -184,12 +182,12 @@
               >
               <textarea
                 id="message"
+                v-model.trim="message"
                 rows="4"
                 class="form-input w-full"
                 type="text"
                 placeholder="Write your thoughts here..."
                 required
-                v-model.trim="message"
               ></textarea>
               <div v-if="errors.message" class="text-xs mt-1 text-rose-500">
                 {{ errors.message }}

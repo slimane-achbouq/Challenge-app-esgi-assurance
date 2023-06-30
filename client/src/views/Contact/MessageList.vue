@@ -196,7 +196,6 @@ export default {
         messages.value.map((elem) => {
           elem.isValide ? messageAnswered.value++ : messageNotAnswered.value++;
         });
-        console.log(messageAnswered.value, messageNotAnswered.value);
       } catch (error) {
         console.log(error);
       }
@@ -212,7 +211,7 @@ export default {
           "auth/validateMessage",
           actionPayload
         );
-        const responseData = await response.json();
+        await response.json();
 
         // Perform any necessary actions with the response data
 

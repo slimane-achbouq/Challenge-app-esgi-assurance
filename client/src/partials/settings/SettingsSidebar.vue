@@ -9,9 +9,9 @@
       </div>
       <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
         <router-link
+          v-slot="{ href, navigate, isExactActive }"
           to="/settings/account"
           custom
-          v-slot="{ href, navigate, isExactActive }"
         >
           <li class="mr-0.5 md:mr-0 md:mb-0.5">
             <a
@@ -40,9 +40,9 @@
           </li>
         </router-link>
         <router-link
+          v-slot="{ href, navigate, isExactActive }"
           to="/settings/notifications"
           custom
-          v-slot="{ href, navigate, isExactActive }"
         >
           <li class="mr-0.5 md:mr-0 md:mb-0.5">
             <a
@@ -71,9 +71,9 @@
           </li>
         </router-link>
         <router-link
+          v-slot="{ href, navigate, isExactActive }"
           to="/settings/apps"
           custom
-          v-slot="{ href, navigate, isExactActive }"
         >
           <li class="mr-0.5 md:mr-0 md:mb-0.5">
             <a
@@ -102,9 +102,9 @@
           </li>
         </router-link>
         <router-link
+          v-slot="{ href, navigate, isExactActive }"
           to="/settings/plans"
           custom
-          v-slot="{ href, navigate, isExactActive }"
         >
           <li class="mr-0.5 md:mr-0 md:mb-0.5">
             <a
@@ -133,9 +133,9 @@
           </li>
         </router-link>
         <router-link
-          to="/settings/billing"
-          custom
           v-slot="{ href, navigate, isExactActive }"
+          to="/settings/paiments"
+          custom
         >
           <li class="mr-0.5 md:mr-0 md:mb-0.5">
             <a

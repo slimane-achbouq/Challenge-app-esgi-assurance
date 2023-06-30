@@ -1,11 +1,11 @@
 <template>
-  <div class="relative inline-flex" v-if="email">
+  <div v-if="email" class="relative inline-flex">
     <button
       ref="trigger"
       class="inline-flex justify-center items-center group"
       aria-haspopup="true"
-      @click.prevent="dropdownOpen = !dropdownOpen"
       :aria-expanded="dropdownOpen"
+      @click.prevent="dropdownOpen = !dropdownOpen"
     >
       <img
         class="w-8 h-8 rounded-full"
@@ -52,8 +52,8 @@
           <li>
             <div role="status">
               <svg
-                aria-hidden="true"
                 v-if="loading"
+                aria-hidden="true"
                 class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                 viewBox="0 0 100 101"
                 fill="none"
@@ -99,15 +99,6 @@ import UserAvatar from "@/images/useravatar.png";
 export default {
   name: "DropdownProfile",
   props: ["align"],
-  data() {
-    return {
-      UserAvatar: UserAvatar,
-      email: null,
-      role: null,
-      user: { id: null },
-      loading: true,
-    };
-  },
   setup() {
     const dropdownOpen = ref(false);
     const trigger = ref(null);
@@ -148,6 +139,15 @@ export default {
       email: null,
       role: null,
       user: { id: 1 },
+    };
+  },
+  data() {
+    return {
+      UserAvatar: UserAvatar,
+      email: null,
+      role: null,
+      user: { id: null },
+      loading: true,
     };
   },
   async created() {

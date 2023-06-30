@@ -30,6 +30,7 @@ import PlansPanel from "@/views/PlansPanel.vue";
 import PaymentSuccess from "@/components/PaymentSuccess.vue";
 import PaymentFailed from "@/components/PaymentFailed.vue";
 import UserContracts from "@/views/UserContracts.vue";
+import Paiments from "../partials/settings/BillingPanel.vue";
 import NewQuoteNotConnected from "@/views/NewQuoteNotConnected.vue";
 import PageNotFound from "@/views/PageNotFound.vue";
 
@@ -243,6 +244,12 @@ const router = createRouter({
       path: "/user-contracts",
       name: "user-contracts",
       component: UserContracts,
+      meta: { requiresUnauth: false },
+    },
+    {
+      path: "/settings/paiments",
+      name: "paiments",
+      component: Paiments,
       meta: { requiresUnauth: false },
     },
     {

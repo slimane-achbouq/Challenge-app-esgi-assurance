@@ -93,13 +93,14 @@
                             maxlength="19"
                             @input="formatCreditCardNumber"
                           />
+                          <div
+                            v-if="errors.creditCardNumber"
+                            class="text-xs mt-1 text-rose-500"
+                          >
+                            {{ errors.creditCardNumber }}
+                          </div>
                         </div>
-                        <div
-                          v-if="errors.creditCardNumber"
-                          class="text-xs mt-1 text-rose-500"
-                        >
-                          {{ errors.creditCardNumber }}
-                        </div>
+
                         <!-- Expiry and CVC -->
                         <div class="flex space-x-4">
                           <div class="flex-1">
@@ -118,6 +119,12 @@
                               placeholder="MM/YY"
                               @input="formatExpiryDate"
                             />
+                            <div
+                              v-if="errors.expiryDate"
+                              class="text-xs mt-1 text-rose-500"
+                            >
+                              {{ errors.expiryDate }}
+                            </div>
                           </div>
                           <div class="flex-1">
                             <label
@@ -134,20 +141,15 @@
                               placeholder="CVC"
                               @input="formatCVC"
                             />
+                            <div
+                              v-if="errors.cvc"
+                              class="text-xs mt-1 text-rose-500"
+                            >
+                              {{ errors.cvc }}
+                            </div>
                           </div>
                         </div>
-                        <div
-                          v-if="errors.expiryDate"
-                          class="text-xs mt-1 text-rose-500"
-                        >
-                          {{ errors.expiryDate }}
-                        </div>
-                        <div
-                          v-if="errors.cvc"
-                          class="text-xs mt-1 text-rose-500"
-                        >
-                          {{ errors.cvc }}
-                        </div>
+
                         <!-- Name on Card -->
                         <div>
                           <label
@@ -162,7 +164,14 @@
                             class="form-input w-full"
                             type="text"
                             placeholder="John Doe"
+                            @input="formatCardName"
                           />
+                          <div
+                            v-if="errors.cardName"
+                            class="text-xs mt-1 text-rose-500"
+                          >
+                            {{ errors.cardName }}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -180,8 +189,26 @@
                         Cancel
                       </button>
                       <button
+                        v-if="
+                          validation.creditCardNumber &&
+                          validation.expiryDate &&
+                          validation.cvc &&
+                          validation.cardName
+                        "
                         class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
                         @click="addCreditCard()"
+                      >
+                        Add
+                      </button>
+                      <button
+                        v-if="
+                          !validation.creditCardNumber ||
+                          !validation.expiryDate ||
+                          !validation.cvc ||
+                          !validation.cardName
+                        "
+                        class="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed shadow-none"
+                        disabled
                       >
                         Add
                       </button>
@@ -293,6 +320,10 @@ import ModalBasic from "../../components/Modal.vue";
 import { ref, onMounted } from "vue";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
+import {
+  ValidateCreditCardNumber,
+  ValidateMMYY,
+} from "../../utils/utils-common-function";
 
 export default {
   name: "BillingPanel",
@@ -343,18 +374,14 @@ export default {
     }
 
     async function addCreditCard() {
-      if (this.creditCardNumber.length < 18) {
-        this.errors.creditCardNumber =
-          "Please enter a valide credit card number";
+      if (!ValidateCreditCardNumber(this.creditCardNumber)) {
         return;
       }
       if (this.cvc.length < 3) {
-        this.errors.cvc = "Please enter a valide cvc number";
         return;
       }
 
-      if (this.cardName.length < 5) {
-        this.errors.cardName = "Please enter a valide card name";
+      if (this.cardName.length < 3) {
         return;
       }
       this.cvc = Number(this.cvc);
@@ -379,9 +406,14 @@ export default {
         console.log(error);
       }
       modalOpen.value = false;
+      this.validation.creditCardNumber = false;
+      this.validation.expiryDate = false;
+      this.validation.cvc = false;
+      this.validation.cardName = false;
       this.creditCardNumber = "";
       this.cvc = "";
       this.expiryDate = "";
+      this.cardName = "";
     }
     async function deleteCard() {
       const actionPayload = {
@@ -425,6 +457,12 @@ export default {
       },
       card,
       isHide,
+      validation: {
+        creditCardNumber: false,
+        expiryDate: false,
+        cvc: false,
+        cardName: false,
+      },
     };
   },
   methods: {
@@ -443,7 +481,14 @@ export default {
 
       // Update the credit card number with the formatted value
       this.creditCardNumber = formattedNumber;
-      console.log(this.creditCardNumber);
+      console.log(ValidateCreditCardNumber(this.creditCardNumber));
+      if (!ValidateCreditCardNumber(this.creditCardNumber)) {
+        this.errors.creditCardNumber = "Please provide a valid Visa number!";
+        this.validation.creditCardNumber = false;
+      } else {
+        this.errors.creditCardNumber = "";
+        this.validation.creditCardNumber = true;
+      }
     },
     formatExpiryDate() {
       // Remove any non-digit characters from the expiry date
@@ -457,6 +502,13 @@ export default {
       }
       // Update the expiry date with the formatted value
       this.expiryDate = formattedDate;
+      if (!ValidateMMYY(this.expiryDate)) {
+        this.errors.expiryDate = "Please enter a valid date in MM/YY format.";
+        this.validation.expiryDate = false;
+      } else {
+        this.errors.expiryDate = "";
+        this.validation.expiryDate = true;
+      }
     },
     formatCVC() {
       // Remove any non-digit characters from the cvc
@@ -465,6 +517,23 @@ export default {
       formattedCVC = formattedCVC.slice(0, 3);
       // Update the cvc with the formatted value
       this.cvc = formattedCVC;
+
+      if (this.cvc.length < 3) {
+        this.errors.cvc = "Please enter a valide cvc number";
+        this.validation.cvc = false;
+      } else {
+        this.errors.cvc = "";
+        this.validation.cvc = true;
+      }
+    },
+    formatCardName() {
+      if (this.cardName.length < 3) {
+        this.errors.cardName = "Enter a valide card name";
+        this.validation.cardName = false;
+      } else {
+        this.errors.cardName = "";
+        this.validation.cardName = true;
+      }
     },
   },
 };

@@ -12,7 +12,7 @@ export function emailValidation(mail) {
 
 export function passwordValidation(password) {
   var regularExpression =
-    /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    /^(?=.*[a-z].*[a-z])(?=.*[A-Z].*[A-Z])(?=.*\d.*\d.*\d.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/;
   return regularExpression.test(password);
 }
 

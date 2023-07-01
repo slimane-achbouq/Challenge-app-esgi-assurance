@@ -369,15 +369,15 @@ export default {
     },
     passwordValidation(event) {
       const value = event.target.value;
-      const containsUppercase = /[A-Z]/.test(value);
-      const containsLowercase = /[a-z]/.test(value);
-      const containsNumber = /[0-9]/.test(value);
+      const containsUppercase = /[A-Z].{1,}/.test(value);
+      const containsLowercase = /[a-z].{1,}/.test(value);
+      const containsNumber = /[0-9].{3,}/.test(value);
       const containsSpecial = /[#?!@$%^&*-]/.test(value);
 
       if (!containsUppercase) {
         this.passwordSatatus.upperCase = true;
         this.errors.passwords.upperCase =
-          "Your password must contain capital letters";
+          "Your password must contain 2 capital letters";
       } else {
         this.passwordSatatus.upperCase = false;
       }
@@ -385,14 +385,14 @@ export default {
       if (!containsLowercase) {
         this.passwordSatatus.lowerCase = true;
         this.errors.passwords.lowerCase =
-          "Your password must contain lowwr letters";
+          "Your password must contain 2 lower letters";
       } else {
         this.passwordSatatus.lowerCase = false;
       }
 
       if (!containsNumber) {
         this.passwordSatatus.number = true;
-        this.errors.passwords.number = "Your password must contain numbers";
+        this.errors.passwords.number = "Your password must contain 4 numbers";
       } else {
         this.passwordSatatus.number = false;
       }
@@ -436,6 +436,9 @@ export default {
       this.error = null;
       this.isLoading = true;
       Object.keys(this.errors).forEach((key) => (this.errors[key] = ""));
+      Object.keys(this.errors.passwords).forEach((key) => {
+        this.errors.passwords[key] = "";
+      });
 
       if (this.firstname.length < 3) {
         this.formValid = false;
@@ -482,6 +485,13 @@ export default {
         this.formValid = false;
         this.isLoading = false;
         this.errors.age = "You must be of legal age (18 years and over)";
+        return;
+      }
+
+      if (!this.postalCode || !this.street || !this.city) {
+        this.formValid = false;
+        this.isLoading = false;
+        this.errors.street = "Please enter a valide adresse!";
         return;
       }
 

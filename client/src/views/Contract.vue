@@ -512,7 +512,7 @@
               </div>
             </ModalBasic>
 
-            <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen">
+            <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen" v-if="role == 'Admin'">
               <div class="p-5 flex w-full space-x-4">
                 <!-- Icon -->
                 <div

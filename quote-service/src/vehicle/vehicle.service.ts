@@ -5,13 +5,37 @@ import { Vehicle } from './vehicle.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CreateVehicleDto } from './vehicle.dto';
+import {WinstonModule} from "nest-winston";
+import {format, transports} from "winston";
 
 @Injectable()
 export class VehicleService {
+  private logger = null;
+
   constructor(
     @InjectRepository(Vehicle)
     private vehicleRepository: Repository<Vehicle>,
-  ) {}
+  ) {
+    this.logger = WinstonModule.createLogger({
+      transports: [
+        new transports.File({
+          level: 'debug',
+          filename: 'logs/debug.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.File({
+          level: 'error',
+          filename: 'logs/error.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.Console({
+          format: format.combine(
+              format.colorize({message: true}),
+          )
+        }),
+      ]
+    });
+  }
 
   async createVehicle(vehicleDto: CreateVehicleDto): Promise<Vehicle> {
     const { carteGrise, ...rest } = vehicleDto;
@@ -21,6 +45,8 @@ export class VehicleService {
 
     // Save the vehicle with the file path
     const newVehicle = this.vehicleRepository.save({ ...rest, carteGrise: fileContent })
+
+    this.logger.debug("debug", "createVehicle : new vehicle " + JSON.stringify(newVehicle));
     return newVehicle;
   }
 
@@ -48,12 +74,14 @@ export class VehicleService {
       // If no new file is uploaded, just update the other vehicle details
       await this.vehicleRepository.update(id, rest);
     }
-  
+
+    this.logger.debug("debug", "updateVehicle : vehicle ID " + id + " updated");
     const updatedVehicle = await this.vehicleRepository.findOneBy({ id });
     return updatedVehicle;
   }
 
   async deleteVehicle(id: string): Promise<void> {
+    this.logger.debug("debug", "deleteVehicle : vehicle ID " + id + " deleted");
     await this.vehicleRepository.delete(id);
   }
 

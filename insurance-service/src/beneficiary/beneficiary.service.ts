@@ -5,12 +5,36 @@ import { CreateBeneficiaryDto,UpdateBeneficiaryDto } from './beneficiary.dto'
 import { Beneficiary } from './beneficiary.schema';
 import * as fs from 'fs';
 import * as path from 'path';
+import {WinstonModule} from "nest-winston";
+import {format, transports} from "winston";
 
 @Injectable()
 export class BeneficiaryService {
+  private logger = null;
+
   constructor(
     @InjectModel(Beneficiary.name) private beneficiaryModel: Model<Beneficiary>,
-  ) {}
+  ) {
+    this.logger = WinstonModule.createLogger({
+      transports: [
+        new transports.File({
+          level: 'debug',
+          filename: 'logs/debug.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.File({
+          level: 'error',
+          filename: 'logs/error.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.Console({
+          format: format.combine(
+              format.colorize({message: true}),
+          )
+        }),
+      ]
+    });
+  }
 
 
   async createBeneficiary(
@@ -31,7 +55,8 @@ export class BeneficiaryService {
       justificatifDomicile: justificatifDomicileContent,
       permis: permisContent,
     });
-  
+
+    this.logger.debug("debug", "createBeneficiary : new beneficiary " + beneficiaryDto.email + " created");
     return newBeneficiary.save();
   }
   
@@ -63,7 +88,8 @@ export class BeneficiaryService {
       justificatifDomicile: updatedJustificatifDomicile,
       permis: updatedPermis,
     };
-  
+
+    this.logger.debug("debug", "updateBeneficiary : beneficiary " + beneficiaryDto.email + " updated");
     return this.beneficiaryModel
       .findByIdAndUpdate(id, updatedBeneficiaryDto, { new: true })
       .exec();
@@ -72,6 +98,7 @@ export class BeneficiaryService {
   
 
   async deleteBeneficiary(id: string): Promise<Beneficiary> {
+    this.logger.debug("debug", "deleteBeneficiary : beneficiary ID " + id + " deleted");
     return this.beneficiaryModel.findByIdAndDelete(id).exec();
   }
 

@@ -5,19 +5,44 @@ import { Insurance } from './insurance.schema';
 import { Beneficiary } from '../beneficiary/beneficiary.schema';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateInsuranceDto, UpdateInsuranceDto } from './insurance.dto';
+import {WinstonModule} from "nest-winston";
+import {format, transports} from "winston";
 
 @Injectable()
 export class InsuranceService {
+  private logger = null;
+
   constructor(
     @InjectModel(Insurance.name) private insuranceModel: Model<Insurance>,
     @InjectModel(Beneficiary.name) private beneficiaryModel: Model<Beneficiary>,
     @Inject('QUOTE_SERVICE') private readonly quoteServiceClient: ClientProxy
     
-  ) {}
+  ) {
+    this.logger = WinstonModule.createLogger({
+      transports: [
+        new transports.File({
+          level: 'debug',
+          filename: 'logs/debug.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.File({
+          level: 'error',
+          filename: 'logs/error.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.Console({
+          format: format.combine(
+              format.colorize({message: true}),
+          )
+        }),
+      ]
+    });
+  }
 
   async createInsurance(insuranceDto: CreateInsuranceDto): Promise<Insurance> {
     const beneficiary = await this.beneficiaryModel.findById(insuranceDto.beneficiary).exec();
     if (!beneficiary) {
+      this.logger.error("createInsurance attempt : beneficiary " + JSON.stringify(insuranceDto.beneficiary) + " not found");
       throw new NotFoundException('Beneficiary not found');
     }
     const newInsurance = new this.insuranceModel({ ...insuranceDto, beneficiary: insuranceDto.beneficiary });
@@ -36,6 +61,7 @@ export class InsuranceService {
     .send({ cmd: 'updateQuote' }, { id, quoteDto })
     .toPromise();
 
+    this.logger.debug("debug", "createInsurance : new insurance for QuoteID " + id + " created");
     return savedInsurance;
   }
 
@@ -73,6 +99,8 @@ export class InsuranceService {
     
     const quoteId = insurance['quoteId']
     this.quoteServiceClient.send({ cmd: 'updateQuote' }, { id:quoteId, quoteDto }).toPromise();
+
+    this.logger.debug("debug", "updateInsurance : insurance with QuoteID " + quoteId + " updated");
     return updateDinsurance;
 
   }

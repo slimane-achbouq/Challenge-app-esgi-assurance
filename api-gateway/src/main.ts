@@ -81,6 +81,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/v1', app, doc, swaggerCustomOptions);
 
   await app.startAllMicroservices();
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();

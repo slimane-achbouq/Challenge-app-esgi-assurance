@@ -1,6 +1,6 @@
 <template>
   <main class="bg-white">
-    <div class="relative flex" v-if="!isSuccess">
+    <div v-if="!isSuccess" class="relative flex">
       <!-- Content -->
       <div class="w-full md:w-1/2">
         <div class="min-h-screen h-full flex flex-col after:flex-1">
@@ -13,21 +13,21 @@
                 <svg width="32" height="32" viewBox="0 0 32 32">
                   <defs>
                     <linearGradient
+                      id="logo-a"
                       x1="28.538%"
                       y1="20.229%"
                       x2="100%"
                       y2="108.156%"
-                      id="logo-a"
                     >
                       <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
                       <stop stop-color="#A5B4FC" offset="100%" />
                     </linearGradient>
                     <linearGradient
+                      id="logo-b"
                       x1="88.638%"
                       y1="29.267%"
                       x2="22.42%"
                       y2="100%"
-                      id="logo-b"
                     >
                       <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
                       <stop stop-color="#38BDF8" offset="100%" />
@@ -67,9 +67,9 @@
                   >
                   <input
                     id="email"
+                    v-model.trim="email"
                     class="form-input w-full"
                     type="email"
-                    v-model.trim="email"
                   />
                 </div>
               </div>
@@ -128,6 +128,10 @@ import successMessageView from "../SuccessMessage.vue";
 
 export default {
   name: "ResetPassword",
+  components: {
+    Banner,
+    successMessageView,
+  },
   data() {
     return {
       email: "",
@@ -164,7 +168,7 @@ export default {
         // this.$router.replace(redirectUrl);
 
         this.isSuccess = true;
-        this.successMesage = "Veuillez vérifier votre boite mail.";
+        this.successMesage = "Please check your mailbox.";
       } catch (ex) {
         this.error = new Error(
           ex || "Failed to send email. Check you have already an compte."
@@ -172,10 +176,6 @@ export default {
         throw error;
       }
     },
-  },
-  components: {
-    Banner,
-    successMessageView,
   },
 };
 </script>

@@ -79,12 +79,12 @@
             </div>
           </li>
           <li>
-            <router-link
+            <button
               class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-              to="/signout"
-              @click="dropdownOpen = false"
-              >Sign Out</router-link
+              @click="signout()"
             >
+              Sign Out
+            </button>
           </li>
         </ul>
       </div>
@@ -96,6 +96,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import UserAvatar from "@/images/useravatar.png";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: "DropdownProfile",
@@ -110,6 +111,8 @@ export default {
     const role = ref(null);
     const token = ref(null);
     const loading = ref(true);
+
+    const router = useRouter();
 
     const setUserDetails = () => {
       email.value = store.getters["auth/email"];
@@ -146,6 +149,16 @@ export default {
       dropdownOpen.value = false;
     };
 
+    function signout() {
+      const authData = localStorage.getItem("vuex");
+      const data = JSON.parse(authData);
+      if (data) {
+        localStorage.clear();
+        // router.push({ name: "home" });
+        window.location.href = "/";
+      }
+    }
+
     return {
       dropdownOpen,
       trigger,
@@ -155,6 +168,7 @@ export default {
       role,
       token,
       loading,
+      signout,
     };
   },
 };

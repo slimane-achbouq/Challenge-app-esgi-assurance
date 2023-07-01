@@ -49,8 +49,6 @@ export class CardService {
       this.creditCardRepository.findByIdAndDelete(creditCard._id).exec();
     }
 
-    console.log(creditCard);
-
     return {
       message: 'You have delete credit card with success !',
     };

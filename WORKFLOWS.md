@@ -8,7 +8,7 @@
     - [3.1. Registration](#31-registration)
     - [3.2. Login](#32-login)
     - [3.3. Credit card](#33-credit-card)
-
+- [4. Additional information](#additional-information)
 ---
 
 
@@ -113,3 +113,74 @@ To delete a credit card from your account, follow these steps:
 - The credit card will be permanently deleted from your Azulance profile.
 
 Please note that it is important to handle your credit card information with care and only store it in trusted and secure platforms. If you encounter any issues or have concerns about the security of your credit card information, please reach out to our support team for assistance.
+
+## 3.4. Create a Quote
+
+The quote will help you discover the cost of your insurance depending on the vehicle you possess (car, motorcycle).
+
+You will be guided throw the process of creating a quote with the help of a progressive form, pretty simple to complete.
+
+![Quote form](docs/worflows/quote/quote-form.png)
+
+You will have four steps to complete with information such as personal, driver and vehicle information.
+
+After completing the form, you will be redirected to the pricing page, where you will be able to choose the best insurance option for you.
+
+![Quote pricing](docs/worflows/quote/quote-prices.png)
+
+After selecting you insurance option, you will have to upload two important documents :
+- Your driver's license
+- Proof of your home address
+
+![Quote pricing documents](docs/worflows/quote/quote-prices-docs.png)
+
+## 3.5. Payment
+
+After selecting your insurance option and uploading the documents, you will be redirected to the payment page by clicking on the button "Confirm and proceed to payment", where you will be able to pay for your insurance.
+
+You can also pay later, but please note that your contract will be on hold until you pay for it.
+
+The service "Stripe" is used to process the payment, and you will be able to pay with multiple payment methods.
+
+## 3.6. Contract
+
+After paying for your insurance, you will be redirected to the contract page, where you will be able to see your contract with its current status.
+
+![Contract](docs/worflows/contract/contract-page.png)
+
+Please note that your contract will be on hold until an administrator verifies the documents and the validity of it.
+
+On this page, you can see all the information about your contract and also your payment history.
+
+If you think that an information you gave is false, you can contact us with the help of the contact page.
+
+## 3.7. Claims
+
+In case of an accident/other important event, you will be able to start a claim for it by clicking on "Create a claim" on the contract page.
+
+![Valid contract](docs/worflows/contract/contract-valid.png)
+
+You will be redirected to the claim creation page, in which you will be able to describe the event and upload documents related to it.
+
+![Claim creation](docs/worflows/claim/new-claim.png)
+
+Several information will be asked, such as :
+- Reason
+- Description
+- Proof of the event
+
+After submitting the claim, you will be redirected to the claim page, where you will be able to see the status of your claim.
+
+![Claim page](docs/worflows/claim/claim-page.png)
+
+On the claim page, you will be able to see all the information you entered about the event and the current status, and also a section where you will see the decision taken by an administrator after reviewing the claim.
+
+![Claim reviewed page](docs/worflows/claim/claim-reviewed.png)
+
+If you think that an information you gave is false, or have a question about the administrator's decision, please feel free to contact us with the help of the contact page. An administrator will answer you as soon as possible.
+
+## Additional information
+
+Thank you for reading this documentation, we wish it was helpful and hope that you will enjoy using our platform.
+
+If you have any questions, please feel free to contact us.

@@ -21,7 +21,7 @@
 - [3. Project description](#3-project-description)
   - [3.1. Project initialization](#31-project-initialization)
   - [3.2. Installed packages](#32-installed-packages)
-- [4. workflows](#4-worflows)
+- [4. Workflows](#4-workflows)
 
 ---
 

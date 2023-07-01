@@ -95,6 +95,7 @@
 <script>
 import { ref, onMounted, onUnmounted } from "vue";
 import UserAvatar from "@/images/useravatar.png";
+import { useStore } from "vuex";
 
 export default {
   name: "DropdownProfile",
@@ -103,7 +104,30 @@ export default {
     const dropdownOpen = ref(false);
     const trigger = ref(null);
     const dropdown = ref(null);
-    const useremail = ref(null);
+
+    const store = useStore();
+    const email = ref(null);
+    const role = ref(null);
+    const token = ref(null);
+    const loading = ref(true);
+
+    const setUserDetails = () => {
+      email.value = store.getters["auth/email"];
+      role.value = store.getters["auth/roles"];
+      token.value = store.getters["auth/token"];
+      loading.value = false;
+    };
+
+    onMounted(() => {
+      document.addEventListener("click", clickHandler);
+      document.addEventListener("keydown", keyHandler);
+      setUserDetails();
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener("click", clickHandler);
+      document.removeEventListener("keydown", keyHandler);
+    });
 
     // close on click outside
     const clickHandler = ({ target }) => {
@@ -122,40 +146,16 @@ export default {
       dropdownOpen.value = false;
     };
 
-    onMounted(() => {
-      document.addEventListener("click", clickHandler);
-      document.addEventListener("keydown", keyHandler);
-    });
-
-    onUnmounted(() => {
-      document.removeEventListener("click", clickHandler);
-      document.removeEventListener("keydown", keyHandler);
-    });
-
     return {
       dropdownOpen,
       trigger,
       dropdown,
-      email: null,
-      role: null,
-      user: { id: 1 },
+      UserAvatar,
+      email,
+      role,
+      token,
+      loading,
     };
-  },
-  data() {
-    return {
-      UserAvatar: UserAvatar,
-      email: null,
-      role: null,
-      user: { id: null },
-      loading: true,
-    };
-  },
-  async created() {
-    this.loading = true;
-    this.role = this.$store.getters["auth/roles"];
-    this.email = this.$store.getters["auth/email"];
-    let token = this.$store.getters["auth/token"];
-    this.loading = false;
   },
 };
 </script>

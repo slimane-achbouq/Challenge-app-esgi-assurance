@@ -18,9 +18,9 @@ const today = new Date();
 
 // Calculate the date 18 years ago
 const minDate = new Date(
-    today.getFullYear() - 18,
-    today.getMonth(),
-    today.getDate(),
+  today.getFullYear() - 18,
+  today.getMonth(),
+  today.getDate(),
 );
 
 export const apiPropertiesUser: {

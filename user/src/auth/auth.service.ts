@@ -52,7 +52,7 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto): Promise<unknown> {
     // Check if user exists
     const userExists = await this.usersService.findByUserByEmail(
-        createUserDto.email,
+      createUserDto.email,
     );
     if (userExists) {
       this.logger.error("signUp attempt error : user " + createUserDto.email + " already exists", "error");
@@ -73,11 +73,11 @@ export class AuthService {
 
     // create token that contain id, emai, roles of user
     const tokens = await this.getTokens(
-        newUser._id,
-        newUser.firstname,
-        newUser.lastname,
-        newUser.email,
-        newUser.roles,
+      newUser._id,
+      newUser.firstname,
+      newUser.lastname,
+      newUser.email,
+      newUser.roles,
     );
 
     const payload = {
@@ -88,8 +88,8 @@ export class AuthService {
     // call utils ms for send email validation to the new profile
     try {
       await this.utilsService
-          .send({ cmd: 'singInConfirmationEmail' }, payload)
-          .toPromise();
+        .send({ cmd: 'singInConfirmationEmail' }, payload)
+        .toPromise();
     } catch (err) {
       this.logger.error("signUp confirmation mail error : for user " + createUserDto.email, "error");
       return new BadRequestException(err);
@@ -130,12 +130,12 @@ export class AuthService {
     }
 
     const tokens = await this.getTokens(
-        user._id,
-        user.firstname,
-        user.lastname,
-        user.email,
-        user.roles,
-        user.isValide,
+      user._id,
+      user.firstname,
+      user.lastname,
+      user.email,
+      user.roles,
+      user.isValide,
     );
     await this.updateRefreshToken(user._id, tokens.refreshToken);
 
@@ -160,41 +160,41 @@ export class AuthService {
   }
 
   async getTokens(
-      userId: string,
-      firstname: string,
-      lastname: string,
-      email: string,
-      roles: Role[],
-      isValide?: boolean,
+    userId: string,
+    firstname: string,
+    lastname: string,
+    email: string,
+    roles: Role[],
+    isValide?: boolean,
   ) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-          {
-            id: userId,
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            roles: roles,
-            profileStatus: isValide,
-          },
-          {
-            secret: process.env.JWT_ACCESS_SECRET,
-            expiresIn: '600m',
-          },
+        {
+          id: userId,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          roles: roles,
+          profileStatus: isValide,
+        },
+        {
+          secret: process.env.JWT_ACCESS_SECRET,
+          expiresIn: '600m',
+        },
       ),
       this.jwtService.signAsync(
-          {
-            id: userId,
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            roles: roles,
-            profileStatus: isValide,
-          },
-          {
-            secret: process.env.JWT_ACCESS_SECRET,
-            expiresIn: '7d',
-          },
+        {
+          id: userId,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          roles: roles,
+          profileStatus: isValide,
+        },
+        {
+          secret: process.env.JWT_ACCESS_SECRET,
+          expiresIn: '7d',
+        },
       ),
     ]);
 
@@ -206,7 +206,7 @@ export class AuthService {
 
   async verifyProfile(verifyDto: VerifyDto) {
     const user: User = await this.usersService.findByUserBytoken(
-        verifyDto.token,
+      verifyDto.token,
     );
 
     if (!user) {
@@ -242,16 +242,16 @@ export class AuthService {
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await argon2.verify(
-        user.refreshToken,
-        refreshToken,
+      user.refreshToken,
+      refreshToken,
     );
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(
-        user.id,
-        user.firstname,
-        user.lastname,
-        user.email,
-        user.roles,
+      user.id,
+      user.firstname,
+      user.lastname,
+      user.email,
+      user.roles,
     );
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
@@ -259,7 +259,7 @@ export class AuthService {
 
   async resetPassword(resetPassword: resetPasswordDto) {
     const user: User = await this.usersService.findByUserByEmail(
-        resetPassword.email,
+      resetPassword.email,
     );
 
     if (!user) {
@@ -282,8 +282,8 @@ export class AuthService {
 
     try {
       await this.utilsService
-          .send({ cmd: 'resetPasswordEmail' }, payload)
-          .toPromise();
+        .send({ cmd: 'resetPasswordEmail' }, payload)
+        .toPromise();
     } catch (err) {
       this.logger.error("resetPassword attempt : Bad request", "error");
       return new BadRequestException(err);
@@ -297,7 +297,7 @@ export class AuthService {
 
   async updatePassword(updatePassword: updatePasswordDto) {
     const user: User = await this.usersService.findByUserBytoken(
-        updatePassword.token,
+      updatePassword.token,
     );
 
     if (!user) {

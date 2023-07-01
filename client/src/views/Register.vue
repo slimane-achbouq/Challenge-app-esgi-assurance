@@ -13,21 +13,21 @@
                 <svg width="32" height="32" viewBox="0 0 32 32">
                   <defs>
                     <linearGradient
+                      id="logo-a"
                       x1="28.538%"
                       y1="20.229%"
                       x2="100%"
                       y2="108.156%"
-                      id="logo-a"
                     >
                       <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
                       <stop stop-color="#A5B4FC" offset="100%" />
                     </linearGradient>
                     <linearGradient
+                      id="logo-b"
                       x1="88.638%"
                       y1="29.267%"
                       x2="22.42%"
                       y2="100%"
-                      id="logo-b"
                     >
                       <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
                       <stop stop-color="#38BDF8" offset="100%" />
@@ -51,7 +51,7 @@
             </div>
           </div>
 
-          <div class="max-w-sm mx-auto px-4 py-8" v-if="state.isSignIn">
+          <div v-if="state.isSignIn" class="max-w-sm mx-auto px-4 py-8">
             <h1 class="text-3xl text-slate-800 font-bold mb-6">Sign Up</h1>
             <Banner type="error" :open="!!error">
               {{ error }}
@@ -66,10 +66,10 @@
                   >
                   <input
                     id="firstname"
+                    v-model.trim="firstname"
                     class="form-input w-full"
                     type="text"
                     required
-                    v-model.trim="firstname"
                   />
                   <div
                     v-if="errors.firstname"
@@ -84,10 +84,10 @@
                   >
                   <input
                     id="lastname"
+                    v-model.trim="lastname"
                     class="form-input w-full"
                     type="lastname"
                     required
-                    v-model.trim="lastname"
                   />
                   <div
                     v-if="errors.lastname"
@@ -102,14 +102,14 @@
                     >Street Address <span class="text-rose-500">*</span></label
                   >
                   <input
-                    autoComplete="none"
                     id="street"
+                    v-model.trim="street"
+                    autoComplete="none"
                     class="form-input w-full"
                     type="text"
-                    v-model.trim="street"
                     @input="searchStreet($event)"
                   />
-                  <div class="" v-if="isAddressLoading">
+                  <div v-if="isAddressLoading" class="">
                     <svg
                       class="animate-spin w-4 h-4 fill-current shrink-0"
                       viewBox="0 0 16 16"
@@ -120,17 +120,17 @@
                     </svg>
                   </div>
                   <div
-                    v-else-if="searchedAddresses"
                     v-for="searchedAddress in searchedAddresses"
+                    v-else-if="searchedAddresses"
                     :key="searchedAddress.properties.id"
                   >
                     <div
                       class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                     >
                       <button
-                        @click="setAddress(searchedAddress)"
                         type="button"
                         class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
+                        @click="setAddress(searchedAddress)"
                       >
                         {{
                           searchedAddress.properties.label.substring(0, 30) +
@@ -154,7 +154,7 @@
                   <vue-tel-input
                     v-model="phoneNumber"
                     class="form-input"
-                    defaultCountry="FR"
+                    default-country="FR"
                   ></vue-tel-input>
                   <div
                     v-if="errors.phoneNumber"
@@ -170,10 +170,10 @@
                   >
                   <input
                     id="age"
+                    v-model.trim="age"
                     class="form-input w-full"
                     type="date"
                     required
-                    v-model.trim="age"
                   />
                   <div v-if="errors.age" class="text-xs mt-1 text-rose-500">
                     {{ errors.age }}
@@ -187,10 +187,10 @@
                   >
                   <input
                     id="email"
+                    v-model.trim="email"
                     class="form-input w-full"
                     type="email"
                     required
-                    v-model.trim="email"
                   />
                   <div v-if="errors.email" class="text-xs mt-1 text-rose-500">
                     {{ errors.email }}
@@ -204,11 +204,11 @@
                   >
                   <input
                     id="password"
+                    v-model.trim="password"
                     class="form-input w-full"
                     type="password"
                     autoComplete="on"
                     required
-                    v-model.trim="password"
                     @input="passwordValidation($event)"
                   />
                   <div

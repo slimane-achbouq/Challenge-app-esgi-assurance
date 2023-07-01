@@ -8,8 +8,8 @@ import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {WinstonModule} from "nest-winston";
-import {format, transports} from "winston";
+import { WinstonModule } from 'nest-winston';
+import { format, transports } from 'winston';
 
 @Injectable()
 export class UsersService {
@@ -29,11 +29,9 @@ export class UsersService {
           format: format.combine(format.timestamp(), format.json()),
         }),
         new transports.Console({
-          format: format.combine(
-              format.colorize({message: true}),
-          )
+          format: format.combine(format.colorize({ message: true })),
         }),
-      ]
+      ],
     });
   }
 
@@ -41,14 +39,21 @@ export class UsersService {
     const user = await this.findByUserByEmail(createUserDto.email);
 
     if (user) {
-      this.logger.error("createUser attempt : user " + user.email + " already exists in database");
+      this.logger.error(
+        'createUser attempt : user ' +
+          user.email +
+          ' already exists in database',
+      );
       throw new BadRequestException(
         'You have already an account in our database !',
       );
     }
 
     const createdUser = new this.userModel(createUserDto);
-    this.logger.debug("debug", "createUser : new user " + createUserDto.email + " created");
+    this.logger.debug(
+      'debug',
+      'createUser : new user ' + createUserDto.email + ' created',
+    );
     return createdUser.save();
   }
 
@@ -59,10 +64,12 @@ export class UsersService {
   async findById(id: string): Promise<User | undefined> {
     const user: User = await this.userModel.findById(id);
 
-    if (!user.isValide)
-      this.logger.error("findById attempt : user account " + user.email + " is not activated");
+    if (!user.isValide) {
+      this.logger.error(
+        'findById attempt : user account ' + user.email + ' is not activated',
+      );
       throw new BadRequestException(`User profile is not activated !`);
-
+    }
     return user;
   }
 
@@ -83,7 +90,9 @@ export class UsersService {
     const existingUser = await this.userModel.findById(id).exec();
 
     if (!existingUser) {
-      this.logger.error("updateuser attempt : user with ID " + id + " not found");
+      this.logger.error(
+        'updateuser attempt : user with ID ' + id + ' not found',
+      );
       throw new NotFoundException(`User not found with id: ${id}`);
     }
 
@@ -97,12 +106,12 @@ export class UsersService {
       }
     });
 
-    this.logger.debug("debug", "updateuser : user with ID " + id + " updated");
+    this.logger.debug('debug', 'updateuser : user with ID ' + id + ' updated');
     return this.userModel.findByIdAndUpdate(id, update, { new: true }).exec();
   }
 
   async remove(id: string): Promise<User> {
-    this.logger.debug("debug", "removeUser : user with ID " + id + " deleted");
+    this.logger.debug('debug', 'removeUser : user with ID ' + id + ' deleted');
     return this.userModel.findByIdAndDelete(id).exec();
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,7 +9,7 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
@@ -31,17 +31,17 @@
               <!-- Delete button -->
               <DeleteButton
                 v-if="showDeleteButton"
-                :selectedItems="selectedItems"
+                :selected-items="selectedItems"
                 @click="onModaDeletelOpen"
               />
             </div>
           </div>
 
-          <Banner type="success" class="mb-4" :open="true" v-if="updated">
+          <Banner v-if="updated" type="success" class="mb-4" :open="true">
             User information updated successfully.
           </Banner>
 
-          <Banner type="success" class="mb-4" :open="true" v-if="deleted">
+          <Banner v-if="deleted" type="success" class="mb-4" :open="true">
             User deleted successfully.
           </Banner>
           <!-- Table -->
@@ -52,9 +52,9 @@
 
           <ModalBasic
             id="feedback-modal"
-            :modalOpen="modalOpen"
-            @close-modal="onModalClose"
+            :modal-open="modalOpen"
             title="Edit User"
+            @close-modal="onModalClose"
           >
             <!-- Modal content -->
             <div class="px-5 py-4">
@@ -75,8 +75,8 @@
                       >First Name<span class="text-rose-500">*</span></label
                     >
                     <input
-                      v-model="selectedItems.firstname"
                       id="name"
+                      v-model="selectedItems.firstname"
                       class="form-input w-full px-2 py-1"
                       type="text"
                       required
@@ -90,8 +90,8 @@
                       >Last Name <span class="text-rose-500">*</span></label
                     >
                     <input
-                      v-model="selectedItems.lastname"
                       id="name"
+                      v-model="selectedItems.lastname"
                       class="form-input w-full px-2 py-1"
                       type="text"
                     />
@@ -110,8 +110,8 @@
                       >Mobile <span class="text-rose-500">*</span></label
                     >
                     <input
-                      v-model="selectedItems.phoneNumber"
                       id="name"
+                      v-model="selectedItems.phoneNumber"
                       class="form-input w-full px-2 py-1"
                       type="text"
                       required
@@ -125,8 +125,8 @@
                       >Status <span class="text-rose-500">*</span></label
                     >
                     <select
-                      class="form-select"
                       v-model="selectedItems.isVerified"
+                      class="form-select"
                     >
                       <option value="true">Actived</option>
                       <option value="false">Not Actived</option>
@@ -139,8 +139,8 @@
                     >Email <span class="text-rose-500">*</span></label
                   >
                   <input
-                    v-model="selectedItems.email"
                     id="email"
+                    v-model="selectedItems.email"
                     class="form-input w-full px-2 py-1"
                     type="email"
                     required
@@ -176,7 +176,7 @@
             </div>
           </ModalBasic>
 
-          <ModalBasic id="danger-modal" :modalOpen="modaDeletelOpen">
+          <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen">
             <div class="p-5 flex w-full space-x-4">
               <!-- Icon -->
               <div

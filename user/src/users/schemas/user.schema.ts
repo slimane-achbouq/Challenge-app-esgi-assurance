@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 import { Document } from 'mongoose';
-import { Role } from 'src/users/enums/roles.enum';
+import { Role } from '../enums/roles.enum';
 import { Statut } from '../enums/statut.enum';
 
 export const apiPropertiesUser: {

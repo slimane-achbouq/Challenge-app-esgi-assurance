@@ -33,11 +33,13 @@ import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Insurance')
 @Controller({
   version: '1',
 })
+@SkipThrottle()
 export class InsuranceController {
   constructor(
     @Inject('INSURANCE_SERVICE') private insuranceServiceClient: ClientProxy,

@@ -58,6 +58,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   @UsePipes(ValidationPipe)
+  @Throttle(2, 30)
   signup(@Body() createUserDto: CreateUserDto) {
     
     if (createUserDto.isValide) {

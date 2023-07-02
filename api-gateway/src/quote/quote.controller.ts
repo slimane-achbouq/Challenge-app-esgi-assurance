@@ -31,11 +31,13 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
 import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Quote')
 @Controller({
   version: '1',
 })
+@SkipThrottle()
 export class QuoteController {
   constructor(
     @Inject('QUOTE_SERVICE') private readonly quoteServiceClient: ClientProxy,
@@ -44,6 +46,7 @@ export class QuoteController {
   // Quote related endpoints
   @Post('quotes')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createQuote(@Body() quoteDto: CreateQuoteDto) {
 
     if(quoteDto.insurancePremium) 
@@ -57,12 +60,14 @@ export class QuoteController {
   @Get('quotes')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @Throttle(5, 60)
   async getQuotes() {
     return this.quoteServiceClient.send({ cmd: 'getQuotes' }, {}).toPromise();
   }
 
   @Get('quote/:userId')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getQuoteByUserId(@Param('userId') userId: string) {
     return this.quoteServiceClient
       .send({ cmd: 'getQuoteByUserId' }, { userId: userId })
@@ -72,6 +77,7 @@ export class QuoteController {
   @Get('quotes/:id')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @Throttle(5, 60)
   async getQuoteById(@Param('id') id: string) {
     // Verify if ID is a valid UUID
     if (!validate(id)) {
@@ -92,6 +98,7 @@ export class QuoteController {
 
   @Get('quote-user/:userId')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getQuoteByIdUser(@Param('userId') userId: string) {
     // Verify if ID is a valid UUID
 
@@ -110,6 +117,7 @@ export class QuoteController {
 @Put('quotes/:id')
 @UsePipes(ValidationPipe)
 @UseGuards(JwtAuthGuard)
+@Throttle(5, 60)
 async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   // check if quote exists
   const existingQuote = await this.quoteServiceClient
@@ -135,6 +143,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
 
   @Delete('quotes/:id')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async deleteQuote(@Param('id') id: string) {
     // Check if quote exists
     const existingQuote = await this.quoteServiceClient
@@ -155,6 +164,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @Throttle(5, 60)
   async createVehicle(
     @Body() vehicleDto: CreateVehicleDto,
     @UploadedFile() file: Express.Multer.File,
@@ -180,6 +190,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
 
   @Get('vehicles/:id')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getVehicleById(@Param('id') id: string) {
     const vehicle = await this.quoteServiceClient
       .send({ cmd: 'getVehicleById' }, id)
@@ -196,6 +207,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async updateVehicle(
     @Param('id') id: string,
     @Body() vehicleDto: UpdateVehicleDto,
@@ -221,6 +233,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
 
   @Delete('vehicles/:id')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async deleteVehicle(@Param('id') id: string) {
     const deleted = await this.quoteServiceClient
       .send({ cmd: 'deleteVehicle' }, id)
@@ -236,6 +249,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   }
 
   @Get('prices/:id')
+  @Throttle(5, 60)
   async getPrices(@Param('id') id: string) {
     const prices = await this.quoteServiceClient
       .send({ cmd: 'getPrices' }, id)
@@ -254,6 +268,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createVehicleWithQuote(
     @Req() req,
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
@@ -303,6 +318,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
 
   @Post('vehicles-with-quotes-nc')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createVehicleWithQuoteNC(
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
   ) {
@@ -355,6 +371,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
 
   @Post('vehicles-with-quote-local-storage')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async createVehicleWithQuoteFromLocalStorage(
     @Req() req,
     @Body() createVehicleQuoteDto: QuoteLocalStorage,

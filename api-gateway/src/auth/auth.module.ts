@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.auth';
 import { JwtStrategy } from './jwt.strategy';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const clientProxyProvider: Provider = {
   provide: 'USER_SERVICE',
@@ -32,9 +34,22 @@ const clientProxyProvider: Provider = {
       secret: process.env.JWT_ACCESS_SECRET,
       signOptions: { expiresIn: '6000s' },
     }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
   ],
   controllers: [UserController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, clientProxyProvider],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    clientProxyProvider,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
   exports: [clientProxyProvider],
 })
 export class AuthModule {}

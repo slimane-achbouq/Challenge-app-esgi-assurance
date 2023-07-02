@@ -6,6 +6,8 @@ import {
   ClientProxy,
 } from '@nestjs/microservices';
 import { JwtModule } from '@nestjs/jwt';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const clientProxyProvider: Provider = {
   provide: 'QUOTE_SERVICE',
@@ -27,8 +29,18 @@ const clientProxyProvider: Provider = {
       secret: process.env.JWT_ACCESS_SECRET,
       signOptions: { expiresIn: '6000s' },
     }),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
   ],
-  providers: [clientProxyProvider],
+  providers: [
+    clientProxyProvider,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
   controllers: [QuoteController],
   exports: [clientProxyProvider],
 })

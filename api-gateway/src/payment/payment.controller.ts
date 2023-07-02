@@ -21,8 +21,10 @@ import {
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreateCreditCardDto } from './dto/create-credit-card.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Payment')
+@SkipThrottle()
 @Controller({
   path: 'payment',
 })
@@ -90,6 +92,7 @@ export class PaymentController {
     type: CreateCreditCardDto,
   })
   @UseGuards(JwtAuthGuard)
+  @Throttle(4, 30)
   async createCreditCard(@Body() createCreditCardDto: CreateCreditCardDto) {
     try {
       return this.paymentService
@@ -116,6 +119,7 @@ export class PaymentController {
   @ApiBearerAuth()
   @Delete('deleteCreditCard/:email')
   @UseGuards(JwtAuthGuard)
+  @Throttle(3, 60)
   async deleteCreditCard(@Param('email') email: string) {
     try {
       return this.paymentService

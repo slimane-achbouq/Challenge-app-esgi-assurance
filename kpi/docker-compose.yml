@@ -5,7 +5,7 @@ services:
     env_file:
       - .env
     ports:
-      - 27017:27017
+      - 27023:27017
     volumes:
       - mongodb_data_container:/data/data_kpi
 
@@ -15,7 +15,7 @@ services:
       - .:/app
       - /app/node_modules
     ports:
-      - 3000:3000
+      - 3008:3000
     command: npm run start:dev
     env_file:
       - .env

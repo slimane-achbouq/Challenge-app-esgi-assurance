@@ -13,7 +13,7 @@ import {
   Delete,
   BadRequestException,
   UsePipes,
-  ValidationPipe
+  ValidationPipe,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
@@ -33,7 +33,7 @@ import { VerifyDto } from './dto/verify-profile.dto';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import {  RpcException } from '@nestjs/microservices';
+import { RpcException } from '@nestjs/microservices';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Auth')
@@ -58,14 +58,13 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   @UsePipes(ValidationPipe)
-  @Throttle(2, 30)
+  // @Throttle(2, 30)
+  @SkipThrottle()
   signup(@Body() createUserDto: CreateUserDto) {
-    
     if (createUserDto.isValide) {
-      throw new  BadRequestException('Request invalid');
+      throw new BadRequestException('Request invalid');
     }
 
-    
     if (createUserDto.roles && createUserDto.roles.includes('Admin')) {
       throw new BadRequestException('Request invalid');
     }
@@ -134,14 +133,14 @@ export class UserController {
   // @Throttle(5, 60)
   @SkipThrottle()
   async updateUser(@Req() req, @Body() updateUserDto): Promise<any> {
-
     const disallowedFields = ['roles', 'isValide'];
 
-    const containsDisallowedFields = disallowedFields.some(field => field in updateUserDto);
-
+    const containsDisallowedFields = disallowedFields.some(
+      (field) => field in updateUserDto,
+    );
 
     if (containsDisallowedFields) {
-        throw new BadRequestException('Request invalid');
+      throw new BadRequestException('Request invalid');
     }
 
     return this.userServiceClient

@@ -11,6 +11,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 @ApiTags('Utils')
 @Controller({
   path: 'mail',
+  version: '1',
 })
 export class UtilsController {
   constructor(

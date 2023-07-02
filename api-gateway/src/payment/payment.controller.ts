@@ -27,6 +27,7 @@ import { SkipThrottle, Throttle } from '@nestjs/throttler';
 @SkipThrottle()
 @Controller({
   path: 'payment',
+  version: '1',
 })
 export class PaymentController {
   constructor(

@@ -18,7 +18,6 @@ import {
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { Observable } from 'rxjs';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import {
   CreateBeneficiaryDto,
@@ -32,7 +31,9 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Insurance')
-@Controller()
+@Controller({
+  version: '1',
+})
 export class InsuranceController {
   constructor(
     @Inject('INSURANCE_SERVICE') private insuranceServiceClient: ClientProxy,
@@ -69,26 +70,19 @@ export class InsuranceController {
     }
   }
 
-
   @Get('getoneuser/:id')
-  async getUserById(
-    @Param('id') id: string,
-  ): Promise<any> {
-
+  async getUserById(@Param('id') id: string): Promise<any> {
     try {
       const userData = await this.userServiceClient
-      .send({ cmd: 'findUserById' }, id)
-      .toPromise();
+        .send({ cmd: 'findUserById' }, id)
+        .toPromise();
 
-     if(!userData)
-      throw new NotFoundException("User Not found");
-    
-      return userData
+      if (!userData) throw new NotFoundException('User Not found');
+
+      return userData;
+    } catch (err) {
+      throw new NotFoundException('User Not found');
     }
-      catch (err) {
-        throw new NotFoundException("User Not found");
-      }
-    
   }
 
   @Get('insurance/:id')
@@ -110,7 +104,6 @@ export class InsuranceController {
       throw new BadRequestException(err.message);
     }
   }
-
 
   @Get('insurance-user/:userId')
   async getInsurancesByUserId(@Param('userId') userId: string): Promise<any> {
@@ -364,9 +357,7 @@ export class InsuranceController {
         .toPromise();
 
       if (!userData) {
-        throw new NotFoundException(
-          `User with ID "${req.user.id}" not found.`,
-        );
+        throw new NotFoundException(`User with ID "${req.user.id}" not found.`);
       }
 
       let currentBeneficiary = await this.insuranceServiceClient
@@ -417,28 +408,25 @@ export class InsuranceController {
         );
       }
 
-      
+      const insuranceDto: CreateInsuranceDto = {
+        insuranceType: relatedQuote.insuranceType,
+        coverageStartDate: createModifiedInsuranceDto.coverageStartDate,
+        coverageEndDate: createModifiedInsuranceDto.coverageEndDate,
+        insurancePremium: createModifiedInsuranceDto.insurancePremium,
+        quoteId: relatedQuote.id,
+        dossierNumber: relatedQuote.quoteNumber,
+        vehicleId: relatedQuote.vehicle.id,
+        beneficiary: currentBeneficiary['_id'],
+        status: false,
+      };
 
-    const insuranceDto: CreateInsuranceDto = {
-      insuranceType: relatedQuote.insuranceType,
-      coverageStartDate: createModifiedInsuranceDto.coverageStartDate,
-      coverageEndDate: createModifiedInsuranceDto.coverageEndDate,
-      insurancePremium: createModifiedInsuranceDto.insurancePremium,
-      quoteId: relatedQuote.id,
-      dossierNumber: relatedQuote.quoteNumber,
-      vehicleId: relatedQuote.vehicle.id,
-      beneficiary: currentBeneficiary['_id'],
-      status : false
-    };
-
-    return this.insuranceServiceClient
-      .send({ cmd: 'createInsurance' }, insuranceDto)
-      .toPromise();
-  } catch (err) {
-    if (err.message.includes("Insurance creation failed")) {
-      throw new BadRequestException('Insurance creation failed');
+      return this.insuranceServiceClient
+        .send({ cmd: 'createInsurance' }, insuranceDto)
+        .toPromise();
+    } catch (err) {
+      if (err.message.includes('Insurance creation failed')) {
+        throw new BadRequestException('Insurance creation failed');
+      }
     }
   }
-}
-
 }

@@ -35,6 +35,7 @@ import { SkipThrottle, Throttle } from '@nestjs/throttler';
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
+  version: '1',
 })
 export class UserController {
   constructor(

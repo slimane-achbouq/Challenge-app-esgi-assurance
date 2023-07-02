@@ -27,7 +27,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { validate } from 'uuid';
 import { QuoteLocalStorage } from './dtos/quote-localStorage.dto';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Quote')
 @Controller({
@@ -42,6 +42,7 @@ export class QuoteController {
   // Quote related endpoints
   @Post('quotes')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createQuote(@Body() quoteDto: CreateQuoteDto) {
     return this.quoteServiceClient
       .send({ cmd: 'createQuote' }, quoteDto)
@@ -49,11 +50,13 @@ export class QuoteController {
   }
 
   @Get('quotes')
+  @Throttle(5, 60)
   async getQuotes() {
     return this.quoteServiceClient.send({ cmd: 'getQuotes' }, {}).toPromise();
   }
 
   @Get('quote/:userId')
+  @Throttle(5, 60)
   async getQuoteByUserId(@Param('userId') userId: string) {
     return this.quoteServiceClient
       .send({ cmd: 'getQuoteByUserId' }, { userId: userId })
@@ -61,6 +64,7 @@ export class QuoteController {
   }
 
   @Get('quotes/:id')
+  @Throttle(5, 60)
   async getQuoteById(@Param('id') id: string) {
     // Verify if ID is a valid UUID
     if (!validate(id)) {
@@ -80,6 +84,7 @@ export class QuoteController {
   }
 
   @Get('quote-user/:userId')
+  @Throttle(5, 60)
   async getQuoteByIdUser(@Param('userId') userId: string) {
     // Verify if ID is a valid UUID
 
@@ -97,6 +102,7 @@ export class QuoteController {
 
   @Put('quotes/:id')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
     // check if quote exists
     const existingQuote = await this.quoteServiceClient
@@ -114,6 +120,7 @@ export class QuoteController {
   }
 
   @Delete('quotes/:id')
+  @Throttle(5, 60)
   async deleteQuote(@Param('id') id: string) {
     // Check if quote exists
     const existingQuote = await this.quoteServiceClient
@@ -132,6 +139,7 @@ export class QuoteController {
   @Post('vehicles')
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createVehicle(
     @Body() vehicleDto: CreateVehicleDto,
     @UploadedFile() file: Express.Multer.File,
@@ -154,6 +162,7 @@ export class QuoteController {
   }
 
   @Get('vehicles/:id')
+  @Throttle(5, 60)
   async getVehicleById(@Param('id') id: string) {
     const vehicle = await this.quoteServiceClient
       .send({ cmd: 'getVehicleById' }, id)
@@ -169,6 +178,7 @@ export class QuoteController {
   @Put('vehicles/:id')
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async updateVehicle(
     @Param('id') id: string,
     @Body() vehicleDto: UpdateVehicleDto,
@@ -193,6 +203,7 @@ export class QuoteController {
   }
 
   @Delete('vehicles/:id')
+  @Throttle(5, 60)
   async deleteVehicle(@Param('id') id: string) {
     const deleted = await this.quoteServiceClient
       .send({ cmd: 'deleteVehicle' }, id)
@@ -208,6 +219,7 @@ export class QuoteController {
   }
 
   @Get('prices/:id')
+  @Throttle(5, 60)
   async getPrices(@Param('id') id: string) {
     const prices = await this.quoteServiceClient
       .send({ cmd: 'getPrices' }, id)
@@ -226,6 +238,7 @@ export class QuoteController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createVehicleWithQuote(
     @Req() req,
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
@@ -275,6 +288,7 @@ export class QuoteController {
 
   @Post('vehicles-with-quotes-nc')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createVehicleWithQuoteNC(
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
   ) {
@@ -327,6 +341,7 @@ export class QuoteController {
 
   @Post('vehicles-with-quote-local-storage')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async createVehicleWithQuoteFromLocalStorage(
     @Req() req,
     @Body() createVehicleQuoteDto: QuoteLocalStorage,

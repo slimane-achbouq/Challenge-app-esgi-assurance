@@ -30,6 +30,10 @@ import {
   UpdateInsuranceDto,
 } from './dtos/insurance.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/common/guards/roles.decorator';
+import { Role } from 'src/common/enums/roles.enum';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
 
 @ApiTags('Insurance')
 @Controller()
@@ -42,6 +46,7 @@ export class InsuranceController {
 
   @Post('insurance')
   @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
   async createInsurance(
     @Body() insuranceDto: CreateInsuranceDto,
   ): Promise<any> {
@@ -57,6 +62,8 @@ export class InsuranceController {
   }
 
   @Get('insurance')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async getInsurances(): Promise<any> {
     try {
       const insurances = await this.insuranceServiceClient
@@ -92,6 +99,7 @@ export class InsuranceController {
   }
 
   @Get('insurance/:id')
+  @UseGuards(JwtAuthGuard)
   async getInsuranceById(@Param('id') id: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -113,6 +121,7 @@ export class InsuranceController {
 
 
   @Get('insurance-user/:userId')
+  @UseGuards(JwtAuthGuard)
   async getInsurancesByUserId(@Param('userId') userId: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -134,6 +143,7 @@ export class InsuranceController {
 
   @Put('insurance/:id')
   @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
   async updateInsurance(
     @Param('id') id: string,
     @Body() insuranceDto: UpdateInsuranceDto,
@@ -167,6 +177,8 @@ export class InsuranceController {
   }
 
   @Delete('insurance/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async deleteInsurance(@Param('id') id: string): Promise<any> {
     try {
       const deletedInsurance = await this.insuranceServiceClient
@@ -189,6 +201,7 @@ export class InsuranceController {
   }
 
   @Get('beneficiary/:id/insurances')
+  @UseGuards(JwtAuthGuard)
   async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
     try {
       const beneficiaryWithInsurances = await this.insuranceServiceClient
@@ -209,6 +222,7 @@ export class InsuranceController {
   }
 
   @Get('beneficiary/:id')
+  @UseGuards(JwtAuthGuard)
   async getBeneficiaryById(@Param('id') id: string): Promise<any> {
     try {
       const beneficiary = await this.insuranceServiceClient
@@ -229,6 +243,8 @@ export class InsuranceController {
   }
 
   @Get('beneficiaries')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async getBeneficiaries(): Promise<any> {
     try {
       const beneficiaries = await this.insuranceServiceClient
@@ -256,6 +272,7 @@ export class InsuranceController {
       { name: 'permis', maxCount: 1 },
     ]),
   )
+  @UseGuards(JwtAuthGuard)
   async createBeneficiary(
     @Body() beneficiaryDto: CreateBeneficiaryDto,
     @UploadedFiles()
@@ -291,6 +308,7 @@ export class InsuranceController {
       { name: 'permis', maxCount: 1 },
     ]),
   )
+  @UseGuards(JwtAuthGuard)
   async updateBeneficiary(
     @Param('id') id: string,
     @Body() beneficiaryDto: UpdateBeneficiaryDto,
@@ -349,6 +367,7 @@ export class InsuranceController {
       { name: 'permis', maxCount: 1 },
     ]),
   )
+  @UseGuards(JwtAuthGuard)
   async createBeneficiaryInsurance(
     @Req() req,
     @Body() createModifiedInsuranceDto: CreateModifiedInsuranceDto,

@@ -119,6 +119,13 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
     throw new NotFoundException(`Quote not found`);
   }
 
+  const insurancePremium = quoteDto['insurancePremium'];
+
+  if(insurancePremium && insurancePremium != 0 ){
+    throw new NotFoundException('you can"t edit quote, contract exist for this quote');
+  }
+  
+
   // proceed with update
   return this.quoteServiceClient
     .send({ cmd: 'updateQuote' }, { id, quoteDto })
@@ -149,6 +156,8 @@ async deleteQuote(@Param('id') id: string) {
   @Post('vehicles')
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async createVehicle(
     @Body() vehicleDto: CreateVehicleDto,
     @UploadedFile() file: Express.Multer.File,
@@ -166,11 +175,14 @@ async deleteQuote(@Param('id') id: string) {
   }
 
   @Get('vehicles')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async getVehicles() {
     return this.quoteServiceClient.send({ cmd: 'getVehicles' }, {}).toPromise();
   }
 
   @Get('vehicles/:id')
+  @UseGuards(JwtAuthGuard)
   async getVehicleById(@Param('id') id: string) {
     const vehicle = await this.quoteServiceClient
       .send({ cmd: 'getVehicleById' }, id)
@@ -187,6 +199,7 @@ async deleteQuote(@Param('id') id: string) {
 @Put('vehicles/:id')
 @UseInterceptors(FileInterceptor('carteGrise'))
 @UsePipes(ValidationPipe)
+@UseGuards(JwtAuthGuard)
 async updateVehicle(
   @Param('id') id: string,
   @Body() vehicleDto: UpdateVehicleDto,
@@ -210,6 +223,7 @@ async updateVehicle(
 
 
 @Delete('vehicles/:id')
+@UseGuards(JwtAuthGuard)
 async deleteVehicle(@Param('id') id: string) {
   const deleted = await this.quoteServiceClient
     .send({ cmd: 'deleteVehicle' }, id)

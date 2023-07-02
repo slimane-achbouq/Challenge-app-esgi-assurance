@@ -8,6 +8,7 @@ import {
   IsString,
   MaxDate,
   MinLength,
+  IsBoolean
 } from 'class-validator';
 import { Statut } from '../enum/statut.enum';
 import { Role } from '../enum/roles.enum';
@@ -123,4 +124,11 @@ export class CreateUserDto {
   @IsDate()
   @MaxDate(new Date())
   age: number;
+
+  @ApiProperty(apiPropertiesUser.isValide)
+  @IsBoolean()
+  isValide: boolean = false;
+
+  @ApiProperty(apiPropertiesUser.isValide)
+  roles:string[];
 }

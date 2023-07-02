@@ -27,6 +27,10 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { validate } from 'uuid';
 import { QuoteLocalStorage } from './dtos/quote-localStorage.dto';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
+import { Roles } from 'src/common/guards/roles.decorator';
+import { Role } from 'src/common/enums/roles.enum';
 
 @ApiTags('Quote')
 @Controller()
@@ -39,22 +43,31 @@ export class QuoteController {
   @Post('quotes')
   @UsePipes(ValidationPipe)
   async createQuote(@Body() quoteDto: CreateQuoteDto) {
+
+    if(quoteDto.insurancePremium) 
+        quoteDto.insurancePremium=0
+
     return this.quoteServiceClient
       .send({ cmd: 'createQuote' }, quoteDto)
       .toPromise();
   }
 
   @Get('quotes')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async getQuotes() {
     return this.quoteServiceClient.send({ cmd: 'getQuotes' }, {}).toPromise();
   }
 
   @Get('quote/:userId')
+  @UseGuards(JwtAuthGuard)
   async getQuoteByUserId(@Param('userId') userId: string) {
     return this.quoteServiceClient.send({ cmd: 'getQuoteByUserId' }, {userId : userId}).toPromise();
   }
 
   @Get('quotes/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async getQuoteById(@Param('id') id: string) {
     // Verify if ID is a valid UUID
     if (!validate(id)) {
@@ -74,6 +87,7 @@ export class QuoteController {
   }
 
   @Get('quote-user/:userId')
+  @UseGuards(JwtAuthGuard)
   async getQuoteByIdUser(@Param('userId') userId: string) {
     // Verify if ID is a valid UUID
     
@@ -94,6 +108,7 @@ export class QuoteController {
 
 @Put('quotes/:id')
 @UsePipes(ValidationPipe)
+@UseGuards(JwtAuthGuard)
 async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   // check if quote exists
   const existingQuote = await this.quoteServiceClient
@@ -112,6 +127,7 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
 
 
 @Delete('quotes/:id')
+@UseGuards(JwtAuthGuard)
 async deleteQuote(@Param('id') id: string) {
   // Check if quote exists
   const existingQuote = await this.quoteServiceClient

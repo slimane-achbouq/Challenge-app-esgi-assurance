@@ -11,6 +11,9 @@ import {
   Param,
   UseGuards,
   Delete,
+  BadRequestException,
+  UsePipes,
+  ValidationPipe
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
@@ -30,6 +33,7 @@ import { VerifyDto } from './dto/verify-profile.dto';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import {  RpcException } from '@nestjs/microservices';
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
@@ -50,7 +54,18 @@ export class UserController {
   })
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
+  @UsePipes(ValidationPipe)
   signup(@Body() createUserDto: CreateUserDto) {
+    
+    if (createUserDto.isValide) {
+      throw new  BadRequestException('Request invalid');
+    }
+
+    
+    if (createUserDto.roles && createUserDto.roles.includes('Admin')) {
+      throw new BadRequestException('Request invalid');
+    }
+
     return this.userServiceClient
       .send({ cmd: 'singupCommande' }, createUserDto)
       .toPromise();
@@ -93,9 +108,31 @@ export class UserController {
       .toPromise();
   }
 
+  @Put('update-user-admin')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
+  async updateUserByAdmin(@Req() req, @Body() updateUserDto): Promise<any> {
+    return this.userServiceClient
+      .send(
+        { cmd: 'updateUser' },
+        { id: updateUserDto.id, updateUserDto: updateUserDto },
+      )
+      .toPromise();
+  }
+
   @Put('update-user')
   @UseGuards(JwtAuthGuard)
   async updateUser(@Req() req, @Body() updateUserDto): Promise<any> {
+
+    const disallowedFields = ['roles', 'isValide'];
+
+    const containsDisallowedFields = disallowedFields.some(field => field in updateUserDto);
+
+
+    if (containsDisallowedFields) {
+        throw new BadRequestException('Request invalid');
+    }
+
     return this.userServiceClient
       .send(
         { cmd: 'updateUser' },
@@ -121,6 +158,8 @@ export class UserController {
   }
 
   @Delete('delete-user/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
+  @Roles(Role.ADMIN)
   async deleteUser(@Param('id') id: string) {
     // Check if quote exists
     const existingQuote = await this.userServiceClient

@@ -4,6 +4,12 @@ import {Document, now} from 'mongoose';
 @Schema()
 export class Visit extends Document {
     @Prop({required: true})
+    app_id: string;
+
+    @Prop({required: true})
+    page: string;
+
+    @Prop({required: true})
     id_visit: string;
 
     @Prop({required: true, default: now()})

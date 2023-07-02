@@ -29,7 +29,7 @@ import {
   UpdateInsuranceDto,
 } from './dtos/insurance.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Insurance')
 @Controller({
@@ -45,6 +45,7 @@ export class InsuranceController {
 
   @Post('insurance')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async createInsurance(
     @Body() insuranceDto: CreateInsuranceDto,
   ): Promise<any> {
@@ -60,6 +61,7 @@ export class InsuranceController {
   }
 
   @Get('insurance')
+  @Throttle(5, 60)
   async getInsurances(): Promise<any> {
     try {
       const insurances = await this.insuranceServiceClient
@@ -73,6 +75,7 @@ export class InsuranceController {
   }
 
   @Get('getoneuser/:id')
+  @Throttle(5, 60)
   async getUserById(@Param('id') id: string): Promise<any> {
     try {
       const userData = await this.userServiceClient
@@ -88,6 +91,7 @@ export class InsuranceController {
   }
 
   @Get('insurance/:id')
+  @Throttle(5, 60)
   async getInsuranceById(@Param('id') id: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -108,6 +112,7 @@ export class InsuranceController {
   }
 
   @Get('insurance-user/:userId')
+  @Throttle(5, 60)
   async getInsurancesByUserId(@Param('userId') userId: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -129,6 +134,7 @@ export class InsuranceController {
 
   @Put('insurance/:id')
   @UsePipes(ValidationPipe)
+  @Throttle(5, 60)
   async updateInsurance(
     @Param('id') id: string,
     @Body() insuranceDto: UpdateInsuranceDto,
@@ -162,6 +168,7 @@ export class InsuranceController {
   }
 
   @Delete('insurance/:id')
+  @Throttle(5, 60)
   async deleteInsurance(@Param('id') id: string): Promise<any> {
     try {
       const deletedInsurance = await this.insuranceServiceClient
@@ -184,6 +191,7 @@ export class InsuranceController {
   }
 
   @Get('beneficiary/:id/insurances')
+  @Throttle(5, 60)
   async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
     try {
       const beneficiaryWithInsurances = await this.insuranceServiceClient
@@ -204,6 +212,7 @@ export class InsuranceController {
   }
 
   @Get('beneficiary/:id')
+  @Throttle(5, 60)
   async getBeneficiaryById(@Param('id') id: string): Promise<any> {
     try {
       const beneficiary = await this.insuranceServiceClient
@@ -224,6 +233,7 @@ export class InsuranceController {
   }
 
   @Get('beneficiaries')
+  @Throttle(5, 60)
   async getBeneficiaries(): Promise<any> {
     try {
       const beneficiaries = await this.insuranceServiceClient
@@ -251,6 +261,7 @@ export class InsuranceController {
       { name: 'permis', maxCount: 1 },
     ]),
   )
+  @Throttle(5, 60)
   async createBeneficiary(
     @Body() beneficiaryDto: CreateBeneficiaryDto,
     @UploadedFiles()
@@ -286,6 +297,7 @@ export class InsuranceController {
       { name: 'permis', maxCount: 1 },
     ]),
   )
+  @Throttle(5, 60)
   async updateBeneficiary(
     @Param('id') id: string,
     @Body() beneficiaryDto: UpdateBeneficiaryDto,
@@ -344,6 +356,7 @@ export class InsuranceController {
       { name: 'permis', maxCount: 1 },
     ]),
   )
+  @Throttle(5, 60)
   async createBeneficiaryInsurance(
     @Req() req,
     @Body() createModifiedInsuranceDto: CreateModifiedInsuranceDto,

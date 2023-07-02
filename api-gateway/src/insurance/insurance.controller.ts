@@ -29,11 +29,13 @@ import {
   UpdateInsuranceDto,
 } from './dtos/insurance.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Insurance')
 @Controller({
   version: '1',
 })
+@SkipThrottle()
 export class InsuranceController {
   constructor(
     @Inject('INSURANCE_SERVICE') private insuranceServiceClient: ClientProxy,

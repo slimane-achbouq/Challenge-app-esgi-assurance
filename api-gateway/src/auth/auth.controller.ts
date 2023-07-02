@@ -53,6 +53,7 @@ export class UserController {
   })
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
+  @Throttle(2, 30)
   signup(@Body() createUserDto: CreateUserDto) {
     return this.userServiceClient
       .send({ cmd: 'singupCommande' }, createUserDto)

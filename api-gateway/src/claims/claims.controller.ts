@@ -17,12 +17,14 @@ import { UpdateDemandDto } from './dto/update-demand.dto';
 import { CreateDemandDto } from './dto/create-demand.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Claims')
 @Controller({
   path: 'claims',
   version: '1',
 })
+@SkipThrottle()
 export class ClaimsController {
   constructor(
     @Inject('CLAIMS_SERVICE') private readonly claimsService: ClientProxy,

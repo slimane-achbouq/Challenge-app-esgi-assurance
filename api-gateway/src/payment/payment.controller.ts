@@ -107,6 +107,7 @@ export class PaymentController {
   @ApiBearerAuth()
   @Get('findCreditCard/:email')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async findCreditCard(@Param('email') email: string) {
     try {
       return this.paymentService
@@ -120,7 +121,7 @@ export class PaymentController {
   @ApiBearerAuth()
   @Delete('deleteCreditCard/:email')
   @UseGuards(JwtAuthGuard)
-  @Throttle(3, 60)
+  @Throttle(10, 60)
   async deleteCreditCard(@Param('email') email: string) {
     try {
       return this.paymentService

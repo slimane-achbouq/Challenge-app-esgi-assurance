@@ -34,9 +34,12 @@ import { ProfileValidationGuard } from 'src/common/guards/profile-validation.gua
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import {  RpcException } from '@nestjs/microservices';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
+
 @ApiTags('Auth')
 @Controller({
   path: 'auth',
+  version: '1',
 })
 export class UserController {
   constructor(
@@ -73,12 +76,14 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('signin')
+  @SkipThrottle()
   signin(@Body() data: AuthDto) {
     return this.userServiceClient.send({ cmd: 'singIn' }, data).toPromise();
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post('verifyUser')
+  @SkipThrottle()
   verify(@Body() verifyDto: VerifyDto) {
     return this.userServiceClient
       .send({ cmd: 'verifyUser' }, verifyDto)
@@ -87,12 +92,14 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Get('logout')
+  @SkipThrottle()
   logout(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('refresh')
+  @Throttle(2, 60)
   refreshTokens(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
@@ -102,6 +109,7 @@ export class UserController {
   @Get('getUsers')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @SkipThrottle()
   getUsers(@Req() req) {
     return this.userServiceClient
       .send({ cmd: 'getUsers' }, { accessToken: req.headers.authorization })
@@ -122,6 +130,7 @@ export class UserController {
 
   @Put('update-user')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async updateUser(@Req() req, @Body() updateUserDto): Promise<any> {
 
     const disallowedFields = ['roles', 'isValide'];
@@ -143,6 +152,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('updatePassword')
+  @Throttle(3, 60)
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.userServiceClient
       .send({ cmd: 'updatePassword' }, updatePasswordDto)
@@ -151,6 +161,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('resetPassword')
+  @Throttle(3, 60)
   resetPassword(@Body() resetPassword: ResetPasswordDto) {
     return this.userServiceClient
       .send({ cmd: 'resetPassword' }, resetPassword)

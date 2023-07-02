@@ -1,11 +1,11 @@
 <template>
-  <div class="relative inline-flex" v-if="email">
+  <div v-if="email" class="relative inline-flex">
     <button
       ref="trigger"
       class="inline-flex justify-center items-center group"
       aria-haspopup="true"
-      @click.prevent="dropdownOpen = !dropdownOpen"
       :aria-expanded="dropdownOpen"
+      @click.prevent="dropdownOpen = !dropdownOpen"
     >
       <img
         class="w-8 h-8 rounded-full"
@@ -52,8 +52,8 @@
           <li>
             <div role="status">
               <svg
-                aria-hidden="true"
                 v-if="loading"
+                aria-hidden="true"
                 class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                 viewBox="0 0 100 101"
                 fill="none"
@@ -79,12 +79,12 @@
             </div>
           </li>
           <li>
-            <router-link
+            <button
               class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-              to="/signout"
-              @click="dropdownOpen = false"
-              >Sign Out</router-link
+              @click="signout()"
             >
+              Sign Out
+            </button>
           </li>
         </ul>
       </div>
@@ -95,24 +95,42 @@
 <script>
 import { ref, onMounted, onUnmounted } from "vue";
 import UserAvatar from "@/images/useravatar.png";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: "DropdownProfile",
   props: ["align"],
-  data() {
-    return {
-      UserAvatar: UserAvatar,
-      email: null,
-      role: null,
-      user: { id: null },
-      loading: true,
-    };
-  },
   setup() {
     const dropdownOpen = ref(false);
     const trigger = ref(null);
     const dropdown = ref(null);
-    const useremail = ref(null);
+
+    const store = useStore();
+    const email = ref(null);
+    const role = ref(null);
+    const token = ref(null);
+    const loading = ref(true);
+
+    const router = useRouter();
+
+    const setUserDetails = () => {
+      email.value = store.getters["auth/email"];
+      role.value = store.getters["auth/roles"];
+      token.value = store.getters["auth/token"];
+      loading.value = false;
+    };
+
+    onMounted(() => {
+      document.addEventListener("click", clickHandler);
+      document.addEventListener("keydown", keyHandler);
+      setUserDetails();
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener("click", clickHandler);
+      document.removeEventListener("keydown", keyHandler);
+    });
 
     // close on click outside
     const clickHandler = ({ target }) => {
@@ -131,31 +149,27 @@ export default {
       dropdownOpen.value = false;
     };
 
-    onMounted(() => {
-      document.addEventListener("click", clickHandler);
-      document.addEventListener("keydown", keyHandler);
-    });
-
-    onUnmounted(() => {
-      document.removeEventListener("click", clickHandler);
-      document.removeEventListener("keydown", keyHandler);
-    });
+    function signout() {
+      const authData = localStorage.getItem("vuex");
+      const data = JSON.parse(authData);
+      if (data) {
+        localStorage.clear();
+        // router.push({ name: "home" });
+        window.location.href = "/";
+      }
+    }
 
     return {
       dropdownOpen,
       trigger,
       dropdown,
-      email: null,
-      role: null,
-      user: { id: 1 },
+      UserAvatar,
+      email,
+      role,
+      token,
+      loading,
+      signout,
     };
-  },
-  async created() {
-    this.loading = true;
-    this.role = this.$store.getters["auth/roles"];
-    this.email = this.$store.getters["auth/email"];
-    let token = this.$store.getters["auth/token"];
-    this.loading = false;
   },
 };
 </script>

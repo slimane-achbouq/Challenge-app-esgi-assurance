@@ -18,7 +18,7 @@ import { PaymentModule } from './payment/payment.module';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule,{ cors: true });
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
@@ -38,6 +38,15 @@ async function bootstrap() {
       // disableErrorMessages: true,
     }),
   );
+
+  // Cors
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  });
 
   // Swagger config
   const swaggerCustomOptions: SwaggerCustomOptions = {
@@ -81,6 +90,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/v1', app, doc, swaggerCustomOptions);
 
   await app.startAllMicroservices();
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();

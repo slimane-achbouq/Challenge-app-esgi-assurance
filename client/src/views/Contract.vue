@@ -113,9 +113,9 @@
                     class="flex flex-col col-span-full xl:col-span-12 bg-white shadow-lg rounded-sm border border-slate-200"
                   >
                     <button
+                      v-if="role === 'User' && contract.status"
                       class="btn border-rose-500 hover:border-slate-300 text-rose-500 m-3"
                       @click="modaDeletelOpen = true"
-                      v-if="role === 'User' && contract.status"
                     >
                       <router-link
                         :to="{
@@ -512,7 +512,7 @@
               </div>
             </ModalBasic>
 
-            <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen">
+            <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen" v-if="role == 'Admin'">
               <div class="p-5 flex w-full space-x-4">
                 <!-- Icon -->
                 <div

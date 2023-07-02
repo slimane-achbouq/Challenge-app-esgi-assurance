@@ -6,10 +6,10 @@
         <label for="app-search" class="sr-only">Search</label>
         <input
           id="app-search"
+          v-model="searchTerm"
           class="form-input w-full pl-9 py-3 focus:border-slate-300"
           type="search"
           placeholder="Search…"
-          v-model="searchTerm"
           @input="searchCustomers"
         />
         <button
@@ -33,7 +33,7 @@
       </form>
     </div>
 
-    <div role="status" v-if="loading">
+    <div v-if="loading" role="status">
       <svg
         aria-hidden="true"
         class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -75,9 +75,9 @@
                     <label class="inline-flex">
                       <span class="sr-only">Select all</span>
                       <input
+                        v-model="selectAll"
                         class="form-checkbox"
                         type="checkbox"
-                        v-model="selectAll"
                         @click="checkAll"
                       />
                     </label>
@@ -120,8 +120,8 @@
               <Customer
                 v-for="customer in customers"
                 :key="customer['_id']"
-                :customer="customer"
                 v-model:selected="selected"
+                :customer="customer"
                 :value="customer['_id']"
                 @edit="onEdit"
               />
@@ -189,14 +189,6 @@ export default {
     Pagination,
   },
   props: ["selectedItems"],
-
-  data() {
-    return {
-      users: [],
-    };
-  },
-
-  methods: {},
   setup(props, { emit }) {
     const allUsers = ref([]); // this variable will store all the users
 
@@ -318,5 +310,13 @@ export default {
       loading,
     };
   },
+
+  data() {
+    return {
+      users: [],
+    };
+  },
+
+  methods: {},
 };
 </script>

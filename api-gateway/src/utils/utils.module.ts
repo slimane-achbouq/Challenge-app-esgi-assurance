@@ -5,6 +5,8 @@ import {
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const clientProxyProvider: Provider = {
   provide: 'UTILS_SERVICE',
@@ -20,8 +22,19 @@ const clientProxyProvider: Provider = {
   },
 };
 @Module({
-  imports: [],
-  providers: [clientProxyProvider],
+  imports: [
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
+  ],
+  providers: [
+    clientProxyProvider,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
   controllers: [UtilsController],
   exports: [clientProxyProvider],
 })

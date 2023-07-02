@@ -33,7 +33,9 @@ import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
 
 @ApiTags('Quote')
-@Controller()
+@Controller({
+  version: '1',
+})
 export class QuoteController {
   constructor(
     @Inject('QUOTE_SERVICE') private readonly quoteServiceClient: ClientProxy,
@@ -62,7 +64,9 @@ export class QuoteController {
   @Get('quote/:userId')
   @UseGuards(JwtAuthGuard)
   async getQuoteByUserId(@Param('userId') userId: string) {
-    return this.quoteServiceClient.send({ cmd: 'getQuoteByUserId' }, {userId : userId}).toPromise();
+    return this.quoteServiceClient
+      .send({ cmd: 'getQuoteByUserId' }, { userId: userId })
+      .toPromise();
   }
 
   @Get('quotes/:id')
@@ -90,12 +94,9 @@ export class QuoteController {
   @UseGuards(JwtAuthGuard)
   async getQuoteByIdUser(@Param('userId') userId: string) {
     // Verify if ID is a valid UUID
-    
-
-
 
     const quote = await this.quoteServiceClient
-      .send({ cmd: 'getQuoteByUserId' }, {id:userId})
+      .send({ cmd: 'getQuoteByUserId' }, { id: userId })
       .toPromise();
 
     // If quote doesn't exist, throw exception
@@ -115,9 +116,9 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
     .send({ cmd: 'getQuoteById' }, id)
     .toPromise();
 
-  if (!existingQuote) {
-    throw new NotFoundException(`Quote not found`);
-  }
+    if (!existingQuote) {
+      throw new NotFoundException(`Quote not found`);
+    }
 
   const insurancePremium = quoteDto['insurancePremium'];
 
@@ -132,25 +133,21 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
     .toPromise();
 }
 
+  @Delete('quotes/:id')
+  @UseGuards(JwtAuthGuard)
+  async deleteQuote(@Param('id') id: string) {
+    // Check if quote exists
+    const existingQuote = await this.quoteServiceClient
+      .send({ cmd: 'getQuoteById' }, id)
+      .toPromise();
 
-@Delete('quotes/:id')
-@UseGuards(JwtAuthGuard)
-async deleteQuote(@Param('id') id: string) {
-  // Check if quote exists
-  const existingQuote = await this.quoteServiceClient
-    .send({ cmd: 'getQuoteById' }, id)
-    .toPromise();
+    if (!existingQuote) {
+      throw new NotFoundException(`Quote not found`);
+    }
 
-  if (!existingQuote) {
-    throw new NotFoundException(`Quote not found`);
+    // Proceed with deletion
+    return this.quoteServiceClient.send({ cmd: 'deleteQuote' }, id).toPromise();
   }
-
-  // Proceed with deletion
-  return this.quoteServiceClient
-    .send({ cmd: 'deleteQuote' }, id)
-    .toPromise();
-}
-
 
   // Vehicle related endpoints
   @Post('vehicles')
@@ -187,70 +184,71 @@ async deleteQuote(@Param('id') id: string) {
     const vehicle = await this.quoteServiceClient
       .send({ cmd: 'getVehicleById' }, id)
       .toPromise();
-  
+
     if (!vehicle) {
       throw new NotFoundException(`Vehicle with ID "${id}" not found`);
     }
-  
+
     return vehicle;
   }
-  
 
-@Put('vehicles/:id')
-@UseInterceptors(FileInterceptor('carteGrise'))
-@UsePipes(ValidationPipe)
-@UseGuards(JwtAuthGuard)
-async updateVehicle(
-  @Param('id') id: string,
-  @Body() vehicleDto: UpdateVehicleDto,
-  @UploadedFile() file: Express.Multer.File,
-) {
-  const fileContent = file ? file.buffer.toString('base64') : null;
-  const updatedVehicleDto = fileContent
-    ? { ...vehicleDto, carteGrise: fileContent }
-    : vehicleDto;
+  @Put('vehicles/:id')
+  @UseInterceptors(FileInterceptor('carteGrise'))
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  async updateVehicle(
+    @Param('id') id: string,
+    @Body() vehicleDto: UpdateVehicleDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const fileContent = file ? file.buffer.toString('base64') : null;
+    const updatedVehicleDto = fileContent
+      ? { ...vehicleDto, carteGrise: fileContent }
+      : vehicleDto;
 
-  const updatedVehicle = await this.quoteServiceClient
-    .send({ cmd: 'updateVehicle' }, { id, vehicleDto: updatedVehicleDto })
-    .toPromise();
+    const updatedVehicle = await this.quoteServiceClient
+      .send({ cmd: 'updateVehicle' }, { id, vehicleDto: updatedVehicleDto })
+      .toPromise();
 
-  if (!updatedVehicle) {
-    throw new NotFoundException(`Vehicle with ID "${id}" not found or could not be updated`);
+    if (!updatedVehicle) {
+      throw new NotFoundException(
+        `Vehicle with ID "${id}" not found or could not be updated`,
+      );
+    }
+
+    return updatedVehicle;
   }
 
-  return updatedVehicle;
-}
+  @Delete('vehicles/:id')
+  @UseGuards(JwtAuthGuard)
+  async deleteVehicle(@Param('id') id: string) {
+    const deleted = await this.quoteServiceClient
+      .send({ cmd: 'deleteVehicle' }, id)
+      .toPromise();
 
+    if (!deleted) {
+      throw new NotFoundException(
+        `Vehicle with ID "${id}" not found or could not be deleted`,
+      );
+    }
 
-@Delete('vehicles/:id')
-@UseGuards(JwtAuthGuard)
-async deleteVehicle(@Param('id') id: string) {
-  const deleted = await this.quoteServiceClient
-    .send({ cmd: 'deleteVehicle' }, id)
-    .toPromise();
-
-  if (!deleted) {
-    throw new NotFoundException(`Vehicle with ID "${id}" not found or could not be deleted`);
+    return { message: `Vehicle with ID "${id}" has been deleted successfully` };
   }
 
-  return { message: `Vehicle with ID "${id}" has been deleted successfully` };
-}
+  @Get('prices/:id')
+  async getPrices(@Param('id') id: string) {
+    const prices = await this.quoteServiceClient
+      .send({ cmd: 'getPrices' }, id)
+      .toPromise();
 
-@Get('prices/:id')
-async getPrices(@Param('id') id: string) {
-  const prices = await this.quoteServiceClient
-    .send({ cmd: 'getPrices' }, id)
-    .toPromise();
+    if (!prices) {
+      throw new NotFoundException(
+        `Vehicle with ID "${id}" not found or could not be deleted`,
+      );
+    }
 
-  if (!prices) {
-    throw new NotFoundException(`Vehicle with ID "${id}" not found or could not be deleted`);
+    return prices;
   }
-
-  return prices;
-}
-
-
-
 
   @Post('vehicles-with-quotes')
   @UseGuards(JwtAuthGuard)
@@ -261,147 +259,142 @@ async getPrices(@Param('id') id: string) {
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-  const fileContent = file ? file.buffer.toString('base64') : null;
-  if (!fileContent) {
-    throw new BadRequestException('File not uploaded');
+    const fileContent = file ? file.buffer.toString('base64') : null;
+    if (!fileContent) {
+      throw new BadRequestException('File not uploaded');
+    }
+
+    const vehicleQuoteDto: CreateVehicleDto = { ...createVehicleQuoteDto };
+
+    // Create vehicle first
+    const createdVehicle = await this.quoteServiceClient
+      .send(
+        { cmd: 'createVehicle' },
+        { ...vehicleQuoteDto, carteGrise: fileContent },
+      )
+      .toPromise();
+
+    if (!createdVehicle) {
+      throw new BadRequestException('Vehicle creation failed');
+    }
+
+    // Create quote with the created vehicle's ID
+    const quoteDtoWithVehicleId = {
+      ...createVehicleQuoteDto,
+      insurancePremium: 0,
+      coverageDuration: createVehicleQuoteDto.coverageDuration,
+      userId: req.user.id,
+      vehicleId: createdVehicle.id,
+    };
+    const createdQuote = await this.quoteServiceClient
+      .send({ cmd: 'createQuote' }, quoteDtoWithVehicleId)
+      .toPromise();
+
+    if (!createdQuote) {
+      throw new BadRequestException('Quote creation failed');
+    }
+
+    // Return both the created vehicle and quote
+    return {
+      vehicle: createdVehicle,
+      quote: createdQuote,
+    };
   }
-
-  const vehicleQuoteDto: CreateVehicleDto = { ...createVehicleQuoteDto };
-
-  // Create vehicle first
-  const createdVehicle = await this.quoteServiceClient
-    .send(
-      { cmd: 'createVehicle' },
-      { ...vehicleQuoteDto, carteGrise: fileContent },
-    )
-    .toPromise();
-
-  if (!createdVehicle) {
-    throw new BadRequestException('Vehicle creation failed');
-  }
-
-  // Create quote with the created vehicle's ID
-  const quoteDtoWithVehicleId = {
-    ...createVehicleQuoteDto,
-    insurancePremium: 0,
-    coverageDuration: createVehicleQuoteDto.coverageDuration,
-    userId: req.user.id,
-    vehicleId: createdVehicle.id,
-  };
-  const createdQuote = await this.quoteServiceClient
-    .send({ cmd: 'createQuote' }, quoteDtoWithVehicleId)
-    .toPromise();
-
-  if (!createdQuote) {
-    throw new BadRequestException('Quote creation failed');
-  }
-
-  // Return both the created vehicle and quote
-  return {
-    vehicle: createdVehicle,
-    quote: createdQuote,
-  };
-}
 
   @Post('vehicles-with-quotes-nc')
   @UsePipes(ValidationPipe)
   async createVehicleWithQuoteNC(
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,
   ) {
-
-  return this.calculateInsurancePremiums(createVehicleQuoteDto)
-}
-
-
-async calculateInsurancePremiums(createVehicleQuoteDto: CreateVehicleQuoteDto): Promise<number[]> {
-
-  let { horsepower, vehicleCirculationDate, registrationCardDate } = createVehicleQuoteDto;
-
-  // Calculate the age of the vehicle
-  vehicleCirculationDate = new Date(vehicleCirculationDate)
-  const vehicleAge = new Date().getFullYear() - vehicleCirculationDate.getFullYear();
-
-  // Calculate the years since the registration card date
-  registrationCardDate = new Date(registrationCardDate)
-  const registrationCardAge = new Date().getFullYear() - registrationCardDate.getFullYear();
-
-  // Base price
-  let basePrice = 12;
-
-  // Apply a discount or increase based on horsepower
-  if (horsepower < 100) {
-    basePrice *= 0.5; // 10% discount for vehicles with less than 100 horsepower
-  } else if (horsepower > 200) {
-    basePrice *= 1.4; // 20% increase for vehicles with more than 200 horsepower
+    return this.calculateInsurancePremiums(createVehicleQuoteDto);
   }
 
-  // Apply a discount or increase based on the age of the vehicle
-  if (vehicleAge < 5) {
-    basePrice *= 0.85; // 5% discount for vehicles less than 5 years old
-  } else if (vehicleAge > 10) {
-    basePrice *= 1.2; // 10% increase for vehicles more than 10 years old
+  async calculateInsurancePremiums(
+    createVehicleQuoteDto: CreateVehicleQuoteDto,
+  ): Promise<number[]> {
+    let { horsepower, vehicleCirculationDate, registrationCardDate } =
+      createVehicleQuoteDto;
+
+    // Calculate the age of the vehicle
+    vehicleCirculationDate = new Date(vehicleCirculationDate);
+    const vehicleAge =
+      new Date().getFullYear() - vehicleCirculationDate.getFullYear();
+
+    // Calculate the years since the registration card date
+    registrationCardDate = new Date(registrationCardDate);
+    const registrationCardAge =
+      new Date().getFullYear() - registrationCardDate.getFullYear();
+
+    // Base price
+    let basePrice = 12;
+
+    // Apply a discount or increase based on horsepower
+    if (horsepower < 100) {
+      basePrice *= 0.5; // 10% discount for vehicles with less than 100 horsepower
+    } else if (horsepower > 200) {
+      basePrice *= 1.4; // 20% increase for vehicles with more than 200 horsepower
+    }
+
+    // Apply a discount or increase based on the age of the vehicle
+    if (vehicleAge < 5) {
+      basePrice *= 0.85; // 5% discount for vehicles less than 5 years old
+    } else if (vehicleAge > 10) {
+      basePrice *= 1.2; // 10% increase for vehicles more than 10 years old
+    }
+
+    // Apply a discount or increase based on the age of the registration card
+    if (registrationCardAge < 1) {
+      basePrice *= 0.95; // 5% discount for registration cards less than 1 year old
+    } else if (registrationCardAge > 5) {
+      basePrice *= 1; // 10% increase for registration cards more than 5 years old
+    }
+
+    // Return three price suggestions: base price, base price + 10%, base price + 20%
+    return [basePrice, basePrice * 1.1, basePrice * 1.2];
   }
 
-  // Apply a discount or increase based on the age of the registration card
-  if (registrationCardAge < 1) {
-    basePrice *= 0.95; // 5% discount for registration cards less than 1 year old
-  } else if (registrationCardAge > 5) {
-    basePrice *= 1; // 10% increase for registration cards more than 5 years old
-    
-  }
-
-  // Return three price suggestions: base price, base price + 10%, base price + 20%
-  return [basePrice, basePrice * 1.1, basePrice * 1.2];
-}
-
-
-
-@Post('vehicles-with-quote-local-storage')
+  @Post('vehicles-with-quote-local-storage')
   @UseGuards(JwtAuthGuard)
   async createVehicleWithQuoteFromLocalStorage(
     @Req() req,
-    @Body() createVehicleQuoteDto: QuoteLocalStorage
+    @Body() createVehicleQuoteDto: QuoteLocalStorage,
   ) {
-  const fileContent = createVehicleQuoteDto.carteGrise;
+    const fileContent = createVehicleQuoteDto.carteGrise;
 
-  const vehicleQuoteDto: CreateVehicleDto = { ...createVehicleQuoteDto };
+    const vehicleQuoteDto: CreateVehicleDto = { ...createVehicleQuoteDto };
 
-  // Create vehicle first
-  const createdVehicle = await this.quoteServiceClient
-    .send(
-      { cmd: 'createVehicle' },
-      { ...vehicleQuoteDto, carteGrise: fileContent },
-    )
-    .toPromise();
+    // Create vehicle first
+    const createdVehicle = await this.quoteServiceClient
+      .send(
+        { cmd: 'createVehicle' },
+        { ...vehicleQuoteDto, carteGrise: fileContent },
+      )
+      .toPromise();
 
-  if (!createdVehicle) {
-    throw new BadRequestException('Vehicle creation failed');
+    if (!createdVehicle) {
+      throw new BadRequestException('Vehicle creation failed');
+    }
+
+    // Create quote with the created vehicle's ID
+    const quoteDtoWithVehicleId = {
+      ...createVehicleQuoteDto,
+      insurancePremium: 0,
+      coverageDuration: createVehicleQuoteDto.coverageDuration,
+      userId: req.user.id,
+      vehicleId: createdVehicle.id,
+    };
+    const createdQuote = await this.quoteServiceClient
+      .send({ cmd: 'createQuote' }, quoteDtoWithVehicleId)
+      .toPromise();
+
+    if (!createdQuote) {
+      throw new BadRequestException('Quote creation failed');
+    }
+
+    // Return both the created vehicle and quote
+    return {
+      vehicle: createdVehicle,
+      quote: createdQuote,
+    };
   }
-
-  // Create quote with the created vehicle's ID
-  const quoteDtoWithVehicleId = {
-    ...createVehicleQuoteDto,
-    insurancePremium: 0,
-    coverageDuration: createVehicleQuoteDto.coverageDuration,
-    userId: req.user.id,
-    vehicleId: createdVehicle.id,
-  };
-  const createdQuote = await this.quoteServiceClient
-    .send({ cmd: 'createQuote' }, quoteDtoWithVehicleId)
-    .toPromise();
-
-  if (!createdQuote) {
-    throw new BadRequestException('Quote creation failed');
-  }
-
-  // Return both the created vehicle and quote
-  return {
-    vehicle: createdVehicle,
-    quote: createdQuote,
-  };
 }
-
-
-
-}
-

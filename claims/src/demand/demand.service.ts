@@ -4,26 +4,41 @@ import {HydratedDocument, Model, now} from 'mongoose';
 import {Demand} from '../schema/demand.schema';
 import {UpdateDemandDto} from '../dto/update-demand.dto';
 import {CreateDemandDto} from 'src/dto/create-demand.dto';
-import { createGzip, createGunzip } from 'zlib';
+import {createGzip, createGunzip} from 'zlib';
+import {WinstonModule} from "nest-winston";
+import {format, transports} from "winston";
 
 @Injectable()
 export class DemandService {
+    private logger = null;
+
     constructor(
         @InjectModel('Demand') private readonly demandModel: Model<Demand>
     ) {
+        // Init logger
+        this.logger = WinstonModule.createLogger({
+            transports: [
+                new transports.File({
+                    level: 'debug',
+                    filename: 'logs/debug.log',
+                    format: format.combine(format.timestamp(), format.json()),
+                }),
+                new transports.File({
+                    level: 'error',
+                    filename: 'logs/error.log',
+                    format: format.combine(format.timestamp(), format.json()),
+                }),
+                new transports.Console({
+                    format: format.combine(
+                        format.colorize({message: true}),
+                    )
+                }),
+            ]
+        });
     }
 
-    /*async create(createDemandDto: CreateDemandDto): Promise<Demand> {
-
-        const {proof, ...rest} = createDemandDto;
-        // Save the base64 encoded file
-        const fileContent = Buffer.from(proof, 'base64');
-        const createdDemand = new this.demandModel({...rest, proof: fileContent});
-        return createdDemand.save();
-    }*/
-
     async create(createDemandDto: CreateDemandDto): Promise<Demand> {
-        const { proof, ...rest } = createDemandDto;
+        const {proof, ...rest} = createDemandDto;
 
         // Compress the file content using gzip
         const compressedContent = await new Promise<Buffer>((resolve, reject) => {
@@ -38,7 +53,8 @@ export class DemandService {
             gzip.end();
         });
 
-        const createdDemand = new this.demandModel({ ...rest, proof: compressedContent });
+        this.logger.debug("debug", "createClaim : new claim for insurance " + createDemandDto.insurance_id);
+        const createdDemand = new this.demandModel({...rest, proof: compressedContent});
         return createdDemand.save();
     }
 
@@ -76,6 +92,7 @@ export class DemandService {
         const existingDemand = await this.demandModel.findById(id);
 
         if (!existingDemand) {
+            this.logger.error("updateClaim attempt : claim ID " + id + " not found");
             throw new Error(
                 'Demand not found with this id : ' + id,
             );
@@ -83,6 +100,7 @@ export class DemandService {
 
         const {proof, ...rest} = updateDemandDto;
 
+        this.logger.debug("debug", "updateClaim : claim " + id + " updated");
         if (proof) {
             // Decode the base64 file content
             const fileContent = Buffer.from(proof, 'base64');
@@ -106,6 +124,7 @@ export class DemandService {
     }
 
     async deleteDemand(id: string): Promise<Demand> {
+        this.logger.debug("debug", "deleteClaim : claim " + id + " deleted");
         return this.demandModel.findByIdAndDelete(id).exec();
     }
 }

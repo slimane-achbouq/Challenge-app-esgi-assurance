@@ -8,6 +8,7 @@ import { BeneficiaryModule } from './beneficiary/beneficiary.module';
 
 
 import * as dotenv from 'dotenv';
+import {WinstonModule} from "nest-winston";
 dotenv.config();
 
 @Module({
@@ -15,6 +16,8 @@ dotenv.config();
     MongooseModule.forRoot(process.env.MONGODB_URI),
     InsuranceModule,
     BeneficiaryModule,
+    WinstonModule.forRoot({
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

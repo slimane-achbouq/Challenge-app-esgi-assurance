@@ -156,7 +156,7 @@ services:
       - my-network
 
   claims-database:
-    container_name: claims
+    container_name: claims-database
     image: mongo:latest
     hostname: claims-database
     volumes:
@@ -187,7 +187,7 @@ services:
       - my-network
 
   payment-database:
-    container_name: payment
+    container_name: payment-database
     image: mongo:latest
     hostname: payment-database
     volumes:

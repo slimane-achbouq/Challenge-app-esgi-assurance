@@ -9,8 +9,8 @@
             class="form-checkbox"
             type="checkbox"
             :value="value"
-            @change="check"
             :checked="checked"
+            @change="check"
           />
         </label>
       </div>

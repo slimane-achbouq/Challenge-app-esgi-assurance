@@ -24,7 +24,7 @@ export class MailService {
     );
     const templateContent = fs.readFileSync(templatePath, { encoding: 'utf8' });
 
-    const url = 'http://127.0.0.1:5173/verify/' + verifyProfileModel.token;
+    const url = `${process.env.CLIENT_URL}verify/` + verifyProfileModel.token;
 
     const sendSmtpEmail = {
       sender: {

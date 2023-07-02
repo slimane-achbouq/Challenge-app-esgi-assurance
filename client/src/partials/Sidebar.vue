@@ -20,9 +20,9 @@
         <button
           ref="trigger"
           class="lg:hidden text-slate-500 hover:text-slate-400"
-          @click.stop="$emit('close-sidebar')"
           aria-controls="sidebar"
           :aria-expanded="sidebarOpen"
+          @click.stop="$emit('close-sidebar')"
         >
           <span class="sr-only">Close sidebar</span>
           <svg
@@ -40,21 +40,21 @@
           <svg width="32" height="32" viewBox="0 0 32 32">
             <defs>
               <linearGradient
+                id="logo-a"
                 x1="28.538%"
                 y1="20.229%"
                 x2="100%"
                 y2="108.156%"
-                id="logo-a"
               >
                 <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
                 <stop stop-color="#A5B4FC" offset="100%" />
               </linearGradient>
               <linearGradient
+                id="logo-b"
                 x1="88.638%"
                 y1="29.267%"
                 x2="22.42%"
                 y2="100%"
-                id="logo-b"
               >
                 <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
                 <stop stop-color="#38BDF8" offset="100%" />
@@ -91,7 +91,7 @@
               >Pages</span
             >
           </h3>
-          <ul class="mt-3" v-if="role">
+          <ul v-if="role" class="mt-3">
             <!-- Community -->
             <SidebarLinkGroup v-slot="parentLink">
               <a
@@ -109,7 +109,11 @@
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center">
-                    <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                    <svg
+                      v-if="role === 'Admin'"
+                      class="shrink-0 h-6 w-6"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         class="fill-current text-slate-600"
                         :class="'text-indigo-500'"
@@ -122,8 +126,26 @@
                       />
                     </svg>
                     <span
+                      v-if="role === 'Admin'"
                       class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200"
                       >Users</span
+                    >
+
+                    <svg
+                      v-if="role !== 'Admin'"
+                      class="shrink-0 h-6 w-6"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        class="fill-current text-slate-400"
+                        :class="'text-indigo-300'"
+                        d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z"
+                      />
+                    </svg>
+                    <span
+                      v-if="role !== 'Admin'"
+                      class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200"
+                      >Profile</span
                     >
                   </div>
                   <!-- Icon -->
@@ -140,14 +162,14 @@
               </a>
               <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                 <ul
+                  v-if="role === 'Admin'"
                   class="pl-9 mt-1"
                   :class="!parentLink.expanded && 'hidden'"
-                  v-if="role === 'Admin'"
                 >
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/dashboard/users"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -167,14 +189,14 @@
               </div>
               <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                 <ul
+                  v-if="role === 'User'"
                   class="pl-9 mt-1"
                   :class="!parentLink.expanded && 'hidden'"
-                  v-if="role === 'User'"
                 >
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/profile"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -244,11 +266,11 @@
               <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                 <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/quotes"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
-                    <li class="mb-1 last:mb-0" v-if="role === 'Admin'">
+                    <li v-if="role === 'Admin'" class="mb-1 last:mb-0">
                       <a
                         class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                         :class="isExactActive && '!text-indigo-500'"
@@ -264,10 +286,10 @@
                   </router-link>
 
                   <router-link
+                    v-if="role === 'User'"
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/user-quotes"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
-                    v-if="role === 'User'"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -285,10 +307,10 @@
                   </router-link>
 
                   <router-link
+                    v-if="role === 'User'"
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/newquote"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
-                    v-if="role === 'User'"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -357,14 +379,14 @@
               </a>
               <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                 <ul
+                  v-if="role === 'Admin'"
                   class="pl-9 mt-1"
                   :class="!parentLink.expanded && 'hidden'"
-                  v-if="role === 'Admin'"
                 >
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/contracts"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -384,14 +406,14 @@
               </div>
 
               <div
-                class="lg:hidden lg:sidebar-expanded:block 2xl:block"
                 v-if="role === 'User'"
+                class="lg:hidden lg:sidebar-expanded:block 2xl:block"
               >
                 <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/user-contracts"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -461,9 +483,9 @@
               <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                 <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/claims"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -483,7 +505,7 @@
               </div>
             </SidebarLinkGroup>
 
-            <SidebarLinkGroup v-slot="parentLink" v-if="this.role === 'Admin'">
+            <SidebarLinkGroup v-if="role === 'Admin'" v-slot="parentLink">
               <a
                 class="block text-slate-200 hover:text-white truncate transition duration-150"
                 :class="'hover:text-slate-200'"
@@ -526,9 +548,9 @@
               <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                 <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
                   <router-link
+                    v-slot="{ href, navigate, isExactActive }"
                     to="/contact/messageList"
                     custom
-                    v-slot="{ href, navigate, isExactActive }"
                   >
                     <li class="mb-1 last:mb-0">
                       <a
@@ -581,15 +603,10 @@ import SidebarLinkGroup from "./SidebarLinkGroup.vue";
 
 export default {
   name: "Sidebar",
-  props: ["sidebarOpen"],
   components: {
     SidebarLinkGroup,
   },
-  data() {
-    return {
-      role: null,
-    };
-  },
+  props: ["sidebarOpen"],
   setup(props, { emit }) {
     const trigger = ref(null);
     const sidebar = ref(null);
@@ -643,6 +660,11 @@ export default {
       sidebar,
       sidebarExpanded,
       currentRoute,
+    };
+  },
+  data() {
+    return {
+      role: null,
     };
   },
 

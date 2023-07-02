@@ -19,6 +19,7 @@ export class UtilsController {
   ) {}
 
   @Post('singInConfirmationEmail')
+  @SkipThrottle()
   async sendMail(@Body() mailDto: VerifyDto) {
     return this.utilsService
       .send({ cmd: 'singInConfirmationEmail' }, mailDto)
@@ -35,6 +36,7 @@ export class UtilsController {
     type: MessageFormDto,
   })
   @Post('createMessageContact')
+  @SkipThrottle()
   async createMessageContact(@Body() messageFormDto: MessageFormDto) {
     return this.utilsService
       .send({ cmd: 'createMessageContact' }, messageFormDto)
@@ -51,6 +53,7 @@ export class UtilsController {
     type: ResetPasswordDto,
   })
   @Post('resetPassword')
+  @SkipThrottle()
   async sendMailResetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.utilsService
       .send({ cmd: 'resetPasswordEmail' }, resetPasswordDto)
@@ -58,11 +61,13 @@ export class UtilsController {
   }
 
   @Get('getAllMessages')
+  @SkipThrottle()
   async getAllMessagesOfContact() {
     return this.utilsService.send({ cmd: 'getAllMessages' }, '').toPromise();
   }
 
   @Put('validateMessage')
+  @SkipThrottle()
   async validateMessage(@Body() validateMessageDto: ValidateMessageDto) {
     return this.utilsService
       .send({ cmd: 'validateMessage' }, validateMessageDto)

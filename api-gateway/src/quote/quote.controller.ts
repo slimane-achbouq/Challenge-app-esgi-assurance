@@ -75,8 +75,7 @@ export class QuoteController {
   }
 
   @Get('quotes/:id')
-  @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
-  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Throttle(5, 60)
   async getQuoteById(@Param('id') id: string) {
     // Verify if ID is a valid UUID

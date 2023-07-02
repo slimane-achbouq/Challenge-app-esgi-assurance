@@ -33,7 +33,7 @@ import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Insurance')
 @Controller({
@@ -50,6 +50,7 @@ export class InsuranceController {
   @Post('insurance')
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async createInsurance(
     @Body() insuranceDto: CreateInsuranceDto,
   ): Promise<any> {
@@ -67,6 +68,7 @@ export class InsuranceController {
   @Get('insurance')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @Throttle(5, 60)
   async getInsurances(): Promise<any> {
     try {
       const insurances = await this.insuranceServiceClient
@@ -80,6 +82,7 @@ export class InsuranceController {
   }
 
   @Get('getoneuser/:id')
+  @Throttle(5, 60)
   async getUserById(@Param('id') id: string): Promise<any> {
     try {
       const userData = await this.userServiceClient
@@ -96,6 +99,7 @@ export class InsuranceController {
 
   @Get('insurance/:id')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getInsuranceById(@Param('id') id: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -117,6 +121,7 @@ export class InsuranceController {
 
   @Get('insurance-user/:userId')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getInsurancesByUserId(@Param('userId') userId: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -139,6 +144,7 @@ export class InsuranceController {
   @Put('insurance/:id')
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async updateInsurance(
     @Param('id') id: string,
     @Body() insuranceDto: UpdateInsuranceDto,
@@ -174,6 +180,7 @@ export class InsuranceController {
   @Delete('insurance/:id')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @Throttle(5, 60)
   async deleteInsurance(@Param('id') id: string): Promise<any> {
     try {
       const deletedInsurance = await this.insuranceServiceClient
@@ -197,6 +204,7 @@ export class InsuranceController {
 
   @Get('beneficiary/:id/insurances')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
     try {
       const beneficiaryWithInsurances = await this.insuranceServiceClient
@@ -218,6 +226,7 @@ export class InsuranceController {
 
   @Get('beneficiary/:id')
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async getBeneficiaryById(@Param('id') id: string): Promise<any> {
     try {
       const beneficiary = await this.insuranceServiceClient
@@ -240,6 +249,7 @@ export class InsuranceController {
   @Get('beneficiaries')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @Throttle(5, 60)
   async getBeneficiaries(): Promise<any> {
     try {
       const beneficiaries = await this.insuranceServiceClient
@@ -268,6 +278,7 @@ export class InsuranceController {
     ]),
   )
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async createBeneficiary(
     @Body() beneficiaryDto: CreateBeneficiaryDto,
     @UploadedFiles()
@@ -304,6 +315,7 @@ export class InsuranceController {
     ]),
   )
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async updateBeneficiary(
     @Param('id') id: string,
     @Body() beneficiaryDto: UpdateBeneficiaryDto,
@@ -363,6 +375,7 @@ export class InsuranceController {
     ]),
   )
   @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
   async createBeneficiaryInsurance(
     @Req() req,
     @Body() createModifiedInsuranceDto: CreateModifiedInsuranceDto,

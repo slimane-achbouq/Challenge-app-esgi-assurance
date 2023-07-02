@@ -35,6 +35,7 @@ export class PaymentController {
   ) {}
 
   @Post()
+  @SkipThrottle()
   async createPayment(@Body() payment: CreatePaymentDto) {
     return this.paymentService
       .send({ cmd: 'createPayment' }, payment)
@@ -42,6 +43,7 @@ export class PaymentController {
   }
 
   @Get()
+  @SkipThrottle()
   async getPayments() {
     const payment = await this.paymentService
       .send({ cmd: 'getPayments' }, '')
@@ -51,6 +53,7 @@ export class PaymentController {
   }
 
   @Get(':id')
+  @SkipThrottle()
   async getPayment(@Param('id') id: string) {
     const payment = await this.paymentService
       .send({ cmd: 'getPayment' }, id)
@@ -60,6 +63,7 @@ export class PaymentController {
   }
 
   @Get('getSession/:title/:tarif/:token/:insurance_id')
+  @SkipThrottle()
   async getSession(
     @Param('title') title: string,
     @Param('tarif') tarif: string,

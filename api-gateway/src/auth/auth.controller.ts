@@ -131,7 +131,8 @@ export class UserController {
 
   @Put('update-user')
   @UseGuards(JwtAuthGuard)
-  @Throttle(5, 60)
+  // @Throttle(5, 60)
+  @SkipThrottle()
   async updateUser(@Req() req, @Body() updateUserDto): Promise<any> {
 
     const disallowedFields = ['roles', 'isValide'];

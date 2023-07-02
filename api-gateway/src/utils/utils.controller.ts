@@ -5,10 +5,13 @@ import { VerifyDto } from './dto/verify-profile.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { MessageFormDto } from './dto/message-form.dto';
 import { ValidateMessageDto } from './dto/validate-message.dto';
+import { SkipThrottle } from '@nestjs/throttler';
 
+@SkipThrottle()
 @ApiTags('Utils')
 @Controller({
   path: 'mail',
+  version: '1',
 })
 export class UtilsController {
   constructor(

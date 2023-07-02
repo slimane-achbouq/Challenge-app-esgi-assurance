@@ -4,6 +4,8 @@ import { AuthModule } from 'src/auth/auth.module';
 import { QuoteModule } from 'src/quote/quote.module';
 import { InsuranceController } from './insurance.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -24,7 +26,17 @@ import { JwtModule } from '@nestjs/jwt';
         },
       },
     ]),
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
   ],
   controllers: [InsuranceController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class InsuranceModule {}

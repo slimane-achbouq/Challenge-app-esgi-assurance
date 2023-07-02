@@ -12,7 +12,6 @@ export class KpiController {
 
     @Post()
     async createKpi(@Body() kpi: Kpi) {
-        console.log(kpi)
         return this.kpiService.create(kpi);
     }
 

@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 import { Document } from 'mongoose';
+import { Role } from '../enums/roles.enum';
+import { Statut } from '../enums/statut.enum';
 
 export const apiPropertiesUser: {
   [P in keyof Partial<User>]: ApiPropertyOptions;
@@ -51,9 +53,15 @@ export const apiPropertiesUser: {
     example: '75018',
     description: 'User city code',
   },
+  phoneNumber: {
+    required: true,
+    format: 'string',
+    example: '+3349380088',
+    description: 'User phone number',
+  },
   age: {
     required: true,
-    format: 'number',
+    format: 'Date',
     example: '19',
     description: 'User age',
   },
@@ -86,21 +94,31 @@ export class User extends Document {
   @Prop({ required: true })
   codeCity: number;
 
+  @ApiProperty(apiPropertiesUser.codeCity)
+  @Prop({ required: true })
+  phoneNumber: string;
+
   @ApiProperty(apiPropertiesUser.age)
   @Prop({ required: true })
-  age: number;
+  age: Date;
 
   @ApiProperty(apiPropertiesUser.password)
   @Prop({ required: true })
   password: string;
 
+  @Prop({ default: Statut.Inactif })
+  statut: Statut;
+
   @Prop({ default: false })
   isValide: boolean;
 
-  @Prop()
+  @Prop({ default: '' })
   validationToken: string;
 
-  @Prop()
+  @Prop({ default: [Role.USER] })
+  roles: Role[];
+
+  @Prop({ default: '' })
   refreshToken: string;
 }
 

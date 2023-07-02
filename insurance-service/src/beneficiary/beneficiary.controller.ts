@@ -7,11 +7,11 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 export class BeneficiaryController {
   constructor(private readonly beneficiaryService: BeneficiaryService) {}
 
-  @MessagePattern({ cmd: 'createBeneficiary' })
-  async createBeneficiary(@Payload() data: any) {
-    const { beneficiaryDto, fileContents } = data;
-    return await this.beneficiaryService.createBeneficiary(beneficiaryDto, fileContents);
-  }
+    @MessagePattern({ cmd: 'createBeneficiary' })
+    async createBeneficiary(@Payload() data:  { beneficiaryDto: CreateBeneficiaryDto, fileContents: { justificatifDomicile: string; permis: string; } }) {
+      const { beneficiaryDto, fileContents } = data;
+      return await this.beneficiaryService.createBeneficiary(beneficiaryDto, fileContents);
+    }
 
   @MessagePattern({ cmd: 'getBeneficiaries' })
   async getBeneficiaries() {
@@ -24,7 +24,7 @@ export class BeneficiaryController {
   }
 
   @MessagePattern({ cmd: 'updateBeneficiary' })
-  async updateBeneficiary(@Payload() data: any) {
+  async updateBeneficiary(@Payload() data: { id : string,beneficiaryDto: CreateBeneficiaryDto, fileContents: { justificatifDomicile: string; permis: string; } }) {
     const { id, beneficiaryDto, fileContents } = data;
     return await this.beneficiaryService.updateBeneficiary(id, beneficiaryDto, fileContents);
   }
@@ -39,5 +39,8 @@ export class BeneficiaryController {
     return await this.beneficiaryService.getBeneficiaryWithInsurances(id);
   }
 
-  // Add other endpoints for CRUD operations here
+  @MessagePattern({ cmd: 'getBeneficiaryByUserId' })
+  async getBeneficiaryByUserId(@Payload() id: string) {
+    return await this.beneficiaryService.getBeneficiaryByUserId(id);
+  }
 }

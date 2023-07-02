@@ -5,12 +5,36 @@ import { CreateBeneficiaryDto,UpdateBeneficiaryDto } from './beneficiary.dto'
 import { Beneficiary } from './beneficiary.schema';
 import * as fs from 'fs';
 import * as path from 'path';
+import {WinstonModule} from "nest-winston";
+import {format, transports} from "winston";
 
 @Injectable()
 export class BeneficiaryService {
+  private logger = null;
+
   constructor(
     @InjectModel(Beneficiary.name) private beneficiaryModel: Model<Beneficiary>,
-  ) {}
+  ) {
+    this.logger = WinstonModule.createLogger({
+      transports: [
+        new transports.File({
+          level: 'debug',
+          filename: 'logs/debug.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.File({
+          level: 'error',
+          filename: 'logs/error.log',
+          format: format.combine(format.timestamp(), format.json()),
+        }),
+        new transports.Console({
+          format: format.combine(
+              format.colorize({message: true}),
+          )
+        }),
+      ]
+    });
+  }
 
 
   async createBeneficiary(
@@ -18,22 +42,24 @@ export class BeneficiaryService {
     fileContents: { justificatifDomicile: string; permis: string },
   ): Promise<Beneficiary> {
     const { justificatifDomicile, permis } = fileContents;
-
-    // Save the files and get their paths
-    const justificatifDomicilePath = justificatifDomicile
-      ? this.saveFile(justificatifDomicile, 'justificatif-domicile')
+  
+    // Decode the base64 file content
+    const justificatifDomicileContent = justificatifDomicile
+      ? Buffer.from(justificatifDomicile, 'base64')
       : null;
-
-    const permisPath = permis ? this.saveFile(permis, 'permis') : null;
-
+  
+    const permisContent = permis ? Buffer.from(permis, 'base64') : null;
+  
     const newBeneficiary = new this.beneficiaryModel({
       ...beneficiaryDto,
-      justificatifDomicile: justificatifDomicilePath,
-      permis: permisPath,
+      justificatifDomicile: justificatifDomicileContent,
+      permis: permisContent,
     });
 
+    this.logger.debug("debug", "createBeneficiary : new beneficiary " + beneficiaryDto.email + " created");
     return newBeneficiary.save();
   }
+  
 
   async getBeneficiaries(): Promise<Beneficiary[]> {
     return this.beneficiaryModel.find().exec();
@@ -49,25 +75,30 @@ export class BeneficiaryService {
     fileContents: { justificatifDomicile: string; permis: string },
   ): Promise<Beneficiary> {
     const { justificatifDomicile, permis } = fileContents;
-
-    // Save the files and get their paths
-    const justificatifDomicilePath = justificatifDomicile
-      ? this.saveFile(justificatifDomicile, 'justificatif-domicile')
+  
+    // If a new file is uploaded, decode it and save it as a blob
+    const updatedJustificatifDomicile = justificatifDomicile
+      ? Buffer.from(justificatifDomicile, 'base64')
       : null;
-    const permisPath = permis ? this.saveFile(permis, 'permis') : null;
-
+  
+    const updatedPermis = permis ? Buffer.from(permis, 'base64') : null;
+  
     const updatedBeneficiaryDto = {
       ...beneficiaryDto,
-      justificatifDomicile: justificatifDomicilePath,
-      permis: permisPath,
+      justificatifDomicile: updatedJustificatifDomicile,
+      permis: updatedPermis,
     };
 
+    this.logger.debug("debug", "updateBeneficiary : beneficiary " + beneficiaryDto.email + " updated");
     return this.beneficiaryModel
       .findByIdAndUpdate(id, updatedBeneficiaryDto, { new: true })
       .exec();
   }
+  
+  
 
   async deleteBeneficiary(id: string): Promise<Beneficiary> {
+    this.logger.debug("debug", "deleteBeneficiary : beneficiary ID " + id + " deleted");
     return this.beneficiaryModel.findByIdAndDelete(id).exec();
   }
 
@@ -75,16 +106,9 @@ export class BeneficiaryService {
     return this.beneficiaryModel.findById(id).populate('insurances').exec();
   }
 
-  // Add other methods for CRUD operations here
-
-
-  private saveFile(base64Content: string, prefix: string): string {
-    const fileName = `${Date.now()}-${prefix}.pdf`;
-    const filePath = path.join('./uploads', fileName);
-
-    // Save the base64 encoded file
-    fs.writeFileSync(filePath, Buffer.from(base64Content, 'base64'));
-
-    return filePath;
+  async getBeneficiaryByUserId(userId: string): Promise<Beneficiary> {
+    return this.beneficiaryModel.findOne({ userId }).exec();
   }
+  
+
 }

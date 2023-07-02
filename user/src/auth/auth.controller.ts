@@ -1,74 +1,92 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
-import { User } from 'src/users/schemas/user.schema';
-import { VerifyDto } from './dto/verify-profile.dto';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { VerifyDto } from './dto/verify-profile.dto';
+import { resetPasswordDto } from './dto/reset-password.dto';
+import { updatePasswordDto } from './dto/update-password.dto';
 
-@ApiTags('Auth')
+// @ApiTags('Auth')
 @Controller({
   path: 'auth',
 })
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @ApiOkResponse({
-    description: 'Add new user',
-    type: User,
-  })
-  @ApiBody({
-    description: 'Add new user',
-    required: true,
-    type: User,
-  })
-  @HttpCode(HttpStatus.OK)
-  @Post('signup')
-  signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signUp(createUserDto);
+  @MessagePattern({ cmd: 'singupCommande' })
+  signup(@Payload() createUserDto: CreateUserDto): Promise<any> {
+    try {
+      return this.authService.signUp(createUserDto);
+    } catch (err) {
+      return err.response;
+    }
   }
 
-  @Post('signin')
-  signin(@Body() data: AuthDto) {
-    return this.authService.signIn(data);
+  @MessagePattern({ cmd: 'singIn' })
+  async signin(@Payload() data: AuthDto) {
+    try {
+      return await this.authService.signIn(data);
+    } catch (err) {
+      return err.response;
+    }
   }
 
+  @MessagePattern({ cmd: 'verifyUser' })
   @Post('verifyUser')
-  verify(@Body() verifyDto: VerifyDto) {
-    return this.authService.verifyProfile(verifyDto);
+  verify(@Payload() verifyDto: VerifyDto) {
+    try {
+      return this.authService.verifyProfile(verifyDto);
+    } catch (err) {
+      return err.response;
+    }
   }
 
-  @ApiBearerAuth()
+  @MessagePattern({ cmd: 'updatePassword' })
+  @Post('updatePassword')
+  updatePassword(@Payload() updatePassword: updatePasswordDto) {
+    try {
+      return this.authService.updatePassword(updatePassword);
+    } catch (err) {
+      return err.response;
+    }
+  }
+
+  @MessagePattern({ cmd: 'resetPassword' })
+  @Post('resetPassword')
+  resetPassword(@Payload() reserPassword: resetPasswordDto) {
+    console.log(reserPassword);
+    try {
+      return this.authService.resetPassword(reserPassword);
+    } catch (err) {
+      return err.response;
+    }
+  }
+
+  @MessagePattern({ cmd: 'logout' })
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {
-    this.authService.logout(req.user['sub']);
+    try {
+      this.authService.logout(req.user['sub']);
+    } catch (err) {
+      return err.response;
+    }
   }
 
-  @ApiBearerAuth()
+  @MessagePattern({ cmd: 'refresh' })
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
     const userId = req.user['sub'];
     const refreshToken = req.user['refreshToken'];
-    return this.authService.refreshTokens(userId, refreshToken);
+    try {
+      return this.authService.refreshTokens(userId, refreshToken);
+    } catch (err) {
+      return err.response;
+    }
   }
 }

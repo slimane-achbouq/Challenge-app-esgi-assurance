@@ -110,3 +110,6 @@ dist
 .tern-port
 
 *.pdf
+
+# database volums
+data/

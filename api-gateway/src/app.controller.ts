@@ -1,14 +1,11 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ClientProxy } from '@nestjs/microservices';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Controller()
 export class AppController {
-
   @Get()
+  @UseGuards(JwtAuthGuard)
   getHello(): string {
-    return "Hello";
+    return 'Hello';
   }
-
- 
 }

@@ -11,7 +11,6 @@
         :value="situation.label"
         name="radio-buttons"
         class="peer sr-only"
-        :checked="this.$store.state.register.situation.toLowerCase() == situation.id"
       />
       <div
         class="flex items-center bg-white text-sm font-medium text-slate-800 p-4 rounded border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out"
@@ -38,10 +37,12 @@
       ></div>
     </label>
     <div class="flex items-center justify-between">
-        <button
-            class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto"
-            @click="nextStep()"
-        >Next Step -&gt;</button>
+      <button
+        class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-auto"
+        @click="nextStep()"
+      >
+        Next Step -&gt;
+      </button>
     </div>
   </div>
 </template>
@@ -76,12 +77,12 @@ export default {
       this.$store.dispatch("register/setSituation", selectedSituation);
     },
     nextStep() {
-        this.$emit("nextStep", {
-                id: 2,
-                label: 'Information',
-                selectedTab: 'StepTwo'
-        });
-    }
+      this.$emit("nextStep", {
+        id: 2,
+        label: "Information",
+        selectedTab: "StepTwo",
+      });
+    },
   },
 };
 </script>

@@ -352,7 +352,7 @@ export default {
         try {
           const token = store.getters["auth/token"];
           const response = await axios.put(
-            `${import.meta.env.VITE_API_URL}/auth/update-user/`,
+            `${import.meta.env.VITE_API_URL}/auth/update-user-admin/`,
             data,
             {
               headers: {

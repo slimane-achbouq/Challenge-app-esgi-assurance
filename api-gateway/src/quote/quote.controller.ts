@@ -27,11 +27,13 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { validate } from 'uuid';
 import { QuoteLocalStorage } from './dtos/quote-localStorage.dto';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Quote')
 @Controller({
   version: '1',
 })
+@SkipThrottle()
 export class QuoteController {
   constructor(
     @Inject('QUOTE_SERVICE') private readonly quoteServiceClient: ClientProxy,

@@ -183,13 +183,18 @@ export default {
         },
     },
     beforeCreate () {
+        if (localStorage.getItem("esgi-ws-token")) {
+          localStorage.removeItem("esgi-ws-token");
+          this.$router.push('/analytics/login')
+        }
+
         if (!localStorage.getItem("kpiJwtToken") && !getCookie("kpiJwtToken")) {
             this.$router.push("/analytics/login");
         }
     },
     async created() {
         this.appId = localStorage.getItem("appId") || getCookie("appId");
-        this.API_URL = 'http://localhost:3000';
+        this.API_URL = 'http://localhost:3008';
 
         this.topPagesVisits = await this.getTotalVisits();
         this.visitors = await this.getTotalUniqueVisitors();

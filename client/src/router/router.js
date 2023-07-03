@@ -266,7 +266,6 @@ const router = createRouter({
             meta: {requiresUnauth: false},
         },
         {path: '/pagnotfound', name: 'pagnotfound', component: PageNotFound, meta: {requiresUnauth: false}},
-        {path: '/', name: 'home', redirect: '/login'},
         {path: '/login', name: 'login', component: LoginView, meta: {requiresUnauth: false}},
         {path: '/dashboard/users', name: 'users', component: UserList, meta: {requiresUnauth: false}},
         {path: '/analytics/dashboard', name: 'analytics_dashboard', component: Analytics, meta: {requiresUnauth: true}},

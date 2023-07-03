@@ -22,7 +22,7 @@
           User deleted successfully.
         </Banner>
 
-        <Banner type="warning" :open="true">
+        <Banner type="warning" :open="!user.isValide" v-if="!user.isValide">
           This user is not yet validated
         </Banner>
         <div

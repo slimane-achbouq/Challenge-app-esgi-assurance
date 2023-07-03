@@ -58,7 +58,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   @UsePipes(ValidationPipe)
-  @Throttle(2, 30)
+  @SkipThrottle()
   signup(@Body() createUserDto: CreateUserDto) {
     
     if (createUserDto.isValide) {
@@ -120,6 +120,7 @@ export class UserController {
   @Put('update-user-admin')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @SkipThrottle()
   async updateUserByAdmin(@Req() req, @Body() updateUserDto): Promise<any> {
     return this.userServiceClient
       .send(
@@ -163,7 +164,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('resetPassword')
-  @Throttle(3, 60)
+  @SkipThrottle() 
   resetPassword(@Body() resetPassword: ResetPasswordDto) {
     return this.userServiceClient
       .send({ cmd: 'resetPassword' }, resetPassword)
@@ -173,6 +174,7 @@ export class UserController {
   @Delete('delete-user/:id')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @SkipThrottle()
   async deleteUser(@Param('id') id: string) {
     // Check if quote exists
     const existingQuote = await this.userServiceClient

@@ -502,11 +502,13 @@
                 >
                   cancele
                 </button>
+                <router-link class="block" to="/quotes">
                 <button
                   class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
                 >
-                  Quotes detail
+                  Quotes list
                 </button>
+                </router-link>
               </div>
             </div>
           </div>

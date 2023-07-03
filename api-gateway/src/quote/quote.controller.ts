@@ -205,7 +205,6 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   @Put('vehicles/:id')
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
-  @UseGuards(JwtAuthGuard)
   @Throttle(5, 60)
   async updateVehicle(
     @Param('id') id: string,

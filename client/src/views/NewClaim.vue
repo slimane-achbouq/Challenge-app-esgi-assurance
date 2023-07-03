@@ -24,6 +24,16 @@
         </Banner>
 
         <Banner
+          type="error"
+          class="mb-1"
+          :open="formatIncorrect"
+          v-if="formatIncorrect"
+        >
+          The format of the file must be PDF.
+        </Banner>
+
+
+        <Banner
           type="failure"
           class="mb-4"
           :open="generalError"
@@ -341,13 +351,23 @@ export default {
         userMail: null,
       },
       claimCreated: false,
+      formatIncorrect:false
     };
   },
   methods: {
     handleProof(event) {
+      
       this.file = event.target.files[0];
+
+      if (this.file.type != 'image/png') {
+        this.formatIncorrect = true
+      }
+
+      else {
+      this.formatIncorrect = false
       this.formData.proof = this.file;
       this.hideProof = true;
+      }
     },
     async onCreatedClaim() {
       console.log(this.formData);

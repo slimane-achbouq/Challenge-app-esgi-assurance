@@ -16,11 +16,20 @@
       <main>
         <Banner
           type="success"
-          class="mb-4"
+          class="mb-1"
           :open="contractCreated"
           v-if="contractCreated"
         >
           Contract created successfully to payment .
+        </Banner>
+
+        <Banner
+          type="error"
+          class="mb-1"
+          :open="formatIncorrect"
+          v-if="formatIncorrect"
+        >
+          The format of the file must be PDF.
         </Banner>
 
         <div
@@ -908,6 +917,7 @@ export default {
   data() {
     return {
       selectedPlan: "Basic",
+      formatIncorrect : false,
       existingPayment: null,
       drivingLicense: null,
       hideImageFielddrivingLicense: null,
@@ -957,20 +967,38 @@ export default {
     },
     handleFile(event) {
       this.file = event.target.files[0];
-      this.errors.license = null;
-      this.drivingLicense = this.file.name;
-      this.formData.permis = this.file;
-      this.previewSrc = URL.createObjectURL(event.target.files[0]);
-      this.hideImageFielddrivingLicense = true;
-      this.errors.license = null;
+
+      if (this.file.type != 'application/pdf') {
+        console.log(this.file.type)
+        this.formatIncorrect = true
+      } else {
+        this.formatIncorrect = false
+        this.errors.license = null;
+        this.drivingLicense = this.file.name;
+        this.formData.permis = this.file;
+        this.previewSrc = URL.createObjectURL(event.target.files[0]);
+        this.hideImageFielddrivingLicense = true;
+        this.errors.license = null;
+      }
+      
     },
     handleFile1(event) {
       this.file = event.target.files[0];
-      this.adresse = this.file.name;
-      this.formData.justificatifDomicile = this.file;
-      this.previewSrc = URL.createObjectURL(event.target.files[0]);
-      this.hideImageFieladresse = true;
-      this.errors.adresse = null;
+
+      if (this.file.type != 'application/pdf') {
+        console.log(this.file.type)
+        this.formatIncorrect = true
+      } else {
+        this.formatIncorrect = false
+        this.adresse = this.file.name;
+        this.formData.justificatifDomicile = this.file;
+        this.previewSrc = URL.createObjectURL(event.target.files[0]);
+        this.hideImageFieladresse = true;
+        this.errors.adresse = null;
+
+        }
+
+      
     },
     processDate(date) {
       let dateObject = new Date(date);

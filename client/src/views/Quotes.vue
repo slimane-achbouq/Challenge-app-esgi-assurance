@@ -161,6 +161,7 @@ export default {
 
       modaDeletelOpen.value = false;
       deleted.value = true;
+       this.$router.push("quotes");
     }
 
     return {

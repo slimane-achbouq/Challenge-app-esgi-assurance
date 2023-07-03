@@ -236,7 +236,7 @@ export default {
   async created() {
     const token = this.$store.getters["auth/token"];
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response = await axios.get(
+    const response = JSON.parse(localStorage.getItem("admin-one-user")) ?? await axios.get(
       `${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`,
       {
         headers: {
@@ -250,6 +250,9 @@ export default {
         }*/
 
     if (response.data) {
+      if (!localStorage.getItem("admin-one-user")) {
+        localStorage.setItem("admin-one-user", JSON.stringify(response));
+      }
       this.customer = response.data;
     }
   },

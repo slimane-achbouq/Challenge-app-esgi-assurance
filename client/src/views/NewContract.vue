@@ -31,7 +31,7 @@
               <div class="mb-2">
                 <i class="fas fa-file-contract"></i
                 ><strong class="text-1xl text-slate-800">
-                  Quote inforamtions</strong
+                  Quote information</strong
                 >
               </div>
             </div>
@@ -134,7 +134,7 @@
                 </h1>
                 <p>
                   After creating your contract, the admin will check this
-                  inforamtions before validate your contract.
+                  information before validate your contract.
                 </p>
               </header>
 
@@ -998,7 +998,6 @@ export default {
 
       this.formData.insurancePremium = Number(this.formData.insurancePremium);
 
-      console.log(this.formData.insurancePremium);
       const token = this.$store.getters["auth/token"];
       // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
       let response = await axios.post(

@@ -44,12 +44,12 @@
         </Banner>
 
         <Banner v-if="role === 'User'" type="warning" class="mb-1" :open="true">
-          To edit the inforamtions of the contract you must create a request
+          To edit the information of the contract you must create a request
           <a class="cursor-pointer text-blue-900/100"> here.</a>
         </Banner>
 
         <Banner
-          v-if="!contract.status && role === 'User'"
+          v-if="contract && !contract.status && role === 'User'"
           type="warning"
           class="mb-1"
           :open="true"
@@ -259,7 +259,7 @@
               <div class="py-8 px-4">
                 <div class="max-w-sm mx-auto lg:max-w-none">
                   <h2 class="text-2xl text-slate-800 font-bold mb-6">
-                    Related inforamtions
+                    Related information
                   </h2>
                   <div class="space-y-6">
                     <!-- Sidebar -->
@@ -680,14 +680,22 @@ export default {
 
     const token = this.$store.getters["auth/token"];
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/insurance/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    let response = null;
+
+    try {
+      response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/insurance/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+      );
+      localStorage.setItem("insurance-data", JSON.stringify(response.data));
+    }
+    catch(e) {
+      response = JSON.parse(localStorage.getItem("insurance-data"));
+    }
 
     /*if(response.data["hydra:member"]){
       customers.value = await response.data["hydra:member"];
@@ -695,7 +703,6 @@ export default {
 
     if (response.data) {
       this.contract = response.data;
-      console.log(this.contract.quoteId);
     }
 
     this.formData.insuranceType = this.contract.insuranceType;
@@ -708,10 +715,9 @@ export default {
     );
     this.formData.insurancePremium = this.contract.insurancePremium;
 
-    console.log(this.formData);
 
-    const response1 = await axios.get(
-      `http://localhost:3000/beneficiary/${this.contract.beneficiary}`,
+    const response1 = JSON.parse(localStorage.getItem("beneficiary-data")) ?? await axios.get(
+      `${import.meta.env.VITE_API_URL}/beneficiary/${this.contract.beneficiary}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -724,12 +730,14 @@ export default {
     }*/
 
     if (response1.data) {
+      if (!localStorage.getItem("beneficiary-data")) {
+        localStorage.setItem("beneficiary-data", JSON.stringify(response1));
+      }
       this.user = response1.data;
-      console.log(this.user);
     }
 
     const response2 = await axios.get(
-      `http://localhost:3000/payment/${this.contract.quoteId}`,
+      `${import.meta.env.VITE_API_URL}/payment/${this.contract.quoteId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -739,7 +747,6 @@ export default {
 
     if (response2.data) {
       this.payment = response2.data;
-      console.log(this.payment);
     }
   },
   methods: {
@@ -767,7 +774,6 @@ export default {
       );
 
       this.sessionId = request.data.id;
-      console.log(request.data);
     },
 
     formatDate(dateString) {
@@ -804,7 +810,6 @@ export default {
     },
 
     async validateItem() {
-      console.log(this.formData);
       const token = this.$store.getters["auth/token"];
       // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
       const response = await axios.put(
@@ -844,7 +849,6 @@ export default {
     },
 
     async onUpdate() {
-      console.log(this.formData);
       const token = this.$store.getters["auth/token"];
       // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
       const response = await axios.put(

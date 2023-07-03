@@ -557,6 +557,8 @@ export default {
               },
             }
           );
+
+          localStorage.setItem("profile-data", JSON.stringify(response));
         } catch (error) {
           console.log(error);
           if ((error.message = "Request failed with status code 500"))
@@ -586,7 +588,7 @@ export default {
     const token = this.$store.getters["auth/token"];
 
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response = await axios.get(
+    const response = JSON.parse(localStorage.getItem("profile-data")) ?? await axios.get(
       `${import.meta.env.VITE_API_URL}/getoneuser/${id}`,
       {
         headers: {
@@ -600,6 +602,9 @@ export default {
         }*/
 
     if (response.data) {
+      if (!localStorage.getItem("profile-data")) {
+        localStorage.setItem("profile-data", JSON.stringify(response));
+      }
       this.user = response.data;
       console.log(this.user);
     }

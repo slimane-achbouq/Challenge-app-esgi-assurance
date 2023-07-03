@@ -40,7 +40,7 @@
             <!-- Right: Actions -->
             <div
               class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2"
-              v-if="this.quote.insurancePremium == 0"
+              v-if="this.quote && this.quote.insurancePremium == 0"
             >
               <button
                 class="btn border-slate-200 hover:border-slate-300 text-slate-600"
@@ -106,7 +106,7 @@
                   <div class="mb-2">
                     <i class="fas fa-user m-2"></i
                     ><strong class="text-1xl text-slate-800"
-                      >Customer inforamtions</strong
+                      >Customer information</strong
                     >
                   </div>
                 </div>
@@ -161,7 +161,7 @@
                         class="text-sm font-medium divide-y divide-slate-100"
                       >
                         <!-- Row -->
-                        <tr>
+                        <tr v-if="user">
                           <td class="p-2 whitespace-nowrap">
                             <div class="flex items-center">
                               <div>
@@ -226,11 +226,11 @@
                 <i
                   class="far fa-edit cursor-pointer"
                   @click="modalOpen = true"
-                  v-if="this.quote.insurancePremium == 0"
+                  v-if="this.quote && this.quote.insurancePremium == 0"
                 ></i>
               </header>
 
-              <div class="px-10 divide-y divide-slate-100 space-y-3">
+              <div v-if="quote" class="px-10 divide-y divide-slate-100 space-y-3">
                 <div>
                   <div class="flex justify-between text-sm m-3">
                     <div class="font-medium text-slate-800">Status</div>
@@ -303,7 +303,7 @@
             </div>
 
             <!-- Quote detail -->
-            <div
+            <div v-if="quote"
               class="col-span-full xl:col-span-6 bg-gradient-to-b from-slate-700 to-slate-800 shadow-lg rounded-sm border border-slate-800"
             >
               <header
@@ -750,8 +750,8 @@ export default {
     this.formData.coverageStartDate = this.processDate(
       this.quote.coverageStartDate
     );
-    const response1 = await axios.get(
-      `http://localhost:3000/getoneuser/${this.quote.userId}`,
+    const response1 = JSON.parse(localStorage.getItem("one-user")) ?? await axios.get(
+      `${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -764,6 +764,9 @@ export default {
         }*/
 
     if (response1.data) {
+      if (!localStorage.getItem("one-user")) {
+        localStorage.setItem("one-user", JSON.stringify(response));
+      }
       this.user = response1.data;
     }
   },

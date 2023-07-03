@@ -1,21 +1,21 @@
-import {Body, Controller, Get, Headers, HttpCode, Post} from '@nestjs/common';
-import {AppidService} from "./appid.service";
-import {Appid} from "../schemas/appid.schema";
+import { Body, Controller, Get, Headers, HttpCode, Post } from '@nestjs/common';
+import { AppidService } from './appid.service';
+import { Appid } from '../schemas/appid.schema';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller("appid")
+@Controller('appid')
 export class AppidController {
-    constructor(private readonly appidService: AppidService) {
-    }
+  constructor(private readonly appidService: AppidService) {}
 
-    @Post()
-    async createAppid(@Body() appid: Appid) {
-        return this.appidService.create(appid);
-    }
+  @MessagePattern('createAppid')
+  async createAppid(@Payload() appid: Appid) {
+    return this.appidService.create(appid);
+  }
 
-    @Get()
-    @HttpCode(200)
-    async getTotalAppidsCount(@Headers() headers) {
-        const email = headers["email"];
-        return this.appidService.getAppidByEmail(email);
-    }
+  @MessagePattern('getTotalAppidsCount')
+  async getTotalAppidsCount(@Payload() headers) {
+    // const email = headers['email'];
+    // return this.appidService.getAppidByEmail(email);
+    return 'zakaria';
+  }
 }

@@ -7,6 +7,7 @@ import { UtilsModule } from './utils/utils.module';
 import { AuthModule } from './auth/auth.module';
 import { ClaimsModule } from './claims/claims.module';
 import { PaymentModule } from './payment/payment.module';
+import { KpiModule } from './kpi/kpi.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PaymentModule } from './payment/payment.module';
     UtilsModule,
     ClaimsModule,
     PaymentModule,
+    KpiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

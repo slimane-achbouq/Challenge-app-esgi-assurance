@@ -4,28 +4,28 @@
     <form class="relative">
       <label for="app-search" class="sr-only">Search by contracts number</label>
       <input
-        id="app-search"
-        class="form-input w-full pl-9 py-3 focus:border-slate-300"
-        type="search"
-        placeholder="Search by quote number"
-        v-model="searchTerm"
-        @input="searchCustomers"
+          id="app-search"
+          class="form-input w-full pl-9 py-3 focus:border-slate-300"
+          type="search"
+          placeholder="Search by quote number"
+          v-model="searchTerm"
+          @input="searchCustomers"
       />
       <button
-        class="absolute inset-0 right-auto group"
-        type="submit"
-        aria-label="Search"
+          class="absolute inset-0 right-auto group"
+          type="submit"
+          aria-label="Search"
       >
         <svg
-          class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
-          viewBox="0 0 16 16"
-          xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+            viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z"
+              d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z"
           />
           <path
-            d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z"
+              d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z"
           />
         </svg>
       </button>
@@ -33,41 +33,42 @@
 
     <!-- Right: Actions  -->
     <div
-      class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2"
+        class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2"
     >
       <!-- Filter button -->
 
       <div class="relative inline-flex">
         <button
-          ref="trigger"
-          class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-          aria-haspopup="true"
-          @click.prevent="dropdownOpen = !dropdownOpen"
-          :aria-expanded="dropdownOpen"
+            ref="trigger"
+            class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+            aria-haspopup="true"
+            @click.prevent="dropdownOpen = !dropdownOpen"
+            :aria-expanded="dropdownOpen"
         >
-          <span class="sr-only">Filter</span><wbr />
+          <span class="sr-only">Filter</span>
+          <wbr/>
           <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
             <path
-              d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z"
+                d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z"
             />
           </svg>
         </button>
         <transition
-          enter-active-class="transition ease-out duration-200 transform"
-          enter-from-class="opacity-0 -translate-y-2"
-          enter-to-class="opacity-100 translate-y-0"
-          leave-active-class="transition ease-out duration-200"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
+            enter-active-class="transition ease-out duration-200 transform"
+            enter-from-class="opacity-0 -translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition ease-out duration-200"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
         >
           <div
-            v-show="dropdownOpen"
-            class="origin-top-right z-10 absolute top-full min-w-56 bg-white border border-slate-200 pt-1.5 rounded shadow-lg overflow-hidden mt-1"
-            :class="align === 'right' ? 'right-0' : 'left-0'"
+              v-show="dropdownOpen"
+              class="origin-top-right z-10 absolute top-full min-w-56 bg-white border border-slate-200 pt-1.5 rounded shadow-lg overflow-hidden mt-1"
+              :class="align === 'right' ? 'right-0' : 'left-0'"
           >
             <div ref="dropdown">
               <div
-                class="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4"
+                  class="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4"
               >
                 Filters
               </div>
@@ -75,9 +76,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
-                      type="checkbox"
-                      class="form-checkbox"
-                      v-model="filters.subscribed"
+                        type="checkbox"
+                        class="form-checkbox"
+                        v-model="filters.subscribed"
                     />
                     <span class="text-sm font-medium ml-2">Active</span>
                   </label>
@@ -85,9 +86,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
-                      type="checkbox"
-                      class="form-checkbox"
-                      v-model="filters.notSubscribed"
+                        type="checkbox"
+                        class="form-checkbox"
+                        v-model="filters.notSubscribed"
                     />
                     <span class="text-sm font-medium ml-2">Incative</span>
                   </label>
@@ -95,24 +96,24 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
-                      type="checkbox"
-                      class="form-checkbox"
-                      v-model="filters.basicInsurance"
+                        type="checkbox"
+                        class="form-checkbox"
+                        v-model="filters.basicInsurance"
                     />
                     <span class="text-sm font-medium ml-2"
-                      >Basic insurance</span
+                    >Basic insurance</span
                     >
                   </label>
                 </li>
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
-                      type="checkbox"
-                      class="form-checkbox"
-                      v-model="filters.standardInsurance"
+                        type="checkbox"
+                        class="form-checkbox"
+                        v-model="filters.standardInsurance"
                     />
                     <span class="text-sm font-medium ml-2"
-                      >Standard insurance</span
+                    >Standard insurance</span
                     >
                   </label>
                 </li>
@@ -120,12 +121,12 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
-                      type="checkbox"
-                      class="form-checkbox"
-                      v-model="filters.comprehensiveCoverage"
+                        type="checkbox"
+                        class="form-checkbox"
+                        v-model="filters.comprehensiveCoverage"
                     />
                     <span class="text-sm font-medium ml-2"
-                      >Comprehensive coverage</span
+                    >Comprehensive coverage</span
                     >
                   </label>
                 </li>
@@ -134,17 +135,17 @@
                 <ul class="flex items-center justify-between">
                   <li>
                     <button
-                      class="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                      @click="clearFilters"
+                        class="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+                        @click="clearFilters"
                     >
                       Clear
                     </button>
                   </li>
                   <li>
                     <button
-                      class="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white"
-                      @click="applyFilters"
-                      @focusout="dropdownOpen = false"
+                        class="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white"
+                        @click="applyFilters"
+                        @focusout="dropdownOpen = false"
                     >
                       Apply
                     </button>
@@ -160,67 +161,67 @@
 
       <div class="relative">
         <button
-          ref="trigger"
-          class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-          aria-label="Select date range"
-          aria-haspopup="true"
-          @click.prevent="dropdownOpen1 = !dropdownOpen1"
-          :aria-expanded="dropdownOpen1"
+            ref="trigger"
+            class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+            aria-label="Select date range"
+            aria-haspopup="true"
+            @click.prevent="dropdownOpen1 = !dropdownOpen1"
+            :aria-expanded="dropdownOpen1"
         >
           <span class="flex items-center">
             <svg
-              class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2"
-              viewBox="0 0 16 16"
+                class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2"
+                viewBox="0 0 16 16"
             >
               <path
-                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z"
+                  d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z"
               />
             </svg>
             <span>{{ options[selected1].period }}</span>
           </span>
           <svg
-            class="shrink-0 ml-1 fill-current text-slate-400"
-            width="11"
-            height="7"
-            viewBox="0 0 11 7"
+              class="shrink-0 ml-1 fill-current text-slate-400"
+              width="11"
+              height="7"
+              viewBox="0 0 11 7"
           >
-            <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
+            <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z"/>
           </svg>
         </button>
         <transition
-          enter-active-class="transition ease-out duration-100 transform"
-          enter-from-class="opacity-0 -translate-y-2"
-          enter-to-class="opacity-100 translate-y-0"
-          leave-active-class="transition ease-out duration-100"
-          leave-from-class="opacity-100"
-          leave-to-class="opacity-0"
+            enter-active-class="transition ease-out duration-100 transform"
+            enter-from-class="opacity-0 -translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition ease-out duration-100"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
         >
           <div
-            v-show="dropdownOpen1"
-            class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+              v-show="dropdownOpen1"
+              class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
           >
             <div
-              ref="dropdown"
-              class="font-medium text-sm text-slate-600"
-              @focusin="dropdownOpen1 = true"
-              @focusout="dropdownOpen1 = false"
+                ref="dropdown"
+                class="font-medium text-sm text-slate-600"
+                @focusin="dropdownOpen1 = true"
+                @focusout="dropdownOpen1 = false"
             >
               <button
-                v-for="option in options"
-                :key="option.id"
-                class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                :class="option.id === selected1 && 'text-indigo-500'"
-                @click="selectedDatefilter(option.id)"
+                  v-for="option in options"
+                  :key="option.id"
+                  class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                  :class="option.id === selected1 && 'text-indigo-500'"
+                  @click="selectedDatefilter(option.id)"
               >
                 <svg
-                  class="shrink-0 mr-2 fill-current text-indigo-500"
-                  :class="option.id !== selected1 && 'invisible'"
-                  width="12"
-                  height="9"
-                  viewBox="0 0 12 9"
+                    class="shrink-0 mr-2 fill-current text-indigo-500"
+                    :class="option.id !== selected1 && 'invisible'"
+                    width="12"
+                    height="9"
+                    viewBox="0 0 12 9"
                 >
                   <path
-                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z"
+                      d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z"
                   />
                 </svg>
                 <span>{{ option.period }}</span>
@@ -247,42 +248,42 @@
         <table class="table-auto w-full divide-y divide-slate-200">
           <!-- Table header -->
           <thead
-            class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-slate-200"
+              class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-slate-200"
           >
-            <tr>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Number</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">insuranceType</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Covrage</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Price / mo</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Start Date</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">End Date</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold text-left">Status</div>
-              </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Beneficiary</div>
-              </th>
-            </tr>
+          <tr>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">Number</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">insuranceType</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">Covrage</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">Price / mo</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">Start Date</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">End Date</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold text-left">Status</div>
+            </th>
+            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <div class="font-semibold">Beneficiary</div>
+            </th>
+          </tr>
           </thead>
           <!-- Table body -->
           <ContractsTableItem
-            v-for="quote in quotes"
-            :key="quote.id"
-            :quote="quote"
-            v-model:selected="selected"
-            :value="quote.id"
+              v-for="quote in quotes"
+              :key="quote.id"
+              :quote="quote"
+              v-model:selected="selected"
+              :value="quote.id"
           />
         </table>
       </div>
@@ -291,31 +292,31 @@
   <div class="mt-8">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <nav
-        class="mb-4 sm:mb-0 sm:order-1"
-        role="navigation"
-        aria-label="Navigation"
+          class="mb-4 sm:mb-0 sm:order-1"
+          role="navigation"
+          aria-label="Navigation"
       >
         <ul class="flex justify-center">
           <li class="ml-3 first:ml-0">
             <a
-              class="btn bg-white border-slate-200"
-              :class="{
+                class="btn bg-white border-slate-200"
+                :class="{
                 'text-slate-300 cursor-not-allowed': page === 1,
                 'hover:border-slate-300 text-indigo-500': page != 1,
               }"
-              @click.prevent="prevPage"
-              >&lt;- Previous</a
+                @click.prevent="prevPage"
+            >&lt;- Previous</a
             >
           </li>
           <li class="ml-3 first:ml-0">
             <a
-              class="btn bg-white border-slate-200"
-              :class="{
+                class="btn bg-white border-slate-200"
+                :class="{
                 'text-slate-300 cursor-not-allowed': page >= lastPage,
                 'hover:border-slate-300 text-indigo-500': page < lastPage,
               }"
-              @click.prevent="nextPage"
-              >Next -&gt;</a
+                @click.prevent="nextPage"
+            >Next -&gt;</a
             >
           </li>
         </ul>
@@ -331,13 +332,13 @@
 </template>
 
 <script>
-import { ref, watch, onMounted } from "vue";
+import {ref, watch, onMounted} from "vue";
 import axios from "axios";
 import ContractsTableItem from "./ContractsTableItem.vue";
 import FilterButton from "@/components/DropdownFilter.vue";
 import DateSelect from "@/components/DateSelect.vue";
 import moment from "moment";
-import { useStore } from "vuex";
+import {useStore} from "vuex";
 
 export default {
   name: "ContractsTable",
@@ -347,7 +348,7 @@ export default {
     DateSelect,
   },
   props: ["selectedItems"],
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const store = useStore();
     const allUsers = ref([]);
     const selectAll = ref(false);
@@ -405,8 +406,8 @@ export default {
       quotes.value = quoteList.value;
 
       quotes.value = quoteList.value.slice(
-        (page.value - 1) * perPage.value,
-        page.value * perPage.value
+          (page.value - 1) * perPage.value,
+          page.value * perPage.value
       ); // assign only the corresponding users to the current page
 
       totalResult.value = quoteList.value.length; // get the total users
@@ -432,29 +433,29 @@ export default {
           if (selected == "0" && quoteCreationDate.isSame(now, "day"))
             return true;
           if (
-            selected == "1" &&
-            quoteCreationDate.isAfter(sevenDaysAgo) &&
-            quoteCreationDate.isBefore(now)
+              selected == "1" &&
+              quoteCreationDate.isAfter(sevenDaysAgo) &&
+              quoteCreationDate.isBefore(now)
           )
             return true;
           if (
-            selected == "2" &&
-            quoteCreationDate.isAfter(oneMonthAgo) &&
-            quoteCreationDate.isBefore(now)
+              selected == "2" &&
+              quoteCreationDate.isAfter(oneMonthAgo) &&
+              quoteCreationDate.isBefore(now)
           )
             return true;
           if (
-            selected == "3" &&
-            quoteCreationDate.isAfter(twelveMonthsAgo) &&
-            quoteCreationDate.isBefore(now)
+              selected == "3" &&
+              quoteCreationDate.isAfter(twelveMonthsAgo) &&
+              quoteCreationDate.isBefore(now)
           )
             return true;
           if (selected == "4") quotes.value = quoteList.value;
         });
       totalResult.value = quotes.value.length;
       quotes.value = quotes.value.slice(
-        (page.value - 1) * perPage.value,
-        page.value * perPage.value
+          (page.value - 1) * perPage.value,
+          page.value * perPage.value
       ); // assign only the corresponding users to the current page
       // get the total users
       lastPage.value = Math.ceil(totalResult.value / perPage.value); // calculate the last page
@@ -479,33 +480,33 @@ export default {
         if (filters.value.premiumInsurance && quote.coverage == "Premium")
           return true;
         if (
-          !filters.value.basicInsurance &&
-          !filters.value.standardInsurance &&
-          !filters.value.premiumInsurance
+            !filters.value.basicInsurance &&
+            !filters.value.standardInsurance &&
+            !filters.value.premiumInsurance
         )
           return true;
       });
 
       quotes.value = quotes.value.filter((quote) => {
         if (
-          filters.value.liabilityCoverage &&
-          quote.insuranceType == "Liability"
+            filters.value.liabilityCoverage &&
+            quote.insuranceType == "Liability"
         )
           return true;
         if (
-          filters.value.collisionCoverage &&
-          quote.insuranceType == "Collision"
+            filters.value.collisionCoverage &&
+            quote.insuranceType == "Collision"
         )
           return true;
         if (
-          filters.value.comprehensiveCoverage &&
-          quote.insuranceType == "Comprehensive"
+            filters.value.comprehensiveCoverage &&
+            quote.insuranceType == "Comprehensive"
         )
           return true;
         if (
-          !filters.value.liabilityCoverage &&
-          !filters.value.collisionCoverage &&
-          !filters.value.comprehensiveCoverage
+            !filters.value.liabilityCoverage &&
+            !filters.value.collisionCoverage &&
+            !filters.value.comprehensiveCoverage
         )
           return true;
       });
@@ -515,18 +516,18 @@ export default {
     };
 
     // close on click outside
-    const clickHandler = ({ target }) => {
+    const clickHandler = ({target}) => {
       if (
-        !dropdownOpen.value ||
-        dropdown.value.contains(target) ||
-        trigger.value.contains(target)
+          !dropdownOpen.value ||
+          dropdown.value.contains(target) ||
+          trigger.value.contains(target)
       )
         return;
       dropdownOpen.value = false;
     };
 
     // close if the esc key is pressed
-    const keyHandler = ({ keyCode }) => {
+    const keyHandler = ({keyCode}) => {
       if (!dropdownOpen.value || keyCode !== 27) return;
       dropdownOpen.value = false;
     };
@@ -534,18 +535,20 @@ export default {
     const fetchQuotes = async () => {
       const token = store.getters["auth/token"];
       const id = store.getters["auth/id"];
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/insurance-user/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+
+      let response = JSON.parse(localStorage.getItem("contracts-list")) ?? await axios.get(
+          `${import.meta.env.VITE_API_URL}/insurance-user/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
       );
 
-      console.log(response.data);
-
       if (response.data) {
+        if (!localStorage.getItem("contracts-list")) {
+          localStorage.setItem("contracts-list", JSON.stringify(response));
+        }
         allUsers.value = await response.data; // store all the users
         quotes.value = allUsers.value;
       }
@@ -582,7 +585,7 @@ export default {
 
     watch(selected, () => {
       selectAll.value =
-        quotes.value.length === selected.value.length ? true : false;
+          quotes.value.length === selected.value.length ? true : false;
       emit("change-selection", selected.value);
     });
 
@@ -590,17 +593,18 @@ export default {
       if (page.value < lastPage.value) {
         page.value++;
         quotes.value = allUsers.value.slice(
-          (page.value - 1) * perPage.value,
-          page.value * perPage.value
+            (page.value - 1) * perPage.value,
+            page.value * perPage.value
         ); // update the customers list according to the new page
       }
     }
+
     function prevPage() {
       if (page.value > 1) {
         page.value--;
         quotes.value = allUsers.value.slice(
-          (page.value - 1) * perPage.value,
-          page.value * perPage.value
+            (page.value - 1) * perPage.value,
+            page.value * perPage.value
         ); // update the customers list according to the new page
       }
     }

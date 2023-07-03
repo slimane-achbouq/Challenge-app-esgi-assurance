@@ -99,7 +99,7 @@ export default {
         }
       );
 
-      console.log(request2.data);
+      localStorage.removeItem("contract-data");
     }
   },
 };

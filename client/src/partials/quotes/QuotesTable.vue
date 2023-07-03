@@ -583,7 +583,7 @@ export default {
 
     const fetchQuotes = async () => {
       const token = store.getters["auth/token"];
-      const response = await axios.get(
+      const response = JSON.parse(localStorage.getItem("admin-quotes-list")) ?? await axios.get(
         `${import.meta.env.VITE_API_URL}/quotes`,
         {
           headers: {
@@ -593,6 +593,9 @@ export default {
       );
 
       if (response.data) {
+        if (!localStorage.getItem("admin-quotes-list")) {
+          localStorage.setItem("admin-quotes-list", JSON.stringify(response));
+        }
         allUsers.value = await response.data; // store all the users
         quotes.value = allUsers.value.slice(
           (page.value - 1) * perPage.value,

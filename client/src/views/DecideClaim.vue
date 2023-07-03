@@ -309,7 +309,7 @@ export default {
       this.$router.push({ name: "claim", params: { id: id } });
     }
 
-    const response = await axios.get(
+    const response = JSON.parse(localStorage.getItem("decide-claim-data")) ?? await axios.get(
       `${import.meta.env.VITE_API_URL}/claims/${id}`,
       {
         headers: {
@@ -318,7 +318,13 @@ export default {
       }
     );
 
-    this.claim = response.data;
+    if (response.data) {
+      if (!localStorage.getItem("decide-claim-data")) {
+        localStorage.setItem("decide-claim-data", JSON.stringify(response));
+      }
+      this.claim = response.data;
+    }
+
     if (this.claim.status != 0) {
       this.$router.push({ name: "claim", params: { id: id } });
     }

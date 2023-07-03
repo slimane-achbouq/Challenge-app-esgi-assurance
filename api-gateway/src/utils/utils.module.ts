@@ -24,8 +24,8 @@ const clientProxyProvider: Provider = {
 @Module({
   imports: [
     ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 10,
+      ttl: 30,
+      limit: 20,
     }),
   ],
   providers: [

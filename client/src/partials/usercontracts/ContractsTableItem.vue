@@ -254,7 +254,7 @@ export default {
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
 
     const token = this.$store.getters["auth/token"];
-    const response = await axios.get(
+    const response = JSON.parse(localStorage.getItem("beneficiary-list")) ??  await axios.get(
       `${import.meta.env.VITE_API_URL}/beneficiary/${this.quote.beneficiary}`,
       {
         headers: {
@@ -264,6 +264,9 @@ export default {
     );
 
     if (response.data) {
+      if (!localStorage.getItem("beneficiary-list")) {
+        localStorage.setItem("beneficiary-list", JSON.stringify(response));
+      }
       this.beneficiary = response.data;
     }
   },

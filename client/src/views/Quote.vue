@@ -106,7 +106,7 @@
                   <div class="mb-2">
                     <i class="fas fa-user m-2"></i
                     ><strong class="text-1xl text-slate-800"
-                      >Customer inforamtions</strong
+                      >Customer information</strong
                     >
                   </div>
                 </div>
@@ -303,7 +303,7 @@
             </div>
 
             <!-- Quote detail -->
-            <div
+            <div v-if="quote"
               class="col-span-full xl:col-span-6 bg-gradient-to-b from-slate-700 to-slate-800 shadow-lg rounded-sm border border-slate-800"
             >
               <header v-if="quote"
@@ -751,8 +751,8 @@ export default {
     this.formData.coverageStartDate = this.processDate(
       this.quote.coverageStartDate
     );
-    const response1 = await axios.get(
-      `http://localhost:3000/getoneuser/${this.quote.userId}`,
+    const response1 = JSON.parse(localStorage.getItem("one-user")) ?? await axios.get(
+      `${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -765,6 +765,9 @@ export default {
         }*/
 
     if (response1.data) {
+      if (!localStorage.getItem("one-user")) {
+        localStorage.setItem("one-user", JSON.stringify(response));
+      }
       this.user = response1.data;
     }
   },

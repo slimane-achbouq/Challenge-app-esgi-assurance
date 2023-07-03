@@ -35,8 +35,8 @@ const clientProxyProvider: Provider = {
       signOptions: { expiresIn: '6000s' },
     }),
     ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 10,
+      ttl: 30,
+      limit: 20,
     }),
   ],
   controllers: [UserController],

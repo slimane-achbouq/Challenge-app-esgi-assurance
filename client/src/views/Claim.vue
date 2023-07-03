@@ -242,16 +242,25 @@ export default {
     this.role = store.getters["auth/roles"];
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
 
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/claims/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    let response = null;
+    try {
+      response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/claims/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+      );
+      localStorage.setItem("claim-data", JSON.stringify(response));
+    }
+    catch(e) {
+      response = JSON.parse(localStorage.getItem("claim-data"))
+    }
 
-    this.claim = response.data;
+    if (response.data) {
+      this.claim = response.data;
+    }
 
     if (
       this.role == "User" &&

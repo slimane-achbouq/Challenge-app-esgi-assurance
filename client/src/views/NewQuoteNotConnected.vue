@@ -119,7 +119,7 @@
           :open="Object.keys(errors).length !== 0"
           v-if="true"
         >
-          Check the inforamtions you filled.
+          Check the information you filled.
         </Banner>
         <Banner type="success" class="mb-4" :open="true" v-if="caretCrise">
           File uploaded successfully.

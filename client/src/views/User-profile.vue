@@ -397,7 +397,7 @@
 import { ref } from "vue";
 import Sidebar from "@/partials/Sidebar.vue";
 import Header from "@/partials/Header.vue";
-import SettingsSidebar from "@/partials/settings/SettingsSidebar.vue";
+import SettingsSidebar from "@/partials/settings/SettingsSidebarAdmin.vue";
 import Banner from "@/components/Banner.vue";
 import ModalBasic from "@/components/Modal.vue";
 import axios from "axios";

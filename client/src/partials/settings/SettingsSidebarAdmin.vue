@@ -31,7 +31,7 @@
                 :class="
                   isExactActive ? 'text-indigo-500' : 'hover:text-slate-700'
                 "
-                >Profile</span>
+                >Users</span>
               </router-link>
             </a>
           </li>
@@ -59,7 +59,7 @@
                 :class="
                   isExactActive ? 'text-indigo-500' : 'hover:text-slate-700'
                 "
-                >My demands</span
+                >Demands</span
               >
               </router-link>
             </a>
@@ -86,7 +86,7 @@
                 :class="
                   isExactActive ? 'text-indigo-500' : 'hover:text-slate-700'
                 "
-                >My quotes</span
+                >Quotes</span
               >
               </router-link>
             </a>
@@ -118,7 +118,7 @@
                 :class="
                   isExactActive ? 'text-indigo-500' : 'hover:text-slate-700'
                 "
-                >My contracts</span
+                >Contracts</span
               >
               </router-link>
             </a>
@@ -146,7 +146,7 @@
                 :class="
                   isExactActive ? 'text-indigo-500' : 'hover:text-slate-700'
                 "
-                >My messages</span
+                >Messages</span
               >
               </router-link>
             </a>
@@ -158,6 +158,6 @@
 
 <script>
 export default {
-  name: "SettingsSidebar",
+  name: "SettingsSidebarAdmin",
 };
 </script>

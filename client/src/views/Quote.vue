@@ -40,7 +40,7 @@
             <!-- Right: Actions -->
             <div
               class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2"
-              v-if="this.quote.insurancePremium == 0"
+              v-if="quote && this.quote.insurancePremium == 0"
             >
               <button
                 class="btn border-slate-200 hover:border-slate-300 text-slate-600"
@@ -161,7 +161,7 @@
                         class="text-sm font-medium divide-y divide-slate-100"
                       >
                         <!-- Row -->
-                        <tr>
+                        <tr v-if="user">
                           <td class="p-2 whitespace-nowrap">
                             <div class="flex items-center">
                               <div>
@@ -226,11 +226,11 @@
                 <i
                   class="far fa-edit cursor-pointer"
                   @click="modalOpen = true"
-                  v-if="this.quote.insurancePremium == 0"
+                  v-if="quote && this.quote.insurancePremium == 0"
                 ></i>
               </header>
 
-              <div class="px-10 divide-y divide-slate-100 space-y-3">
+              <div class="px-10 divide-y divide-slate-100 space-y-3" v-if="quote">
                 <div>
                   <div class="flex justify-between text-sm m-3">
                     <div class="font-medium text-slate-800">Status</div>
@@ -306,7 +306,7 @@
             <div
               class="col-span-full xl:col-span-6 bg-gradient-to-b from-slate-700 to-slate-800 shadow-lg rounded-sm border border-slate-800"
             >
-              <header
+              <header v-if="quote"
                 class="px-5 py-4 border-b border-slate-600 flex items-center justify-between font-semibold"
               >
                 <h2 class="font-semibold text-slate-200">
@@ -322,7 +322,7 @@
                   ></i>
                 </router-link>
               </header>
-              <div class="h-full px-5 py-2">
+              <div class="h-full px-5 py-2" v-if="quote">
                 <!-- Details -->
                 <div class="justify-center">
                   <div
@@ -681,7 +681,7 @@ export default {
       const token = this.$store.getters["auth/token"];
       try {
         const response = await axios.delete(
-          `${import.meta.env.VITE_API_URL}/quotes/${quote.id}`,
+          `${import.meta.env.VITE_API_URL}/quotes/${this.quote.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -691,6 +691,7 @@ export default {
         this.modaDeletelOpen = false;
         this.deleted = true;
       } catch (e) {
+        console.log(e)
         this.modaDeletelOpen = false;
         this.deleted = false;
       }

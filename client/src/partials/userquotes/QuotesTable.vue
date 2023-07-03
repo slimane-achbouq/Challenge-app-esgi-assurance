@@ -513,8 +513,8 @@ export default {
     const applyFilters = () => {
       quotes.value = quoteList.value;
       quotes.value = quotes.value.filter((quote) => {
-        if (filters.value.subscribed && quote.insuranceId) return true;
-        if (filters.value.notSubscribed && !quote.subscribed) return true;
+        if (filters.value.subscribed && quote.insurancePremium) return true;
+        if (filters.value.notSubscribed && !quote.insurancePremium) return true;
         if (!filters.value.notSubscribed && !filters.value.subscribed)
           return true;
         if (filters.value.notSubscribed && filters.value.subscribed)

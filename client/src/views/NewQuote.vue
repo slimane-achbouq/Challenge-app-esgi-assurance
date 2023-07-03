@@ -15,7 +15,7 @@
       <main>
         <Banner
           type="success"
-          class="mb-4"
+          class="mb-1"
           :open="quoteCreated"
           v-if="quoteCreated"
         >
@@ -23,13 +23,23 @@
         </Banner>
         <Banner
           type="error"
-          class="mb-4"
+          class="mb-1"
           :open="Object.keys(errors).length !== 0"
           v-if="true"
         >
           Check the fields.
         </Banner>
-        <Banner type="success" class="mb-4" :open="true" v-if="caretCrise">
+
+        <Banner
+          type="error"
+          class="mb-1"
+          :open="formatIncorrect"
+          v-if="formatIncorrect"
+        >
+          The format of the file must be PDF.
+        </Banner>
+
+        <Banner type="success" class="mb-1" :open="true" v-if="caretCrise">
           File uploaded successfully.
         </Banner>
 
@@ -745,6 +755,7 @@ export default {
   },
   data() {
     return {
+      formatIncorrect : false,
       quote_id: null,
       errors: {},
       formData: {
@@ -919,10 +930,21 @@ export default {
     },
     handleFile(event) {
       this.file = event.target.files[0];
-      this.caretCrise = this.file.name;
-      this.formData.carteGrise = this.file;
-      this.previewSrc = URL.createObjectURL(event.target.files[0]);
-      this.hideImageField = true;
+
+
+      if (this.file.type != 'application/pdf') {
+        console.log(this.file.type)
+        this.formatIncorrect = true
+      } else {
+        this.formatIncorrect = false
+        this.caretCrise = this.file.name;
+        this.formData.carteGrise = this.file;
+        this.previewSrc = URL.createObjectURL(event.target.files[0]);
+        this.hideImageField = true;
+        
+
+      }
+      
     },
   },
   setup() {

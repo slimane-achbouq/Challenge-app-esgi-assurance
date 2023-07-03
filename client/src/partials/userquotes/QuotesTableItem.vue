@@ -34,9 +34,9 @@
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div class="flex items-center">
-          <div v-html="typeIcon(quote.insuranceId)"></div>
-          <div v-if="insuranceId">Subscriped</div>
-          <div v-if="!insuranceId">Not subscriped</div>
+          <div v-html="typeIcon(quote.insurancePremium)"></div>
+          <div v-if="quote.insurancePremium">Subscriped</div>
+          <div v-if="!quote.insurancePremium">Not subscriped</div>
         </div>
       </td>
       <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -212,7 +212,7 @@ export default {
 
     const typeIcon = (type) => {
       switch (type) {
-        case null:
+        case 0:
           return `<svg class="w-4 h-4 fill-current text-slate-400 shrink-0 mr-2" viewBox="0 0 16 16">
               <path d="M4.3 4.5c1.9-1.9 5.1-1.9 7 0 .7.7 1.2 1.7 1.4 2.7l2-.3c-.2-1.5-.9-2.8-1.9-3.8C10.1.4 5.7.4 2.9 3.1L.7.9 0 7.3l6.4-.7-2.1-2.1zM15.6 8.7l-6.4.7 2.1 2.1c-1.9 1.9-5.1 1.9-7 0-.7-.7-1.2-1.7-1.4-2.7l-2 .3c.2 1.5.9 2.8 1.9 3.8 1.4 1.4 3.1 2 4.9 2 1.8 0 3.6-.7 4.9-2l2.2 2.2.8-6.4z" />
             </svg>`;

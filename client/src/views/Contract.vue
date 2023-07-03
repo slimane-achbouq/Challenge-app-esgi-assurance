@@ -44,8 +44,13 @@
         </Banner>
 
         <Banner v-if="role === 'User'" type="warning" class="mb-1" :open="true">
-          To edit the information of the contract you must create a request
+          To edit the inforamtions of the contract you must create a request
+
+          <router-link
+                  :to="{ name: 'contact' }"
+                >
           <a class="cursor-pointer text-blue-900/100"> here.</a>
+          </router-link>
         </Banner>
 
         <Banner
@@ -842,6 +847,7 @@ export default {
         );
         this.modaDeletelOpen = false;
         this.deleted = true;
+        this.$router.push("quotes");
       } catch (e) {
         this.modaDeletelOpen = false;
         this.deleted = false;

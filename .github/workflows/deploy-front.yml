@@ -2,7 +2,7 @@ name: Deploy
 
 on:
     push:
-        branches: ['feature/deploy']
+        branches: ['develop']
 
 jobs:
     build:
@@ -12,8 +12,6 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v2
-              with:
-                  ref: feature/deploy
 
             - name: Setup Node
               uses: actions/setup-node@v1

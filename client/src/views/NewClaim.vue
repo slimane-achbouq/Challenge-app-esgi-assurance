@@ -23,13 +23,9 @@
           Claim created successfully .
         </Banner>
 
+        
+
         <Banner
-<<<<<<< HEAD
-            type="failure"
-            class="mb-4"
-            :open="generalError"
-            v-if="generalError"
-=======
           type="error"
           class="mb-1"
           :open="formatIncorrect"
@@ -44,7 +40,6 @@
           class="mb-4"
           :open="generalError"
           v-if="generalError"
->>>>>>> develop
         >
           {{ generalError }}
         </Banner>

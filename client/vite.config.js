@@ -7,7 +7,7 @@ import pluginRewriteAll from 'vite-plugin-rewrite-all';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), pluginRewriteAll()],
-  base: '/Challenge-app-esgi-assurance/',
+  base: '',
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

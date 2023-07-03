@@ -86,7 +86,14 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+api-gateway/dist
+claims/dist
+insurance-service/dist
+kpi/dist
+payment/dist
+quote-service/dist
+user/dist
+utils/dist
 
 # Gatsby files
 .cache/

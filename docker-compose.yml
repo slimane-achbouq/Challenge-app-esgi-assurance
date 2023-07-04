@@ -216,6 +216,37 @@ services:
       - ./payment/.env
     networks:
       - my-network
+
+  kpi-database:
+    container_name: kpi-database
+    image: mongo:latest
+    hostname: kpi-database
+    volumes:
+      - ./kpi/data/db:/data/db
+    env_file:
+      - ./kpi/.env
+    ports:
+      - "27023:27017"
+    networks:
+      - my-network
+
+  kpi-service:
+    container_name: kpi-service
+    hostname: kpi-service
+    build: ./kpi
+    volumes:
+      - ./kpi:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3008:3008
+    depends_on:
+      - kpi-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./kpi/.env
+    networks:
+      - my-network
 networks:
   my-network:
     

@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import Banner from "@/components/Banner.vue";
+import Banner from "../components/Banner.vue";
 import axios from "axios";
 export default {
   components: {
@@ -245,7 +245,7 @@ export default {
             
 
         }
-        
+
 
 
         

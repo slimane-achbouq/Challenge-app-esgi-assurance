@@ -18,4 +18,7 @@ export default defineConfig({
       transformMixedEsModules: true,
     },
   },
+  test:{
+    environment: 'happy-dom',
+  }
 });

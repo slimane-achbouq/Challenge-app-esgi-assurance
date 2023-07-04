@@ -536,14 +536,19 @@ export default {
       const token = store.getters["auth/token"];
       const id = store.getters["auth/id"];
 
-      let response = JSON.parse(localStorage.getItem("contracts-list")) ?? await axios.get(
-          `${import.meta.env.VITE_API_URL}/insurance-user/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-      );
+      let response = null;
+      try {
+        response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/insurance-user/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+        );
+      } catch (e) {
+        response = JSON.parse(localStorage.getItem("contracts-list"));
+      }
 
       if (response.data) {
         if (!localStorage.getItem("contracts-list")) {

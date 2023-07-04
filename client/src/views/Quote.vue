@@ -766,7 +766,7 @@ export default {
 
     if (response1.data) {
       if (!localStorage.getItem("one-user")) {
-        localStorage.setItem("one-user", JSON.stringify(response));
+        localStorage.setItem("one-user", JSON.stringify(response1));
       }
       this.user = response1.data;
     }

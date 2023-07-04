@@ -558,7 +558,7 @@ export default {
             }
           );
 
-          localStorage.setItem("profile-data", JSON.stringify(response));
+          //localStorage.setItem("profile-data", JSON.stringify(response));
         } catch (error) {
           console.log(error);
           if ((error.message = "Request failed with status code 500"))
@@ -603,7 +603,7 @@ export default {
 
     if (response.data) {
       if (!localStorage.getItem("profile-data")) {
-        localStorage.setItem("profile-data", JSON.stringify(response));
+        //localStorage.setItem("profile-data", JSON.stringify(response));
       }
       this.user = response.data;
       console.log(this.user);

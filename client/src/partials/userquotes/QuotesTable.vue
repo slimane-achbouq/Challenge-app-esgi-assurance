@@ -595,7 +595,7 @@ export default {
 
       if (response.data) {
         if (!localStorage.getItem("claims-list")) {
-          localStorage.setItem("claims-list", JSON.stringify(response));
+         // localStorage.setItem("claims-list", JSON.stringify(response));
         }
         allUsers.value = await response.data; // store all the users
         quotes.value = allUsers.value.slice(

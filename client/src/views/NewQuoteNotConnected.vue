@@ -1417,7 +1417,7 @@ export default {
 
             this.prices = response.data
             this.errors = {};
-            localStorage.setItem('quote', JSON.stringify(this.formData));
+            //localStorage.setItem('quote', JSON.stringify(this.formData));
             this.step.id = 4
           } catch (error) {
             console.log(error)

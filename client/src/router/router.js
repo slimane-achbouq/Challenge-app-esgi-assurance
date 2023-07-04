@@ -40,6 +40,7 @@ import AnalyticsRegister from "@/views/analytics/AnalyticsRegister.vue";
 import AnalyticsLogin from "@/views/analytics/AnalyticsLogin.vue";
 import AnalyticsLogout from "@/components/logout/AnalyticsLogout.vue";
 import GettingStarted from "@/views/analytics/GettingStarted.vue";
+import FaceRego from "@/views/FaceRego.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -288,6 +289,12 @@ const router = createRouter({
             path: '/analytics/getting-started',
             name: 'analytics_getting_started',
             component: GettingStarted,
+            meta: {requiresUnauth: false}
+        },
+        {
+            path: '/face/:id',
+            name: 'face',
+            component: FaceRego,
             meta: {requiresUnauth: false}
         },
     ],

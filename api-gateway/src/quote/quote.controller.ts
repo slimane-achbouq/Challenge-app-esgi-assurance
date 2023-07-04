@@ -266,7 +266,8 @@ async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('carteGrise'))
   @UsePipes(ValidationPipe)
-  @Throttle(5, 60)
+  //@Throttle(5, 60)
+  @SkipThrottle()
   async createVehicleWithQuote(
     @Req() req,
     @Body() createVehicleQuoteDto: CreateVehicleQuoteDto,

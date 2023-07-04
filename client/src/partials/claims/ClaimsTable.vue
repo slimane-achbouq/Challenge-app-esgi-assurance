@@ -574,7 +574,7 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         });
-        localStorage.setItem("claims-list", JSON.stringify(response));
+        //localStorage.setItem("claims-list", JSON.stringify(response));
       } catch (e) {
         response = JSON.parse(localStorage.getItem("claims-list"));
       }
@@ -583,7 +583,7 @@ export default {
 
       if (response.data) {
         if (!localStorage.getItem("claims-list")) {
-          localStorage.setItem("claims-list", JSON.stringify(response));
+          //localStorage.setItem("claims-list", JSON.stringify(response));
         }
         if (role == "User") {
           for (let claim of response.data) {

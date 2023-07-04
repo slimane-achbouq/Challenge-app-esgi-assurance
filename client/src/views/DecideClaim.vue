@@ -320,7 +320,7 @@ export default {
 
     if (response.data) {
       if (!localStorage.getItem("decide-claim-data")) {
-        localStorage.setItem("decide-claim-data", JSON.stringify(response));
+        //localStorage.setItem("decide-claim-data", JSON.stringify(response));
       }
       this.claim = response.data;
     }

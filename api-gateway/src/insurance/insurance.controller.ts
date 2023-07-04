@@ -33,7 +33,7 @@ import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
-
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 @ApiTags('Insurance')
 @Controller({
   version: '1',
@@ -195,6 +195,7 @@ export class InsuranceController {
 
   @Get('beneficiary/:id/insurances')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
     try {
       const beneficiaryWithInsurances = await this.insuranceServiceClient
@@ -216,6 +217,7 @@ export class InsuranceController {
 
   @Get('beneficiary/:id')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getBeneficiaryById(@Param('id') id: string): Promise<any> {
     try {
       const beneficiary = await this.insuranceServiceClient
@@ -238,6 +240,7 @@ export class InsuranceController {
   @Get('beneficiaries')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @SkipThrottle()
   async getBeneficiaries(): Promise<any> {
     try {
       const beneficiaries = await this.insuranceServiceClient

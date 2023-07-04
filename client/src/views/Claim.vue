@@ -252,7 +252,7 @@ export default {
             },
           }
       );
-      localStorage.setItem("claim-data", JSON.stringify(response));
+      //localStorage.setItem("claim-data", JSON.stringify(response));
     }
     catch(e) {
       response = JSON.parse(localStorage.getItem("claim-data"))

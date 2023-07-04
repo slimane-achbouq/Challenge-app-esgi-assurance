@@ -696,7 +696,7 @@ export default {
             },
           }
       );
-      localStorage.setItem("insurance-data", JSON.stringify(response.data));
+      //localStorage.setItem("insurance-data", JSON.stringify(response.data));
     }
     catch(e) {
       response = JSON.parse(localStorage.getItem("insurance-data"));
@@ -736,7 +736,7 @@ export default {
 
     if (response1.data) {
       if (!localStorage.getItem("beneficiary-data")) {
-        localStorage.setItem("beneficiary-data", JSON.stringify(response1));
+        //localStorage.setItem("beneficiary-data", JSON.stringify(response1));
       }
       this.user = response1.data;
     }

@@ -1,7 +1,13 @@
 import {Body, Controller, Get, Post} from '@nestjs/common';
 import {AppService} from './app.service';
 import {Kpi} from "./schemas/kpi.schema";
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
+    @MessagePattern('getHello')
+    getHello(): string {
+    console.log('setp 2');
+        return 'Hello';
+    }
 }

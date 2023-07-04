@@ -9,7 +9,7 @@ export class Visitor extends Document {
   @Prop({ required: true })
   id_visitor: string;
 
-  @Prop({ required: true, default: now() })
+  @Prop({ required: false, default: now() })
   createdAt: Date;
 }
 

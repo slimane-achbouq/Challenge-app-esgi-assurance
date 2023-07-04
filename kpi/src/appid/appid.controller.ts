@@ -14,8 +14,7 @@ export class AppidController {
 
   @MessagePattern('getTotalAppidsCount')
   async getTotalAppidsCount(@Payload() headers) {
-    // const email = headers['email'];
-    // return this.appidService.getAppidByEmail(email);
-    return 'zakaria';
+    const email = headers['email'];
+    return this.appidService.getAppidByEmail(email);
   }
 }

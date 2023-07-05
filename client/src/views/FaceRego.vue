@@ -101,6 +101,9 @@
                               height="1200"
                               autoplay
                             ></video>
+
+                            <canvas ref="canvas" style="display: none;"></canvas>
+
                           </div>
                         </div>
                       </div>
@@ -123,6 +126,7 @@ import axios from "axios";
 import { useStore } from "vuex";
 import Header from "@/partials/Header.vue";
 import Sidebar from "@/partials/Sidebar.vue";
+import Swal from "sweetalert2";
 
 export default {
   name: "FaceRego",
@@ -222,9 +226,32 @@ export default {
           const drawBox = new faceapi.draw.DrawBox(box, {
             label: result,
           });
-          if (result.label !== "unknown") {
-            console.log("true");
-            console.log(result.label);
+          if (result.label !== "unknown" && result['_distance'] > 0.30) {
+
+
+            const canvas = this.$refs.canvas;
+            const context = canvas.getContext("2d");
+            canvas.width = this.video.videoWidth;
+            canvas.height = this.video.videoHeight;
+            context.drawImage(this.video, 0, 0, canvas.width, canvas.height);
+            const imageDataURL = canvas.toDataURL();
+            console.log(imageDataURL)
+
+
+
+                Swal.fire({
+                text: "Your ID Card is vérified, wait the admin to validate the contract",
+                icon: "success",
+              }).then(() => {
+                  const redirectUrl = "/" + (this.$route.query.redirect || `contract/${id}`);
+                  this.$router.replace(redirectUrl);
+                });
+              
+              
+              const stream = this.video.srcObject;
+              const tracks = stream.getTracks();
+              tracks.forEach((track) => track.stop());
+
           }
         });
       }, 100);
@@ -254,7 +281,7 @@ export default {
     },
 
     getLabeledFaceDescriptions() {
-      const labels = ["Messi"];
+      const labels = ["Data"];
       return Promise.all(
         labels.map(async (label) => {
           const descriptions = [];

@@ -456,6 +456,9 @@ export default {
     };
   },
   async created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
 
     const token = this.$store.getters["auth/token"];

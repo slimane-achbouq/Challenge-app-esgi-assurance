@@ -316,6 +316,11 @@ export default {
       users: [],
     };
   },
+  created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
+  },
 
   methods: {},
 };

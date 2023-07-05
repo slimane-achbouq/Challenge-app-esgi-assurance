@@ -561,21 +561,16 @@
                       <!-- Content -->
                       <div class="grow mb-2">
                         <div class="font-semibold text-slate-800 mb-1">
-                          Documents For Business Verification
+                          Documents Verification
                         </div>
                         <div class="text-sm">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing sed
-                          do eiusmod tempor incididunt ut labore et dolore.
+                          All your uploaded documents for a contract is securely
+                          saved and verified by a real human. <br />
+                          The document extension for each file to upload will be
+                          written so you can upload the right file easier.
                         </div>
                       </div>
                       <!-- Link -->
-                      <div>
-                        <a
-                          class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                          href="#0"
-                          >View -&gt;</a
-                        >
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -598,21 +593,17 @@
                       <!-- Content -->
                       <div class="grow mb-2">
                         <div class="font-semibold text-slate-800 mb-1">
-                          Delayed Or Missing Payouts
+                          Payment methods
                         </div>
                         <div class="text-sm">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing sed
-                          do eiusmod tempor incididunt ut labore et dolore.
+                          You will be able to choose your preferred payment
+                          method when your contract is validated by an
+                          administrator. We will never ask you to pay before
+                          your contract is created, and never ask you to pay
+                          outside of our platform.
                         </div>
                       </div>
                       <!-- Link -->
-                      <div>
-                        <a
-                          class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                          href="#0"
-                          >View -&gt;</a
-                        >
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -635,21 +626,17 @@
                       <!-- Content -->
                       <div class="grow mb-2">
                         <div class="font-semibold text-slate-800 mb-1">
-                          Update Existing Bank Account Information
+                          Claim an important event
                         </div>
                         <div class="text-sm">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing sed
-                          do eiusmod tempor incididunt ut labore et dolore.
+                          When an important event happens, you will be able to
+                          create a claim so we can help you with the best
+                          possible solution. <br />
+                          A claim can be for an accident, vehicle theft, or any
+                          other event that can happen.
                         </div>
                       </div>
                       <!-- Link -->
-                      <div>
-                        <a
-                          class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                          href="#0"
-                          >View -&gt;</a
-                        >
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -672,21 +659,17 @@
                       <!-- Content -->
                       <div class="grow mb-2">
                         <div class="font-semibold text-slate-800 mb-1">
-                          Close A Mosaic Account
+                          Contacting method for a request
                         </div>
                         <div class="text-sm">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing sed
-                          do eiusmod tempor incididunt ut labore et dolore.
+                          For any request in mind, you can use our contact form
+                          to let us know what you need, and we will get back to
+                          you as soon as possible. <br />
+                          We process multiple requests, such as contract change,
+                          particular information or contest a claim.
                         </div>
                       </div>
                       <!-- Link -->
-                      <div>
-                        <a
-                          class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                          href="#0"
-                          >View -&gt;</a
-                        >
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -734,6 +717,9 @@ export default {
     };
   },
   async created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
     const store = useStore();
     this.role = store.getters["auth/roles"];
     this.token = store.getters["auth/token"];

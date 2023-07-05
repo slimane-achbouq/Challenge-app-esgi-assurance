@@ -36,7 +36,47 @@
           </svg>
         </button>
         <!-- Logo -->
-        <router-link class="block" to="/dashboard">
+        <router-link v-if="isAnalytics" class="block" to="/analytics/dashboard">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <defs>
+              <linearGradient
+                  id="logo-a"
+                  x1="28.538%"
+                  y1="20.229%"
+                  x2="100%"
+                  y2="108.156%"
+              >
+                <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
+                <stop stop-color="#A5B4FC" offset="100%" />
+              </linearGradient>
+              <linearGradient
+                  id="logo-b"
+                  x1="88.638%"
+                  y1="29.267%"
+                  x2="22.42%"
+                  y2="100%"
+              >
+                <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
+                <stop stop-color="#38BDF8" offset="100%" />
+              </linearGradient>
+            </defs>
+            <rect fill="#6366F1" width="32" height="32" rx="16" />
+            <path
+                d="M18.277.16C26.035 1.267 32 7.938 32 16c0 8.837-7.163 16-16 16a15.937 15.937 0 01-10.426-3.863L18.277.161z"
+                fill="#4F46E5"
+            />
+            <path
+                d="M7.404 2.503l18.339 26.19A15.93 15.93 0 0116 32C7.163 32 0 24.837 0 16 0 10.327 2.952 5.344 7.404 2.503z"
+                fill="url(#logo-a)"
+            />
+            <path
+                d="M2.223 24.14L29.777 7.86A15.926 15.926 0 0132 16c0 8.837-7.163 16-16 16-5.864 0-10.991-3.154-13.777-7.86z"
+                fill="url(#logo-b)"
+            />
+          </svg>
+        </router-link>
+
+        <router-link v-else class="block" to="/dashboard">
           <svg width="32" height="32" viewBox="0 0 32 32">
             <defs>
               <linearGradient
@@ -91,7 +131,54 @@
               >Pages</span
             >
           </h3>
-          <ul v-if="role" class="mt-3">
+          <ul v-if="isAnalytics" class="mt-3">
+            <SidebarLinkGroup v-slot="parentLink" >
+              <a class="block text-slate-200 hover:text-white truncate transition duration-150" :class=" 'hover:text-slate-200'" href="#0" @click.prevent="sidebarExpanded ? parentLink.handleClick() : sidebarExpanded = true">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                      <path class="fill-current text-slate-400" :class=" 'text-indigo-300'" d="M13 6.068a6.035 6.035 0 0 1 4.932 4.933H24c-.486-5.846-5.154-10.515-11-11v6.067Z" />
+                      <path class="fill-current text-slate-700" :class=" '!text-indigo-500'" d="M18.007 13c-.474 2.833-2.919 5-5.864 5a5.888 5.888 0 0 1-3.694-1.304L4 20.731C6.131 22.752 8.992 24 12.143 24c6.232 0 11.35-4.851 11.857-11h-5.993Z" />
+                      <path class="fill-current text-slate-600" :class=" 'text-indigo-600'" d="M6.939 15.007A5.861 5.861 0 0 1 6 11.829c0-2.937 2.167-5.376 5-5.85V0C4.85.507 0 5.614 0 11.83c0 2.695.922 5.174 2.456 7.17l4.483-3.993Z" />
+                    </svg>
+                    <span class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Analytics</span>
+                  </div>
+                  <!-- Icon -->
+                  <div class="flex shrink-0 ml-2">
+                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" :class="parentLink.expanded && 'rotate-180'" viewBox="0 0 12 12">
+                      <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+              <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                <ul class="pl-9 mt-1" :class="!parentLink.expanded && 'hidden'">
+                  <router-link to="/analytics/dashboard" custom v-slot="{ href, navigate, isExactActive }">
+                    <li class="mb-1 last:mb-0">
+                      <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
+                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dashboard</span>
+                      </a>
+                    </li>
+                  </router-link>
+                  <router-link to="/analytics/my-tags" custom v-slot="{ href, navigate, isExactActive }">
+                    <li class="mb-1 last:mb-0">
+                      <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
+                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My tags</span>
+                      </a>
+                    </li>
+                  </router-link>
+                  <router-link to="/analytics/create-tag" custom v-slot="{ href, navigate, isExactActive }">
+                    <li class="mb-1 last:mb-0">
+                      <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate" :class="isExactActive && '!text-indigo-500'" :href="href" @click="navigate">
+                        <span class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Create a new tag</span>
+                      </a>
+                    </li>
+                  </router-link>
+                </ul>
+              </div>
+            </SidebarLinkGroup>
+          </ul>
+          <ul v-if="role && !isAnalytics" class="mt-3">
             <!-- Community -->
             <SidebarLinkGroup v-slot="parentLink">
               <a
@@ -665,11 +752,13 @@ export default {
   data() {
     return {
       role: null,
+      isAnalytics: false,
     };
   },
 
   async created() {
     this.role = this.$store.getters["auth/roles"];
+    this.isAnalytics = !localStorage.getItem("kpiAuthToken");
   },
 };
 </script>

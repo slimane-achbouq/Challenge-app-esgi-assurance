@@ -12,11 +12,13 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { lastValueFrom } from 'rxjs';
+import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Kpi')
 @Controller({
   version: '1',
 })
+@SkipThrottle()
 export class KpiController {
   constructor(
     @Inject('KPI_SERVICE') private readonly kpiService: ClientProxy,
@@ -36,7 +38,6 @@ export class KpiController {
   @HttpCode(HttpStatus.OK)
   @Get('visitor')
   async getUniqueVisitorsCount(@Headers() headers) {
-    console.log('step 1');
     return lastValueFrom(
       this.kpiService.send('getUniqueVisitorsCount', headers),
     );
@@ -56,7 +57,7 @@ export class KpiController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('kpiAuth/login')
-  async signIn(@Body() signInDto: Record<string, any>) {
+  async signIn(@Body() signInDto) {
     return lastValueFrom(this.kpiService.send('signIn', signInDto));
   }
 
@@ -92,15 +93,14 @@ export class KpiController {
     );
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @Post('tag')
-  async createTag(@Body() tag: any) {
+  async createTag(@Body() tag) {
     return lastValueFrom(this.kpiService.send('createTag', tag));
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('tag')
-  getAllTags(@Headers() headers) {
+  async getAllTags(@Headers() headers) {
     return lastValueFrom(this.kpiService.send('getAllTags', headers));
   }
 

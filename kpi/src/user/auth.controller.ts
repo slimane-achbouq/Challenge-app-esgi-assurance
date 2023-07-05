@@ -20,7 +20,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @MessagePattern('signIn')
-  async signIn(@Body() signInDto: Record<string, any>) {
+  async signIn(@Body() signInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 

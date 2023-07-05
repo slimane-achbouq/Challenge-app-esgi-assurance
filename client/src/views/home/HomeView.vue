@@ -931,6 +931,9 @@ export default {
   },
   async created() {
     this.token = this.$store.getters["auth/token"];
+    if (localStorage.getItem("kpiJwtToken")) {
+      localStorage.clear();
+    }
   },
   methods: {},
 };

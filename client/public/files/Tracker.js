@@ -1,6 +1,6 @@
 // Envoi des données à la base MongoDB à chaque action
 export function sendEvent({tag, type, appId, createdAt, content}) {
-    fetch("http://localhost:3000/kpi", {
+    fetch(`${import.meta.env.VITE_API_URL}/kpi`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export function sendEvent({tag, type, appId, createdAt, content}) {
 }
 
 export function saveUniqueUser(id_visitor) {
-    fetch("http://localhost:3000/visitor", {
+    fetch(`${import.meta.env.VITE_API_URL}/visitor`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export function saveUniqueUser(id_visitor) {
 }
 
 export function saveVisit(id_visit) {
-    fetch("http://localhost:3000/visit", {
+    fetch(`${import.meta.env.VITE_API_URL}/visit`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export function saveVisit(id_visit) {
 }
 
 export function saveDurationTime(id_visit, id_visitor, totalSeconds) {
-    fetch("http://localhost:3000/time", {
+    fetch(`${import.meta.env.VITE_API_URL}/time`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -238,7 +238,7 @@ function saveUsedBrowser() {
         browserName = "other/unknown";
     }
 
-    fetch("http://localhost:3000/browser", {
+    fetch(`${import.meta.env.VITE_API_URL}/browser`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -263,7 +263,7 @@ function saveDevice() {
         device = "mobile";
     }
 
-    fetch("http://localhost:3000/device", {
+    fetch(`${import.meta.env.VITE_API_URL}/device`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

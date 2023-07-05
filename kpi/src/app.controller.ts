@@ -7,7 +7,6 @@ import { MessagePattern } from '@nestjs/microservices';
 export class AppController {
     @MessagePattern('getHello')
     getHello(): string {
-    console.log('setp 2');
         return 'Hello';
     }
 }

@@ -101,6 +101,14 @@ import { useRouter } from "vue-router";
 export default {
   name: "DropdownProfile",
   props: ["align"],
+  data() {
+    return {
+      isAnalytics: false
+    }
+  },
+  created() {
+    this.isAnalytics = !!localStorage.getItem("kpiJwtToken");
+  },
   setup() {
     const dropdownOpen = ref(false);
     const trigger = ref(null);

@@ -51,7 +51,6 @@
 </template>
 
 <script>
-const API_URL = 'http://localhost:3008';
 export default {
   data() {
     return {
@@ -74,7 +73,7 @@ export default {
     },
     async submitForm() {
       try {
-        const res = await fetch(`${API_URL}/kpiAuth/register`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/kpiAuth/register`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -83,7 +82,7 @@ export default {
         });
 
         if (res.ok) {
-          await fetch(`${API_URL}/appid`, {
+          await fetch(`${import.meta.env.VITE_API_URL}/appid`, {
             headers: {
               'Content-Type': 'application/json',
             },

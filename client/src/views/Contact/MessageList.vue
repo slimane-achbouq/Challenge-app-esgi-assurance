@@ -179,6 +179,7 @@ export default {
     const messageAnswered = ref(0);
     const messageNotAnswered = ref(0);
     const banner2InfoOpen = ref(true);
+    const token = store.getters["auth/token"];
 
     // Fetch messages from the store before the component is mounted
     onMounted(async () => {
@@ -187,8 +188,14 @@ export default {
 
     // Fetch messages from the store
     async function fetchMessages() {
+      const actionPayload = {
+        token: token,
+      };
       try {
-        const fetchedMessages = await store.dispatch("auth/getContactMessages");
+        const fetchedMessages = await store.dispatch(
+          "auth/getContactMessages",
+          actionPayload
+        );
         messages.value = fetchedMessages;
         messageAnswered.value = 0;
         messageNotAnswered.value = 0;
@@ -205,6 +212,7 @@ export default {
     async function setMessage(id) {
       const actionPayload = {
         id: id,
+        token: token,
       };
       try {
         const response = await store.dispatch(
@@ -228,6 +236,7 @@ export default {
       messageAnswered,
       messageNotAnswered,
       banner2InfoOpen,
+      token,
     };
   },
 };

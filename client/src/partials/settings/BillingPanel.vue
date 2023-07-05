@@ -242,7 +242,7 @@
                               <p>****</p>
                               <p>****</p>
                               <p>****</p>
-                              <p>6420</p>
+                              <p>4242</p>
                             </div>
                             <div class="row card-holder">
                               <p>CARD HPLDER</p>

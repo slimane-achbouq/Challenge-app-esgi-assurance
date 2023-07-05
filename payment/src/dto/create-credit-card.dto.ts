@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, IsNumber, IsEmail } from 'class-validator';
-import { ApiPropertyOptions } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 
 export const apiPropertiesCard: {
   [P in keyof Partial<CreateCreditCardDto>]: ApiPropertyOptions;
@@ -39,22 +39,27 @@ export const apiPropertiesCard: {
 };
 
 export class CreateCreditCardDto {
+  @ApiProperty(apiPropertiesCard.cardNumber)
   @IsNotEmpty()
   @IsString()
   cardNumber: string;
 
+  @ApiProperty(apiPropertiesCard.expiryDate)
   @IsNotEmpty()
   @IsString()
   expiryDate: string;
 
+  @ApiProperty(apiPropertiesCard.cvc)
   @IsNotEmpty()
   @IsNumber()
   cvc: number;
 
+  @ApiProperty(apiPropertiesCard.cardName)
   @IsNotEmpty()
   @IsString()
   cardName: string;
 
+  @ApiProperty(apiPropertiesCard.userEmail)
   @IsNotEmpty()
   @IsEmail()
   userEmail: string;

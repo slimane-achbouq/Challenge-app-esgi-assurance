@@ -36,7 +36,8 @@
           <Help align="right" />
           <!-- Divider -->
           <hr class="w-px h-6 bg-slate-200" />
-          <UserMenu align="right" />
+          <DropdownProfileAnalytics v-if="isAnalytics" align="right" />
+          <UserMenu v-else align="right" />
         </div>
       </div>
     </div>
@@ -50,16 +51,26 @@ import SearchModal from "@/components/ModalSearch.vue";
 import Notifications from "@/components/DropdownNotifications.vue";
 import Help from "@/components/DropdownHelp.vue";
 import UserMenu from "@/components/DropdownProfile.vue";
+import DropdownProfileAnalytics from "@/components/DropdownProfileAnalytics.vue";
 
 export default {
   name: "Header",
   components: {
+    DropdownProfileAnalytics,
     SearchModal,
     Notifications,
     Help,
     UserMenu,
   },
   props: ["sidebarOpen"],
+  data() {
+    return {
+      isAnalytics: false
+    }
+  },
+  created() {
+    this.isAnalytics = !!localStorage.getItem("kpiJwtToken");
+  },
   setup() {
     const searchModalOpen = ref(false);
     return {

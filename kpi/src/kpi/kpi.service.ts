@@ -14,8 +14,6 @@ export class KpiService {
         const tag = await this.tagService.findOneByLabel(dataKpi.tag);
         const appid = await this.appidService.findOneByName(dataKpi.app_id);
 
-        console.log(tag)
-        console.log(appid)
         if (tag && appid) {
             const createdKpi = new this.kpiModel(dataKpi);
             return createdKpi.save();

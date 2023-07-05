@@ -15,6 +15,7 @@ import { QuoteModule } from './quote/quote.module';
 import { UtilsModule } from './utils/utils.module';
 import { ClaimsModule } from './claims/claims.module';
 import { PaymentModule } from './payment/payment.module';
+import { KpiModule } from './kpi/kpi.module';
 dotenv.config();
 
 async function bootstrap() {
@@ -85,6 +86,7 @@ async function bootstrap() {
       UtilsModule,
       ClaimsModule,
       PaymentModule,
+      KpiModule,
     ],
   });
   SwaggerModule.setup('api/v1', app, doc, swaggerCustomOptions);

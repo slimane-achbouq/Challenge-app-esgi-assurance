@@ -12,16 +12,16 @@
           <path id="welcome-a" d="M64 0l64 128-64-20-64 20z" />
           <path id="welcome-e" d="M40 0l40 80-40-12.5L0 80z" />
           <path id="welcome-g" d="M40 0l40 80-40-12.5L0 80z" />
-          <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="welcome-b">
+          <linearGradient id="welcome-b" x1="50%" y1="0%" x2="50%" y2="100%">
             <stop stop-color="#A5B4FC" offset="0%" />
             <stop stop-color="#818CF8" offset="100%" />
           </linearGradient>
           <linearGradient
+            id="welcome-c"
             x1="50%"
             y1="24.537%"
             x2="50%"
             y2="100%"
-            id="welcome-c"
           >
             <stop stop-color="#4338CA" offset="0%" />
             <stop stop-color="#6366F1" stop-opacity="0" offset="100%" />
@@ -68,15 +68,29 @@
     <!-- Content -->
     <div class="relative">
       <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-1">
-        Good afternoon, Acme Inc. 👋
+        Hello, {{ firstname }}. 👋
       </h1>
-      <p>Here is what’s happening with your projects today:</p>
     </div>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import { useStore } from "vuex";
+
 export default {
   name: "WelcomeBanner",
+  setup() {
+    return {
+      firstname: null,
+    };
+  },
+  created() {
+    const store = useStore();
+    const firstname = ref(null);
+    // const token = store.getters["auth/token"];
+    firstname.value = store.getters["auth/firstname"];
+    this.firstname = firstname.value;
+  },
 };
 </script>

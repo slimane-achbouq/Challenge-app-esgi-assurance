@@ -61,7 +61,6 @@
 </template>
 
 <script>
-const API_URL = 'http://localhost:3008';
 export default {
   data() {
     return {
@@ -79,7 +78,7 @@ export default {
       let expires = "; expires=" + date.toUTCString();
 
       try {
-        const response = await fetch(`${API_URL}/kpiAuth/login`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/kpiAuth/login`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -89,10 +88,10 @@ export default {
         });
 
         const res = await response.json();
-        localStorage.setItem("kpiJwtToken", res.access_token);
-        document.cookie = "kpiJwtToken=" + res.access_token + expires + "; path=/analytics";
         if (response.ok) {
-          const appIdRes = await fetch(`${API_URL}/appid`, {
+          localStorage.setItem("kpiJwtToken", res.access_token);
+          document.cookie = "kpiJwtToken=" + res.access_token + expires + "; path=/analytics";
+          const appIdRes = await fetch(`${import.meta.env.VITE_API_URL}/appid`, {
             headers: {
               'Content-Type': 'application/json',
               "email": this.email
@@ -136,7 +135,7 @@ export default {
     }
 
     if (localStorage.getItem("kpiJwtToken")) {
-      this.$router.push('/analytics/dashboard')
+      this.$router.push('/analytics/dashboard');
     }
   }
 }

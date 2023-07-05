@@ -1,17 +1,17 @@
 # Base image
-FROM node:16-alpine
+FROM node:14-alpine
 
-# Create app directory
-WORKDIR /app
+# Set the working directory
+WORKDIR /usr/src/app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install app dependencies
-RUN npm install
+# Install dependencies
+RUN npm install && npm install --save amqplib && npm install --save amqp-connection-manager
 
-# Bundle app source
+# Copy the rest of the application code
 COPY . .
 
-# Creates a "dist" folder with the production build
-RUN npm run build
+# Start the application
+CMD ["npm", "run", "start:dev"]

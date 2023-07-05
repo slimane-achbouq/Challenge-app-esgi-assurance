@@ -156,6 +156,12 @@ export default {
   components: {
     Banner,
   },
+  created() {
+    if (localStorage.getItem("kpiJwtToken")) {
+      localStorage.clear()
+      this.$router.push('/login');
+    }
+  },
   data() {
     return {
       email: "",

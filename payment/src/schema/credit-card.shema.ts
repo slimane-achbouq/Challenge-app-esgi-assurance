@@ -16,7 +16,7 @@ export class CreditCard extends Document {
   expiryDate: string;
 
   @ApiProperty(apiPropertiesCard.cvc)
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   cvc: string;
 
   @ApiProperty(apiPropertiesCard.cardName)

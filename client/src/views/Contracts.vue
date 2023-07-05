@@ -32,7 +32,7 @@
               <DeleteButton :selected-items="selectedItems" />
               <!-- Add order button -->
 
-              <router-link to="/newquote">
+              <router-link v-if="role == 'User'" to="/newquote">
                 <button
                   class="btn bg-indigo-500 hover:bg-indigo-600 text-white"
                 >
@@ -67,6 +67,7 @@ import DateSelect from "@/components/DateSelect.vue";
 import FilterButton from "@/components/DropdownFilter.vue";
 import ContractsTable from "@/partials/contracts/ContractsTable.vue";
 import PaginationClassic from "@/components/Pagination.vue";
+import { useStore } from "vuex";
 
 export default {
   name: "Contracts",
@@ -82,6 +83,10 @@ export default {
   setup() {
     const sidebarOpen = ref(false);
     const selectedItems = ref([]);
+    const store = useStore();
+    const role = ref(null);
+
+    role.value = store.getters["auth/roles"];
 
     const updateSelectedItems = (selected) => {
       selectedItems.value = selected;
@@ -91,6 +96,7 @@ export default {
       sidebarOpen,
       selectedItems,
       updateSelectedItems,
+      role,
     };
   },
 };

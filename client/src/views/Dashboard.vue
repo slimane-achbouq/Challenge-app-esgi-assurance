@@ -35,13 +35,13 @@
                     </dt>
                     <dd
                       v-if="data.quotes != null"
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       {{ data.quotes }}
                     </dd>
                     <dd
                       v-else
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       0
                     </dd>
@@ -58,13 +58,13 @@
                     </dt>
                     <dd
                       v-if="data.contracts != null"
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       {{ data.contracts }}
                     </dd>
                     <dd
                       v-else
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       0
                     </dd>
@@ -81,13 +81,13 @@
                     </dt>
                     <dd
                       v-if="data.claims != null"
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       {{ data.claims }}
                     </dd>
                     <dd
                       v-else
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       0
                     </dd>
@@ -104,13 +104,13 @@
                     </dt>
                     <dd
                       v-if="data.users != null"
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       {{ data.users }}
                     </dd>
                     <dd
                       v-else
-                      class="mt-1 text-3xl leading-9 font-semibold text-indigo-600"
+                      class="mt-1 text-5xl leading-9 font-semibold text-indigo-600"
                     >
                       0
                     </dd>
@@ -126,7 +126,77 @@
               class="grid sm:grid-cols-2 lg:grid-cols-4 lg:sidebar-expanded:grid-cols-2 xl:sidebar-expanded:grid-cols-4 gap-6"
             >
               <!-- Item -->
-              <div class="bg-slate-100 rounded-sm text-center p-5">
+              <div
+                v-if="role == 'Admin'"
+                class="bg-slate-100 rounded-sm text-center p-5"
+              >
+                <div class="flex flex-col h-full">
+                  <div class="grow mb-2">
+                    <!-- Icon -->
+                    <div
+                      class="inline-flex w-12 h-12 rounded-full bg-indigo-400"
+                    >
+                      <svg
+                        class="w-12 h-12"
+                        viewBox="0 0 48 48"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <defs>
+                          <linearGradient
+                            id="icon6-a"
+                            x1="50%"
+                            y1="0%"
+                            x2="50%"
+                            y2="100%"
+                          >
+                            <stop stop-color="#FFF" offset="0%" />
+                            <stop stop-color="#A5B4FC" offset="100%" />
+                          </linearGradient>
+                        </defs>
+                        <g fill-rule="nonzero" fill="none">
+                          <path
+                            d="M33.83 16.57 9.803 19.52c-.491.06-.846.464-.793.901l1.756 14.297c.054.437.496.743.987.683l24.026-2.95c.492-.06.847-.464.793-.901l-1.755-14.297c-.054-.438-.496-.743-.987-.683Z"
+                            fill="#4F46E5"
+                            opacity=".88"
+                          />
+                          <path
+                            d="M28.712 0H4.505c-.495 0-.897.357-.897.798v14.404c0 .44.402.798.897.798h24.207c.494 0 .896-.357.896-.798V.798c0-.44-.402-.798-.896-.798Z"
+                            fill="url(#icon6-a)"
+                            transform="rotate(8 -86.45 77.005)"
+                          />
+                          <path
+                            fill="#6366F1"
+                            opacity=".72"
+                            d="m23.646 19.765 4.533 3.667-5.368 2.275z"
+                          />
+                        </g>
+                      </svg>
+                    </div>
+                    <!-- Content -->
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">
+                      Claims
+                    </h3>
+                    <div class="text-sm">
+                      Here you can view a list of all the claims.
+                    </div>
+                  </div>
+                  <!-- Link -->
+                  <div>
+                    <router-link
+                      to="/claims"
+                      class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
+                      href="#0"
+                      >Explore -&gt;
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item -->
+              <div
+                v-if="role == 'User'"
+                class="bg-slate-100 rounded-sm text-center p-5"
+              >
                 <div class="flex flex-col h-full">
                   <div class="grow mb-2">
                     <!-- Icon -->
@@ -175,15 +245,16 @@
                       Profile
                     </h3>
                     <div class="text-sm">
-                      Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                      If you want to edit or obtain information about your
+                      account
                     </div>
                   </div>
                   <!-- Link -->
                   <div>
-                    <a
+                    <router-link
                       class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                      href="#0"
-                      >Explore -&gt;</a
+                      to="/profile"
+                      >Explore -&gt;</router-link
                     >
                   </div>
                 </div>
@@ -248,16 +319,22 @@
                     <h3 class="text-lg font-semibold text-slate-800 mb-1">
                       Quotes
                     </h3>
-                    <div class="text-sm">
-                      Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                    <div v-if="role === 'User'" class="text-sm">
+                      You want to know information about a quote or create a
+                      quote or see a list of your quotes.
+                    </div>
+                    <div v-if="role === 'Admin'" class="text-sm">
+                      You want to know information about a quote or see a list
+                      of quotes.
                     </div>
                   </div>
                   <!-- Link -->
                   <div>
-                    <a
+                    <router-link
+                      to="/quotes"
                       class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
                       href="#0"
-                      >Explore -&gt;</a
+                      >Explore -&gt;</router-link
                     >
                   </div>
                 </div>
@@ -311,23 +388,32 @@
                     <h3 class="text-lg font-semibold text-slate-800 mb-1">
                       Contracts
                     </h3>
-                    <div class="text-sm">
-                      Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+
+                    <div v-if="role === 'User'" class="text-sm">
+                      You can access to the contract list .
+                    </div>
+                    <div v-if="role === 'Admin'" class="text-sm">
+                      You can access the contract list to validate the
+                      contracts.
                     </div>
                   </div>
                   <!-- Link -->
                   <div>
-                    <a
+                    <router-link
+                      to="/contracts"
                       class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
                       href="#0"
-                      >Explore -&gt;</a
+                      >Explore -&gt;</router-link
                     >
                   </div>
                 </div>
               </div>
 
               <!-- Item -->
-              <div class="bg-slate-100 rounded-sm text-center p-5">
+              <div
+                v-if="role == 'User'"
+                class="bg-slate-100 rounded-sm text-center p-5"
+              >
                 <div class="flex flex-col h-full">
                   <div class="grow mb-2">
                     <!-- Icon -->
@@ -369,15 +455,77 @@
                       Contact Us
                     </h3>
                     <div class="text-sm">
-                      Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                      You can contact our administration here.
                     </div>
                   </div>
                   <!-- Link -->
                   <div>
-                    <a
+                    <router-link
+                      to="/contact"
                       class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
                       href="#0"
-                      >Explore -&gt;</a
+                      >Explore -&gt;</router-link
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item -->
+              <div
+                v-if="role == 'Admin'"
+                class="bg-slate-100 rounded-sm text-center p-5"
+              >
+                <div class="flex flex-col h-full">
+                  <div class="grow mb-2">
+                    <!-- Icon -->
+                    <div
+                      class="inline-flex w-12 h-12 rounded-full bg-indigo-400"
+                    >
+                      <svg
+                        class="w-12 h-12"
+                        viewBox="0 0 48 48"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <defs>
+                          <linearGradient
+                            id="icon2-a"
+                            x1="50%"
+                            y1="0%"
+                            x2="50%"
+                            y2="100%"
+                          >
+                            <stop stop-color="#FFF" offset="0%" />
+                            <stop stop-color="#A5B4FC" offset="100%" />
+                          </linearGradient>
+                        </defs>
+                        <g fill-rule="nonzero" fill="none">
+                          <path
+                            d="M26.5 19c4.695 0 8.5 3.184 8.5 7.111 0 1.597-.638 3.067-1.7 4.253V35l-4.108-2.148a10 10 0 0 1-2.692.37c-4.695 0-8.5-3.184-8.5-7.11C18 22.183 21.805 19 26.5 19Z"
+                            fill="#4F46E5"
+                            opacity=".88"
+                          />
+                          <path
+                            d="M23 13c-5.523 0-10 3.582-10 8 0 1.797.75 3.45 2 4.785V31l4.833-2.416c.996.266 2.059.416 3.167.416 5.523 0 10-3.582 10-8s-4.477-8-10-8Z"
+                            fill="url(#icon2-a)"
+                          />
+                        </g>
+                      </svg>
+                    </div>
+                    <!-- Content -->
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">
+                      Messages
+                    </h3>
+                    <div class="text-sm">
+                      You can check the clients' messages here.
+                    </div>
+                  </div>
+                  <!-- Link -->
+                  <div>
+                    <router-link
+                      to="/contact/messageList"
+                      class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
+                      href="#0"
+                      >Explore -&gt;</router-link
                     >
                   </div>
                 </div>
@@ -676,11 +824,6 @@ export default {
     } catch (err) {
       this.data.users = JSON.parse(localStorage.getItem("users-length"));
     }
-
-    console.log("users", this.data.users);
-    console.log("claims", this.data.claims);
-    console.log("quotes", this.data.quotes);
-    console.log("contract", this.data.contracts);
   },
 };
 </script>

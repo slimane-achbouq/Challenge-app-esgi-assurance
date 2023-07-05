@@ -463,7 +463,7 @@
                     to="/newquote"
                     custom
                   >
-                    <li class="mb-1 last:mb-0">
+                    <li v-track:click="'CLICKED_BTN'" class="mb-1 last:mb-0">
                       <a
                         class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                         :class="isExactActive && '!text-indigo-500'"

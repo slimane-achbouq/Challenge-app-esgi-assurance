@@ -45,9 +45,9 @@
 
           <!-- Cards -->
           <div class="grid grid-cols-12 gap-6">
-            <VisitedPagesStats v-bind:data="topPagesVisits"/>
-            <DurationTimeStats v-bind:data="times"/>
-            <KpiStats v-bind:data="kpis"/>
+            <VisitedPagesStats v-if="topPagesVisits" v-bind:data="topPagesVisits"/>
+            <DurationTimeStats v-if="times" v-bind:data="times"/>
+            <KpiStats v-if="kpis" v-bind:data="kpis"/>
             <UsedBrowsersStats v-bind:appId="appId" v-bind:API_URL="API_URL"/>
             <UsedDevicesStats v-bind:appId="appId" v-bind:API_URL="API_URL"/>
 

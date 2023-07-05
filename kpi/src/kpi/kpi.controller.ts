@@ -25,9 +25,8 @@ export class KpiController {
   }
 
   @MessagePattern('getUniqueVisitorsCountKpi')
-  async getUniqueVisitorsCount(@Headers() headers) {
-    const app_id = headers['app-id'];
-    return this.kpiService.findAllKpis(app_id);
+  async getUniqueVisitorsCount(appId: string) {
+    return this.kpiService.findAllKpis(appId);
   }
 
   @MessagePattern('getKpisByTag')

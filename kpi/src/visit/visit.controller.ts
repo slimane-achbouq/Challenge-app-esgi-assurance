@@ -22,8 +22,7 @@ export class VisitController {
     }*/
 
   @MessagePattern('getTotalVisitsCount')
-  async getTotalVisitsCount(@Headers() headers) {
-    const app_id = headers['app-id'];
-    return this.visitService.getTotalVisitsByAppId(app_id);
+  async getTotalVisitsCount(appId: string) {
+    return this.visitService.getTotalVisitsByAppId(appId);
   }
 }

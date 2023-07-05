@@ -758,7 +758,8 @@ export default {
 
   async created() {
     this.role = this.$store.getters["auth/roles"];
-    this.isAnalytics = !localStorage.getItem("kpiAuthToken");
+    this.isAnalytics = !!localStorage.getItem("kpiJwtToken");
+    console.log(this.isAnalytics)
   },
 };
 </script>

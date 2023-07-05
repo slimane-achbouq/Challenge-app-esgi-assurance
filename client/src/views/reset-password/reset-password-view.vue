@@ -162,7 +162,6 @@ export default {
         );
 
         const responseJSON = await response.json();
-        console.log(responseJSON);
 
         // const redirectUrl = '/' + (this.$route.query.redirect || 'login');
         // this.$router.replace(redirectUrl);

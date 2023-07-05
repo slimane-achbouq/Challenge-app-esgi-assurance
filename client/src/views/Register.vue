@@ -220,7 +220,8 @@
                   <div class="text-xs mt-1 text-rose-500">
                     <a v-if="passwordSatatus.lowerCase">
                       * {{ errors.passwords.lowerCase }}</a
-                    ><br v-if="passwordSatatus.lowerCase" />
+                    >
+                    <br v-if="passwordSatatus.lowerCase" />
                     <a v-if="passwordSatatus.upperCase">
                       * {{ errors.passwords.upperCase }}</a
                     ><br v-if="passwordSatatus.upperCase" />
@@ -229,7 +230,7 @@
                     ><br v-if="passwordSatatus.number" />
                     <a v-if="passwordSatatus.specialChar">
                       * {{ errors.passwords.specialChar }}</a
-                    ><br v-if="passwordSatatus.specialChar" />
+                    >
                   </div>
                 </div>
                 <div></div>
@@ -367,14 +368,28 @@ export default {
       this.street = address.properties.name;
       this.searchedAddresses = [];
     },
+
+    containsLowercase(value) {
+      const containsLowercase = /[a-z].{1,1}/.test(value);
+      return containsLowercase;
+    },
+    containsUppercase(value) {
+      const containsUppercase = /[A-Z].{1,1}/.test(value);
+      return containsUppercase;
+    },
+    containsNumber(value) {
+      const containsNumber = /[0-9].{3,}/.test(value);
+      return containsNumber;
+    },
+    containsSpecial(value) {
+      const containsSpecial = /[#?!@$%^&*-]/.test(value);
+      return containsSpecial;
+    },
     passwordValidation(event) {
       const value = event.target.value;
-      const containsUppercase = /[A-Z].{1,}/.test(value);
-      const containsLowercase = /[a-z].{1,}/.test(value);
-      const containsNumber = /[0-9].{3,}/.test(value);
-      const containsSpecial = /[#?!@$%^&*-]/.test(value);
+      this.errors.password = "";
 
-      if (!containsUppercase) {
+      if (!this.containsUppercase(value)) {
         this.passwordSatatus.upperCase = true;
         this.errors.passwords.upperCase =
           "Your password must contain 2 capital letters";
@@ -382,7 +397,7 @@ export default {
         this.passwordSatatus.upperCase = false;
       }
 
-      if (!containsLowercase) {
+      if (!this.containsLowercase(value)) {
         this.passwordSatatus.lowerCase = true;
         this.errors.passwords.lowerCase =
           "Your password must contain 2 lower letters";
@@ -390,17 +405,18 @@ export default {
         this.passwordSatatus.lowerCase = false;
       }
 
-      if (!containsNumber) {
+      if (!this.containsNumber(value)) {
         this.passwordSatatus.number = true;
         this.errors.passwords.number = "Your password must contain 4 numbers";
       } else {
         this.passwordSatatus.number = false;
       }
 
-      if (!containsSpecial) {
+      if (!this.containsSpecial(value)) {
         this.passwordSatatus.specialChar = true;
         this.errors.passwords.specialChar =
           "Your password must contain special chars";
+        return;
       } else {
         this.passwordSatatus.specialChar = false;
       }
@@ -435,11 +451,13 @@ export default {
       this.formIsValid = true;
       this.error = null;
       this.isLoading = true;
-      Object.keys(this.errors).forEach((key) => (this.errors[key] = ""));
       Object.keys(this.errors.passwords).forEach((key) => {
         this.errors.passwords[key] = "";
       });
 
+      Object.keys(this.passwordSatatus).forEach((key) => {
+        this.passwordSatatus[key] = false;
+      });
       if (this.firstname.length < 3) {
         this.formValid = false;
         this.isLoading = false;
@@ -491,7 +509,7 @@ export default {
       if (!this.postalCode || !this.street || !this.city) {
         this.formValid = false;
         this.isLoading = false;
-        this.errors.street = "Please enter a valide adresse!";
+        this.errors.street = "Please enter a valid address!";
         return;
       }
 

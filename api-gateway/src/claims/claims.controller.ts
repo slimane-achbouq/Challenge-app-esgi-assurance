@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateDemandDto } from './dto/update-demand.dto';
 import { CreateDemandDto } from './dto/create-demand.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -69,6 +69,7 @@ export class ClaimsController {
   @Get()
   @UseInterceptors(FileInterceptor('proof'))
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async getDemandes() {
     const claims = await this.claimsService
       .send({ cmd: 'getDemandes' }, '')

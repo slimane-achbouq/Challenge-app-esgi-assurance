@@ -54,8 +54,8 @@
           <UserMenu align="right" class="dark:text-white" />
         </div>
         <div
-          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
         >
           <ul
             class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
@@ -127,11 +127,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon1-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon1-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -183,11 +183,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon2-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon2-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -238,11 +238,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon3-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon3-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -310,11 +310,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon4-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon4-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -371,11 +371,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon5-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon5-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -427,11 +427,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon6-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon6-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -488,11 +488,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon7-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon7-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -550,11 +550,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon8-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon8-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />

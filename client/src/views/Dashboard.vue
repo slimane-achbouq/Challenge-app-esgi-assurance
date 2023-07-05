@@ -734,6 +734,9 @@ export default {
     };
   },
   async created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
     const store = useStore();
     this.role = store.getters["auth/roles"];
     this.token = store.getters["auth/token"];

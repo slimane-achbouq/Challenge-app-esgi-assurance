@@ -266,6 +266,7 @@ export class InsuranceController {
     FileFieldsInterceptor([
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
+      { name: 'IdCard', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -275,6 +276,7 @@ export class InsuranceController {
     files: {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
+      IdCard: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -284,6 +286,9 @@ export class InsuranceController {
           : null,
         permis: files.permis[0]
           ? files.permis[0].buffer.toString('base64')
+          : null,
+        IdCard: files.IdCard[0]
+          ? files.IdCard[0].buffer.toString('base64')
           : null,
       };
       const beneficiary = await this.insuranceServiceClient
@@ -302,6 +307,7 @@ export class InsuranceController {
     FileFieldsInterceptor([
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
+      { name: 'IdCard', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -312,6 +318,7 @@ export class InsuranceController {
     files: {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
+      IdCard: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -332,9 +339,12 @@ export class InsuranceController {
           files.permis && files.permis[0]
             ? files.permis[0].buffer.toString('base64')
             : null,
+        IdCard: files.IdCard[0]
+            ? files.IdCard[0].buffer.toString('base64')
+            : null,
       };
 
-      if (!fileContents.justificatifDomicile || !fileContents.permis) {
+      if (!fileContents.justificatifDomicile || !fileContents.permis || !fileContents.IdCard) {
         throw new BadRequestException('File not uploaded');
       }
 
@@ -361,6 +371,7 @@ export class InsuranceController {
     FileFieldsInterceptor([
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
+      { name: 'IdCard', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -371,6 +382,7 @@ export class InsuranceController {
     files: {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
+      IdCard: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -393,9 +405,12 @@ export class InsuranceController {
         permis: files.permis[0]
           ? files.permis[0].buffer.toString('base64')
           : null,
+        IdCard: files.IdCard[0]
+          ? files.IdCard[0].buffer.toString('base64')
+          : null,
       };
 
-      if (!fileContents.justificatifDomicile || !fileContents.permis) {
+      if (!fileContents.justificatifDomicile || !fileContents.permis || !fileContents.IdCard) {
         throw new BadRequestException('Files not uploaded');
       }
 
@@ -440,6 +455,7 @@ export class InsuranceController {
         vehicleId: relatedQuote.vehicle.id,
         beneficiary: currentBeneficiary['_id'],
         status: false,
+        verifiedId:false
       };
 
       return this.insuranceServiceClient

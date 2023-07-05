@@ -46,6 +46,9 @@ export class Insurance extends Document {
   @Prop({ type: Boolean, default: false })
   status: boolean;
 
+  @Prop({ type: Boolean, default: false })
+  verifiedId: boolean;
+
   
 
 }

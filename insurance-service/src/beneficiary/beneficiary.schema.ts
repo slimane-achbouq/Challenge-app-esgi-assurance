@@ -33,6 +33,9 @@ export class Beneficiary extends Document {
   @Prop({ type: Buffer, required: false })
   permis: Buffer;
 
+  @Prop({ type: Buffer, required: false })
+  IdCard: Buffer;
+
   
 }
 

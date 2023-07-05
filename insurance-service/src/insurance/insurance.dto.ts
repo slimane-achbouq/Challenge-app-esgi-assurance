@@ -37,6 +37,8 @@ export class CreateInsuranceDto {
   quoteId: string;
 
   status: boolean; 
+
+  verifiedId: boolean;
 }
 
 export type UpdateInsuranceDto  = Partial<CreateInsuranceDto>;

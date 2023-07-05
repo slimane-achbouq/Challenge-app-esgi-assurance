@@ -623,6 +623,8 @@
               <div>
                 <form>
                   <div class="space-y-3 my-5">
+
+
                     <label
                       class="block text-sm font-medium mb-1"
                       for="card-country"
@@ -633,7 +635,7 @@
                     <div
                       class="flex items-center justify-center w-full"
                       v-if="!hideImageFielddrivingLicense"
-                    >
+                     >
                       <label for="dropzone-file" class="form-input w-full">
                         <div class="flex flex-col items-center justify-center">
                           <svg
@@ -679,7 +681,7 @@
                     <div
                       class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
                       v-if="hideImageFielddrivingLicense"
-                    >
+                     >
                       <div
                         class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
                       >
@@ -704,6 +706,11 @@
                         </div>
                       </div>
                     </div>
+
+
+
+
+
                     <div class="space-y-4">
                       <label
                         class="block text-sm font-medium mb-1"
@@ -793,6 +800,101 @@
                       </div>
                     </div>
 
+
+
+                    <div class="space-y-4">
+                      <label
+                        class="block text-sm font-medium mb-1"
+                        for="card-country"
+                        >ID Card
+                        <span class="text-rose-500">*</span></label
+                      >
+                      <div
+                        class="flex items-center justify-center w-full"
+                        v-if="!hideImageFielIdCard"
+                      >
+                        <label for="dropzone-file" class="form-input w-full">
+                          <div
+                            class="flex flex-col items-center justify-center"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="w-10 h-10 mb-3 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              ></path>
+                            </svg>
+                            <p
+                              class="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                            >
+                              <span class="font-semibold"
+                                >Click to upload your ID Card</span
+                              >
+                              or drag and drop
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                              Image Only
+                            </p>
+                          </div>
+                          <input
+                            id="dropzone-file"
+                            type="file"
+                            class="hidden"
+                            required
+                            @change="handleFile2"
+                          />
+                        </label>
+                      </div>
+                      <div v-if="errors" class="text-xs mt-1 text-rose-500">
+                        {{ errors.IdCard}}
+                      </div>
+
+                      <div
+                        class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
+                        v-if="hideImageFielIdCard"
+                      >
+                        <div
+                          class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
+                        >
+                          <!-- Left side -->
+                          <div class="flex items-start space-x-3 md:space-x-4">
+                            <div class="w-9 h-9 shrink-0 mt-1">
+                              <img
+                                class="w-9 h-9 rounded-full"
+                                src="@/images/pdf.png"
+                                width="36"
+                                height="36"
+                              />
+                            </div>
+                            <div>
+                              Adresse Grise file :
+                              <div class="text-sm">
+                                {{ drivingLicense }}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            class="flex items-center space-x-4 pl-10 md:pl-0"
+                          >
+                            <button></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+
                     <div class="text-right" v-if="!contractCreated">
                       <button
                         type=""
@@ -800,7 +902,7 @@
                         @click.prevent="onCreatedContract"
                         v-if="!contractCreated && !existingPayment"
                       >
-                        Confirm and proceed to payment
+                        Confirm and proceed face verifiation
                       </button>
                       <button
                         type=""
@@ -880,7 +982,7 @@
             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
             @click="submit(`Azulance - ${selectedPlan} option`, this.price)"
           >
-            Proceeded payment
+            Proceeded verification
           </button>
         </div>
       </div>
@@ -921,18 +1023,22 @@ export default {
       existingPayment: null,
       drivingLicense: null,
       hideImageFielddrivingLicense: null,
+      hideImageFielIdCard:null,
       adresse: null,
+      IdCard: null,
       hideImageFieladresse: null,
       quote: null,
       prices: null,
       errors: {
         license: null,
         adress: null,
+        IdCard:null
       },
       price: null,
       contractCreated: false,
       formData: {
         justificatifDomicile: null,
+        IdCard:null,
         permis: null,
         coverageStartDate: null,
         coverageEndDate: null,
@@ -1000,6 +1106,17 @@ export default {
 
       
     },
+    handleFile2(event) {
+      this.file = event.target.files[0];
+    
+        this.formatIncorrect = false
+        this.IdCard = this.file.name;
+        this.formData.IdCard = this.file;
+        this.previewSrc = URL.createObjectURL(event.target.files[0]);
+        this.hideImageFielIdCard = true;
+        this.errors.IdCard = null;
+    
+    },
     processDate(date) {
       let dateObject = new Date(date);
 
@@ -1018,6 +1135,8 @@ export default {
         this.errors.license = " the Driving License is mandatory";
       if (!this.adresse)
         this.errors["adresse"] = " the proof of the adress is mandatory";
+      if (!this.IdCard)
+        this.errors["IdCard"] = " the ID Card is mandatory";
 
       this.formData.coverageStartDate = this.quote.coverageStartDate;
       this.formData.coverageEndDate = this.quote.coverageStartDate;

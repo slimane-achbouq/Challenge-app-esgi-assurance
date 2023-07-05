@@ -259,7 +259,7 @@ export default {
         labels.map(async (label) => {
           const descriptions = [];
 
-          const arrayBuffer = Uint8Array.from(this.benf.justificatifDomicile.data).buffer;
+          const arrayBuffer = Uint8Array.from(this.benf.IdCard.data).buffer;
           const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
           const imageUrl = URL.createObjectURL(blob);
           const img = document.createElement('img');

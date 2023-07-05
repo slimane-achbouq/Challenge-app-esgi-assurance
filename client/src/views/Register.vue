@@ -172,6 +172,8 @@
                     id="age"
                     v-model.trim="age"
                     class="form-input w-full"
+                    min="1899-01-01"
+                    max="2005-07-06"
                     type="date"
                     required
                   />

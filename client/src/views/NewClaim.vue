@@ -24,24 +24,24 @@
         </Banner>
 
         <Banner
+          v-if="formatIncorrect"
           type="error"
           class="mb-1"
           :open="formatIncorrect"
-          v-if="formatIncorrect"
         >
           The format of the file must be PDF.
         </Banner>
 
         <Banner
+          v-if="generalError"
           type="failure"
           class="mb-4"
           :open="generalError"
-          v-if="generalError"
         >
           {{ generalError }}
         </Banner>
 
-        <Banner type="success" class="mb-4" :open="true" v-if="ifProof">
+        <Banner v-if="ifProof" type="success" class="mb-4" :open="true">
           Proof image uploaded successfully.
         </Banner>
 
@@ -68,7 +68,7 @@
               <div>
                 <form>
                   <div class="space-y-3">
-                    <div class="flex-1" v-if="contract">
+                    <div v-if="contract" class="flex-1">
                       <p>
                         Claim for the contract :
                         <router-link
@@ -96,7 +96,7 @@
                         v-model="formData.title"
                         placeholder=""
                       />
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">
+                      <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         {{ errors.title }}
                       </p>
                     </div>
@@ -119,7 +119,7 @@
                         <option>Material accident</option>
                         <option>Other</option>
                       </select>
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">
+                      <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         {{ errors.reason }}
                       </p>
                     </div>
@@ -137,7 +137,7 @@
                         placeholder="Explain here..."
                         v-model="formData.description"
                       ></textarea>
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">
+                      <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         {{ errors.description }}
                       </p>
                     </div>
@@ -227,7 +227,7 @@
                         </label>
                       </div>
 
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">
+                      <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         Proof required
                       </p>
 
@@ -334,6 +334,13 @@ export default {
     Banner,
     ModalBlank,
   },
+  setup() {
+    const sidebarOpen = ref(false);
+
+    return {
+      sidebarOpen,
+    };
+  },
   data() {
     return {
       contract: null,
@@ -353,10 +360,35 @@ export default {
       formatIncorrect: false,
     };
   },
+
+  async created() {
+    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
+
+    const token = this.$store.getters["auth/token"];
+    if (!token) {
+      this.$router.push({ name: "home" });
+    }
+
+    this.formData.userMail = this.$store.getters["auth/email"];
+
+    let response = await axios
+      .get(`${import.meta.env.VITE_API_URL}/insurance/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.response.status != 200) {
+          this.$router.push({ name: "contracts" });
+        }
+      });
+
+    this.contract = response.data;
+    this.formData.insurance_id = id;
+  },
   methods: {
     handleProof(event) {
-      this.file = event.target.files[0];
-
       if (!this.file.type.includes("image")) {
         this.formatIncorrect = true;
       } else {
@@ -383,39 +415,6 @@ export default {
           this.generalError = error.response.data.message[0];
         });
     },
-  },
-  setup() {
-    const sidebarOpen = ref(false);
-
-    return {
-      sidebarOpen,
-    };
-  },
-  async created() {
-    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-
-    const token = this.$store.getters["auth/token"];
-    if (!token) {
-      this.$router.push({ name: "home" });
-    }
-
-    this.formData.userMail = this.$store.getters["auth/email"];
-
-    let response = await axios
-      .get(`${import.meta.env.VITE_API_URL}/insurance/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error.response.status != 200) {
-          this.$router.push({ name: "contracts" });
-        }
-      });
-
-    this.contract = response.data;
-    this.formData.insurance_id = id;
   },
 };
 </script>

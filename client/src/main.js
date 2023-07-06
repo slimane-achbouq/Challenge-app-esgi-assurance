@@ -94,5 +94,5 @@ app.use(store);
 app.mount("#app");
 
 app.use(Tracker, {
-  AppId: "APP_U6OJ0XHB",
+  AppId: "APP_QBQXUNRW",
 });

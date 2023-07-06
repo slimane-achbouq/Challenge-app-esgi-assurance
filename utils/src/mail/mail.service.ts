@@ -66,7 +66,7 @@ export class MailService {
     );
     const templateContent = fs.readFileSync(templatePath, { encoding: 'utf8' });
 
-    const url = 'http://127.0.0.1:5173/resetPassword/' + resetPassword.token;
+    const url = `${process.env.CLIENT_URL}resetPassword/${resetPassword.token}`;
 
     const sendSmtpEmail = {
       sender: {

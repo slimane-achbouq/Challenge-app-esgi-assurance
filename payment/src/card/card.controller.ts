@@ -1,6 +1,6 @@
 import { Body, Controller } from '@nestjs/common';
 import { CardService } from './card.service';
-import { CreateCreditCardDto } from 'src/dto/create-credit-card.dto';
+import { CreateCreditCardDto } from '../dto/create-credit-card.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('card')

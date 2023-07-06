@@ -16,17 +16,17 @@ import { ClientProxy } from '@nestjs/microservices';
 import { v4 as uuidv4 } from 'uuid';
 import { resetPasswordDto } from './dto/reset-password.dto';
 import { updatePasswordDto } from './dto/update-password.dto';
-import {WinstonModule} from "nest-winston";
-import {format, transports} from "winston";
+import { WinstonModule } from 'nest-winston';
+import { format, transports } from 'winston';
 
 @Injectable()
 export class AuthService {
   private logger = null;
 
   constructor(
-      private usersService: UsersService,
-      private jwtService: JwtService,
-      @Inject('UTILS_SERVICE') private readonly utilsService: ClientProxy,
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    @Inject('UTILS_SERVICE') private readonly utilsService: ClientProxy,
   ) {
     this.logger = WinstonModule.createLogger({
       transports: [
@@ -41,11 +41,9 @@ export class AuthService {
           format: format.combine(format.timestamp(), format.json()),
         }),
         new transports.Console({
-          format: format.combine(
-              format.colorize({message: true}),
-          )
+          format: format.combine(format.colorize({ message: true })),
         }),
-      ]
+      ],
     });
   }
 
@@ -55,7 +53,12 @@ export class AuthService {
       createUserDto.email,
     );
     if (userExists) {
-      this.logger.error("signUp attempt error : user " + createUserDto.email + " already exists", "error");
+      this.logger.error(
+        'signUp attempt error : user ' +
+          createUserDto.email +
+          ' already exists',
+        'error',
+      );
       return { message: 'User already exist !' };
     }
 
@@ -91,13 +94,19 @@ export class AuthService {
         .send({ cmd: 'singInConfirmationEmail' }, payload)
         .toPromise();
     } catch (err) {
-      this.logger.error("signUp confirmation mail error : for user " + createUserDto.email, "error");
+      this.logger.error(
+        'signUp confirmation mail error : for user ' + createUserDto.email,
+        'error',
+      );
       return new BadRequestException(err);
     }
 
     await this.updateRefreshToken(newUser._id, tokens.refreshToken);
 
-    this.logger.debug("debug", "signUp new user created : " + createUserDto.email);
+    this.logger.debug(
+      'debug',
+      'signUp new user created : ' + createUserDto.email,
+    );
     return {
       message: 'User profile was created with success !',
     };
@@ -106,8 +115,11 @@ export class AuthService {
   async signIn(data: AuthDto) {
     // Check if user exists
     const user = await this.usersService.findByUserByEmail(data.email);
-    if (!user){
-      this.logger.error("signIn attempt error : email " + data.email + " not found", "error");
+    if (!user) {
+      this.logger.error(
+        'signIn attempt error : email ' + data.email + ' not found',
+        'error',
+      );
       return {
         message: 'User does not exist !',
       };
@@ -115,15 +127,23 @@ export class AuthService {
 
     // Check if user profile is valide
     if (!user.isValide) {
-      this.logger.error("signIn attempt error : email " + data.email + " not activated", "error");
+      this.logger.error(
+        'signIn attempt error : email ' + data.email + ' not activated',
+        'error',
+      );
       return {
         message: 'User profile is not activated !',
       };
     }
 
     const passwordMatches = await argon2.verify(user.password, data.password);
-    if (!passwordMatches){
-      this.logger.error("signIn attempt error : password for email " + data.email + " not correct", "error");
+    if (!passwordMatches) {
+      this.logger.error(
+        'signIn attempt error : password for email ' +
+          data.email +
+          ' not correct',
+        'error',
+      );
       return {
         message: 'Password is incorrect !',
       };
@@ -139,12 +159,12 @@ export class AuthService {
     );
     await this.updateRefreshToken(user._id, tokens.refreshToken);
 
-    this.logger.debug("debug", "signIn : email " + data.email);
+    this.logger.debug('debug', 'signIn : email ' + data.email);
     return tokens;
   }
 
   async logout(userId: string) {
-    this.logger.debug("debug", "logout : user ID " + userId);
+    this.logger.debug('debug', 'logout : user ID ' + userId);
     return this.usersService.update(userId, { refreshToken: null });
   }
 
@@ -210,28 +230,37 @@ export class AuthService {
     );
 
     if (!user) {
-      this.logger.error("verifyProfile attempt : user not found/token wrong", "error");
+      this.logger.error(
+        'verifyProfile attempt : user not found/token wrong',
+        'error',
+      );
       return {
         message: `Token wrong !`,
       };
     }
 
     if (user.isValide) {
-      this.logger.error("verifyProfile attempt : user " + user.email + " already activated", "error");
+      this.logger.error(
+        'verifyProfile attempt : user ' + user.email + ' already activated',
+        'error',
+      );
       return {
         message: `User is already activated !`,
       };
     }
 
     if (user.validationToken == verifyDto.token) {
-      this.logger.debug("debug", "verifyProfile : user " + user.email + " activated");
+      this.logger.debug(
+        'debug',
+        'verifyProfile : user ' + user.email + ' activated',
+      );
       await this.usersService.update(user._id, { isValide: true });
       return {
         message: 'User profile activated !',
       };
     }
 
-    this.logger.error("verifyProfile attempt : wrong token", "error");
+    this.logger.error('verifyProfile attempt : wrong token', 'error');
     return {
       message: 'Token wrong !',
     };
@@ -263,7 +292,7 @@ export class AuthService {
     );
 
     if (!user) {
-      this.logger.error("resetPassword attempt : user does not exist", "error");
+      this.logger.error('resetPassword attempt : user does not exist', 'error');
       return {
         message: `User does not exist !`,
       };
@@ -285,11 +314,14 @@ export class AuthService {
         .send({ cmd: 'resetPasswordEmail' }, payload)
         .toPromise();
     } catch (err) {
-      this.logger.error("resetPassword attempt : Bad request", "error");
+      this.logger.error('resetPassword attempt : Bad request', 'error');
       return new BadRequestException(err);
     }
 
-    this.logger.debug("debug", "resetPassword : mail sent for user " + resetPassword.email);
+    this.logger.debug(
+      'debug',
+      'resetPassword : mail sent for user ' + resetPassword.email,
+    );
     return {
       message: 'Please check your email to update password !',
     };
@@ -301,7 +333,10 @@ export class AuthService {
     );
 
     if (!user) {
-      this.logger.error("updatePassword attempt : user does not exist", "error");
+      this.logger.error(
+        'updatePassword attempt : user does not exist',
+        'error',
+      );
       return {
         message: `User does not exist !`,
       };
@@ -313,7 +348,10 @@ export class AuthService {
       password: hash,
     });
 
-    this.logger.debug("debug", "updatePassword : user ID " + user._id + " updated password");
+    this.logger.debug(
+      'debug',
+      'updatePassword : user ID ' + user._id + ' updated password',
+    );
     return {
       message: 'User password was updated !',
     };

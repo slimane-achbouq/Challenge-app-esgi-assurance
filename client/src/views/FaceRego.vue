@@ -102,8 +102,7 @@
                               autoplay
                             ></video>
 
-                            <canvas ref="canvas" style="display: none;"></canvas>
-
+                            <canvas ref="canvas" style="display: none"></canvas>
                           </div>
                         </div>
                       </div>
@@ -113,7 +112,6 @@
               </div>
             </div>
           </div>
-          
         </div>
       </main>
     </div>
@@ -143,7 +141,7 @@ export default {
     return {
       isWebcamActivatedd: false,
       video: null,
-      benf :null
+      benf: null,
     };
   },
 
@@ -176,24 +174,25 @@ export default {
       console.log(response.data);
     }
 
-    const  idBene = response.data.beneficiary
+    const idBene = response.data.beneficiary;
 
-    const response1 = JSON.parse(localStorage.getItem("beneficiary-data")) ?? await axios.get(
-      `${import.meta.env.VITE_API_URL}/beneficiary/${response.data.beneficiary}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response1 =
+      JSON.parse(localStorage.getItem("beneficiary-data")) ??
+      (await axios.get(
+        `${import.meta.env.VITE_API_URL}/beneficiary/${
+          response.data.beneficiary
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ));
 
-      if (response1.data) {
-      
-      this.benf = await response1.data
+    if (response1.data) {
+      this.benf = await response1.data;
       if (this.benf.veriviedImage) this.$router.push("/user-contracts");
-      console.log(this.benf)
-     }
-
+    }
 
     this.video = await this.$refs.video;
 
@@ -232,57 +231,53 @@ export default {
             label: result,
           });
 
-          console.log(result['_distance'])
-          if (result.label !== "unknown" && result['_distance'] < 0.4) {
-
-
-            const canvas = this.$refs.canvas;
-            const context = canvas.getContext("2d");
-            canvas.width = this.video.videoWidth;
-            canvas.height = this.video.videoHeight;
+          console.log(result["_distance"]);
+          if (result.label !== "unknown" && result["_distance"] < 0.5) {
+            const canvas = await this.$refs.canvas;
+            const context = await canvas.getContext("2d");
+            canvas.width = await this.video.videoWidth;
+            canvas.height = await this.video.videoHeight;
             context.drawImage(this.video, 0, 0, canvas.width, canvas.height);
-            const imageDataURL = canvas.toDataURL();
+            const imageDataURL = await canvas.toDataURL();
 
             const imageData = await (await fetch(imageDataURL)).blob();
 
-            const formData = new FormData();
+            const formData = await new FormData();
             formData.append("veriviedImage", imageData);
 
-
-            let response =  axios
-              .put(`${import.meta.env.VITE_API_URL}/beneficiary/${idBene}`, formData, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "multipart/form-data",
-                },
-              })
+            let response = await axios
+              .put(
+                `${import.meta.env.VITE_API_URL}/beneficiary/${idBene}`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              )
               .then((data) => {
-                console.log(data)
+                console.log(data);
               })
               .catch((error) => {
                 console.log(error);
               });
 
-            console.log(imageDataURL)
+            Swal.fire({
+              text: "Your ID Card is vérified, wait the admin to validate the contract",
+              icon: "success",
+            }).then(() => {
+              const redirectUrl =
+                "/" + (this.$route.query.redirect || `contract/${id}`);
+              this.$router.replace(redirectUrl);
+            });
 
-
-
-                Swal.fire({
-                text: "Your ID Card is vérified, wait the admin to validate the contract",
-                icon: "success",
-              }).then(() => {
-                  const redirectUrl = "/" + (this.$route.query.redirect || `contract/${id}`);
-                  this.$router.replace(redirectUrl);
-                });
-              
-              
-              const stream = this.video.srcObject;
-              const tracks = stream.getTracks();
-              tracks.forEach((track) => track.stop());
-
+            const stream = this.video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach((track) => track.stop());
           }
         });
-      }, 100);
+      }, 300);
     });
   },
 
@@ -314,15 +309,14 @@ export default {
         labels.map(async (label) => {
           const descriptions = [];
 
-          const IdCard = this.benf.IdCard.data
+          const IdCard = this.benf.IdCard.data;
 
           const arrayBuffer = Uint8Array.from(this.benf.IdCard.data).buffer;
-          const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+          const blob = new Blob([arrayBuffer], { type: "image/jpeg" });
           const imageUrl = URL.createObjectURL(blob);
-          const img = document.createElement('img');
+          const img = document.createElement("img");
           img.src = imageUrl;
 
-          
           const detections = await faceapi
             .detectSingleFace(img)
             .withFaceLandmarks()
@@ -353,6 +347,5 @@ export default {
       });
     }
   },
-  
 };
 </script>

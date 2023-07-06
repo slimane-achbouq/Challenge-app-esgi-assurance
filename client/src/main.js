@@ -45,9 +45,11 @@ const routesUser = ["/profile", "/user-quotes", "/user-contracts"];
 
 router.beforeEach((to, from) => {
   const token = store.state.auth.token;
-  /*if (!token) {
-        if (to.fullPath != "/login") router.push('login')
-    } else {
+  if (!token) {
+    if (to.fullPath != "/login") router.push("login");
+  }
+
+  /*else {
 
         const role = store.state.auth.roles[0]
 

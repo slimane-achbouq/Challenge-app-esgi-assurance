@@ -15,8 +15,21 @@ services:
     networks:
       - my-network
     command: sh -c "npm install && npm run start:dev"
-    env_file:
-      - ./api-gateway/.env
+    environment:
+        - RABBITMQ_DEFAULT_USER=admin
+        - RABBITMQ_DEFAULT_PASS=admin_password
+        - RABBITMQ_USER=admin
+        - RABBITMQ_PASS=admin_password
+        - RABBITMQ_HOST=localhost:5672
+        - RABBITMQ_AUTH_QUEUE=auth_queue
+        - JWT_SECRET=JWT_ACCESS_SECRET
+        - RABBITMQ_URL=amqp://admin:admin_password@rabbitmq:5672
+        - INSURANCE_SERVICE_QUEUE=insurance_service_queue
+        - USER_SERVICE_QUEUE=user_service_queue
+        - QUOTE_SERVICE_QUEUE=quote_service_queue
+        - API_GATEWAY_QUEUE=api_gateway_queue
+        - JWT_ACCESS_SECRET=JWT_ACCESS_SECRET
+        - JWT_REFRESH_SECRET=bKGR7ScxSnX/U76cu62/pUElk71DSiZTjGS/yyCokgsUvbT8nG6Xnv88M2Ya1mz58WNPdiy4sODJrAWA40zOPq08G+UdtPf6YtownNRxruZM2+toXopCVEEa3/7+FyDPlx28aP/yLm5jG610fYVprY8ZMNkbbQZtIOUINwAjvgWPfd30I6qsWtRJleuKcCay2ndM54LEZKXH9XbegsZ9TWeITkbSbKMVG4G2Tjnakr+qFmlnAM8eLpwSxiezRIKZtjTFNP9mIoTzJhlePCNlReIvUxczIcy1eY1K5Si1qXgOYGizlZrZ2NzyXYdmwK7ZCEFnt9iIAHLlklkq8XfiSw==
 
   webserver:
       build:
@@ -36,8 +49,8 @@ services:
     container_name: rabbitmq
     image: rabbitmq:3-management
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin_password
+        RABBITMQ_DEFAULT_USER: admin
+        RABBITMQ_DEFAULT_PASS: admin_password
     hostname: rabbitmq
     volumes:
       - /var/lib/rabbitmq
@@ -71,8 +84,11 @@ services:
       - insurancedatabase
       - gateway
       - rabbitmq
-    env_file:
-      - ./insurance-service/.env
+    environment:
+      - MONGODB_URI=mongodb://insurancedatabase:27017/nestjs-mongodb
+      - RABBITMQ_URL=amqp://admin:admin_password@rabbitmq:5672
+      - INSURANCE_SERVICE_QUEUE=insurance_service_queue
+      - QUOTE_SERVICE_QUEUE=quote_service_queue
     networks:
       - my-network
 
@@ -89,9 +105,11 @@ services:
     volumes:
       - ./quote-service:/usr/src/app
       - /usr/src/app/node_modules
-
-    env_file:
-      - ./quote-service/.env
+    environment:
+      - DATABASE_URL=postgres://user:password@quotedatabase:5432/nestjsdb
+      - INSURANCE_SERVICE_QUEUE=insurance_service_queue
+      - RABBITMQ_URL=amqp://admin:admin_password@rabbitmq:5672
+      - QUOTE_SERVICE_QUEUE=quote_service_queue
     networks:
       - my-network
 
@@ -139,8 +157,15 @@ services:
       - user-database
       - gateway
       - rabbitmq
-    env_file:
-      - ./user/.env
+    environment:
+      - APP_PORT=3000
+      - MONGODB_URL=mongodb://user-database:27017/db
+      - JWT_SECRET=JWT_ACCESS_SECRET
+      - JWT_EXPIRATION_TIME=3600s
+      - REFRESH_TOKEN_SECRET=SECRET
+      - REFRESH_TOKEN_EXPIRATION_TIME=604800s
+      - JWT_ACCESS_SECRET=JWT_ACCESS_SECRET
+      - JWT_REFRESH_SECRET=JWT_ACCESS_SECRET
     networks:
       - my-network
 
@@ -158,16 +183,22 @@ services:
       - utils-database
       - gateway
       - rabbitmq
-    env_file:
-      - ./utils/.env
+    environment:
+      - APP_PORT=3005
+      - MONGODB_URL=mongodb://utils-database:27017/db
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=465
+      - MAIL_USER=03zaki95@gmail.com
+      - MAIL_PASSWORD=zaki1998
+      - MAIL_FROM=Azulance App<03zaki95@gmail.com>
+      - SEND_IN_BLUE_API_KEY=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
+      - CLIENT_URL=https://magenta-speculoos-e4c9ef.netlify.app/
     networks:
       - my-network
   utils-database:
     container_name: utils-database
     hostname: utils-database
     image: mongo:latest
-    env_file:
-      - ./utils/.env
     volumes:
       - ./utils/data/db:/data/db
     ports:
@@ -181,8 +212,6 @@ services:
     hostname: claims-database
     volumes:
       - ./claims/data/db:/data/db
-    env_file:
-      - ./claims/.env
     ports:
       - "27021:27017"
     networks:
@@ -202,8 +231,8 @@ services:
       - claims-database
       - gateway
       - rabbitmq
-    env_file:
-      - ./claims/.env
+    environment:
+      - MONGODB_URI=mongodb://claims-database:27017/db
     networks:
       - my-network
 

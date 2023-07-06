@@ -190,7 +190,7 @@ const router = createRouter({
         {
             path: "/verify/:token",
             name: "verify",
-            component: LoginView,
+            component: VerificationCompte,
             meta: {requiresUnauth: false},
         },
         {

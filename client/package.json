@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cd ./dist && cp index.html 404.html",
+    "build": "vite build && cd ./dist && cp index.html 404.html && echo '/* /index.html  200' | cat >_redirects",
     "preview": "vite preview",
     "format": "prettier .  --write",
     "test": "npx vitest --dom"

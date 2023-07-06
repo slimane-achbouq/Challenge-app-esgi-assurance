@@ -296,8 +296,8 @@ services:
       - gateway
       - rabbitmq
     environment:
-      - MONGODB_URL = mongodb://kpi-database:27017/db
-      - RABBITMQ_URL = 'amqp://admin:admin_password@rabbitmq:5672'
+      - MONGODB_URL=mongodb://kpi-database:27017/db
+      - RABBITMQ_URL='amqp://admin:admin_password@rabbitmq:5672'
     networks:
       - my-network
 networks:

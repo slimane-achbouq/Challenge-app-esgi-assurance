@@ -5,8 +5,8 @@ import { Vehicle } from './vehicle.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CreateVehicleDto } from './vehicle.dto';
-import {WinstonModule} from "nest-winston";
-import {format, transports} from "winston";
+import { WinstonModule } from 'nest-winston';
+import { format, transports } from 'winston';
 
 @Injectable()
 export class VehicleService {
@@ -29,11 +29,9 @@ export class VehicleService {
           format: format.combine(format.timestamp(), format.json()),
         }),
         new transports.Console({
-          format: format.combine(
-              format.colorize({message: true}),
-          )
+          format: format.combine(format.colorize({ message: true })),
         }),
-      ]
+      ],
     });
   }
 
@@ -44,12 +42,17 @@ export class VehicleService {
     const fileContent = Buffer.from(carteGrise, 'base64');
 
     // Save the vehicle with the file path
-    const newVehicle = this.vehicleRepository.save({ ...rest, carteGrise: fileContent })
+    const newVehicle = this.vehicleRepository.save({
+      ...rest,
+      carteGrise: fileContent,
+    });
 
-    this.logger.debug("debug", "createVehicle : new vehicle " + JSON.stringify(newVehicle));
+    this.logger.debug(
+      'debug',
+      'createVehicle : new vehicle ' + JSON.stringify(newVehicle),
+    );
     return newVehicle;
   }
-
 
   async getVehicles(): Promise<Vehicle[]> {
     return this.vehicleRepository.find();
@@ -62,59 +65,63 @@ export class VehicleService {
   async updateVehicle(id: string, vehicleDto: any): Promise<Vehicle> {
     const { carteGrise, ...rest } = vehicleDto;
     const vehicle = await this.vehicleRepository.findOneBy({ id });
-  
+
     // If a new file is uploaded, decode it and save it as a blob
     if (carteGrise) {
       // Decode the base64 file content
       const fileContent = Buffer.from(carteGrise, 'base64');
-  
+
       // Update the vehicle with the new file content
-      await this.vehicleRepository.update(id, { ...rest, carteGrise: fileContent });
+      await this.vehicleRepository.update(id, {
+        ...rest,
+        carteGrise: fileContent,
+      });
     } else {
       // If no new file is uploaded, just update the other vehicle details
       await this.vehicleRepository.update(id, rest);
     }
 
-    this.logger.debug("debug", "updateVehicle : vehicle ID " + id + " updated");
+    this.logger.debug('debug', 'updateVehicle : vehicle ID ' + id + ' updated');
     const updatedVehicle = await this.vehicleRepository.findOneBy({ id });
     return updatedVehicle;
   }
 
   async deleteVehicle(id: string): Promise<void> {
-    this.logger.debug("debug", "deleteVehicle : vehicle ID " + id + " deleted");
+    this.logger.debug('debug', 'deleteVehicle : vehicle ID ' + id + ' deleted');
     await this.vehicleRepository.delete(id);
   }
 
+  async calculateInsurancePremiums(id: string): Promise<number[]> {
+    const currentVehicle = await this.vehicleRepository.findOneBy({ id });
+    let { horsepower, vehicleCirculationDate, registrationCardDate } =
+      currentVehicle;
 
-    async calculateInsurancePremiums(id: string): Promise<number[]> {
+    // Calculate the age of the vehicle
+    vehicleCirculationDate = new Date(vehicleCirculationDate);
+    const vehicleAge =
+      new Date().getFullYear() - vehicleCirculationDate.getFullYear();
 
-      const currentVehicle = await this.vehicleRepository.findOneBy({ id });
-      let { horsepower, vehicleCirculationDate, registrationCardDate } = currentVehicle;
-    
-      // Calculate the age of the vehicle
-      vehicleCirculationDate = new Date(vehicleCirculationDate)
-      const vehicleAge = new Date().getFullYear() - vehicleCirculationDate.getFullYear();
-    
-      // Calculate the years since the registration card date
-      registrationCardDate = new Date(registrationCardDate)
-      const registrationCardAge = new Date().getFullYear() - registrationCardDate.getFullYear();
-    
-      // Base price
-      let basePrice = 30;
-    
-      // Apply a discount or increase based on horsepower
-      if (horsepower < 100) {
-        basePrice *= 0.5; // 10% discount for vehicles with less than 100 horsepower
-      } else if (horsepower > 200) {
-        basePrice *= 1.4; // 20% increase for vehicles with more than 200 horsepower
-      }
-    
-      // Apply a discount or increase based on the age of the vehicle
-      if (vehicleAge < 5) {
-        basePrice *= 0.85; // 5% discount for vehicles less than 5 years old
-      } else if (vehicleAge > 10) {
-        basePrice *= 1.2; // 10% increase for vehicles more than 10 years old
-      }
+    // Calculate the years since the registration card date
+    registrationCardDate = new Date(registrationCardDate);
+    const registrationCardAge =
+      new Date().getFullYear() - registrationCardDate.getFullYear();
+
+    // Base price
+    let basePrice = 12;
+
+    // Apply a discount or increase based on horsepower
+    if (horsepower < 100) {
+      basePrice *= 0.5; // 10% discount for vehicles with less than 100 horsepower
+    } else if (horsepower > 200) {
+      basePrice *= 1.4; // 20% increase for vehicles with more than 200 horsepower
+    }
+
+    // Apply a discount or increase based on the age of the vehicle
+    if (vehicleAge < 5) {
+      basePrice *= 0.85; // 5% discount for vehicles less than 5 years old
+    } else if (vehicleAge > 10) {
+      basePrice *= 1.2; // 10% increase for vehicles more than 10 years old
+    }
     
       // Apply a discount or increase based on the age of the registration card
       if (registrationCardAge < 1) {
@@ -130,5 +137,7 @@ export class VehicleService {
     
       // Return three price suggestions: base price, base price + 10%, base price + 20%
       return [basePrice+2, basePrice * 1.1 + 6, basePrice * 1.2 + 9];
-    }
+
+    
+  }
 }

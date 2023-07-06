@@ -1,13 +1,20 @@
-import { IsString, IsNumber, IsInt, IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsInt,
+  IsNotEmpty,
+  IsUUID,
+  IsEnum,
+} from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
-enum InsuranceType {
+export enum InsuranceType {
   LIABILITY = 'Liability',
   COLLISION = 'Collision',
   COMPREHENSIVE = 'Comprehensive',
 }
 
-enum Coverage {
+export enum Coverage {
   BASIC = 'Basic',
   STANDARD = 'Standard',
   PREMIUM = 'Premium',

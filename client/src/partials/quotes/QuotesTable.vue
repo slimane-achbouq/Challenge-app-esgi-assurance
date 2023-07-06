@@ -626,8 +626,6 @@ export default {
         quotes.value = quoteList.value.filter((quote) => {
           return quote.quoteNumber == searchTerm.value;
         });
-
-      console.log(JSON.stringify(quotes.value));
     };
 
     const checkAll = () => {

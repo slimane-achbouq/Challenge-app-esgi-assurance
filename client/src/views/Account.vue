@@ -441,32 +441,27 @@ export default {
     if (!this.$store.getters["auth/isAuthenticated"]) {
       this.$router.push("/");
     }
-    console.log(this.$store.getters["auth/email"]);
-    console.log(this.$store.getters["auth/isAuthenticated"]);
 
     const id = this.$store.getters["auth/id"];
 
     const token = this.$store.getters["auth/token"];
 
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response =
-      JSON.parse(localStorage.getItem("profile-data")) ??
-      (await axios.get(`${import.meta.env.VITE_API_URL}/getoneuser/${id}`, {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/getoneuser/${id}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }));
+      }
+    );
 
     /*if(response.data["hydra:member"]){
           customers.value = await response.data["hydra:member"];
         }*/
 
     if (response.data) {
-      if (!localStorage.getItem("profile-data")) {
-        localStorage.setItem("profile-data", JSON.stringify(response));
-      }
       this.user = response.data;
-      console.log(this.user);
     }
   },
 
@@ -521,8 +516,6 @@ export default {
           this.isAddressLoading = false;
           return;
         }
-
-        console.log(this.searchedAddresses);
       } catch (error) {
         this.error = error.message || "Failed to search for the given street";
       }
@@ -551,7 +544,6 @@ export default {
       try {
         // Get the form data from the inputs
 
-        console.log(this.user.adresse);
         if (!this.user.firstname) {
           this.errors.name = "Veuillez revérifier votre nom";
           return;

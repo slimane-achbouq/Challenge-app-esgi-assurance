@@ -66,6 +66,7 @@ export class InsuranceController {
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
   @ApiBearerAuth()
+  @SkipThrottle()
   async getInsurances(): Promise<any> {
     try {
       const insurances = await this.insuranceServiceClient
@@ -95,6 +96,7 @@ export class InsuranceController {
 
   @Get('insurance/:id')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getInsuranceById(@Param('id') id: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -313,6 +315,7 @@ export class InsuranceController {
     ]),
   )
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async updateBeneficiary(
     @Param('id') id: string,
     @Body() beneficiaryDto: UpdateBeneficiaryDto,

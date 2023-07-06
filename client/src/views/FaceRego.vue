@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden" style="background-color: #f1f5f9">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,7 +9,7 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <div class="border-t border-slate-200" v-if="isWebcamActivatedd">
+          <div v-if="isWebcamActivatedd" class="border-t border-slate-200">
             <div class="max-w-2xl m-auto mt-16">
               <div class="text-center px-4">
                 <div
@@ -68,8 +68,8 @@
             <div class="md:flex flex-1">
               <!-- Middle content -->
               <div
-                class="flex-1 md:ml-6 xl:mx-2 2xl:mx-2"
                 v-if="!isWebcamActivatedd"
+                class="flex-1 md:ml-6 xl:mx-2 2xl:mx-2"
               >
                 <div class="md:py-8">
                   <!-- Blocks -->
@@ -171,7 +171,6 @@ export default {
         }*/
 
     if (response.data) {
-      console.log(response.data);
     }
 
     const idBene = response.data.beneficiary;
@@ -231,8 +230,7 @@ export default {
             label: result,
           });
 
-          console.log(result["_distance"]);
-          if (result.label !== "unknown" && result["_distance"] < 0.5) {
+          if (result.label !== "unknown" && result["_distance"] < 0.45) {
             const canvas = await this.$refs.canvas;
             const context = await canvas.getContext("2d");
             canvas.width = await this.video.videoWidth;
@@ -256,9 +254,7 @@ export default {
                   },
                 }
               )
-              .then((data) => {
-                console.log(data);
-              })
+              .then((data) => {})
               .catch((error) => {
                 console.log(error);
               });
@@ -279,6 +275,25 @@ export default {
         });
       }, 300);
     });
+  },
+
+  beforeUnmount() {
+    // Access the video element using this.$refs
+    const video = this.$refs.video;
+
+    // Check if the video element has a srcObject
+    if (video && video.srcObject) {
+      // Get the stream from the srcObject
+      const stream = video.srcObject;
+
+      // Get all the tracks from the stream
+      const tracks = stream.getTracks();
+
+      // Stop each track
+      tracks.forEach((track) => {
+        track.stop();
+      });
+    }
   },
 
   methods: {
@@ -327,25 +342,6 @@ export default {
         })
       );
     },
-  },
-
-  beforeUnmount() {
-    // Access the video element using this.$refs
-    const video = this.$refs.video;
-
-    // Check if the video element has a srcObject
-    if (video && video.srcObject) {
-      // Get the stream from the srcObject
-      const stream = video.srcObject;
-
-      // Get all the tracks from the stream
-      const tracks = stream.getTracks();
-
-      // Stop each track
-      tracks.forEach((track) => {
-        track.stop();
-      });
-    }
   },
 };
 </script>

@@ -633,18 +633,21 @@
                       <i
                         class="fas fa-edit cursor-pointer"
                         style="color: #7c91b1"
-                        @click="beneficiary.permis = null"
+                        @click="
+                          beneficiary.permis = null;
+                          hideImageFielddrivingLicense = null;
+                        "
                       ></i>
                     </div>
 
                     <div
-                      class="flex items-center justify-center w-full"
                       v-if="
                         (!beneficiary && !hideImageFielddrivingLicense) ||
                         (beneficiary &&
                           !beneficiary.permis &&
                           !hideImageFielddrivingLicense)
                       "
+                      class="flex items-center justify-center w-full"
                     >
                       <label for="dropzone-file" class="form-input w-full">
                         <div class="flex flex-col items-center justify-center">
@@ -733,18 +736,21 @@
                         <i
                           class="fas fa-edit cursor-pointer"
                           style="color: #7c91b1"
-                          @click="beneficiary.justificatifDomicile = null"
+                          @click="
+                            beneficiary.justificatifDomicile = null;
+                            hideImageFieladresse = null;
+                          "
                         ></i>
                       </div>
 
                       <div
-                        class="flex items-center justify-center w-full"
                         v-if="
                           (!beneficiary && !hideImageFieladresse) ||
                           (beneficiary &&
                             !beneficiary.justificatifDomicile &&
                             !hideImageFieladresse)
                         "
+                        class="flex items-center justify-center w-full"
                       >
                         <label for="dropzone-file" class="form-input w-full">
                           <div
@@ -842,13 +848,13 @@
                         ></i>
                       </div>
                       <div
-                        class="flex items-center justify-center w-full"
                         v-if="
                           (!beneficiary && !hideImageFielIdCard) ||
                           (beneficiary &&
                             !beneficiary.IdCard &&
                             !hideImageFielIdCard)
                         "
+                        class="flex items-center justify-center w-full"
                       >
                         <label for="dropzone-file" class="form-input w-full">
                           <div
@@ -921,7 +927,7 @@
                               />
                             </div>
                             <div>
-                              Adresse Grise file :
+                              Card ID :
                               <div class="text-sm">
                                 {{ drivingLicense }}
                               </div>
@@ -1021,11 +1027,13 @@
           </router-link>
 
           <button
+            v-if="insurance_id"
             v-track:click="'CLICKED_BTN'"
             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
-            @click="submit(`Azulance - ${selectedPlan} option`, price)"
           >
-            Proceeded verification
+            <router-link :to="{ name: 'face', params: { id: insurance_id } }">
+              Proceed to verification
+            </router-link>
           </button>
         </div>
       </div>
@@ -1070,6 +1078,7 @@ export default {
     return {
       selectedPlan: "Basic",
       formatIncorrect: false,
+      insurance_id: null,
       existingPayment: null,
       drivingLicense: null,
       hideImageFielddrivingLicense: null,
@@ -1104,7 +1113,7 @@ export default {
   },
   async created() {
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-
+    this.insurance_id = id;
     const token = this.$store.getters["auth/token"];
     let existingPayment = await axios.get(
       `${import.meta.env.VITE_API_URL}/payment/${id}`,
@@ -1192,13 +1201,11 @@ export default {
       );
 
       this.sessionId = request.data.id;
-      console.log(request.data);
     },
     handleFile(event) {
       this.file = event.target.files[0];
 
       if (this.file.type != "application/pdf") {
-        console.log(this.file.type);
         this.formatIncorrect = true;
       } else {
         this.formatIncorrect = false;
@@ -1214,7 +1221,6 @@ export default {
       this.file = event.target.files[0];
 
       if (this.file.type != "application/pdf") {
-        console.log(this.file.type);
         this.formatIncorrect = true;
       } else {
         this.formatIncorrect = false;
@@ -1258,7 +1264,6 @@ export default {
       return `${year}-${month}-${day}`;
     },
     async onCreatedContract() {
-      console.log(this.beneficiary);
       if (!this.beneficiary && !this.drivingLicense)
         this.errors.license = " the Driving License is mandatory";
       if (!this.beneficiary && !this.adresse)
@@ -1266,17 +1271,13 @@ export default {
       if (!this.beneficiary && !this.IdCard)
         this.errors["IdCard"] = " the ID Card is mandatory";
 
-      console.log(this.beneficiary);
       if (this.beneficiary) {
-        console.log(this.beneficiary);
         const beneficiary = {};
         if (this.formData.justificatifDomicile)
           beneficiary["justificatifDomicile"] =
             this.formData.justificatifDomicile;
         if (this.formData.permis) beneficiary["permis"] = this.formData.permis;
         if (this.formData.IdCard) beneficiary["IdCard"] = this.formData.IdCard;
-
-        console.log(this.beneficiary);
 
         const token1 = this.$store.getters["auth/token"];
 
@@ -1315,6 +1316,7 @@ export default {
       );
 
       if (response.data) {
+        this.insurance_id = response.data._id;
         this.contractCreated = true;
       }
     },

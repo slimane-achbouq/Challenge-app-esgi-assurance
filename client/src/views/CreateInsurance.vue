@@ -593,7 +593,6 @@ export default {
     handleFile(event) {
       this.file = event.target.files[0];
       this.caretCrise = this.file.name;
-      console.log(this.file);
       this.previewSrc = URL.createObjectURL(event.target.files[0]);
       this.hideImageField = true;
     },

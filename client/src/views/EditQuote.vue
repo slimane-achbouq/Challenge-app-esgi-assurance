@@ -503,11 +503,11 @@
                   cancele
                 </button>
                 <router-link class="block" to="/quotes">
-                <button
-                  class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
-                >
-                  Quotes list
-                </button>
+                  <button
+                    class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
+                  >
+                    Quotes list
+                  </button>
                 </router-link>
               </div>
             </div>
@@ -606,7 +606,6 @@ export default {
       this.errors = {};
       this.vehicle = response.data;
 
-      console.log(this.vehicle.model);
       this.formData.vehicleType = this.vehicle.vehicleType;
       this.formData.brand = this.vehicle.brand;
       this.formData.model = this.vehicle.model;
@@ -651,11 +650,9 @@ export default {
 
       if (this.formData.annualMileage !== "") {
         let num = parseFloat(this.formData.annualMileage);
-        console.log(typeof num);
         this.formData.annualMileage = isNaN(num)
           ? this.formData.annualMileage
           : num;
-        console.log(typeof this.formData.annualMileage);
       }
 
       if (this.formData.coverageDuration !== "") {
@@ -664,8 +661,6 @@ export default {
           ? this.formData.coverageDuration
           : num;
       }
-
-      console.log(this.formData);
 
       const token =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I";

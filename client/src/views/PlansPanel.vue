@@ -6,7 +6,7 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
       <main>
@@ -22,8 +22,8 @@
 
         <!-- Pricing -->
         <div
-          class="px-4 sm:px-6 lg:px-8 py-4 w-full max-w-9xl mx-auto"
           v-if="prices"
+          class="px-4 sm:px-6 lg:px-8 py-4 w-full max-w-9xl mx-auto"
         >
           <!-- Pricing tabs -->
           <div class="grid grid-cols-12 gap-6">
@@ -452,16 +452,6 @@ import { useStore } from "vuex";
 export default {
   name: "PlansPanel",
   components: { Sidebar, Banner, Header, StripeCheckout },
-  data() {
-    return {
-      prices: null,
-      quote: null,
-      loading: false,
-      sessionId: null,
-      publishableKey:
-        "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
-    };
-  },
   setup() {
     const annual = ref(true);
     const sidebarOpen = ref(false);
@@ -471,27 +461,15 @@ export default {
       sidebarOpen,
     };
   },
-  methods: {
-    submit: async function (title, tarif) {
-      await this.getStripeSession(title, tarif);
-      this.$refs.checkoutRef.redirectToCheckout();
-    },
-    getStripeSession: async function (title, tarif) {
-      let token = this.$store.getters["auth/token"];
-      let request = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/payment/getSession/${title}/${tarif}/${token}/${this.quote.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      this.sessionId = request.data.id;
-      console.log(request.data);
-    },
+  data() {
+    return {
+      prices: null,
+      quote: null,
+      loading: false,
+      sessionId: null,
+      publishableKey:
+        "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
+    };
   },
   async created() {
     const token = this.$store.getters["auth/token"];
@@ -534,6 +512,27 @@ export default {
       }
     );
     this.prices = response.data;
+  },
+  methods: {
+    submit: async function (title, tarif) {
+      await this.getStripeSession(title, tarif);
+      this.$refs.checkoutRef.redirectToCheckout();
+    },
+    getStripeSession: async function (title, tarif) {
+      let token = this.$store.getters["auth/token"];
+      let request = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/payment/getSession/${title}/${tarif}/${token}/${this.quote.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      this.sessionId = request.data.id;
+    },
   },
 };
 </script>

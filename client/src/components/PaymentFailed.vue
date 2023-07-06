@@ -28,6 +28,9 @@ import axios from "axios";
 
 export default {
   name: "PaymentSuccess",
+  setup() {
+    return {};
+  },
   data() {
     return {
       token: null,
@@ -35,10 +38,6 @@ export default {
       id: null,
       price: null,
     };
-  },
-  methods: {},
-  setup() {
-    return {};
   },
   async created() {
     if (!this.$store.getters["auth/isAuthenticated"]) {
@@ -87,10 +86,9 @@ export default {
           },
         }
       );
-
-      console.log(request2.data);
     }
   },
+  methods: {},
 };
 </script>
 

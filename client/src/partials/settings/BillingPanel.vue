@@ -481,7 +481,6 @@ export default {
 
       // Update the credit card number with the formatted value
       this.creditCardNumber = formattedNumber;
-      console.log(ValidateCreditCardNumber(this.creditCardNumber));
       if (!ValidateCreditCardNumber(this.creditCardNumber)) {
         this.errors.creditCardNumber = "Please provide a valid Visa number!";
         this.validation.creditCardNumber = false;

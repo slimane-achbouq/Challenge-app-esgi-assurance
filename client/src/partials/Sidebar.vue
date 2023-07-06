@@ -381,13 +381,9 @@
                 <div class="flex items-center justify-between">
                   <div class="flex items-center">
                     <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                      <path class="fill-current text-slate-600" />
                       <path
                         class="fill-current text-slate-600"
-                        :class="text - indigo - 500"
-                      />
-                      <path
-                        class="fill-current text-slate-600"
-                        :class="text - indigo - 500"
                         d="M1 1h22v23H1z"
                       />
                       <path

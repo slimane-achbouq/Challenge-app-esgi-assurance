@@ -109,6 +109,18 @@
                       </svg>
                       <span class="ml-2">Delete</span>
                     </button>
+
+                   
+                                  <button  v-if="role !== 'Admin' && !payment"
+                                      class="btn border-slate-200 hover:border-slate-300 text-slate-600 m-2 flex "
+                                      @click="submit(`Azulance -  option`, price)"
+                                    >
+                                    <i class="fas fa-user-check"></i>
+                                      <span class="ml-2">Pay the bill</span>
+                                  </button>
+
+                  
+
                   </div>
                 </header>
                 <!-- Billing Information -->
@@ -182,6 +194,26 @@
                           </div>
                         </div>
                       </div>
+
+                      <div>
+                        <div class="flex justify-between text-sm m-3">
+                          <div class="font-medium text-slate-800">ID Card verification</div>
+                          
+                          <div class="  ">
+                            <span
+                              v-if="user && this.user.veriviedImage"
+                              class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
+                              >Verified</span
+                            ><span
+                              v-if="user && !this.user.veriviedImage"
+                              class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
+                              >Not verified</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      
 
                       <div class="divide-y divide-slate-100">
                         <div
@@ -335,6 +367,49 @@
                               </div>
                             </div>
                           </div>
+
+                          <div>
+                            
+                            <div class="flex justify-between text-sm m-2" v-if="user && user.IdCard">
+                              <div class="text-slate-800">ID Card</div>
+                              
+                              <div class="text-slate-400 italic">
+                              <i class="fas fa-image cursor-pointer" @click="
+                                    downloadImage(user.IdCard)
+                                  "></i>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+
+
+
+                            <div class="flex justify-center "  v-if="role !== 'Admin' && user && !this.user.veriviedImage">
+                                <router-link :to="{ name: 'face', params: { id: this.contract._id } }">
+                                  <button 
+                                      class="btn border-slate-200 hover:border-slate-300 text-slate-600 m-2 flex "
+                                    
+                                    >
+                                    <i class="fas fa-user-check"></i>
+                                      <span class="ml-2">Verify ID Card</span>
+                                  </button>
+
+                                  </router-link>
+                            </div>
+                            
+                            
+                            <div class="flex justify-between text-sm m-2" v-if="user && user.veriviedImage">
+                              <div class="text-slate-800">Verified image</div>
+                              <div class="text-slate-400 italic">
+                              <i class="fas fa-image cursor-pointer" @click="
+                                    downloadImage1(user.veriviedImage)
+                                  "></i>
+                              </div>
+                            </div>
+                          </div>
+
+                          
                         </div>
                       </div>
                     </div>
@@ -614,6 +689,44 @@
                 </button>
               </div>
             </ModalBasic>
+
+            <ModalBasic id="danger-modal" :modal-open="modalOpenImage">
+              <div class="p-5 flex w-full space-x-4">
+                
+                <!-- Content -->
+                <div>
+                  <!-- Modal header -->
+                  <div class="mb-2">
+                    <div class="text-lg font-semibold text-slate-800">
+                      <i class="fas fa-images"></i> Image validation
+                    </div>
+
+                    
+                  </div>
+
+                  <div class="text-sm mb-0">
+                    <div class="">
+                      <img :src="'data:image/jpeg;base64,'+this.Image" alt="Image">
+                    </div>
+                  </div>
+
+                  
+                  <!-- Modal footer -->
+                </div>
+                
+              </div>
+
+              <div class="flex flex-wrap justify-end space-x-2 m-6">
+                
+                <button
+                  class="btn-sm bg-green-500 hover:bg-green-600 text-white"
+                  @click="modalOpenImage=false"
+                >
+                  Close
+                </button>
+              </div>
+            </ModalBasic>
+            
           </div>
         </div>
       </main>
@@ -667,6 +780,7 @@ export default {
         coverageEndDate: "",
       },
       modalOpen: false,
+      modalOpenImage:false,
       contractUpdated: false,
       modaDeletelOpen: false,
       modaValidateOpen: false,
@@ -674,6 +788,7 @@ export default {
       role: null,
       payment: null,
       sessionId: null,
+      Image:null,
       publishableKey:
         "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
     };
@@ -739,6 +854,7 @@ export default {
         //localStorage.setItem("beneficiary-data", JSON.stringify(response1));
       }
       this.user = response1.data;
+      console.log(this.user.veriviedImage)
     }
 
     const response2 = await axios.get(
@@ -796,6 +912,24 @@ export default {
       link.setAttribute("target", "_blank"); // Open in new tab
       document.body.appendChild(link);
       link.click();
+    },
+
+    downloadImage(image){
+      this.modalOpenImage=image
+      
+      const bytes = image.data; // Remplacez par votre tableau de bytes
+      console.log(image.data)
+      const byteString = String.fromCharCode.apply(null, bytes);
+      const base64 = btoa(byteString);
+
+      
+       this.Image = base64;
+
+    },
+    downloadImage1(image){
+      this.modalOpenImage=true
+       this.Image = image;
+
     },
     processDate(date) {
       let dateObject = new Date(date);

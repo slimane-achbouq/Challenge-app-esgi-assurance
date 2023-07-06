@@ -113,6 +113,7 @@
               </div>
             </div>
           </div>
+          
         </div>
       </main>
     </div>
@@ -175,6 +176,8 @@ export default {
       console.log(response.data);
     }
 
+    const  idBene = response.data.beneficiary
+
     const response1 = JSON.parse(localStorage.getItem("beneficiary-data")) ?? await axios.get(
       `${import.meta.env.VITE_API_URL}/beneficiary/${response.data.beneficiary}`,
       {
@@ -185,7 +188,9 @@ export default {
     );
 
       if (response1.data) {
-      this.benf = response1.data
+      
+      this.benf = await response1.data
+      if (this.benf.veriviedImage) this.$router.push("/user-contracts");
       console.log(this.benf)
      }
 
@@ -221,12 +226,14 @@ export default {
         const results = resizedDetections.map((d) => {
           return faceMatcher.findBestMatch(d.descriptor);
         });
-        results.forEach((result, i) => {
+        results.forEach(async (result, i) => {
           const box = resizedDetections[i].detection.box;
           const drawBox = new faceapi.draw.DrawBox(box, {
             label: result,
           });
-          if (result.label !== "unknown" && result['_distance'] > 0.30) {
+
+          console.log(result['_distance'])
+          if (result.label !== "unknown" && result['_distance'] < 0.38) {
 
 
             const canvas = this.$refs.canvas;
@@ -235,6 +242,27 @@ export default {
             canvas.height = this.video.videoHeight;
             context.drawImage(this.video, 0, 0, canvas.width, canvas.height);
             const imageDataURL = canvas.toDataURL();
+
+            const imageData = await (await fetch(imageDataURL)).blob();
+
+            const formData = new FormData();
+            formData.append("veriviedImage", imageData);
+
+
+            let response =  axios
+              .put(`${import.meta.env.VITE_API_URL}/beneficiary/${idBene}`, formData, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then((data) => {
+                console.log(data)
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
             console.log(imageDataURL)
 
 
@@ -286,6 +314,8 @@ export default {
         labels.map(async (label) => {
           const descriptions = [];
 
+          const IdCard = this.benf.IdCard.data
+
           const arrayBuffer = Uint8Array.from(this.benf.IdCard.data).buffer;
           const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
           const imageUrl = URL.createObjectURL(blob);
@@ -304,5 +334,25 @@ export default {
       );
     },
   },
+
+  beforeUnmount() {
+    // Access the video element using this.$refs
+    const video = this.$refs.video;
+
+    // Check if the video element has a srcObject
+    if (video && video.srcObject) {
+      // Get the stream from the srcObject
+      const stream = video.srcObject;
+
+      // Get all the tracks from the stream
+      const tracks = stream.getTracks();
+
+      // Stop each track
+      tracks.forEach((track) => {
+        track.stop();
+      });
+    }
+  },
+  
 };
 </script>

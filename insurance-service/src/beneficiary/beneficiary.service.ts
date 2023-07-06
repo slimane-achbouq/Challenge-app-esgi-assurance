@@ -75,9 +75,9 @@ export class BeneficiaryService {
   async updateBeneficiary(
     id: string,
     beneficiaryDto: UpdateBeneficiaryDto,
-    fileContents: { justificatifDomicile: string; permis: string,IdCard: string   },
+    fileContents: { justificatifDomicile: string; permis: string,IdCard: string ,veriviedImage:string  },
   ): Promise<Beneficiary> {
-    const { justificatifDomicile, permis ,IdCard } = fileContents;
+    const { justificatifDomicile, permis ,IdCard,veriviedImage } = fileContents;
   
     // If a new file is uploaded, decode it and save it as a blob
     const updatedJustificatifDomicile = justificatifDomicile
@@ -92,7 +92,8 @@ export class BeneficiaryService {
       ...beneficiaryDto,
       justificatifDomicile: updatedJustificatifDomicile,
       permis: updatedPermis,
-      IdCard:updatedIdCard
+      IdCard:updatedIdCard,
+      veriviedImage:veriviedImage 
     };
 
     this.logger.debug("debug", "updateBeneficiary : beneficiary " + beneficiaryDto.email + " updated");

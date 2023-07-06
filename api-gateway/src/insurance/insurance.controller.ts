@@ -308,6 +308,7 @@ export class InsuranceController {
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
       { name: 'IdCard', maxCount: 1 },
+      { name: 'veriviedImage', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -319,6 +320,7 @@ export class InsuranceController {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
       IdCard: Express.Multer.File[];
+      veriviedImage: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -332,21 +334,21 @@ export class InsuranceController {
 
       const fileContents = {
         justificatifDomicile:
-          files.justificatifDomicile && files.justificatifDomicile[0]
+        files && files.justificatifDomicile && files.justificatifDomicile
             ? files.justificatifDomicile[0].buffer.toString('base64')
-            : null,
+            : beneficiary.justificatifDomicile,
         permis:
-          files.permis && files.permis[0]
+        files && files.permis && files.permis
             ? files.permis[0].buffer.toString('base64')
-            : null,
-        IdCard: files.IdCard[0]
+            : beneficiary.permis,
+        IdCard: files && files.IdCard
             ? files.IdCard[0].buffer.toString('base64')
-            : null,
+            : beneficiary.IdCard,
+        veriviedImage : files && files.veriviedImage 
+            ? files.veriviedImage[0].buffer.toString('base64')
+            : null
       };
 
-      if (!fileContents.justificatifDomicile || !fileContents.permis || !fileContents.IdCard) {
-        throw new BadRequestException('File not uploaded');
-      }
 
       const updatedBeneficiary = await this.insuranceServiceClient
         .send(
@@ -399,20 +401,17 @@ export class InsuranceController {
         .toPromise();
 
       const fileContents = {
-        justificatifDomicile: files.justificatifDomicile[0]
+        justificatifDomicile: files.justificatifDomicile
           ? files.justificatifDomicile[0].buffer.toString('base64')
           : null,
-        permis: files.permis[0]
+        permis: files.permis
           ? files.permis[0].buffer.toString('base64')
           : null,
-        IdCard: files.IdCard[0]
+        IdCard: files.IdCard
           ? files.IdCard[0].buffer.toString('base64')
           : null,
       };
 
-      if (!fileContents.justificatifDomicile || !fileContents.permis || !fileContents.IdCard) {
-        throw new BadRequestException('Files not uploaded');
-      }
 
       if (!currentBeneficiary) {
         const beneficiaryInsuranceDto: CreateBeneficiaryDto = {
@@ -467,4 +466,20 @@ export class InsuranceController {
       }
     }
   }
+
+  @Get('getbeneficiaryByUserId/:id')
+  async getbeneficiaryByUserId(@Param('id') id: string): Promise<any> {
+    try {
+      let currentBeneficiary = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaryByUserId' }, id)
+        .toPromise();
+
+      if (!currentBeneficiary) throw new NotFoundException('Beneficiary Not found');
+
+      return currentBeneficiary;
+    } catch (err) {
+      throw new NotFoundException('Beneficiary Not found');
+    }
+  }
+
 }

@@ -148,12 +148,6 @@ const router = createRouter({
             meta: {requiresUnauth: false},
         },
         {
-            path: "/verify/:token",
-            contract: "verify",
-            component: VerificationCompte,
-            meta: {requiresUnauth: false},
-        },
-        {
             path: "/reset-password-input",
             contract: "ResetPasswordInput",
             component: ResetPasswordInput,

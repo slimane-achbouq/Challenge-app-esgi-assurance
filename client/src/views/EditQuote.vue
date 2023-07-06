@@ -671,7 +671,7 @@ export default {
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDcxYzk1MDJkMGZjNDc4NDUwNTZjMjciLCJ1c2VybmFtZSI6Inpha2lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJVc2VyIl0sImlhdCI6MTY4NTc2OTAyMCwiZXhwIjoxNjg1ODA1MDIwfQ.ojCocc5BvZ0MUS_QVAlzKGRi7CahnkKph_ix_hxVN2I";
       try {
         let response = await axios.put(
-          "http://localhost:3000/vehicles/" + this.vehicle.id,
+          `${import.meta.env.VITE_API_URL}/vehicles/` + this.vehicle.id,
           this.formData,
           {
             headers: {

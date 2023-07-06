@@ -24,7 +24,7 @@ export class BeneficiaryController {
   }
 
   @MessagePattern({ cmd: 'updateBeneficiary' })
-  async updateBeneficiary(@Payload() data: { id : string,beneficiaryDto: CreateBeneficiaryDto, fileContents: { justificatifDomicile: string; permis: string;IdCard: string } }) {
+  async updateBeneficiary(@Payload() data: { id : string,beneficiaryDto: CreateBeneficiaryDto, fileContents: { justificatifDomicile: string; permis: string;IdCard: string,veriviedImage:string } }) {
     const { id, beneficiaryDto, fileContents } = data;
     return await this.beneficiaryService.updateBeneficiary(id, beneficiaryDto, fileContents);
   }

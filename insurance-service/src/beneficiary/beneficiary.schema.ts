@@ -36,6 +36,9 @@ export class Beneficiary extends Document {
   @Prop({ type: Buffer, required: false })
   IdCard: Buffer;
 
+  @Prop({ type: String , required: false,default:null})
+  veriviedImage: string;
+
   
 }
 

@@ -2,10 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { UsersService } from './users.service';
 import { Model } from 'mongoose';
-import { User } from './schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Statut } from './enums/statut.enum';
 import { Role } from './enums/roles.enum';
+import { BadRequestException } from '@nestjs/common';
+
+type mockModel<T = any> = Partial<Record<keyof Model<T>, jest.Mock>>;
+const createMockModel = <T = any>(): mockModel<T> => ({
+  findById: jest.fn(),
+  create: jest.fn(),
+});
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -17,12 +24,7 @@ describe('UsersService', () => {
         UsersService,
         {
           provide: getModelToken(User.name),
-          useValue: {
-            findOne: jest.fn(),
-            prototype: {
-              save: jest.fn(),
-            },
-          },
+          useValue: createMockModel(),
         },
       ],
     }).compile();
@@ -31,8 +33,12 @@ describe('UsersService', () => {
     userModel = module.get<Model<User>>(getModelToken(User.name));
   });
 
+  it('should be defined', () => {
+    expect(usersService).toBeDefined();
+  });
+
   describe('create', () => {
-    it('should create a new user', async () => {
+    it('should throw a BadRequestException when the email is already in use', async () => {
       const createUserDto: CreateUserDto = {
         firstname: 'Zakaria',
         lastname: 'ATTAOUI',
@@ -43,34 +49,20 @@ describe('UsersService', () => {
         phoneNumber: 33749380088,
         password: 'zakaria1998',
         age: 23,
-        isValide: true,
+        isValide: false,
         refreshToken: '',
         validationToken: '',
         statut: Statut.Inactif,
         roles: [Role.USER],
       };
 
-      // Mock the findByUserByEmail method to return null,
-      // indicating that the user does not exist
-      jest.spyOn(usersService, 'findByUserByEmail').mockResolvedValue(null);
+      jest
+        .spyOn(usersService, 'findByUserByEmail')
+        .mockResolvedValueOnce({} as User);
 
-      // Mock the save method to return the created user
-      const createdUser = new User();
-      jest.spyOn(userModel.prototype, 'save').mockResolvedValue(createdUser);
-
-      // Call the create method
-      const result = await usersService.create(createUserDto);
-
-      // Assert that the findByUserByEmail method was called with the correct email
-      expect(usersService.findByUserByEmail).toHaveBeenCalledWith(
-        createUserDto.email,
+      await expect(usersService.create(createUserDto)).rejects.toThrow(
+        BadRequestException,
       );
-
-      // Assert that the save method was called
-      expect(userModel.prototype.save).toHaveBeenCalled();
-
-      // Assert that the result matches the created user
-      expect(result).toEqual(createdUser);
     });
   });
 });

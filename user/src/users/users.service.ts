@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { WinstonModule } from 'nest-winston';
 import { format, transports } from 'winston';
+import { User } from './schemas/user.schema';
 
 @Injectable()
 export class UsersService {

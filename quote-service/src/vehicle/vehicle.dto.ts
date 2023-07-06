@@ -1,9 +1,16 @@
 import { IsOptional } from 'class-validator';
-import { IsString, IsNumber, IsInt, Min, Max, IsNotEmpty, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsInt,
+  Min,
+  Max,
+  IsNotEmpty,
+  IsEnum,
+} from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
-
-enum VehicleType {
+export enum VehicleType {
   CAR = 'Car',
   MOTORCYCLE = 'Motorcycle',
   TRUCK = 'Truck',
@@ -58,9 +65,6 @@ export class CreateVehicleDto {
   annualMileage: number;
 
   carteGrise;
-
 }
 
 export class UpdateVehicleDto extends PartialType(CreateVehicleDto) {}
-
-

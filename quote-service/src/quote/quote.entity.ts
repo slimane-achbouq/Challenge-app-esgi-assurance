@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { Vehicle } from '../vehicle/vehicle.entity';
 
-
 enum InsuranceType {
   LIABILITY = 'Liability',
   COLLISION = 'Collision',
@@ -25,7 +24,6 @@ enum Coverage {
 export class Quote {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  
 
   @PrimaryGeneratedColumn()
   quoteNumber: number;

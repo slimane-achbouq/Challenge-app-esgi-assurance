@@ -99,7 +99,7 @@ export class User extends Document {
   phoneNumber: string;
 
   @ApiProperty(apiPropertiesUser.age)
-  @Prop({ required: true })
+  @Prop({ required: true, type: Date })
   age: Date;
 
   @ApiProperty(apiPropertiesUser.password)

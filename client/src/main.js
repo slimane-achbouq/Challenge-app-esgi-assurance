@@ -45,9 +45,9 @@ const routesUser = ["/profile", "/user-quotes", "/user-contracts"];
 
 router.beforeEach((to, from) => {
   const token = store.state.auth.token;
-  if (!token) {
+  /* if (!token) {
     if (to.fullPath != "/login") router.push("login");
-  }
+  } */
 
   /*else {
 
@@ -89,5 +89,5 @@ app.use(store);
 app.mount("#app");
 
 app.use(Tracker, {
-  AppId: "APP_U6OJ0XHB",
+  AppId: "APP_QBQXUNRW",
 });

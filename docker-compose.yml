@@ -1,0 +1,275 @@
+version: '3.8'
+
+services:
+
+  gateway:
+    container_name: api-gateway
+    hostname: api-gateway
+    build: ./api-gateway
+    image: slimane2/challenge-api-geteway
+    volumes:
+      - ./api-gateway:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    networks:
+      - my-network
+    command: sh -c "npm install && npm run start:dev"
+    env_file:
+      - ./api-gateway/.env
+
+  webserver:
+      build:
+        context: ./nginx
+      image: slimane2/challenge-webserver
+      container_name: nginx
+      hostname: nginx
+      ports:
+        - 80:80
+        - 443:443
+      depends_on:
+        - gateway
+      networks:
+        - my-network
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin_password
+    hostname: rabbitmq
+    volumes:
+      - /var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - my-network
+
+  insurancedatabase:
+    container_name: insurancedatabase
+    image: mongo:latest
+    hostname: insurancedatabase
+    volumes:
+      - ./insurance-service/data/db:/data/db
+    ports:
+      - "27018:27017"
+    networks:
+      - my-network
+
+  insurance-api:
+    container_name: insurance-api
+    build: ./insurance-service
+    image: slimane2/challenge-insurence-service
+    volumes:
+      - ./insurance-service:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3001:3001
+    depends_on:
+      - insurancedatabase
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./insurance-service/.env
+    networks:
+      - my-network
+
+  quote-service:
+    container_name: quote-api
+    build: ./quote-service
+    image: slimane2/challenge-quote-service
+    ports:
+      - '3002:3002'
+    depends_on:
+      - quotedatabase
+      - gateway
+      - rabbitmq
+    volumes:
+      - ./quote-service:/usr/src/app
+      - /usr/src/app/node_modules
+
+    env_file:
+      - ./quote-service/.env
+    networks:
+      - my-network
+
+  quotedatabase:
+    container_name: quotedatabase
+    image: postgres:13
+    hostname: quotedatabase
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nestjsdb
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./quote-service/data/db:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+
+  user-database:
+    container_name: user-database
+    hostname: user-database
+    image: mongo:latest
+    env_file:
+      - ./user/.env
+    volumes:
+      - ./user/data/db:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+
+  user-service:
+    container_name: user-service
+    hostname: user-service
+    build: ./user
+    image: slimane2/challenge-user
+    volumes:
+      - ./user:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3004:3004
+    depends_on:
+      - user-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./user/.env
+    networks:
+      - my-network
+
+  utils-service:
+    container_name: utils-service
+    hostname: utils-service
+    build: ./utils
+    image: slimane2/challenge-utils
+    volumes:
+      - ./utils:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3005:3005
+    depends_on:
+      - utils-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./utils/.env
+    networks:
+      - my-network
+  utils-database:
+    container_name: utils-database
+    hostname: utils-database
+    image: mongo:latest
+    env_file:
+      - ./utils/.env
+    volumes:
+      - ./utils/data/db:/data/db
+    ports:
+      - "27020:27017"
+    networks:
+      - my-network
+
+  claims-database:
+    container_name: claims-database
+    image: mongo:latest
+    hostname: claims-database
+    volumes:
+      - ./claims/data/db:/data/db
+    env_file:
+      - ./claims/.env
+    ports:
+      - "27021:27017"
+    networks:
+      - my-network
+
+  claims-service:
+    container_name: claims-service
+    hostname: claims-service
+    build: ./claims
+    image: slimane2/challenge-claims
+    volumes:
+      - ./claims:/src/app
+      - /src/app/node_modules
+    ports:
+      - 3006:3006
+    depends_on:
+      - claims-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./claims/.env
+    networks:
+      - my-network
+
+  payment-database:
+    container_name: payment-database
+    image: mongo:latest
+    hostname: payment-database
+    volumes:
+      - ./payment/data/db:/data/db
+    env_file:
+      - ./payment/.env
+    ports:
+      - "27022:27017"
+    networks:
+      - my-network
+
+  payment-service:
+    container_name: payment-service
+    hostname: payment-service
+    build: ./payment
+    image: slimane2/challenge-payment
+    volumes:
+      - ./payment:/src/app
+      - /src/app/node_modules
+    ports:
+      - 3007:3007
+    depends_on:
+      - payment-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./payment/.env
+    networks:
+      - my-network
+
+  kpi-database:
+    container_name: kpi-database
+    image: mongo:latest
+    hostname: kpi-database
+    volumes:
+      - ./kpi/data/db:/data/db
+    env_file:
+      - ./kpi/.env
+    ports:
+      - "27023:27017"
+    networks:
+      - my-network
+
+  kpi-service:
+    container_name: kpi-service
+    hostname: kpi-service
+    build: ./kpi
+    image: slimane2/challenge-kpi
+    volumes:
+      - ./kpi:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3008:3008
+    depends_on:
+      - kpi-database
+      - gateway
+      - rabbitmq
+    env_file:
+      - ./kpi/.env
+    networks:
+      - my-network
+networks:
+  my-network:
+    

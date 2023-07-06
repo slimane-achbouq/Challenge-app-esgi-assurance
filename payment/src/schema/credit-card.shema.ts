@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { apiPropertiesCard } from 'src/dto/create-credit-card.dto';
+import { apiPropertiesCard } from '../dto/create-credit-card.dto';
 import { Document } from 'mongoose';
 
 @Schema({

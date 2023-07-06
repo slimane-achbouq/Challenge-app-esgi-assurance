@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,16 +9,16 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
       <main>
         <Banner
+          v-if="claimCreated"
           type="success"
           class="mb-4"
           :open="claimCreated"
-          v-if="claimCreated"
         >
           Claim created successfully .
         </Banner>
@@ -91,9 +91,9 @@
                       >
                       <input
                         id="card-state"
+                        v-model="formData.title"
                         class="form-input w-full placeholder-slate-300"
                         type="text"
-                        v-model="formData.title"
                         placeholder=""
                       />
                       <p v-if="errors" class="text-xs mt-1 text-rose-500">
@@ -109,9 +109,9 @@
                       >
                       <select
                         id="card-country"
+                        v-model="formData.reason"
                         class="form-select w-full"
                         required
-                        v-model="formData.reason"
                       >
                         <option>Vandalized vehicle</option>
                         <option>Theft</option>
@@ -132,10 +132,10 @@
                       >
                       <textarea
                         id="message"
+                        v-model="formData.description"
                         rows="4"
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Explain here..."
-                        v-model="formData.description"
                       ></textarea>
                       <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         {{ errors.description }}
@@ -150,8 +150,8 @@
                       >
 
                       <div
-                        class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
                         v-if="hideProof"
+                        class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
                       >
                         <div
                           class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
@@ -183,8 +183,8 @@
                       </div>
 
                       <div
-                        class="flex items-center justify-center w-full"
                         v-if="!hideProof"
+                        class="flex items-center justify-center w-full"
                       >
                         <label for="dropzone-file" class="form-input w-full">
                           <div
@@ -233,10 +233,10 @@
 
                       <div class="text-right">
                         <button
+                          v-if="!claimCreated"
                           type="submit"
                           class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                           @click.prevent="onCreatedClaim"
-                          v-if="!claimCreated"
                         >
                           Submit
                         </button>
@@ -253,9 +253,9 @@
         </div>
 
         <ModalBlank
-          id="success-modal"
-          :modalOpen="claimCreated"
           v-if="claimCreated"
+          id="success-modal"
+          :modal-open="claimCreated"
         >
           <div class="p-5 flex space-x-4">
             <!-- Icon -->
@@ -389,13 +389,10 @@ export default {
   },
   methods: {
     handleProof(event) {
-      if (!this.file.type.includes("image")) {
-        this.formatIncorrect = true;
-      } else {
-        this.formatIncorrect = false;
-        this.formData.proof = this.file;
-        this.hideProof = true;
-      }
+      this.file = event.target.files[0];
+      this.formatIncorrect = false;
+      this.formData.proof = this.file;
+      this.hideProof = true;
     },
     async onCreatedClaim() {
       const token = this.$store.getters["auth/token"];

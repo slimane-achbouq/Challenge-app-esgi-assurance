@@ -100,7 +100,7 @@ export class VehicleService {
       const registrationCardAge = new Date().getFullYear() - registrationCardDate.getFullYear();
     
       // Base price
-      let basePrice = 12;
+      let basePrice = 30;
     
       // Apply a discount or increase based on horsepower
       if (horsepower < 100) {
@@ -129,6 +129,6 @@ export class VehicleService {
 
     
       // Return three price suggestions: base price, base price + 10%, base price + 20%
-      return [basePrice, basePrice * 1.1, basePrice * 1.2];
+      return [basePrice+2, basePrice * 1.1 + 6, basePrice * 1.2 + 9];
     }
 }

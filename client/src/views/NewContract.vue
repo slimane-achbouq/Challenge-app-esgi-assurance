@@ -844,7 +844,10 @@
                         <i
                           class="fas fa-edit cursor-pointer"
                           style="color: #7c91b1"
-                          @click="beneficiary.IdCard = null"
+                          @click="
+                            beneficiary.IdCard = null;
+                            hideImageFielIdCard = null;
+                          "
                         ></i>
                       </div>
                       <div
@@ -1235,19 +1238,23 @@ export default {
       this.IdCarderrors = false;
       this.file = event.target.files[0];
 
-      const maxSizeInBytes = 110 * 1024;
-
-      if (this.file.size > maxSizeInBytes) {
-        // Afficher un message d'erreur ou effectuer une action en cas de dépassement de la taille maximale
-        this.IdCarderrors =
-          "The file size exceeds the maximum allowed limit (110 KB).";
+      if (!this.file.type.includes("image")) {
+        this.IdCarderrors = "The file format must be an image.";
       } else {
-        this.formatIncorrect = false;
-        this.IdCard = this.file.name;
-        this.formData.IdCard = this.file;
-        this.previewSrc = URL.createObjectURL(event.target.files[0]);
-        this.hideImageFielIdCard = true;
-        this.errors.IdCard = null;
+        const maxSizeInBytes = 110 * 1024;
+
+        if (this.file.size > maxSizeInBytes) {
+          // Afficher un message d'erreur ou effectuer une action en cas de dépassement de la taille maximale
+          this.IdCarderrors =
+            "The file size exceeds the maximum allowed limit (110 KB).";
+        } else {
+          this.formatIncorrect = false;
+          this.IdCard = this.file.name;
+          this.formData.IdCard = this.file;
+          this.previewSrc = URL.createObjectURL(event.target.files[0]);
+          this.hideImageFielIdCard = true;
+          this.errors.IdCard = null;
+        }
       }
     },
     processDate(date) {

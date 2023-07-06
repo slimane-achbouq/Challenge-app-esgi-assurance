@@ -13,21 +13,21 @@
                 <svg width="32" height="32" viewBox="0 0 32 32">
                   <defs>
                     <linearGradient
+                      id="logo-a"
                       x1="28.538%"
                       y1="20.229%"
                       x2="100%"
                       y2="108.156%"
-                      id="logo-a"
                     >
                       <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
                       <stop stop-color="#A5B4FC" offset="100%" />
                     </linearGradient>
                     <linearGradient
+                      id="logo-b"
                       x1="88.638%"
                       y1="29.267%"
                       x2="22.42%"
                       y2="100%"
-                      id="logo-b"
                     >
                       <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
                       <stop stop-color="#38BDF8" offset="100%" />
@@ -67,10 +67,10 @@
                   >
                   <input
                     id="email"
+                    v-model.trim="email"
                     class="form-input w-full"
                     type="email"
                     required
-                    v-model.trim="email"
                   />
                 </div>
                 <div>
@@ -79,11 +79,11 @@
                   >
                   <input
                     id="password"
+                    v-model.trim="password"
                     class="form-input w-full"
                     type="password"
                     autoComplete="on"
                     required
-                    v-model.trim="password"
                   />
                 </div>
               </div>
@@ -129,6 +129,14 @@
                   >Sign Up</router-link
                 >
               </div>
+              <div class="pt-5 mt-6 border-t border-slate-200"></div>
+              <div class="text-sm">
+                <router-link
+                  class="font-medium text-indigo-500 hover:text-indigo-600"
+                  to="/analytics/login"
+                  >Go to analytics platform</router-link
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -156,12 +164,6 @@ export default {
   components: {
     Banner,
   },
-  created() {
-    if (localStorage.getItem("kpiJwtToken")) {
-      localStorage.clear()
-      this.$router.push('/login');
-    }
-  },
   data() {
     return {
       email: "",
@@ -170,6 +172,12 @@ export default {
       isLoading: false,
       error: null,
     };
+  },
+  created() {
+    if (localStorage.getItem("kpiJwtToken")) {
+      localStorage.clear();
+      this.$router.push("/login");
+    }
   },
   methods: {
     async submitForm() {
@@ -212,53 +220,43 @@ export default {
           return;
         }
 
-        let quote = localStorage.getItem('quote');
+        let quote = localStorage.getItem("quote");
 
-        if(quote) {
-
-
-          const base64Data = quote.split(';base64,').pop();
-          quote  =JSON.parse(quote)
-          quote.carteGrise = base64Data
+        if (quote) {
+          const base64Data = quote.split(";base64,").pop();
+          quote = JSON.parse(quote);
+          quote.carteGrise = base64Data;
 
           const token = this.$store.getters["auth/token"];
-            try {
-              let response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/vehicles-with-quote-local-storage`,
-                quote,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`
-                  },
-                }
-              );
+          try {
+            let response = await axios.post(
+              `${
+                import.meta.env.VITE_API_URL
+              }/vehicles-with-quote-local-storage`,
+              quote,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
 
-              localStorage.removeItem("quote");
+            localStorage.removeItem("quote");
 
-              const redirectUrl = "/" + (this.$route.query.redirect || `newContract/${response.data.quote.id}`);
-              this.$router.replace(redirectUrl);
-            } catch (error) {
-              console.log(error)
-            }
-
-
-        }
-
-
-        else {
-            const redirectUrl = "/" + (this.$route.query.redirect || "dashboard");
+            const redirectUrl =
+              "/" +
+              (this.$route.query.redirect ||
+                `newContract/${response.data.quote.id}`);
             this.$router.replace(redirectUrl);
-            
-
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          const redirectUrl = "/" + (this.$route.query.redirect || "dashboard");
+          this.$router.replace(redirectUrl);
         }
-
-
-
-        
-
-        
       } catch (error) {
-        console.log(error)
+        console.log(error);
         if (error.message == "Error: Invalid credentials.") {
           this.error = "Your password or email is incorrect";
         } else {
@@ -269,24 +267,23 @@ export default {
     },
 
     base64ToFile(base64, fileName, mimeType) {
-        const byteCharacters = atob(base64);
-        const byteArrays = [];
+      const byteCharacters = atob(base64);
+      const byteArrays = [];
 
-        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-          const slice = byteCharacters.slice(offset, offset + 512);
-          const byteNumbers = new Array(slice.length);
+      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
 
-          for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-          }
-
-          const byteArray = new Uint8Array(byteNumbers);
-          byteArrays.push(byteArray);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
         }
 
-        return new File(byteArrays, fileName, { type: mimeType });
-    }
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
 
+      return new File(byteArrays, fileName, { type: mimeType });
+    },
   },
 };
 </script>

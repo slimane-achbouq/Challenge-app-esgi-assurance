@@ -42,11 +42,11 @@ async function bootstrap() {
 
   // Cors
   app.enableCors({
-    origin: process.env.CLIENT_URL,
+    /* origin: process.env.CLIENT_URL,
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
-    credentials: true,
+    credentials: true, */
   });
 
   // Swagger config

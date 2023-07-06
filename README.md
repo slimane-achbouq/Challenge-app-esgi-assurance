@@ -1,3 +1,4 @@
+
 # Challenge app esgi assurance <!-- omit in toc -->
 
 ![Azulance LOGO](docs/azulance.png)
@@ -176,3 +177,4 @@ Feel free to explore the file to gain a deeper understanding of the application'
 </p>
 
 ---
+

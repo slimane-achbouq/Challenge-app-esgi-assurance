@@ -134,8 +134,6 @@ services:
     container_name: user-database
     hostname: user-database
     image: mongo:latest
-    env_file:
-      - ./user/.env
     volumes:
       - ./user/data/db:/data/db
     ports:
@@ -242,8 +240,6 @@ services:
     hostname: payment-database
     volumes:
       - ./payment/data/db:/data/db
-    env_file:
-      - ./payment/.env
     ports:
       - "27022:27017"
     networks:
@@ -263,8 +259,14 @@ services:
       - payment-database
       - gateway
       - rabbitmq
-    env_file:
-      - ./payment/.env
+    environment:
+      - MONGODB_URL = mongodb://payment-database:27017/db
+      - RABBITMQ_URL = amqp://admin:admin_password@rabbitmq:5672
+      - INSURANCE_SERVICE_QUEUE = insurance_service_queue
+      - QUOTE_SERVICE_QUEUE = quote_service_queue
+      - STRIPE_SECRET_KEY=sk_test_51MZYljHiiKajDgAsM1cjE9n1V1LNfO2jrHRyo3Hox5yGRvNJo7ctXlarwUEx1CP8IHM2GiNJm95HdKxr3CSncaUX00sg1WxEQu
+      - STRIPE_CURRENCY=eur
+      - CLIENT_URL=https://magenta-speculoos-e4c9ef.netlify.app
     networks:
       - my-network
 
@@ -274,8 +276,6 @@ services:
     hostname: kpi-database
     volumes:
       - ./kpi/data/db:/data/db
-    env_file:
-      - ./kpi/.env
     ports:
       - "27023:27017"
     networks:
@@ -295,8 +295,9 @@ services:
       - kpi-database
       - gateway
       - rabbitmq
-    env_file:
-      - ./kpi/.env
+    environment:
+      - MONGODB_URL = mongodb://kpi-database:27017/db
+      - RABBITMQ_URL = 'amqp://admin:admin_password@rabbitmq:5672'
     networks:
       - my-network
 networks:

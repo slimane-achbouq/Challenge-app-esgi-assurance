@@ -4,6 +4,7 @@ services:
 
   gateway:
     container_name: api-gateway
+    hostname: api-gateway
     build: ./api-gateway
     volumes:
       - ./api-gateway:/usr/src/app
@@ -15,6 +16,19 @@ services:
     command: sh -c "npm install && npm run start:dev"
     env_file:
       - ./api-gateway/.env
+
+  webserver:
+      build:
+        context: ./nginx
+      container_name: nginx
+      hostname: nginx
+      ports:
+        - 80:80
+        - 443:443
+      depends_on:
+        - gateway
+      networks:
+        - my-network
 
   rabbitmq:
     container_name: rabbitmq

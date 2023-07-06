@@ -708,7 +708,7 @@
                       <label
                         class="block text-sm font-medium mb-1"
                         for="card-country"
-                        >Proof of your adresse
+                        >Proof of your address
                         <span class="text-rose-500">*</span></label
                       >
                       <div
@@ -738,7 +738,7 @@
                               class="mb-2 text-sm text-gray-500 dark:text-gray-400"
                             >
                               <span class="font-semibold"
-                                >Click to upload the proof of your Adresse</span
+                                >Click to upload the proof of your Address</span
                               >
                               or drag and drop
                             </p>
@@ -777,7 +777,7 @@
                               />
                             </div>
                             <div>
-                              Adresse Grise file :
+                              Carte Grise file :
                               <div class="text-sm">
                                 {{ drivingLicense }}
                               </div>
@@ -1073,7 +1073,7 @@ export default {
       if (!this.drivingLicense)
         this.errors.license = " the Driving License is mandatory";
       if (!this.adresse)
-        this.errors["adresse"] = " the proof of the adress is mandatory";
+        this.errors["adresse"] = " the proof of the address is mandatory";
 
       this.formData.coverageStartDate = this.quote.coverageStartDate;
       this.formData.coverageEndDate = this.quote.coverageStartDate;

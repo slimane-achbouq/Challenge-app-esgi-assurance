@@ -11,8 +11,8 @@
               class="form-checkbox"
               type="checkbox"
               :value="value"
-              @change="check"
               :checked="checked"
+              @change="check"
             />
           </label>
         </div>
@@ -55,12 +55,12 @@
       <td class="p-2 whitespace-nowrap">
         <div class="text-left text-emerald-500">
           <span
-            class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
             v-if="quote.status"
+            class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
             >Actif</span
           ><span
-            class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
             v-if="!quote.status"
+            class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
             >Inactif</span
           >
         </div>
@@ -72,8 +72,8 @@
             class="text-slate-400 hover:text-slate-500 transform"
             :class="descriptionOpen && 'rotate-180'"
             :aria-expanded="descriptionOpen"
-            @click.prevent="descriptionOpen = !descriptionOpen"
             :aria-controls="`description-${quote.id}`"
+            @click.prevent="descriptionOpen = !descriptionOpen"
           >
             <span class="sr-only">Menu</span>
             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
@@ -105,7 +105,7 @@
                   <div class="font-semibold text-left">Name</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold text-left">Adresse</div>
+                  <div class="font-semibold text-left">Address</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="font-semibold text-left">Phone Number</div>
@@ -114,7 +114,7 @@
                   <div class="font-semibold text-left">email</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div class="font-semibold text-left">Proof of adresse</div>
+                  <div class="font-semibold text-left">Proof of address</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="font-semibold text-left">License</div>
@@ -122,35 +122,35 @@
               </tr>
             </thead>
 
-            <tbody class="text-sm" v-if="this.beneficiary">
+            <tbody v-if="beneficiary" class="text-sm">
               <!-- Row -->
               <tr>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="flex items-center text-slate-800">
                     <div class="font-medium text-sky-500">
-                      {{ this.beneficiary.firstName }}
-                      {{ this.beneficiary.lastName }}
+                      {{ beneficiary.firstName }}
+                      {{ beneficiary.lastName }}
                     </div>
                   </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="flex items-center text-slate-800">
                     <div class="font-medium text-sky-500">
-                      {{ this.beneficiary.postalAddress }}
+                      {{ beneficiary.postalAddress }}
                     </div>
                   </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="flex items-center text-slate-800">
                     <div class="font-medium text-sky-500">
-                      {{ this.beneficiary.phoneNumber }}
+                      {{ beneficiary.phoneNumber }}
                     </div>
                   </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                   <div class="flex items-center text-slate-800">
                     <div class="font-medium text-sky-500">
-                      {{ this.beneficiary.email }}
+                      {{ beneficiary.email }}
                     </div>
                   </div>
                 </td>
@@ -192,26 +192,6 @@ import axios from "axios";
 
 export default {
   name: "ContractsTableItem",
-  data() {
-    return {
-      beneficiary: null,
-    };
-  },
-  methods: {
-    downloadFile(data) {
-      const byteArray = new Uint8Array(this.beneficiary.permis.data);
-
-      const blob = new Blob([byteArray], { type: "application/pdf" });
-
-      // Create a URL for the blob and download it
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("target", "_blank"); // Open in new tab
-      document.body.appendChild(link);
-      link.click();
-    },
-  },
   props: ["quote", "value", "selected"],
   setup(props, context) {
     const checked = computed(() => props.selected.includes(props.value));
@@ -265,6 +245,11 @@ export default {
       formatDate,
     };
   },
+  data() {
+    return {
+      beneficiary: null,
+    };
+  },
   async created() {
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
 
@@ -281,6 +266,21 @@ export default {
     if (response.data) {
       this.beneficiary = response.data;
     }
+  },
+  methods: {
+    downloadFile(data) {
+      const byteArray = new Uint8Array(this.beneficiary.permis.data);
+
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+
+      // Create a URL for the blob and download it
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("target", "_blank"); // Open in new tab
+      document.body.appendChild(link);
+      link.click();
+    },
   },
 };
 </script>

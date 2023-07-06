@@ -146,7 +146,7 @@
                             </div>
                           </th>
                           <th class="p-2 whitespace-nowrap">
-                            <div class="font-semibold text-left">adresse</div>
+                            <div class="font-semibold text-left">address</div>
                           </th>
                           <th class="p-2 whitespace-nowrap">
                             <div class="font-semibold text-left">Age</div>

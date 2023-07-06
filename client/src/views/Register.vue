@@ -440,7 +440,7 @@ export default {
           this.searchedAddresses = data.features;
         }
         if (data.features.length == 0) {
-          this.errors.address = "There is no adresse !";
+          this.errors.address = "There is no address !";
           this.isAddressLoading = false;
           return;
         }
@@ -554,8 +554,7 @@ export default {
         } else {
           this.state.isSuccess = false;
           this.error =
-            error.message ||
-            "Failed to create your a compte, please try later.";
+            error.message || "Failed to create your account, please try later.";
           Swal.fire({
             title: "Sorry!",
             text: error.message,
@@ -568,7 +567,7 @@ export default {
         }
       } finally {
         this.successMessage =
-          "Your profile has been successfully created. please verfiy your adresse mail";
+          "Your profile has been successfully created. please verfiy your email address";
         this.state.isSignIn = false;
         this.isLoading = false;
       }

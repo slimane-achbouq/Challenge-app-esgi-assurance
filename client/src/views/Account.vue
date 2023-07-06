@@ -447,22 +447,20 @@ export default {
     const token = this.$store.getters["auth/token"];
 
     // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response =
-      JSON.parse(localStorage.getItem("profile-data")) ??
-      (await axios.get(`${import.meta.env.VITE_API_URL}/getoneuser/${id}`, {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/getoneuser/${id}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }));
+      }
+    );
 
     /*if(response.data["hydra:member"]){
           customers.value = await response.data["hydra:member"];
         }*/
 
     if (response.data) {
-      if (!localStorage.getItem("profile-data")) {
-        localStorage.setItem("profile-data", JSON.stringify(response));
-      }
       this.user = response.data;
     }
   },

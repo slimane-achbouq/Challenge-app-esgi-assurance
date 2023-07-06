@@ -122,18 +122,22 @@ export class VehicleService {
     } else if (vehicleAge > 10) {
       basePrice *= 1.2; // 10% increase for vehicles more than 10 years old
     }
+    
+      // Apply a discount or increase based on the age of the registration card
+      if (registrationCardAge < 1) {
+        basePrice *= 0.95; // 5% discount for registration cards less than 1 year old
+      } else if (registrationCardAge > 5) {
+        basePrice *= 1; // 10% increase for registration cards more than 5 years old
+        
+      }
 
-    // Apply a discount or increase based on the age of the registration card
-    if (registrationCardAge < 1) {
-      basePrice *= 0.95; // 5% discount for registration cards less than 1 year old
-    } else if (registrationCardAge > 5) {
-      basePrice *= 1; // 10% increase for registration cards more than 5 years old
-    }
+      const minPremium = 15;
+      const maxPremium = 35;
 
-    const minPremium = 15;
-    const maxPremium = 35;
+    
+      // Return three price suggestions: base price, base price + 10%, base price + 20%
+      return [basePrice+2, basePrice * 1.1 + 6, basePrice * 1.2 + 9];
 
-    // Return three price suggestions: base price, base price + 10%, base price + 20%
-    return [basePrice, basePrice * 1.1, basePrice * 1.2];
+    
   }
 }

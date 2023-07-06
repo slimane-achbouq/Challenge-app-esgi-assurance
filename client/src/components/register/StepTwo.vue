@@ -7,9 +7,9 @@
       >
       <input
         id="associationName"
+        v-model.trim="associationName"
         class="form-input w-full"
         type="text"
-        v-model.trim="associationName"
         required
       />
     </div>
@@ -19,8 +19,8 @@
 
     <!-- Profession Comercial Name Code -->
     <div
-      class="flex space-x-4"
       v-if="state == 'company' || state == 'self-employed/independent'"
+      class="flex space-x-4"
     >
       <div class="flex-1">
         <label class="block text-sm font-medium mb-1" for="profession"
@@ -28,9 +28,9 @@
         >
         <input
           id="profession"
+          v-model.trim="profession"
           class="form-input w-full"
           type="text"
-          v-model.trim="profession"
           required
         />
         <div v-if="errors.profession" class="text-xs mt-1 text-rose-500">
@@ -43,9 +43,9 @@
         >
         <input
           id="comercialName"
+          v-model.trim="comercialName"
           class="form-input w-full"
           type="text"
-          v-model.trim="comercialName"
           required
         />
         <div v-if="errors.comercialName" class="text-xs mt-1 text-rose-500">
@@ -55,16 +55,16 @@
     </div>
 
     <!-- Name and Familyname Code -->
-    <div class="flex space-x-4" v-if="state == 'individual'">
+    <div v-if="state == 'individual'" class="flex space-x-4">
       <div class="flex-1">
         <label class="block text-sm font-medium mb-1" for="firstname"
           >Name: <span class="text-rose-500">*</span></label
         >
         <input
           id="firstname"
+          v-model.trim="firstname"
           class="form-input w-full"
           type="text"
-          v-model.trim="firstname"
           required
         />
         <div v-if="errors.firstname" class="text-xs mt-1 text-rose-500">
@@ -77,9 +77,9 @@
         >
         <input
           id="lastname"
+          v-model.trim="lastname"
           class="form-input w-full"
           type="text"
-          v-model.trim="lastname"
           required
         />
         <div v-if="errors.lastname" class="text-xs mt-1 text-rose-500">
@@ -94,14 +94,14 @@
         >Street Address: <span class="text-rose-500">*</span></label
       >
       <input
-        autoComplete="none"
         id="street"
+        v-model.trim="street"
+        autoComplete="none"
         class="form-input w-full"
         type="text"
-        v-model.trim="street"
         @input="searchStreet($event)"
       />
-      <div class="" v-if="isAddressLoading">
+      <div v-if="isAddressLoading" class="">
         <svg
           class="animate-spin w-4 h-4 fill-current shrink-0"
           viewBox="0 0 16 16"
@@ -112,17 +112,17 @@
         </svg>
       </div>
       <div
-        v-else-if="searchedAddresses"
         v-for="searchedAddress in searchedAddresses"
+        v-else-if="searchedAddresses"
         :key="searchedAddress.properties.id"
       >
         <div
           class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         >
           <button
-            @click="setAddress(searchedAddress)"
             type="button"
             class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
+            @click="setAddress(searchedAddress)"
           >
             {{ searchedAddress.properties.label }}
           </button>
@@ -173,9 +173,9 @@
       >
       <input
         id="phoneNumber"
+        v-model.trim="phoneNumber"
         class="form-input w-full"
         type="tel"
-        v-model.trim="phoneNumber"
         required
       />
       <div v-if="errors.phoneNumber" class="text-xs mt-1 text-rose-500">
@@ -190,9 +190,9 @@
       >
       <input
         id="email"
+        v-model.trim="email"
         class="form-input w-full"
         type="text"
-        v-model.trim="email"
         required
       />
       <div v-if="errors.email" class="text-xs mt-1 text-rose-500">
@@ -207,14 +207,14 @@
       >
       <input
         id="password"
+        v-model.trim="password"
         class="form-input w-full"
         type="password"
-        v-model.trim="password"
         required
       />
     </div>
 
-    <div class="flex items-center justify-center w-full" v-if="!hideImageField">
+    <div v-if="!hideImageField" class="flex items-center justify-center w-full">
       <label for="dropzone-file" class="form-input w-full">
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
           <svg
@@ -249,8 +249,8 @@
         />
       </label>
     </div>
-    <div class="flex items-center justify-center w-full" v-if="hideImageField">
-      <img :src="previewSrc" alt="Preview image" id="previewImg" />
+    <div v-if="hideImageField" class="flex items-center justify-center w-full">
+      <img id="previewImg" :src="previewSrc" alt="Preview image" />
     </div>
 
     <div v-if="errors.password" class="text-xs mt-1 text-rose-500">
@@ -296,6 +296,9 @@ import {
 import Banner from "@/components/Banner.vue";
 
 export default {
+  components: {
+    Banner,
+  },
   components: {
     Banner,
   },
@@ -461,7 +464,6 @@ export default {
         password: this.password,
       };
       this.isLoading = true;
-      console.log(this.dataPayload);
 
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
@@ -497,9 +499,6 @@ export default {
 
       this.isLoading = false;
     },
-  },
-  components: {
-    Banner,
   },
 };
 </script>

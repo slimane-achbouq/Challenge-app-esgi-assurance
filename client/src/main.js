@@ -45,9 +45,16 @@ const routesUser = ["/profile", "/user-quotes", "/user-contracts"];
 
 router.beforeEach((to, from) => {
   const token = store.state.auth.token;
-  /*if (!token) {
-        if (to.fullPath != "/login") router.push('login')
-    } else {
+  if (!token) {
+    if (
+      to.fullPath != "/login" &&
+      to.fullPath != "/register" &&
+      to.fullPath != "/"
+    )
+      router.push("login");
+  }
+
+  /*else {
 
         const role = store.state.auth.roles[0]
 
@@ -87,5 +94,5 @@ app.use(store);
 app.mount("#app");
 
 app.use(Tracker, {
-  AppId: "APP_U6OJ0XHB",
+  AppId: "APP_QBQXUNRW",
 });

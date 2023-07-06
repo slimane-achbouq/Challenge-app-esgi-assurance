@@ -67,7 +67,6 @@
           <div
             v-show="dropdownOpen"
             class="origin-top-right z-10 absolute top-full min-w-56 bg-white border border-slate-200 pt-1.5 rounded shadow-lg overflow-hidden mt-1"
-            :class="align === 'right' ? 'right-0' : 'left-0'"
           >
             <div ref="dropdown">
               <div
@@ -574,7 +573,7 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         });
-        localStorage.setItem("claims-list", JSON.stringify(response));
+        //localStorage.setItem("claims-list", JSON.stringify(response));
       } catch (e) {
         response = JSON.parse(localStorage.getItem("claims-list"));
       }
@@ -583,7 +582,7 @@ export default {
 
       if (response.data) {
         if (!localStorage.getItem("claims-list")) {
-          localStorage.setItem("claims-list", JSON.stringify(response));
+          //localStorage.setItem("claims-list", JSON.stringify(response));
         }
         if (role == "User") {
           for (let claim of response.data) {
@@ -620,8 +619,6 @@ export default {
         claims.value = claimList.value.filter((claim) => {
           return claim.claimNumber == searchTerm.value;
         });
-
-      console.log(JSON.stringify(claims.value));
     };
 
     const checkAll = () => {

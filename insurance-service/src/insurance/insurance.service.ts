@@ -76,7 +76,7 @@ export class InsuranceService {
   async getInsurancesByUserId(userId: string): Promise<Insurance[]> {
     const beneficiary = await this.beneficiaryModel.findOne({ userId }).exec();
 
-    const idbeneficiary = beneficiary._id.toString()
+    const idbeneficiary = beneficiary ? beneficiary._id.toString() : null
     if (!beneficiary) {
       return []; // Return an empty array if no beneficiary is found with the provided userId
     }

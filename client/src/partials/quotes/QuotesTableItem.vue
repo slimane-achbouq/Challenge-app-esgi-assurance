@@ -251,7 +251,7 @@ export default {
 
     if (response.data) {
       if (!localStorage.getItem("admin-one-user")) {
-        localStorage.setItem("admin-one-user", JSON.stringify(response));
+       // localStorage.setItem("admin-one-user", JSON.stringify(response));
       }
       this.customer = response.data;
     }

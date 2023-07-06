@@ -58,8 +58,6 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   @UsePipes(ValidationPipe)
-  // @Throttle(2, 30)
-  @SkipThrottle()
   signup(@Body() createUserDto: CreateUserDto) {
     if (createUserDto.isValide) {
       throw new BadRequestException('Request invalid');
@@ -99,7 +97,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Get('refresh')
-  @Throttle(2, 60)
+  @SkipThrottle()
   refreshTokens(@Req() req: Request) {
     return this.userServiceClient.send({ cmd: 'logout' }, req).toPromise();
   }
@@ -119,7 +117,6 @@ export class UserController {
   @Put('update-user-admin')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
-  @SkipThrottle()
   async updateUserByAdmin(@Req() req, @Body() updateUserDto): Promise<any> {
     return this.userServiceClient
       .send(
@@ -131,7 +128,6 @@ export class UserController {
 
   @Put('update-user')
   @UseGuards(JwtAuthGuard)
-  // @Throttle(5, 60)
   @SkipThrottle()
   async updateUser(@Req() req, @Body() updateUserDto): Promise<any> {
     const disallowedFields = ['roles', 'isValide'];
@@ -154,7 +150,6 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @Post('updatePassword')
-  @Throttle(3, 60)
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.userServiceClient
       .send({ cmd: 'updatePassword' }, updatePasswordDto)
@@ -173,7 +168,6 @@ export class UserController {
   @Delete('delete-user/:id')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
-  @SkipThrottle()
   async deleteUser(@Param('id') id: string) {
     // Check if quote exists
     const existingQuote = await this.userServiceClient

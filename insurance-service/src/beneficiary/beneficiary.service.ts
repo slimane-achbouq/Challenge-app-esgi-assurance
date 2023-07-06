@@ -39,9 +39,9 @@ export class BeneficiaryService {
 
   async createBeneficiary(
     beneficiaryDto: CreateBeneficiaryDto,
-    fileContents: { justificatifDomicile: string; permis: string },
+    fileContents: { justificatifDomicile: string; permis: string,IdCard: string },
   ): Promise<Beneficiary> {
-    const { justificatifDomicile, permis } = fileContents;
+    const { justificatifDomicile, permis, IdCard } = fileContents;
   
     // Decode the base64 file content
     const justificatifDomicileContent = justificatifDomicile
@@ -49,11 +49,14 @@ export class BeneficiaryService {
       : null;
   
     const permisContent = permis ? Buffer.from(permis, 'base64') : null;
+    
+    const IdCardContent = IdCard ? Buffer.from(IdCard, 'base64') : null;
   
     const newBeneficiary = new this.beneficiaryModel({
       ...beneficiaryDto,
       justificatifDomicile: justificatifDomicileContent,
       permis: permisContent,
+      IdCard:IdCardContent,
     });
 
     this.logger.debug("debug", "createBeneficiary : new beneficiary " + beneficiaryDto.email + " created");
@@ -72,9 +75,9 @@ export class BeneficiaryService {
   async updateBeneficiary(
     id: string,
     beneficiaryDto: UpdateBeneficiaryDto,
-    fileContents: { justificatifDomicile: string; permis: string },
+    fileContents: { justificatifDomicile: string; permis: string,IdCard: string ,veriviedImage:string  },
   ): Promise<Beneficiary> {
-    const { justificatifDomicile, permis } = fileContents;
+    const { justificatifDomicile, permis ,IdCard,veriviedImage } = fileContents;
   
     // If a new file is uploaded, decode it and save it as a blob
     const updatedJustificatifDomicile = justificatifDomicile
@@ -82,11 +85,15 @@ export class BeneficiaryService {
       : null;
   
     const updatedPermis = permis ? Buffer.from(permis, 'base64') : null;
+
+    const updatedIdCard = IdCard ? Buffer.from(IdCard, 'base64') : null;
   
     const updatedBeneficiaryDto = {
       ...beneficiaryDto,
       justificatifDomicile: updatedJustificatifDomicile,
       permis: updatedPermis,
+      IdCard:updatedIdCard,
+      veriviedImage:veriviedImage 
     };
 
     this.logger.debug("debug", "updateBeneficiary : beneficiary " + beneficiaryDto.email + " updated");

@@ -25,6 +25,8 @@ export class CreateBeneficiaryDto {
   @IsString()
   userId: string;
 
+  veriviedImage: string;
+
 }
 
 export type UpdateBeneficiaryDto = Partial<CreateBeneficiaryDto>;

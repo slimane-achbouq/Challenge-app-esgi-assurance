@@ -252,7 +252,7 @@ export default {
 
     if (response.data) {
       if (!localStorage.getItem("beneficiary-list")) {
-        localStorage.setItem("beneficiary-list", JSON.stringify(response));
+       // localStorage.setItem("beneficiary-list", JSON.stringify(response));
       }
       this.beneficiary = response.data;
     }

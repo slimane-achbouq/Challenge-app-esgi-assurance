@@ -45,7 +45,9 @@ export class CreateInsuranceDto {
   @IsUUID()
   vehicleId: string;
 
-  status: boolean; 
+  status: boolean;
+  
+  verifiedId: boolean;
 }
 
 export class UpdateInsuranceDto extends PartialType(CreateInsuranceDto) {}

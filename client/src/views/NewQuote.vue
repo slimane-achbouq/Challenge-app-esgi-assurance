@@ -227,6 +227,7 @@
                             class="form-input w-full placeholder-slate-300"
                             type="number"
                             placeholder="200"
+                            min="0"
                           />
                           <p
                             v-if="errors.horsepower"
@@ -281,6 +282,7 @@
                             type="datetime-local"
                             class="form-input w-full"
                             name="startingDate"
+                            max="2019-12-25"
                           />
                           <p
                             v-if="errors.licenseobtaineddate"
@@ -941,7 +943,6 @@ export default {
       this.file = event.target.files[0];
 
       if (this.file.type != "application/pdf") {
-        console.log(this.file.type);
         this.formatIncorrect = true;
       } else {
         this.formatIncorrect = false;

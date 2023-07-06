@@ -598,7 +598,7 @@ export default {
 
       if (response.data) {
         if (!localStorage.getItem("admin-quotes-list")) {
-          localStorage.setItem("admin-quotes-list", JSON.stringify(response));
+          //localStorage.setItem("admin-quotes-list", JSON.stringify(response));
         }
         allUsers.value = await response.data; // store all the users
         quotes.value = allUsers.value.slice(
@@ -626,8 +626,6 @@ export default {
         quotes.value = quoteList.value.filter((quote) => {
           return quote.quoteNumber == searchTerm.value;
         });
-
-      console.log(JSON.stringify(quotes.value));
     };
 
     const checkAll = () => {

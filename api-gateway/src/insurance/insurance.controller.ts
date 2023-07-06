@@ -33,7 +33,7 @@ import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { ProfileValidationGuard } from 'src/common/guards/profile-validation.guard';
-
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 @ApiTags('Insurance')
 @Controller({
   version: '1',
@@ -66,6 +66,7 @@ export class InsuranceController {
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
   @ApiBearerAuth()
+  @SkipThrottle()
   async getInsurances(): Promise<any> {
     try {
       const insurances = await this.insuranceServiceClient
@@ -95,6 +96,7 @@ export class InsuranceController {
 
   @Get('insurance/:id')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getInsuranceById(@Param('id') id: string): Promise<any> {
     try {
       const insurance = await this.insuranceServiceClient
@@ -196,6 +198,7 @@ export class InsuranceController {
 
   @Get('beneficiary/:id/insurances')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getBeneficiaryWithInsurances(@Param('id') id: string): Promise<any> {
     try {
       const beneficiaryWithInsurances = await this.insuranceServiceClient
@@ -217,6 +220,7 @@ export class InsuranceController {
 
   @Get('beneficiary/:id')
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getBeneficiaryById(@Param('id') id: string): Promise<any> {
     try {
       const beneficiary = await this.insuranceServiceClient
@@ -239,6 +243,7 @@ export class InsuranceController {
   @Get('beneficiaries')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @SkipThrottle()
   async getBeneficiaries(): Promise<any> {
     try {
       const beneficiaries = await this.insuranceServiceClient
@@ -264,6 +269,7 @@ export class InsuranceController {
     FileFieldsInterceptor([
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
+      { name: 'IdCard', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -273,6 +279,7 @@ export class InsuranceController {
     files: {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
+      IdCard: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -282,6 +289,9 @@ export class InsuranceController {
           : null,
         permis: files.permis[0]
           ? files.permis[0].buffer.toString('base64')
+          : null,
+        IdCard: files.IdCard[0]
+          ? files.IdCard[0].buffer.toString('base64')
           : null,
       };
       const beneficiary = await this.insuranceServiceClient
@@ -300,9 +310,12 @@ export class InsuranceController {
     FileFieldsInterceptor([
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
+      { name: 'IdCard', maxCount: 1 },
+      { name: 'veriviedImage', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async updateBeneficiary(
     @Param('id') id: string,
     @Body() beneficiaryDto: UpdateBeneficiaryDto,
@@ -310,6 +323,8 @@ export class InsuranceController {
     files: {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
+      IdCard: Express.Multer.File[];
+      veriviedImage: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -323,18 +338,21 @@ export class InsuranceController {
 
       const fileContents = {
         justificatifDomicile:
-          files.justificatifDomicile && files.justificatifDomicile[0]
+        files && files.justificatifDomicile && files.justificatifDomicile
             ? files.justificatifDomicile[0].buffer.toString('base64')
-            : null,
+            : beneficiary.justificatifDomicile,
         permis:
-          files.permis && files.permis[0]
+        files && files.permis && files.permis
             ? files.permis[0].buffer.toString('base64')
-            : null,
+            : beneficiary.permis,
+        IdCard: files && files.IdCard
+            ? files.IdCard[0].buffer.toString('base64')
+            : beneficiary.IdCard,
+        veriviedImage : files && files.veriviedImage 
+            ? files.veriviedImage[0].buffer.toString('base64')
+            : null
       };
 
-      if (!fileContents.justificatifDomicile || !fileContents.permis) {
-        throw new BadRequestException('File not uploaded');
-      }
 
       const updatedBeneficiary = await this.insuranceServiceClient
         .send(
@@ -359,6 +377,7 @@ export class InsuranceController {
     FileFieldsInterceptor([
       { name: 'justificatifDomicile', maxCount: 1 },
       { name: 'permis', maxCount: 1 },
+      { name: 'IdCard', maxCount: 1 },
     ]),
   )
   @UseGuards(JwtAuthGuard)
@@ -369,6 +388,7 @@ export class InsuranceController {
     files: {
       justificatifDomicile: Express.Multer.File[];
       permis: Express.Multer.File[];
+      IdCard: Express.Multer.File[];
     },
   ): Promise<any> {
     try {
@@ -385,17 +405,17 @@ export class InsuranceController {
         .toPromise();
 
       const fileContents = {
-        justificatifDomicile: files.justificatifDomicile[0]
+        justificatifDomicile: files.justificatifDomicile
           ? files.justificatifDomicile[0].buffer.toString('base64')
           : null,
-        permis: files.permis[0]
+        permis: files.permis
           ? files.permis[0].buffer.toString('base64')
+          : null,
+        IdCard: files.IdCard
+          ? files.IdCard[0].buffer.toString('base64')
           : null,
       };
 
-      if (!fileContents.justificatifDomicile || !fileContents.permis) {
-        throw new BadRequestException('Files not uploaded');
-      }
 
       if (!currentBeneficiary) {
         const beneficiaryInsuranceDto: CreateBeneficiaryDto = {
@@ -438,6 +458,7 @@ export class InsuranceController {
         vehicleId: relatedQuote.vehicle.id,
         beneficiary: currentBeneficiary['_id'],
         status: false,
+        verifiedId:false
       };
 
       return this.insuranceServiceClient
@@ -449,4 +470,20 @@ export class InsuranceController {
       }
     }
   }
+
+  @Get('getbeneficiaryByUserId/:id')
+  async getbeneficiaryByUserId(@Param('id') id: string): Promise<any> {
+    try {
+      let currentBeneficiary = await this.insuranceServiceClient
+        .send({ cmd: 'getBeneficiaryByUserId' }, id)
+        .toPromise();
+
+      if (!currentBeneficiary) throw new NotFoundException('Beneficiary Not found');
+
+      return currentBeneficiary;
+    } catch (err) {
+      throw new NotFoundException('Beneficiary Not found');
+    }
+  }
+
 }

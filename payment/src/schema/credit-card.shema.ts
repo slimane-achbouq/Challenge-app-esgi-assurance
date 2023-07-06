@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { apiPropertiesCard } from 'src/dto/create-credit-card.dto';
+import { apiPropertiesCard } from '../dto/create-credit-card.dto';
 import { Document } from 'mongoose';
 
 @Schema({
@@ -16,7 +16,7 @@ export class CreditCard extends Document {
   expiryDate: string;
 
   @ApiProperty(apiPropertiesCard.cvc)
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   cvc: string;
 
   @ApiProperty(apiPropertiesCard.cardName)

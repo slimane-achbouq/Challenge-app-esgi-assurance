@@ -233,7 +233,7 @@ export default {
           });
 
           console.log(result['_distance'])
-          if (result.label !== "unknown" && result['_distance'] < 0.38) {
+          if (result.label !== "unknown" && result['_distance'] < 0.4) {
 
 
             const canvas = this.$refs.canvas;

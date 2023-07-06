@@ -138,13 +138,14 @@ export default {
       throw error;
     }
   },
-  async getContactMessages() {
+  async getContactMessages(context, payload) {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/mail/getAllMessages`,
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${payload.token}`,
           },
           method: "GET",
         }
@@ -170,6 +171,7 @@ export default {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${payload.token}`,
           },
           method: "PUT",
           body: JSON.stringify({

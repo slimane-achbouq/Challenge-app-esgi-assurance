@@ -95,18 +95,14 @@ export default {
 
     return {
       tags: null,
-      appId: appId
+      appId: appId,
+      sidebarOpen: false,
     }
   },
   methods: {
     formatDate(dateString) {
       const date = new Date(dateString);
-      const day = ("0" + date.getDate()).slice(-2);
-      const month = ("0" + (date.getMonth() + 1)).slice(-2);
-      const year = date.getFullYear();
-      const hour = date.getHours();
-      const minute = date.getMinutes();
-      return `${day}/${month}/${year} at ${hour}:${minute}`;
+      return date.toLocaleDateString() + " at " + date.toLocaleTimeString();
     }
   },
   setup() {
@@ -116,6 +112,10 @@ export default {
     if (localStorage.getItem("esgi-ws-token")) {
       localStorage.removeItem("esgi-ws-token");
       this.$router.push('/analytics/login')
+    }
+
+    if (!localStorage.getItem("kpiJwtToken")) {
+      this.$router.push('/analytics/login');
     }
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/tag`, {

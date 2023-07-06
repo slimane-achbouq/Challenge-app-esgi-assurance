@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,12 +9,12 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
       <main>
-        <Banner type="success" class="mb-4" :open="deleted" v-if="deleted">
+        <Banner v-if="deleted" type="success" class="mb-4" :open="deleted">
           Quote(s) deleted successfully .
         </Banner>
         <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
@@ -33,7 +33,7 @@
             >
               <!-- Delete button -->
               <DeleteButton
-                :selectedItems="selectedItems"
+                :selected-items="selectedItems"
                 @click="onModaDeletelOpen"
               />
               <!-- Add order button -->
@@ -50,7 +50,9 @@
                       d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z"
                     />
                   </svg>
-                  <span class="hidden xs:block ml-2">Create Quote</span>
+                  <button v-track:click="'CLICKED_BTN'">
+                    <span class="hidden xs:block ml-2">Create Quote</span>
+                  </button>
                 </button>
               </router-link>
             </div>
@@ -60,7 +62,7 @@
           <QuotesTable @change-selection="updateSelectedItems($event)" />
         </div>
 
-        <ModalBasic id="danger-modal" :modalOpen="modaDeletelOpen">
+        <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen">
           <div class="p-5 flex w-full space-x-4">
             <!-- Icon -->
             <div

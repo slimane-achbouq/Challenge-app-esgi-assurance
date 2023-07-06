@@ -1,6 +1,6 @@
 <template>
   <main class="bg-white">
-    <div class="relative flex" v-if="!isSuccess">
+    <div v-if="!isSuccess" class="relative flex">
       <!-- Content -->
       <div class="w-full md:w-1/2">
         <div class="min-h-screen h-full flex flex-col after:flex-1">
@@ -14,21 +14,21 @@
                 <svg width="32" height="32" viewBox="0 0 32 32">
                   <defs>
                     <linearGradient
+                      id="logo-a"
                       x1="28.538%"
                       y1="20.229%"
                       x2="100%"
                       y2="108.156%"
-                      id="logo-a"
                     >
                       <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
                       <stop stop-color="#A5B4FC" offset="100%" />
                     </linearGradient>
                     <linearGradient
+                      id="logo-b"
                       x1="88.638%"
                       y1="29.267%"
                       x2="22.42%"
                       y2="100%"
-                      id="logo-b"
                     >
                       <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
                       <stop stop-color="#38BDF8" offset="100%" />
@@ -73,9 +73,9 @@
                       >
                       <input
                         id="newPassword"
+                        v-model.trim="newPassword"
                         class="form-input w-full"
                         type="password"
-                        v-model.trim="newPassword"
                         required
                       />
                     </div>
@@ -88,9 +88,9 @@
                       >
                       <input
                         id="newPassword"
+                        v-model.trim="confirmPassword"
                         class="form-input w-full"
                         type="password"
-                        v-model.trim="confirmPassword"
                         required
                       />
                     </div>
@@ -153,6 +153,10 @@ import { passwordValidation } from "@/utils/utils-common-function";
 
 export default {
   name: "ResetPasswordInput",
+  components: {
+    Banner,
+    successMessageView,
+  },
   data() {
     return {
       newPassword: "",
@@ -198,21 +202,16 @@ export default {
         );
 
         const responseJSON = await response.json();
-        console.log(responseJSON);
 
         this.isSuccess = true;
         this.successMesage = "Your password has been successfully changed.";
       } catch (ex) {
         this.error = new Error(
-          ex || "Failed to change password. Check you have already an compte."
+          ex || "Failed to change password. Check you have already an account."
         );
         throw error;
       }
     },
-  },
-  components: {
-    Banner,
-    successMessageView,
   },
 };
 </script>

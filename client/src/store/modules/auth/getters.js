@@ -8,6 +8,9 @@ export default {
   fullName(state) {
     return state.firstname + " " + state.lastname;
   },
+  firstname(state) {
+    return state.firstname;
+  },
   roles(state) {
     return state.roles[0] === "Admin" ? "Admin" : "User";
   },

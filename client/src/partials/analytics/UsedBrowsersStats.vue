@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         async getAllUsedBrowers() {
-            const response = await fetch(`${this.API_URL}/browser`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/browser`, {
                 headers: {
                     'Content-Type': 'application/json',
                     "App-Id": this.appId,

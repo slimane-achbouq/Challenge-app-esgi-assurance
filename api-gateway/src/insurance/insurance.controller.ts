@@ -28,7 +28,7 @@ import {
   CreateModifiedInsuranceDto,
   UpdateInsuranceDto,
 } from './dtos/insurance.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/common/guards/roles.decorator';
 import { Role } from 'src/common/enums/roles.enum';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -65,6 +65,7 @@ export class InsuranceController {
   @Get('insurance')
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   async getInsurances(): Promise<any> {
     try {
       const insurances = await this.insuranceServiceClient

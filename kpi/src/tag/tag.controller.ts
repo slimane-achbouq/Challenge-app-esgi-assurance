@@ -1,20 +1,25 @@
 import {Body, Controller, Get, Headers, HttpCode, Post} from '@nestjs/common';
-import {Tag} from "../schemas/tag.schema";
-import {TagService} from "./tag.service";
+import {Tag} from '../schemas/tag.schema';
+import {TagService} from './tag.service';
+import {MessagePattern} from '@nestjs/microservices';
 
 @Controller('tag')
 export class TagController {
     constructor(private readonly tagService: TagService) {
     }
-    @Post()
+
+    @MessagePattern('createTag')
     async createTag(@Body() tag: Tag) {
-        return this.tagService.create(tag);
+        try {
+            return this.tagService.create(tag);
+        } catch (e) {
+            return e;
+        }
     }
 
-    @Get()
-    @HttpCode(200)
+    @MessagePattern('getAllTags')
     async getAllTags(@Headers() headers) {
-        const app_id = headers["app-id"];
+        const app_id = headers['app-id'];
         return await this.tagService.findAllByAppId(app_id);
     }
 }

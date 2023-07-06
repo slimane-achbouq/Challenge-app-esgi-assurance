@@ -54,8 +54,8 @@
           <UserMenu align="right" class="dark:text-white" />
         </div>
         <div
-          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky"
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
         >
           <ul
             class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
@@ -127,11 +127,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon1-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon1-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -156,14 +156,14 @@
                     Getting Started
                   </h3>
                   <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                    You can start the experience by creating a new quote.
                   </div>
                 </div>
                 <!-- Link -->
                 <div>
                   <a
                     class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
+                    href="/new-quote"
                     >Explore -&gt;</a
                   >
                 </div>
@@ -183,11 +183,11 @@
                     >
                       <defs>
                         <linearGradient
+                          id="icon2-a"
                           x1="50%"
                           y1="0%"
                           x2="50%"
                           y2="100%"
-                          id="icon2-a"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -208,17 +208,18 @@
                   </div>
                   <!-- Content -->
                   <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    In-app Messaging
+                    In-app Contact
                   </h3>
                   <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                    Need answers ? Feel free to contact us for anything in your
+                    mind.
                   </div>
                 </div>
                 <!-- Link -->
                 <div>
                   <a
                     class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
+                    href="/contact"
                     >Explore -&gt;</a
                   >
                 </div>
@@ -238,11 +239,11 @@
                     >
                       <defs>
                         <linearGradient
-                          x1="50%"
-                          y1="0%"
-                          x2="50%"
-                          y2="100%"
                           id="icon3-a"
+                          x1="50%"
+                          y1="0%"
+                          x2="50%"
+                          y2="100%"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -280,17 +281,18 @@
                   </div>
                   <!-- Content -->
                   <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    Apps & Tools
+                    Your contracts
                   </h3>
                   <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                    You can view and manage all your contracts when
+                    authenticated.
                   </div>
                 </div>
                 <!-- Link -->
                 <div>
                   <a
                     class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
+                    href="/contracts"
                     >Explore -&gt;</a
                   >
                 </div>
@@ -310,72 +312,11 @@
                     >
                       <defs>
                         <linearGradient
-                          x1="50%"
-                          y1="0%"
-                          x2="50%"
-                          y2="100%"
-                          id="icon4-a"
-                        >
-                          <stop stop-color="#FFF" offset="0%" />
-                          <stop stop-color="#A5B4FC" offset="100%" />
-                        </linearGradient>
-                      </defs>
-                      <g fill-rule="nonzero" fill="none">
-                        <path
-                          d="M34.327 18.194H10.12c-.495 0-.897.358-.897.798v14.404c0 .44.402.798.897.798h24.207c.495 0 .896-.357.896-.798V18.992c0-.44-.401-.798-.896-.798Z"
-                          fill="#4F46E5"
-                          opacity=".88"
-                        />
-                        <path
-                          d="M29.09 0H4.883c-.494 0-.896.357-.896.798v14.404c0 .44.402.798.896.798H29.09c.495 0 .897-.357.897-.798V.798c0-.44-.402-.798-.897-.798Z"
-                          fill="url(#icon4-a)"
-                          transform="rotate(-8 126.748 -40.297)"
-                        />
-                        <path
-                          d="M25.194 25.777a3 3 0 1 1-.835-5.942 3 3 0 0 1 .835 5.942Z"
-                          fill="#6366F1"
-                          opacity=".72"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                  <!-- Content -->
-                  <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    Billing & Invoices
-                  </h3>
-                  <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
-                  </div>
-                </div>
-                <!-- Link -->
-                <div>
-                  <a
-                    class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
-                    >Explore -&gt;</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Item -->
-            <div class="bg-slate-100 rounded-sm text-center p-5">
-              <div class="flex flex-col h-full">
-                <div class="grow mb-2">
-                  <!-- Icon -->
-                  <div class="inline-flex w-12 h-12 rounded-full bg-indigo-400">
-                    <svg
-                      class="w-12 h-12"
-                      viewBox="0 0 48 48"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <linearGradient
-                          x1="50%"
-                          y1="0%"
-                          x2="50%"
-                          y2="100%"
                           id="icon5-a"
+                          x1="50%"
+                          y1="0%"
+                          x2="50%"
+                          y2="100%"
                         >
                           <stop stop-color="#FFF" offset="0%" />
                           <stop stop-color="#A5B4FC" offset="100%" />
@@ -397,195 +338,18 @@
                   </div>
                   <!-- Content -->
                   <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    Support
+                    Claiming
                   </h3>
                   <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
+                    Claim important events on your car (accidents, theft) in no
+                    time.
                   </div>
                 </div>
                 <!-- Link -->
                 <div>
                   <a
                     class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
-                    >Explore -&gt;</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Item -->
-            <div class="bg-slate-100 rounded-sm text-center p-5">
-              <div class="flex flex-col h-full">
-                <div class="grow mb-2">
-                  <!-- Icon -->
-                  <div class="inline-flex w-12 h-12 rounded-full bg-indigo-400">
-                    <svg
-                      class="w-12 h-12"
-                      viewBox="0 0 48 48"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <linearGradient
-                          x1="50%"
-                          y1="0%"
-                          x2="50%"
-                          y2="100%"
-                          id="icon6-a"
-                        >
-                          <stop stop-color="#FFF" offset="0%" />
-                          <stop stop-color="#A5B4FC" offset="100%" />
-                        </linearGradient>
-                      </defs>
-                      <g fill-rule="nonzero" fill="none">
-                        <path
-                          d="M33.83 16.57 9.803 19.52c-.491.06-.846.464-.793.901l1.756 14.297c.054.437.496.743.987.683l24.026-2.95c.492-.06.847-.464.793-.901l-1.755-14.297c-.054-.438-.496-.743-.987-.683Z"
-                          fill="#4F46E5"
-                          opacity=".88"
-                        />
-                        <path
-                          d="M28.712 0H4.505c-.495 0-.897.357-.897.798v14.404c0 .44.402.798.897.798h24.207c.494 0 .896-.357.896-.798V.798c0-.44-.402-.798-.896-.798Z"
-                          fill="url(#icon6-a)"
-                          transform="rotate(8 -86.45 77.005)"
-                        />
-                        <path
-                          fill="#6366F1"
-                          opacity=".72"
-                          d="m23.646 19.765 4.533 3.667-5.368 2.275z"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                  <!-- Content -->
-                  <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    Multimedia / Files
-                  </h3>
-                  <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
-                  </div>
-                </div>
-                <!-- Link -->
-                <div>
-                  <a
-                    class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
-                    >Explore -&gt;</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Item -->
-            <div class="bg-slate-100 rounded-sm text-center p-5">
-              <div class="flex flex-col h-full">
-                <div class="grow mb-2">
-                  <!-- Icon -->
-                  <div class="inline-flex w-12 h-12 rounded-full bg-indigo-400">
-                    <svg
-                      class="w-12 h-12"
-                      viewBox="0 0 48 48"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <linearGradient
-                          x1="50%"
-                          y1="0%"
-                          x2="50%"
-                          y2="100%"
-                          id="icon7-a"
-                        >
-                          <stop stop-color="#FFF" offset="0%" />
-                          <stop stop-color="#A5B4FC" offset="100%" />
-                        </linearGradient>
-                      </defs>
-                      <g
-                        transform="translate(-.186 -.042)"
-                        fill-rule="nonzero"
-                        fill="none"
-                      >
-                        <circle fill="#554FE8" cx="20" cy="26.993" r="10" />
-                        <circle
-                          fill="url(#icon7-a)"
-                          cx="25.122"
-                          cy="24"
-                          r="11"
-                        />
-                        <path
-                          fill="#6366F1"
-                          opacity=".72"
-                          d="m26.255 22.605-1.569-3.586-.922 3.804-3.735.327 3.26 2.195-.864 3.91 2.927-2.626 3.339 2.078-1.53-3.7 2.83-2.729z"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                  <!-- Content -->
-                  <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    App Rewards
-                  </h3>
-                  <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
-                  </div>
-                </div>
-                <!-- Link -->
-                <div>
-                  <a
-                    class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
-                    >Explore -&gt;</a
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- Item -->
-            <div class="bg-slate-100 rounded-sm text-center p-5">
-              <div class="flex flex-col h-full">
-                <div class="grow mb-2">
-                  <!-- Icon -->
-                  <div class="inline-flex w-12 h-12 rounded-full bg-indigo-400">
-                    <svg
-                      class="w-12 h-12"
-                      viewBox="0 0 48 48"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <linearGradient
-                          x1="50%"
-                          y1="0%"
-                          x2="50%"
-                          y2="100%"
-                          id="icon8-a"
-                        >
-                          <stop stop-color="#FFF" offset="0%" />
-                          <stop stop-color="#A5B4FC" offset="100%" />
-                        </linearGradient>
-                      </defs>
-                      <g fill-rule="nonzero" fill="none">
-                        <path
-                          d="M18.648 35.069c.232.217.46.322.798.31.337-.012.558-.132.775-.365l1.95-2.094c1.028.414 2.504.813 4.076.758 1.798-.063 3.688-.692 5.426-2.441 3.686-3.956 4.05-12.862 4.038-13.199-.012-.337-.136-.67-.368-.888-.233-.217-.574-.317-.91-.306-.338.012-9.405 1.23-12.875 4.953-2.168 2.327-2.41 5.037-1.883 7.27l6.61-3.946-7.804 8.378a1.206 1.206 0 0 0 .167 1.57Z"
-                          fill="#554FE8"
-                        />
-                        <path
-                          d="M.353 17.663c.225.224.45.337.787.337s.562-.113.786-.337l2.024-2.026c1.011.45 2.473.9 4.046.9 1.799 0 3.71-.562 5.508-2.25C17.326 10.462 18 1.575 18 1.237c0-.337-.112-.675-.337-.9C17.438.113 17.1 0 16.763 0c-.337 0-9.441.9-13.038 4.5-2.248 2.25-2.585 4.95-2.136 7.2l6.744-3.712-8.093 8.1a1.206 1.206 0 0 0 .113 1.575Z"
-                          fill="url(#icon8-a)"
-                          transform="rotate(13 -42.427 83.827)"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                  <!-- Content -->
-                  <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                    Contact Us
-                  </h3>
-                  <div class="text-sm">
-                    Lorem ipsum dolor sit consectetur adipiscing elit sed do.
-                  </div>
-                </div>
-                <!-- Link -->
-                <div>
-                  <a
-                    class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                    href="#0"
+                    href="/claims"
                     >Explore -&gt;</a
                   >
                 </div>

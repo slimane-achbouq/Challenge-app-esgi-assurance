@@ -5,10 +5,10 @@
       <label for="app-search" class="sr-only">Search by contracts number</label>
       <input
         id="app-search"
+        v-model="searchTerm"
         class="form-input w-full pl-9 py-3 focus:border-slate-300"
         type="search"
         placeholder="Search by quote number"
-        v-model="searchTerm"
         @input="searchCustomers"
       />
       <button
@@ -36,7 +36,7 @@
       class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2"
     >
       <!-- Delete button -->
-      <DeleteButton :selectedItems="selectedItems" />
+      <DeleteButton :selected-items="selectedItems" />
 
       <!-- Filter button -->
 
@@ -45,8 +45,8 @@
           ref="trigger"
           class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
           aria-haspopup="true"
-          @click.prevent="dropdownOpen = !dropdownOpen"
           :aria-expanded="dropdownOpen"
+          @click.prevent="dropdownOpen = !dropdownOpen"
         >
           <span class="sr-only">Filter</span><wbr />
           <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
@@ -78,9 +78,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
+                      v-model="filters.subscribed"
                       type="checkbox"
                       class="form-checkbox"
-                      v-model="filters.subscribed"
                     />
                     <span class="text-sm font-medium ml-2">Active</span>
                   </label>
@@ -88,9 +88,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
+                      v-model="filters.notSubscribed"
                       type="checkbox"
                       class="form-checkbox"
-                      v-model="filters.notSubscribed"
                     />
                     <span class="text-sm font-medium ml-2">Incative</span>
                   </label>
@@ -98,9 +98,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
+                      v-model="filters.basicInsurance"
                       type="checkbox"
                       class="form-checkbox"
-                      v-model="filters.basicInsurance"
                     />
                     <span class="text-sm font-medium ml-2"
                       >Basic insurance</span
@@ -110,9 +110,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
+                      v-model="filters.standardInsurance"
                       type="checkbox"
                       class="form-checkbox"
-                      v-model="filters.standardInsurance"
                     />
                     <span class="text-sm font-medium ml-2"
                       >Standard insurance</span
@@ -123,9 +123,9 @@
                 <li class="py-1 px-3">
                   <label class="flex items-center">
                     <input
+                      v-model="filters.comprehensiveCoverage"
                       type="checkbox"
                       class="form-checkbox"
-                      v-model="filters.comprehensiveCoverage"
                     />
                     <span class="text-sm font-medium ml-2"
                       >Comprehensive coverage</span
@@ -167,8 +167,8 @@
           class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
           aria-label="Select date range"
           aria-haspopup="true"
-          @click.prevent="dropdownOpen1 = !dropdownOpen1"
           :aria-expanded="dropdownOpen1"
+          @click.prevent="dropdownOpen1 = !dropdownOpen1"
         >
           <span class="flex items-center">
             <svg
@@ -258,9 +258,9 @@
                   <label class="inline-flex">
                     <span class="sr-only">Select all</span>
                     <input
+                      v-model="selectAll"
                       class="form-checkbox"
                       type="checkbox"
-                      v-model="selectAll"
                       @click="checkAll"
                     />
                   </label>
@@ -296,8 +296,8 @@
           <ContractsTableItem
             v-for="quote in quotes"
             :key="quote.id"
-            :quote="quote"
             v-model:selected="selected"
+            :quote="quote"
             :value="quote.id"
           />
         </table>
@@ -649,6 +649,11 @@ export default {
       options,
       selectedDatefilter,
     };
+  },
+  created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
   },
 };
 </script>

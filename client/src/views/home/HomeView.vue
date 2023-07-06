@@ -17,12 +17,14 @@
         <div class="flex md:order-2">
           <div v-if="!token">
             <router-link
+              v-track:click="'CLICKED_BTN'"
               type="button"
               class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
               to="/login"
               >Login</router-link
             >
             <router-link
+              v-track:click="'CLICKED_BTN'"
               type="button"
               class="btn bg-indigo-600 hover:bg-indigo-600 text-white ml-3"
               to="/register"
@@ -113,25 +115,27 @@
           v-if="!token"
           class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4"
         >
-          <router-link
-            to="/new-quote"
-            class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-          >
-            Get Started
-            <svg
-              aria-hidden="true"
-              class="ml-2 -mr-1 w-4 h-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+          <button v-track:click="'CLICKED_BTN'">
+            <router-link
+              to="/new-quote"
+              class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-indigo-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
             >
-              <path
-                fill-rule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </router-link>
+              Get Started
+              <svg
+                aria-hidden="true"
+                class="ml-2 -mr-1 w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </router-link>
+          </button>
           <router-link
             to="/register"
             class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
@@ -929,8 +933,28 @@ export default {
       token: null,
     };
   },
+  mounted() {
+    (function (d, m) {
+      var kommunicateSettings = {
+        appId: "10b193d95360a9bd8d4c5effe8ba8d56c",
+        popupWidget: true,
+        automaticChatOpenOnNavigation: true,
+      };
+      var s = document.createElement("script");
+      s.type = "text/javascript";
+      s.async = true;
+      s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+      var h = document.getElementsByTagName("head")[0];
+      h.appendChild(s);
+      window.kommunicate = m;
+      m._globals = kommunicateSettings;
+    })(document, window.kommunicate || {});
+  },
   async created() {
     this.token = this.$store.getters["auth/token"];
+    if (localStorage.getItem("kpiJwtToken")) {
+      localStorage.clear();
+    }
   },
   methods: {},
 };

@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,12 +9,12 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
       <main>
-        <Banner type="success" class="mb-4" :open="true" v-if="updated">
+        <Banner v-if="updated" type="success" class="mb-4" :open="true">
           User information updated successfully.
         </Banner>
 
@@ -72,9 +72,9 @@
                           >
                           <input
                             id="firstname"
+                            v-model.trim="user.firstname"
                             class="form-input w-full"
                             type="text"
-                            v-model.trim="user.firstname"
                           />
                           <div
                             v-if="errors.name"
@@ -91,9 +91,9 @@
                           >
                           <input
                             id="lastname"
+                            v-model.trim="user.lastname"
                             class="form-input w-full"
                             type="text"
-                            v-model.trim="user.lastname"
                           />
 
                           <div
@@ -112,9 +112,9 @@
                           >
                           <input
                             id="address"
+                            v-model.trim="user.email"
                             class="form-input w-full"
                             type="text"
-                            v-model.trim="user.email"
                           />
 
                           <div
@@ -135,8 +135,8 @@
                           >
                           <input
                             id="card-city"
-                            class="form-input w-full"
                             v-model.trim="user.phoneNumber"
+                            class="form-input w-full"
                             type="text"
                           />
                           <div v-if="error" class="text-xs mt-1 text-rose-500">
@@ -158,15 +158,15 @@
                           <span class="text-rose-500">*</span></label
                         >
                         <input
-                          autoComplete="none"
                           id="street"
+                          v-model.trim="user.adresse"
+                          autoComplete="none"
                           class="form-input w-full"
                           type="text"
-                          v-model.trim="user.adresse"
                           @input="searchStreet($event)"
                         />
 
-                        <div class="" v-if="isAddressLoading">
+                        <div v-if="isAddressLoading" class="">
                           <svg
                             class="animate-spin w-4 h-4 fill-current shrink-0"
                             viewBox="0 0 16 16"
@@ -178,17 +178,17 @@
                         </div>
 
                         <div
-                          v-else-if="searchedAddresses"
                           v-for="searchedAddress in searchedAddresses"
+                          v-else-if="searchedAddresses"
                           :key="searchedAddress.properties.id"
                         >
                           <div
                             class="text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                           >
                             <button
-                              @click="setAddress(searchedAddress)"
                               type="button"
                               class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white"
+                              @click="setAddress(searchedAddress)"
                             >
                               {{
                                 searchedAddress.properties.label.substring(
@@ -217,9 +217,9 @@
                           >
                           <input
                             id="card-vat"
+                            v-model="user.adresse"
                             class="form-input w-full cursor-not-allowed"
                             type="text"
-                            v-model="user.adresse"
                             disabled
                           />
                         </div>
@@ -231,9 +231,9 @@
                           >
                           <input
                             id="card-vat"
+                            v-model="user.city"
                             class="form-input w-full cursor-not-allowed"
                             type="text"
-                            v-model="user.city"
                             disabled
                           />
                         </div>
@@ -246,9 +246,9 @@
 
                           <input
                             id="card-postcode"
+                            v-model="user.codeCity"
                             class="form-input w-full cursor-not-allowed"
                             type="text"
-                            v-model="user.codeCity"
                             disabled
                           />
                         </div>
@@ -273,7 +273,7 @@
             </div>
           </div>
         </div>
-        <ModalBasic id="danger-modal" :modalOpen="modaVlidateOpen">
+        <ModalBasic id="danger-modal" :modal-open="modaVlidateOpen">
           <div class="p-5 flex w-full space-x-4">
             <!-- Icon -->
             <div
@@ -322,7 +322,7 @@
           </div>
         </ModalBasic>
 
-        <ModalBasic id="danger-modal" :modalOpen="modaDeletelOpen">
+        <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen">
           <div class="p-5 flex w-full space-x-4">
             <!-- Icon -->
             <div
@@ -399,6 +399,13 @@ export default {
     Banner,
     ModalBasic,
   },
+  setup() {
+    const sidebarOpen = ref(false);
+
+    return {
+      sidebarOpen,
+    };
+  },
   data() {
     return {
       searchedAddresses: [],
@@ -429,6 +436,38 @@ export default {
 
       updated: false,
     };
+  },
+  async created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
+    console.log(this.$store.getters["auth/email"]);
+    console.log(this.$store.getters["auth/isAuthenticated"]);
+
+    const id = this.$store.getters["auth/id"];
+
+    const token = this.$store.getters["auth/token"];
+
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+    const response =
+      JSON.parse(localStorage.getItem("profile-data")) ??
+      (await axios.get(`${import.meta.env.VITE_API_URL}/getoneuser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }));
+
+    /*if(response.data["hydra:member"]){
+          customers.value = await response.data["hydra:member"];
+        }*/
+
+    if (response.data) {
+      if (!localStorage.getItem("profile-data")) {
+        localStorage.setItem("profile-data", JSON.stringify(response));
+      }
+      this.user = response.data;
+      console.log(this.user);
+    }
   },
 
   methods: {
@@ -478,7 +517,7 @@ export default {
           this.searchedAddresses = data.features;
         }
         if (data.features.length == 0) {
-          this.errors.address = "There is no adresse !";
+          this.errors.address = "There is no address !";
           this.isAddressLoading = false;
           return;
         }
@@ -571,43 +610,6 @@ export default {
 
       this.updated = true;
     },
-  },
-  setup() {
-    const sidebarOpen = ref(false);
-
-    return {
-      sidebarOpen,
-    };
-  },
-  async created() {
-    console.log(this.$store.getters["auth/email"]);
-    console.log(this.$store.getters["auth/isAuthenticated"]);
-
-    const id = this.$store.getters["auth/id"];
-
-    const token = this.$store.getters["auth/token"];
-
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response = JSON.parse(localStorage.getItem("profile-data")) ?? await axios.get(
-      `${import.meta.env.VITE_API_URL}/getoneuser/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    /*if(response.data["hydra:member"]){
-          customers.value = await response.data["hydra:member"];
-        }*/
-
-    if (response.data) {
-      if (!localStorage.getItem("profile-data")) {
-        //localStorage.setItem("profile-data", JSON.stringify(response));
-      }
-      this.user = response.data;
-      console.log(this.user);
-    }
   },
 };
 </script>

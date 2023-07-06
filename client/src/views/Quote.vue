@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,21 +9,21 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
       <main>
         <Banner
+          v-if="quoteUpdated"
           type="success"
           class="mb-4"
           :open="quoteUpdated"
-          v-if="quoteUpdated"
         >
           Quote edited successfully .
         </Banner>
 
-        <Banner type="success" class="mb-4" :open="deleted" v-if="deleted">
+        <Banner v-if="deleted" type="success" class="mb-4" :open="deleted">
           Quote deleted successfully.
         </Banner>
 
@@ -39,13 +39,13 @@
 
             <!-- Right: Actions -->
             <div
+              v-if="quote && quote.insurancePremium == 0"
               class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2"
-              v-if="quote && this.quote.insurancePremium == 0"
             >
               <button
+                v-if="quote.insurancePremium == 0"
                 class="btn border-slate-200 hover:border-slate-300 text-slate-600"
                 @click="modalOpen = true"
-                v-if="this.quote.insurancePremium == 0"
               >
                 <svg
                   class="w-4 h-4 fill-current text-slate-500 shrink-0"
@@ -59,9 +59,9 @@
               </button>
 
               <button
+                v-if="quote.insurancePremium == 0"
                 class="btn border-slate-200 hover:border-slate-300 text-rose-500"
                 @click="modaDeletelOpen = true"
-                v-if="this.quote.insurancePremium == 0"
               >
                 <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                   <path
@@ -86,7 +86,7 @@
                       d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z"
                     />
                   </svg>
-                  <span class="hidden xs:block ml-2" v-if="role === 'User'"
+                  <span v-if="role === 'User'" class="hidden xs:block ml-2"
                     >Choose my plan</span
                   >
                 </button>
@@ -146,7 +146,7 @@
                             </div>
                           </th>
                           <th class="p-2 whitespace-nowrap">
-                            <div class="font-semibold text-left">adresse</div>
+                            <div class="font-semibold text-left">address</div>
                           </th>
                           <th class="p-2 whitespace-nowrap">
                             <div class="font-semibold text-left">Age</div>
@@ -194,12 +194,12 @@
                           <td class="p-2 whitespace-nowrap">
                             <div class="text-left text-emerald-500">
                               <span
-                                class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
                                 v-if="user.isValide"
+                                class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
                                 >Actif</span
                               ><span
-                                class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
                                 v-if="!user.isValide"
+                                class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
                                 >Inactif</span
                               >
                             </div>
@@ -224,24 +224,27 @@
                   <i class="fas fa-file-contract"></i> Quote informations
                 </h2>
                 <i
+                  v-if="quote && quote.insurancePremium == 0"
                   class="far fa-edit cursor-pointer"
                   @click="modalOpen = true"
-                  v-if="quote && this.quote.insurancePremium == 0"
                 ></i>
               </header>
 
-              <div class="px-10 divide-y divide-slate-100 space-y-3" v-if="quote">
+              <div
+                v-if="quote"
+                class="px-10 divide-y divide-slate-100 space-y-3"
+              >
                 <div>
                   <div class="flex justify-between text-sm m-3">
                     <div class="font-medium text-slate-800">Status</div>
                     <div class="  ">
                       <span
-                        class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
                         v-if="quote.insuranceId"
+                        class="bg-emerald-100 text-emerald-600 font-medium rounded-full text-center px-2.5 py-1"
                         >subscribed</span
                       ><span
-                        class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
                         v-if="!quote.insuranceId"
+                        class="bg-amber-100 text-amber-600 font-medium rounded-full text-center px-2.5 py-1"
                         >unsubscribed</span
                       >
                     </div>
@@ -303,10 +306,12 @@
             </div>
 
             <!-- Quote detail -->
-            <div v-if="quote"
+            <div
+              v-if="quote"
               class="col-span-full xl:col-span-6 bg-gradient-to-b from-slate-700 to-slate-800 shadow-lg rounded-sm border border-slate-800"
             >
-              <header v-if="quote"
+              <header
+                v-if="quote"
                 class="px-5 py-4 border-b border-slate-600 flex items-center justify-between font-semibold"
               >
                 <h2 class="font-semibold text-slate-200">
@@ -317,12 +322,12 @@
                   :to="{ name: 'editquote', params: { id: quote.vehicle.id } }"
                 >
                   <i
+                    v-if="quote.insurancePremium == 0"
                     class="far fa-edit font-semibold text-slate-200 cursor-pointer"
-                    v-if="this.quote.insurancePremium == 0"
                   ></i>
                 </router-link>
               </header>
-              <div class="h-full px-5 py-2" v-if="quote">
+              <div v-if="quote" class="h-full px-5 py-2">
                 <!-- Details -->
                 <div class="justify-center">
                   <div
@@ -441,11 +446,11 @@
                   <div class="flex items-start space-x-3 md:space-x-4">
                     <div class="w-9 h-9 shrink-0 mt-1">
                       <img
-                        @click="downloadFile"
                         class="w-9 h-9 rounded-full"
                         src="@/images/pdf.png"
                         width="36"
                         height="36"
+                        @click="downloadFile"
                       />
                     </div>
                     <div>
@@ -464,7 +469,11 @@
         </div>
       </main>
 
-      <ModalBasic id="feedback-modal" :modalOpen="modalOpen" title="Edit Quote">
+      <ModalBasic
+        id="feedback-modal"
+        :modal-open="modalOpen"
+        title="Edit Quote"
+      >
         <!-- Modal content -->
         <div class="px-5 py-4">
           <div class="space-y-3">
@@ -475,8 +484,8 @@
                 >
                 <select
                   id="card-country"
-                  class="form-select w-full"
                   v-model="formData.insuranceType"
+                  class="form-select w-full"
                 >
                   <option>Liability</option>
                   <option>Collision</option>
@@ -491,8 +500,8 @@
                 >
                 <select
                   id="card-country"
-                  class="form-select w-full"
                   v-model="formData.coverage"
+                  class="form-select w-full"
                 >
                   <option>Basic</option>
                   <option>Standard</option>
@@ -511,9 +520,9 @@
                 >
                 <input
                   id="card-address"
+                  v-model="formData.coverageDuration"
                   class="form-input w-full placeholder-slate-300"
                   type="number"
-                  v-model="formData.coverageDuration"
                   placeholder="12"
                 />
                 <p class="text-xs mt-1 text-rose-500"></p>
@@ -524,11 +533,11 @@
                   >Coverage Start Date <span class="text-rose-500">*</span><br
                 /></label>
                 <input
+                  id="startingDate"
+                  v-model="formData.coverageStartDate"
                   type="date"
                   class="form-input w-full"
-                  id="startingDate"
                   name="startingDate"
-                  v-model="formData.coverageStartDate"
                 />
                 <p class="text-xs mt-1 text-rose-500"></p>
               </div>
@@ -554,7 +563,7 @@
         </div>
       </ModalBasic>
 
-      <ModalBasic id="danger-modal" :modalOpen="modaDeletelOpen">
+      <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen">
         <div class="p-5 flex w-full space-x-4">
           <!-- Icon -->
           <div
@@ -623,6 +632,14 @@ export default {
     ModalBasic,
     Banner,
   },
+
+  setup() {
+    const sidebarOpen = ref(false);
+
+    return {
+      sidebarOpen,
+    };
+  },
   data() {
     return {
       id: null,
@@ -641,6 +658,61 @@ export default {
       deleted: false,
       role: null,
     };
+  },
+
+  async created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
+    this.role = this.$store.getters["auth/roles"];
+    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
+
+    const token = this.$store.getters["auth/token"];
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/quotes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    /*if(response.data["hydra:member"]){
+          customers.value = await response.data["hydra:member"];
+        }*/
+
+    if (response.data) {
+      this.quote = response.data;
+    }
+
+    this.formData.insuranceType = this.quote.insuranceType;
+    this.formData.coverage = this.quote.coverage;
+    this.formData.coverageDuration = this.quote.coverageDuration;
+    this.formData.coverageStartDate = this.processDate(
+      this.quote.coverageStartDate
+    );
+    const response1 =
+      JSON.parse(localStorage.getItem("one-user")) ??
+      (await axios.get(
+        `${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ));
+
+    /*if(response.data["hydra:member"]){
+          customers.value = await response.data["hydra:member"];
+        }*/
+
+    if (response1.data) {
+      if (!localStorage.getItem("one-user")) {
+        localStorage.setItem("one-user", JSON.stringify(response1));
+      }
+      this.user = response1.data;
+    }
   },
   methods: {
     downloadFile() {
@@ -691,7 +763,7 @@ export default {
         this.modaDeletelOpen = false;
         this.deleted = true;
       } catch (e) {
-        console.log(e)
+        console.log(e);
         this.modaDeletelOpen = false;
         this.deleted = false;
       }
@@ -712,64 +784,6 @@ export default {
       this.quoteUpdated = true;
       this.modalOpen = false;
     },
-  },
-
-  setup() {
-    const sidebarOpen = ref(false);
-
-    return {
-      sidebarOpen,
-    };
-  },
-
-  async created() {
-    this.role = this.$store.getters["auth/roles"];
-    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-
-    const token = this.$store.getters["auth/token"];
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/quotes/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    /*if(response.data["hydra:member"]){
-          customers.value = await response.data["hydra:member"];
-        }*/
-
-    if (response.data) {
-      this.quote = response.data;
-    }
-
-    this.formData.insuranceType = this.quote.insuranceType;
-    this.formData.coverage = this.quote.coverage;
-    this.formData.coverageDuration = this.quote.coverageDuration;
-    this.formData.coverageStartDate = this.processDate(
-      this.quote.coverageStartDate
-    );
-    const response1 = JSON.parse(localStorage.getItem("one-user")) ?? await axios.get(
-      `${import.meta.env.VITE_API_URL}/getoneuser/${this.quote.userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    /*if(response.data["hydra:member"]){
-          customers.value = await response.data["hydra:member"];
-        }*/
-
-    if (response1.data) {
-      if (!localStorage.getItem("one-user")) {
-        //localStorage.setItem("one-user", JSON.stringify(response));
-      }
-      this.user = response1.data;
-    }
   },
 };
 </script>

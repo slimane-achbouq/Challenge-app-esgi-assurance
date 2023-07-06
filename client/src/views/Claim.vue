@@ -109,7 +109,10 @@
                         </div>
                         <div class="divide-y divide-slate-300 m-3">
                           <div>
-                            <div class="m-2 mt-5">
+                            <div
+                              v-track:mouseover="'CONTENT_MOUSEOVER'"
+                              class="m-2 mt-5"
+                            >
                               <div class="text-slate-800 font-semibold">
                                 Decision
                               </div>
@@ -122,7 +125,10 @@
                                 - {{ claim.decision }}
                               </div>
                             </div>
-                            <div class="m-2 mt-5">
+                            <div
+                              v-track:mouseover="'CONTENT_MOUSEOVER'"
+                              class="m-2 mt-5"
+                            >
                               <div class="text-slate-800 font-semibold">
                                 Additional information
                               </div>
@@ -245,17 +251,16 @@ export default {
     let response = null;
     try {
       response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/claims/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        `${import.meta.env.VITE_API_URL}/claims/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      //localStorage.setItem("claim-data", JSON.stringify(response));
-    }
-    catch(e) {
-      response = JSON.parse(localStorage.getItem("claim-data"))
+      localStorage.setItem("claim-data", JSON.stringify(response));
+    } catch (e) {
+      response = JSON.parse(localStorage.getItem("claim-data"));
     }
 
     if (response.data) {

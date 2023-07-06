@@ -15,6 +15,7 @@ import { QuoteModule } from './quote/quote.module';
 import { UtilsModule } from './utils/utils.module';
 import { ClaimsModule } from './claims/claims.module';
 import { PaymentModule } from './payment/payment.module';
+import { KpiModule } from './kpi/kpi.module';
 dotenv.config();
 
 async function bootstrap() {
@@ -41,11 +42,11 @@ async function bootstrap() {
 
   // Cors
   app.enableCors({
-    origin: process.env.CLIENT_URL,
+    /* origin: process.env.CLIENT_URL,
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
-    credentials: true,
+    credentials: true, */
   });
 
   // Swagger config
@@ -85,6 +86,7 @@ async function bootstrap() {
       UtilsModule,
       ClaimsModule,
       PaymentModule,
+      KpiModule,
     ],
   });
   SwaggerModule.setup('api/v1', app, doc, swaggerCustomOptions);

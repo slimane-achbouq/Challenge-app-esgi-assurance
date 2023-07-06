@@ -14,7 +14,7 @@ export class TagService {
     }
 
     async findAllByAppId(appId: string): Promise<Tag[]> {
-        return this.tagModel.find({app_id: appId}).exec();
+        return this.tagModel.find({appId}).exec();
     }
 
     async findOneByLabel(label: string): Promise<Tag> {

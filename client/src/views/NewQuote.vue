@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,37 +9,37 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
       <main>
         <Banner
+          v-if="quoteCreated"
           type="success"
           class="mb-1"
           :open="quoteCreated"
-          v-if="quoteCreated"
         >
           quote created successfully .
         </Banner>
         <Banner
+          v-if="true"
           type="error"
           class="mb-1"
           :open="Object.keys(errors).length !== 0"
-          v-if="true"
         >
           Check the fields.
         </Banner>
 
         <Banner
+          v-if="formatIncorrect"
           type="error"
           class="mb-1"
           :open="formatIncorrect"
-          v-if="formatIncorrect"
         >
           The format of the file must be PDF.
         </Banner>
 
-        <Banner type="success" class="mb-1" :open="true" v-if="caretCrise">
+        <Banner v-if="caretCrise" type="success" class="mb-1" :open="true">
           File uploaded successfully.
         </Banner>
 
@@ -108,14 +108,14 @@
                 <header class="mb-6">
                   <!-- Title -->
                   <h1
-                    class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"
                     v-if="step.id == 1 || step.id == 2"
+                    class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"
                   >
                     <i class="fas fa-car"></i> Vehicle informations
                   </h1>
                   <h1
-                    class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"
                     v-if="step.id == 3"
+                    class="text-2xl md:text-3xl text-slate-800 font-bold mb-2"
                   >
                     <i class="fas fa-file-signature"></i> Quote informations
                   </h1>
@@ -128,8 +128,8 @@
                       <!-- 1st row -->
 
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 1"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -140,16 +140,16 @@
                           >
                           <select
                             id="card-country"
-                            class="form-select w-full"
                             v-model="formData.vehicleType"
+                            class="form-select w-full"
                           >
                             <option>Car</option>
                             <option>Motorcycle</option>
                             <option>Truck</option>
                           </select>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.vehicletype"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             {{ errors.vehicletype }}
                           </p>
@@ -174,8 +174,8 @@
                             </option>
                           </select>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.brand"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             {{ errors.brand }}
                           </p>
@@ -183,8 +183,8 @@
                       </div>
                       <!-- 2nd row -->
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 1"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -207,8 +207,8 @@
                             </option>
                           </select>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.model"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             {{ errors.model }}
                           </p>
@@ -223,14 +223,14 @@
                           >
                           <input
                             id="card-city"
+                            v-model="formData.horsepower"
                             class="form-input w-full placeholder-slate-300"
                             type="number"
-                            v-model="formData.horsepower"
                             placeholder="200"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.horsepower"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Horse Power should not be empty
                           </p>
@@ -238,8 +238,8 @@
                       </div>
                       <!-- 3rd row -->
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 1"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -250,20 +250,20 @@
                           >
                           <input
                             id="card-state"
+                            v-model="formData.licensePlate"
                             class="form-input w-full placeholder-slate-300"
                             type="text"
-                            v-model="formData.licensePlate"
                             placeholder="AA-123-BB"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.licenseplate"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             License Plate should not be empty
                           </p>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.licenseplateformat"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Place Number format not correct
                           </p>
@@ -276,15 +276,15 @@
                             <span class="text-rose-500">*</span><br
                           /></label>
                           <input
+                            id="startingDate"
+                            v-model="formData.licenseObtainedDate"
                             type="datetime-local"
                             class="form-input w-full"
-                            id="startingDate"
                             name="startingDate"
-                            v-model="formData.licenseObtainedDate"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.licenseobtaineddate"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Date not valid
                           </p>
@@ -292,8 +292,8 @@
                       </div>
                       <!-- 4th row -->
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 2"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -304,20 +304,20 @@
                           >
                           <input
                             id="card-name"
+                            v-model="formData.annualMileage"
                             class="form-input w-full placeholder-slate-300"
                             type="number"
-                            v-model="formData.annualMileage"
                             placeholder="70000"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.annualmileage"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Annual Mileage should not be empty
                           </p>
                         </div>
 
-                        <div class="flex-1" v-if="step.id == 2">
+                        <div v-if="step.id == 2" class="flex-1">
                           <label
                             class="block text-sm font-medium mb-1"
                             for="startingDate"
@@ -325,15 +325,15 @@
                             <span class="text-rose-500">*</span><br
                           /></label>
                           <input
+                            id="startingDate"
+                            v-model="formData.vehicleCirculationDate"
                             type="datetime-local"
                             class="form-input w-full"
-                            id="startingDate"
                             name="startingDate"
-                            v-model="formData.vehicleCirculationDate"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.vehiclecirculationdate"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Date not valid
                           </p>
@@ -342,8 +342,8 @@
 
                       <!-- 4th row -->
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 2"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -356,20 +356,20 @@
                           >
                           <input
                             id="card-name"
+                            v-model="formData.registrationCardHolder"
                             class="form-input w-full placeholder-slate-300"
                             type="text"
-                            v-model="formData.registrationCardHolder"
                             placeholder="First Name, Last Name"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.registrationcardholder"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Registration Card Holder should not be empty
                           </p>
                         </div>
 
-                        <div class="flex-1" v-if="step.id == 2">
+                        <div v-if="step.id == 2" class="flex-1">
                           <label
                             class="block text-sm font-medium mb-1"
                             for="startingDate"
@@ -377,15 +377,15 @@
                             <span class="text-rose-500">*</span><br
                           /></label>
                           <input
+                            id="startingDate"
+                            v-model="formData.registrationCardDate"
                             type="datetime-local"
                             class="form-input w-full"
-                            id="startingDate"
                             name="startingDate"
-                            v-model="formData.registrationCardDate"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.registrationcarddate"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Date not valid
                           </p>
@@ -394,8 +394,8 @@
 
                       <!-- 4th row -->
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 2"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -406,20 +406,20 @@
                           >
                           <select
                             id="card-country"
-                            class="form-select w-full"
                             v-model="formData.purchaseMode"
+                            class="form-select w-full"
                           >
                             <option>New</option>
                             <option>Used</option>
                           </select>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.purchasemode"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             {{ errors.purchasemode }}
                           </p>
                         </div>
-                        <div class="flex-1" v-if="step.id == 2">
+                        <div v-if="step.id == 2" class="flex-1">
                           <label
                             class="block text-sm font-medium mb-1"
                             for="card-name"
@@ -428,14 +428,14 @@
                           >
                           <input
                             id="card-name"
+                            v-model="formData.parkingPostalCode"
                             class="form-input w-full placeholder-slate-300"
                             type="text"
-                            v-model="formData.parkingPostalCode"
                             placeholder="75000"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.parkingpostalcode"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Parking Postal C ode should not be empty
                           </p>
@@ -445,8 +445,8 @@
                       <!-- 1st row -->
 
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 3"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -457,21 +457,21 @@
                           >
                           <select
                             id="card-country"
-                            class="form-select w-full"
                             v-model="formData.insuranceType"
+                            class="form-select w-full"
                           >
                             <option>Liability</option>
                             <option>Collision</option>
                             <option>Comprehensive</option>
                           </select>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.insurancetype"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             {{ errors.insurancetype }}
                           </p>
                         </div>
-                        <div class="flex-1" v-if="step.id == 3">
+                        <div v-if="step.id == 3" class="flex-1">
                           <label
                             class="block text-sm font-medium mb-1"
                             for="card-country"
@@ -480,16 +480,16 @@
                           >
                           <select
                             id="card-country"
-                            class="form-select w-full"
                             v-model="formData.coverage"
+                            class="form-select w-full"
                           >
                             <option>Basic</option>
                             <option>Standard</option>
                             <option>Premium</option>
                           </select>
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.coverage"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             {{ errors.coverage }}
                           </p>
@@ -497,8 +497,8 @@
                       </div>
                       <!-- 2nd row -->
                       <div
-                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                         v-if="step.id == 3"
+                        class="md:flex space-y-4 md:space-y-0 md:space-x-4"
                       >
                         <div class="flex-1">
                           <label
@@ -509,14 +509,14 @@
                           >
                           <input
                             id="card-address"
+                            v-model="formData.coverageDuration"
                             class="form-input w-full placeholder-slate-300"
                             type="number"
-                            v-model="formData.coverageDuration"
                             placeholder="12"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.coverageduration"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Coverage Duration should not be empty
                           </p>
@@ -529,15 +529,15 @@
                             <span class="text-rose-500">*</span><br
                           /></label>
                           <input
+                            id="startingDate"
+                            v-model="formData.coverageStartDate"
                             type="datetime-local"
                             class="form-input w-full"
-                            id="startingDate"
                             name="startingDate"
-                            v-model="formData.coverageStartDate"
                           />
                           <p
-                            class="text-xs mt-1 text-rose-500"
                             v-if="errors.coveragestartdate"
+                            class="text-xs mt-1 text-rose-500"
                           >
                             Date not valid
                           </p>
@@ -545,8 +545,8 @@
                       </div>
 
                       <div
-                        class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
                         v-if="hideImageField && step.id == 1"
+                        class="shadow-lg rounded-sm border px-5 py-4 bg-amber-10 border-amber-300"
                       >
                         <div
                           class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
@@ -576,8 +576,8 @@
                       </div>
 
                       <div
-                        class="flex items-center justify-center w-full"
                         v-if="!hideImageField && step.id == 1"
+                        class="flex items-center justify-center w-full"
                       >
                         <label for="dropzone-file" class="form-input w-full">
                           <div
@@ -624,16 +624,17 @@
                       </div>
 
                       <p
-                        class="text-xs mt-1 text-rose-500"
                         v-if="errors.filerequired && step.id == 1"
+                        class="text-xs mt-1 text-rose-500"
                       >
                         Carte grise required
                       </p>
 
-                      <div class="text-right" v-if="!quoteCreated">
+                      <div v-if="!quoteCreated" class="text-right">
                         <button
-                          type=""
                           v-if="step.id == 2 || step.id == 3"
+                          type=""
+                          class="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500"
                           @click.prevent="
                             prevStep({
                               id: step.id - 1,
@@ -641,14 +642,14 @@
                               selectedTab: 'StepTwo',
                             })
                           "
-                          class="btn bg-white border-slate-200 hover:border-slate-300 text-indigo-500"
                         >
                           back
                         </button>
 
                         <button
-                          type=""
                           v-if="step.id != 3"
+                          type=""
+                          class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                           @click.prevent="
                             nextStep({
                               id: step.id + 1,
@@ -656,15 +657,15 @@
                               selectedTab: 'StepTwo',
                             })
                           "
-                          class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                         >
                           Next step
                         </button>
 
                         <button
-                          @click.prevent="onQuoteCreated"
                           v-if="step.id == 3"
+                          v-track:click="'CLICKED_BTN'"
                           class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white mx-5"
+                          @click.prevent="onQuoteCreated"
                         >
                           Submit
                         </button>
@@ -681,9 +682,9 @@
         </div>
 
         <ModalBlank
-          id="success-modal"
-          :modalOpen="quoteCreated"
           v-if="quoteCreated"
+          id="success-modal"
+          :modal-open="quoteCreated"
         >
           <div class="p-5 flex space-x-4">
             <!-- Icon -->
@@ -722,6 +723,7 @@
                   :to="{ name: 'newcontract', params: { id: quote_id } }"
                 >
                   <button
+                    v-track:click="'CLICKED_BTN'"
                     class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
                   >
                     Choose my plans
@@ -753,9 +755,16 @@ export default {
     Banner,
     ModalBlank,
   },
+  setup() {
+    const sidebarOpen = ref(false);
+
+    return {
+      sidebarOpen,
+    };
+  },
   data() {
     return {
-      formatIncorrect : false,
+      formatIncorrect: false,
       quote_id: null,
       errors: {},
       formData: {
@@ -931,28 +940,17 @@ export default {
     handleFile(event) {
       this.file = event.target.files[0];
 
-
-      if (this.file.type != 'application/pdf') {
-        console.log(this.file.type)
-        this.formatIncorrect = true
+      if (this.file.type != "application/pdf") {
+        console.log(this.file.type);
+        this.formatIncorrect = true;
       } else {
-        this.formatIncorrect = false
+        this.formatIncorrect = false;
         this.caretCrise = this.file.name;
         this.formData.carteGrise = this.file;
         this.previewSrc = URL.createObjectURL(event.target.files[0]);
         this.hideImageField = true;
-        
-
       }
-      
     },
-  },
-  setup() {
-    const sidebarOpen = ref(false);
-
-    return {
-      sidebarOpen,
-    };
   },
 };
 </script>

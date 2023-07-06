@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateCreditCardDto } from 'src/dto/create-credit-card.dto';
-import { CreditCard } from 'src/schema/credit-card.shema';
+import { CreateCreditCardDto } from '../dto/create-credit-card.dto';
+import { CreditCard } from '../schema/credit-card.shema';
 
 @Injectable()
 export class CardService {
@@ -18,7 +18,7 @@ export class CardService {
 
     if (creditCard.message !== 'this user does not have a card !') {
       return {
-        message: 'You have already an card in our database !',
+        message: 'You have already a card in our database !',
       };
     }
 

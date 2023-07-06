@@ -24,7 +24,7 @@ import { CreateQuoteDto, UpdateQuoteDto } from './dtos/quote.dto';
 import { CreateVehicleDto, UpdateVehicleDto } from './dtos/vehicle.dto';
 import { CreateVehicleQuoteDto } from './dtos/vehicle-quote.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { validate } from 'uuid';
 import { QuoteLocalStorage } from './dtos/quote-localStorage.dto';
 import { RolesGuard } from 'src/common/guards/roles.guard';
@@ -48,9 +48,7 @@ export class QuoteController {
   @UsePipes(ValidationPipe)
   @Throttle(5, 60)
   async createQuote(@Body() quoteDto: CreateQuoteDto) {
-
-    if(quoteDto.insurancePremium) 
-        quoteDto.insurancePremium=0
+    if (quoteDto.insurancePremium) quoteDto.insurancePremium = 0;
 
     return this.quoteServiceClient
       .send({ cmd: 'createQuote' }, quoteDto)
@@ -61,6 +59,7 @@ export class QuoteController {
   @UseGuards(JwtAuthGuard, RolesGuard, ProfileValidationGuard)
   @Roles(Role.ADMIN)
   @Throttle(5, 60)
+  @ApiBearerAuth()
   async getQuotes() {
     return this.quoteServiceClient.send({ cmd: 'getQuotes' }, {}).toPromise();
   }
@@ -113,32 +112,33 @@ export class QuoteController {
     return quote;
   }
 
-@Put('quotes/:id')
-@UsePipes(ValidationPipe)
-@UseGuards(JwtAuthGuard)
-@Throttle(5, 60)
-async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
-  // check if quote exists
-  const existingQuote = await this.quoteServiceClient
-    .send({ cmd: 'getQuoteById' }, id)
-    .toPromise();
+  @Put('quotes/:id')
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Throttle(5, 60)
+  async updateQuote(@Param('id') id: string, @Body() quoteDto: UpdateQuoteDto) {
+    // check if quote exists
+    const existingQuote = await this.quoteServiceClient
+      .send({ cmd: 'getQuoteById' }, id)
+      .toPromise();
 
     if (!existingQuote) {
       throw new NotFoundException(`Quote not found`);
     }
 
-  const insurancePremium = quoteDto['insurancePremium'];
+    const insurancePremium = quoteDto['insurancePremium'];
 
-  if(insurancePremium && insurancePremium != 0 ){
-    throw new NotFoundException('you can"t edit quote, contract exist for this quote');
+    if (insurancePremium && insurancePremium != 0) {
+      throw new NotFoundException(
+        'you can"t edit quote, contract exist for this quote',
+      );
+    }
+
+    // proceed with update
+    return this.quoteServiceClient
+      .send({ cmd: 'updateQuote' }, { id, quoteDto })
+      .toPromise();
   }
-  
-
-  // proceed with update
-  return this.quoteServiceClient
-    .send({ cmd: 'updateQuote' }, { id, quoteDto })
-    .toPromise();
-}
 
   @Delete('quotes/:id')
   @UseGuards(JwtAuthGuard)

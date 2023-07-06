@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Inject, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { VerifyDto } from './dto/verify-profile.dto';
@@ -6,6 +14,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { MessageFormDto } from './dto/message-form.dto';
 import { ValidateMessageDto } from './dto/validate-message.dto';
 import { SkipThrottle } from '@nestjs/throttler';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @SkipThrottle()
 @ApiTags('Utils')
@@ -61,12 +70,14 @@ export class UtilsController {
   }
 
   @Get('getAllMessages')
+  @UseGuards(JwtAuthGuard)
   @SkipThrottle()
   async getAllMessagesOfContact() {
     return this.utilsService.send({ cmd: 'getAllMessages' }, '').toPromise();
   }
 
   @Put('validateMessage')
+  @UseGuards(JwtAuthGuard)
   @SkipThrottle()
   async validateMessage(@Body() validateMessageDto: ValidateMessageDto) {
     return this.utilsService

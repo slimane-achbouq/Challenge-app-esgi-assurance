@@ -14,7 +14,7 @@ const clientProxyProvider: Provider = {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://admin:admin_password@rabbitmq:5672'],
+        urls: [process.env.RABBITMQ_URL],
         queue: 'payment_service_queue',
         queueOptions: { durable: false },
       },

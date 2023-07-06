@@ -84,6 +84,10 @@
 </template>
 
 <script>
+import Sidebar from "@/partials/Sidebar.vue";
+import Header from "@/partials/Header.vue";
+import axios from "axios";
+
 function getCookie(name) {
   const cookies = document.cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
@@ -96,14 +100,19 @@ function getCookie(name) {
 }
 
 export default {
+  components: {Header, Sidebar},
   created() {
     if (localStorage.getItem("esgi-ws-token")) {
       localStorage.removeItem("esgi-ws-token");
       this.$router.push('/analytics/login')
     }
 
+    if (!localStorage.getItem("kpiJwtToken")) {
+      this.$router.push('/analytics/login');
+    }
+
     this.appId = localStorage.getItem("appId") || getCookie("appId");
-    this.API_URL = 'http://localhost:3008';
+    this.API_URL = import.meta.env.VITE_API_URL;
   },
   data() {
     if (!localStorage.getItem("kpiJwtToken") && !getCookie("kpiJwtToken")) {
@@ -117,11 +126,12 @@ export default {
       statusMsg: '',
       statusClass: '',
       show: 'hidden',
+      sidebarOpen: false,
     }
   },
   methods: {
     async handleSubmit() {
-      const response = await fetch(`${this.API_URL}/tag`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/tag`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -131,6 +141,7 @@ export default {
           label: this.label.toUpperCase(),
         }),
       });
+
       if (response.ok) {
         this.statusMsg = 'The tag "' + this.label + '" has been created successfully !';
         this.statusClass = 'emerald';
@@ -139,7 +150,7 @@ export default {
       } else {
         this.statusClass = 'red';
         this.show = 'block';
-        const zodErr = await res.json();
+        const zodErr = await response.json();
         if (zodErr.error) {
           this.statusMsg = zodErr.error.issues[0].message;
         } else {

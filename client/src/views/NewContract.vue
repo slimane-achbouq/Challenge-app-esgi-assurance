@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,25 +9,25 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
       <main>
         <Banner
+          v-if="contractCreated"
           type="success"
           class="mb-1"
           :open="contractCreated"
-          v-if="contractCreated"
         >
           Contract created successfully to payment .
         </Banner>
 
         <Banner
+          v-if="formatIncorrect"
           type="error"
           class="mb-1"
           :open="formatIncorrect"
-          v-if="formatIncorrect"
         >
           The format of the file must be PDF.
         </Banner>
@@ -49,7 +49,7 @@
               <div class="flex items-center mb-4 md:mb-0">
                 <!-- User info -->
 
-                <table class="table-auto w-full" v-if="quote">
+                <table v-if="quote" class="table-auto w-full">
                   <!-- Table header -->
                   <thead
                     class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm"
@@ -149,7 +149,7 @@
 
               <hr class="my-3 border-t border-slate-200" />
 
-              <div class="w-full max-w-9xl mx-auto" v-if="prices">
+              <div v-if="prices" class="w-full max-w-9xl mx-auto">
                 <!-- Pricing tabs -->
                 <div class="grid grid-cols-12 gap-6">
                   <!-- Tab 1 -->
@@ -720,7 +720,7 @@
                       <label
                         class="block text-sm font-medium mb-1"
                         for="card-country"
-                        >Proof of your adresse
+                        >Proof of your address
                         <span class="text-rose-500">*</span></label
                       >
 
@@ -755,7 +755,7 @@
                               class="mb-2 text-sm text-gray-500 dark:text-gray-400"
                             >
                               <span class="font-semibold"
-                                >Click to upload the proof of your Adresse</span
+                                >Click to upload the proof of your Address</span
                               >
                               or drag and drop
                             </p>
@@ -794,7 +794,7 @@
                               />
                             </div>
                             <div>
-                              Adresse Grise file :
+                              Carte Grise file :
                               <div class="text-sm">
                                 {{ drivingLicense }}
                               </div>
@@ -914,26 +914,26 @@
 
                     <div class="text-right" v-if="!contractCreated">
                       <button
+                        v-if="!contractCreated && !existingPayment"
                         type=""
                         class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                         @click.prevent="onCreatedContract"
-                        v-if="!contractCreated && !existingPayment"
                       >
                         Confirm and proceed face verifiation
                       </button>
                       <button
+                        v-else-if="contractCreated && !existingPayment"
                         type=""
                         class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                         @click.prevent="onCreatedContract"
-                        v-else-if="contractCreated && !existingPayment"
                       >
                         Proceed to payment
                       </button>
                       <button
+                        v-else-if="!contractCreated && existingPayment"
                         type=""
                         class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                         @click.prevent="onCreatedContract"
-                        v-else-if="!contractCreated && existingPayment"
                       >
                         Confirm
                       </button>
@@ -951,9 +951,9 @@
     </div>
   </div>
   <ModalBlank
-    id="success-modal"
-    :modalOpen="contractCreated"
     v-if="contractCreated"
+    id="success-modal"
+    :modal-open="contractCreated"
   >
     <div class="p-5 flex space-x-4">
       <!-- Icon -->
@@ -996,8 +996,9 @@
           </router-link>
 
           <button
+            v-track:click="'CLICKED_BTN'"
             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
-            @click="submit(`Azulance - ${selectedPlan} option`, this.price)"
+            @click="submit(`Azulance - ${selectedPlan} option`, price)"
           >
             Proceeded verification
           </button>
@@ -1033,10 +1034,17 @@ export default {
     ModalBlank,
     StripeCheckout,
   },
+  setup() {
+    const sidebarOpen = ref(false);
+
+    return {
+      sidebarOpen,
+    };
+  },
   data() {
     return {
       selectedPlan: "Basic",
-      formatIncorrect : false,
+      formatIncorrect: false,
       existingPayment: null,
       drivingLicense: null,
       hideImageFielddrivingLicense: null,
@@ -1069,6 +1077,74 @@ export default {
         "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
     };
   },
+  async created() {
+    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
+
+    const token = this.$store.getters["auth/token"];
+    let existingPayment = await axios.get(
+      `${import.meta.env.VITE_API_URL}/payment/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    this.existingPayment = existingPayment.data;
+
+    if (this.existingPayment) {
+      const redirectUrl = "/" + (this.$route.query.redirect || "contracts");
+      this.$router.replace(redirectUrl);
+    }
+
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+    let response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/quotes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data) {
+      this.quote = response.data;
+    }
+
+    const idUser = this.$store.getters["auth/id"];
+
+    response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/getbeneficiaryByUserId/${idUser}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data) {
+     this.beneficiary = response.data
+    }
+
+
+    this.existingPayment = existingPayment.data;
+
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+    response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/prices/${this.quote.vehicle.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data) {
+      this.prices = response.data;
+    }
+
+    this.price = Math.round(this.prices[0]);
+  },
   methods: {
     submit: async function (title, tarif) {
       await this.getStripeSession(title, tarif);
@@ -1093,11 +1169,11 @@ export default {
     handleFile(event) {
       this.file = event.target.files[0];
 
-      if (this.file.type != 'application/pdf') {
-        console.log(this.file.type)
-        this.formatIncorrect = true
+      if (this.file.type != "application/pdf") {
+        console.log(this.file.type);
+        this.formatIncorrect = true;
       } else {
-        this.formatIncorrect = false
+        this.formatIncorrect = false;
         this.errors.license = null;
         this.drivingLicense = this.file.name;
         this.formData.permis = this.file;
@@ -1105,25 +1181,21 @@ export default {
         this.hideImageFielddrivingLicense = true;
         this.errors.license = null;
       }
-      
     },
     handleFile1(event) {
       this.file = event.target.files[0];
 
-      if (this.file.type != 'application/pdf') {
-        console.log(this.file.type)
-        this.formatIncorrect = true
+      if (this.file.type != "application/pdf") {
+        console.log(this.file.type);
+        this.formatIncorrect = true;
       } else {
-        this.formatIncorrect = false
+        this.formatIncorrect = false;
         this.adresse = this.file.name;
         this.formData.justificatifDomicile = this.file;
         this.previewSrc = URL.createObjectURL(event.target.files[0]);
         this.hideImageFieladresse = true;
         this.errors.adresse = null;
-
-        }
-
-      
+      }
     },
     handleFile2(event) {
       this.IdCarderrors=false
@@ -1227,83 +1299,6 @@ export default {
         this.contractCreated = true;
       }
     },
-  },
-  setup() {
-    const sidebarOpen = ref(false);
-
-    return {
-      sidebarOpen,
-    };
-  },
-  async created() {
-    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-
-    const token = this.$store.getters["auth/token"];
-    let existingPayment = await axios.get(
-      `${import.meta.env.VITE_API_URL}/payment/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    this.existingPayment = existingPayment.data;
-
-    if(this.existingPayment ) {
-      const redirectUrl = "/" + (this.$route.query.redirect || "contracts");
-      this.$router.replace(redirectUrl);
-    }
-
-
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    let response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/quotes/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.data) {
-      this.quote = response.data;
-    }
-
-
-    const idUser = this.$store.getters["auth/id"];
-
-    response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/getbeneficiaryByUserId/${idUser}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.data) {
-     this.beneficiary = response.data
-    }
-
-
-    this.existingPayment = existingPayment.data;
-
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/prices/${this.quote.vehicle.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.data) {
-      this.prices = response.data;
-    }
-
-    this.price = Math.round(this.prices[0]);
   },
 };
 </script>

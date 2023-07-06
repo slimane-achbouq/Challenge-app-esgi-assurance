@@ -46,10 +46,8 @@
         <Banner v-if="role === 'User'" type="warning" class="mb-1" :open="true">
           To edit the inforamtions of the contract you must create a request
 
-          <router-link
-                  :to="{ name: 'contact' }"
-                >
-          <a class="cursor-pointer text-blue-900/100"> here.</a>
+          <router-link :to="{ name: 'contact' }">
+            <a class="cursor-pointer text-blue-900/100"> here.</a>
           </router-link>
         </Banner>
 
@@ -321,7 +319,7 @@
                           </div>
                           <div>
                             <div class="flex justify-between text-sm m-2">
-                              <div class="text-slate-800">Adresse</div>
+                              <div class="text-slate-800">Address</div>
                               <div class="text-slate-400 italic">
                                 {{ user.postalAddress }}
                               </div>
@@ -356,7 +354,7 @@
                           </div>
                           <div>
                             <div class="flex justify-between text-sm m-2">
-                              <div class="text-slate-800">Proof of adresse</div>
+                              <div class="text-slate-800">Proof of address</div>
                               <div class="text-slate-400 italic">
                                 <i
                                   class="fas fa-download cursor-pointer"
@@ -592,7 +590,11 @@
               </div>
             </ModalBasic>
 
-            <ModalBasic id="danger-modal" :modal-open="modaDeletelOpen" v-if="role == 'Admin'">
+            <ModalBasic
+              v-if="role == 'Admin'"
+              id="danger-modal"
+              :modal-open="modaDeletelOpen"
+            >
               <div class="p-5 flex w-full space-x-4">
                 <!-- Icon -->
                 <div
@@ -794,6 +796,9 @@ export default {
     };
   },
   async created() {
+    if (!this.$store.getters["auth/isAuthenticated"]) {
+      this.$router.push("/");
+    }
     this.role = this.$store.getters["auth/roles"];
 
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
@@ -804,16 +809,15 @@ export default {
 
     try {
       response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/insurance/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        `${import.meta.env.VITE_API_URL}/insurance/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      //localStorage.setItem("insurance-data", JSON.stringify(response.data));
-    }
-    catch(e) {
+      localStorage.setItem("insurance-data", JSON.stringify(response.data));
+    } catch (e) {
       response = JSON.parse(localStorage.getItem("insurance-data"));
     }
 
@@ -835,15 +839,18 @@ export default {
     );
     this.formData.insurancePremium = this.contract.insurancePremium;
 
-
-    const response1 = JSON.parse(localStorage.getItem("beneficiary-data")) ?? await axios.get(
-      `${import.meta.env.VITE_API_URL}/beneficiary/${this.contract.beneficiary}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response1 =
+      JSON.parse(localStorage.getItem("beneficiary-data")) ??
+      (await axios.get(
+        `${import.meta.env.VITE_API_URL}/beneficiary/${
+          this.contract.beneficiary
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ));
 
     /*if(response.data["hydra:member"]){
       customers.value = await response.data["hydra:member"];
@@ -961,7 +968,7 @@ export default {
         }
       );
 
-      this.contract.status=true
+      this.contract.status = true;
 
       this.contractUpdated = true;
       this.modaValidateOpen = false;

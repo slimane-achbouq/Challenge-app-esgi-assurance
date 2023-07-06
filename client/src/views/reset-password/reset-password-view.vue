@@ -162,7 +162,6 @@ export default {
         );
 
         const responseJSON = await response.json();
-        console.log(responseJSON);
 
         // const redirectUrl = '/' + (this.$route.query.redirect || 'login');
         // this.$router.replace(redirectUrl);
@@ -171,7 +170,7 @@ export default {
         this.successMesage = "Please check your mailbox.";
       } catch (ex) {
         this.error = new Error(
-          ex || "Failed to send email. Check you have already an compte."
+          ex || "Failed to send email. Check you have already an account."
         );
         throw error;
       }

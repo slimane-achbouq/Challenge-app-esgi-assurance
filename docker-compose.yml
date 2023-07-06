@@ -260,10 +260,10 @@ services:
       - gateway
       - rabbitmq
     environment:
-      - MONGODB_URL = mongodb://payment-database:27017/db
-      - RABBITMQ_URL = amqp://admin:admin_password@rabbitmq:5672
-      - INSURANCE_SERVICE_QUEUE = insurance_service_queue
-      - QUOTE_SERVICE_QUEUE = quote_service_queue
+      - MONGODB_URL=mongodb://payment-database:27017/db
+      - RABBITMQ_URL=amqp://admin:admin_password@rabbitmq:5672
+      - INSURANCE_SERVICE_QUEUE=insurance_service_queue
+      - QUOTE_SERVICE_QUEUE=quote_service_queue
       - STRIPE_SECRET_KEY=sk_test_51MZYljHiiKajDgAsM1cjE9n1V1LNfO2jrHRyo3Hox5yGRvNJo7ctXlarwUEx1CP8IHM2GiNJm95HdKxr3CSncaUX00sg1WxEQu
       - STRIPE_CURRENCY=eur
       - CLIENT_URL=https://magenta-speculoos-e4c9ef.netlify.app

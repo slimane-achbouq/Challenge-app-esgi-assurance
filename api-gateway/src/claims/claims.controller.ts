@@ -70,6 +70,7 @@ export class ClaimsController {
   @UseInterceptors(FileInterceptor('proof'))
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @SkipThrottle()
   async getDemandes() {
     const claims = await this.claimsService
       .send({ cmd: 'getDemandes' }, '')
@@ -81,6 +82,7 @@ export class ClaimsController {
   @Get(':id')
   @UseInterceptors(FileInterceptor('proof'))
   @UseGuards(JwtAuthGuard)
+  @SkipThrottle()
   async getDemande(@Param('id') id: string) {
     const claims = await this.claimsService
       .send({ cmd: 'getDemande' }, { _id: id })

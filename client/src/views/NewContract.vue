@@ -623,8 +623,6 @@
               <div>
                 <form>
                   <div class="space-y-3 my-5">
-
-
                     <label
                       class="block text-sm font-medium mb-1"
                       for="card-country"
@@ -632,14 +630,22 @@
                       <span class="text-rose-500">*</span></label
                     >
                     <div class="flex justify-end">
-                      <i class="fas fa-edit cursor-pointer" style="color: #7c91b1;" @click="beneficiary.permis=null"></i>
+                      <i
+                        class="fas fa-edit cursor-pointer"
+                        style="color: #7c91b1"
+                        @click="beneficiary.permis = null"
+                      ></i>
                     </div>
-                    
 
                     <div
+                      v-if="
+                        beneficiary &&
+                        beneficiary &&
+                        !beneficiary.permis &&
+                        !hideImageFielddrivingLicense
+                      "
                       class="flex items-center justify-center w-full"
-                      v-if="beneficiary && beneficiary && !beneficiary.permis && !hideImageFielddrivingLicense"
-                     >
+                    >
                       <label for="dropzone-file" class="form-input w-full">
                         <div class="flex flex-col items-center justify-center">
                           <svg
@@ -657,7 +663,7 @@
                               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                             ></path>
                           </svg>
-                          
+
                           <p
                             class="mb-2 text-sm text-gray-500 dark:text-gray-400"
                           >
@@ -684,9 +690,12 @@
                     </div>
 
                     <div
-                      class="shadow-lg rounded-sm border px-5 py-4 "
-                      v-if="beneficiary && beneficiary && beneficiary.permis || hideImageFielddrivingLicense"
-                     >
+                      v-if="
+                        (beneficiary && beneficiary && beneficiary.permis) ||
+                        hideImageFielddrivingLicense
+                      "
+                      class="shadow-lg rounded-sm border px-5 py-4"
+                    >
                       <div
                         class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
                       >
@@ -712,10 +721,6 @@
                       </div>
                     </div>
 
-
-
-
-
                     <div class="space-y-4">
                       <label
                         class="block text-sm font-medium mb-1"
@@ -725,12 +730,20 @@
                       >
 
                       <div class="flex justify-end">
-                        <i class="fas fa-edit cursor-pointer" style="color: #7c91b1;" @click="beneficiary.justificatifDomicile=null"></i>
+                        <i
+                          class="fas fa-edit cursor-pointer"
+                          style="color: #7c91b1"
+                          @click="beneficiary.justificatifDomicile = null"
+                        ></i>
                       </div>
 
                       <div
+                        v-if="
+                          beneficiary &&
+                          !beneficiary.justificatifDomicile &&
+                          !hideImageFieladresse
+                        "
                         class="flex items-center justify-center w-full"
-                        v-if="beneficiary && !beneficiary.justificatifDomicile && !hideImageFieladresse"
                       >
                         <label for="dropzone-file" class="form-input w-full">
                           <div
@@ -777,8 +790,11 @@
                       </div>
 
                       <div
-                        class="shadow-lg rounded-sm border px-5 py-4 "
-                        v-if="beneficiary && beneficiary.justificatifDomicile || hideImageFieladresse"
+                        v-if="
+                          (beneficiary && beneficiary.justificatifDomicile) ||
+                          hideImageFieladresse
+                        "
+                        class="shadow-lg rounded-sm border px-5 py-4"
                       >
                         <div
                           class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
@@ -810,22 +826,28 @@
                       </div>
                     </div>
 
-
-
                     <div class="space-y-4">
                       <label
                         class="block text-sm font-medium mb-1"
                         for="card-country"
-                        >ID Card
-                        <span class="text-rose-500">*</span></label
+                        >ID Card <span class="text-rose-500">*</span></label
                       >
 
                       <div class="flex justify-end">
-                        <i class="fas fa-edit cursor-pointer" style="color: #7c91b1;" @click="beneficiary.IdCard=null"></i>
+                        <i
+                          class="fas fa-edit cursor-pointer"
+                          style="color: #7c91b1"
+                          @click="beneficiary.IdCard = null"
+                        ></i>
                       </div>
                       <div
+                        v-if="
+                          beneficiary &&
+                          beneficiary &&
+                          !beneficiary.IdCard &&
+                          !hideImageFielIdCard
+                        "
                         class="flex items-center justify-center w-full"
-                        v-if="beneficiary && beneficiary && !beneficiary.IdCard && !hideImageFielIdCard"
                       >
                         <label for="dropzone-file" class="form-input w-full">
                           <div
@@ -868,15 +890,21 @@
                         </label>
                       </div>
                       <div v-if="errors" class="text-xs mt-1 text-rose-500">
-                        {{ errors.IdCard}}
+                        {{ errors.IdCard }}
                       </div>
-                      <div v-if="IdCarderrors" class="text-xs mt-1 text-rose-500">
-                        {{ IdCarderrors}}
+                      <div
+                        v-if="IdCarderrors"
+                        class="text-xs mt-1 text-rose-500"
+                      >
+                        {{ IdCarderrors }}
                       </div>
 
                       <div
-                        class="shadow-lg rounded-sm border px-5 py-4 "
-                        v-if="beneficiary && beneficiary && beneficiary.IdCard || hideImageFielIdCard"
+                        v-if="
+                          (beneficiary && beneficiary && beneficiary.IdCard) ||
+                          hideImageFielIdCard
+                        "
+                        class="shadow-lg rounded-sm border px-5 py-4"
                       >
                         <div
                           class="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2"
@@ -908,11 +936,7 @@
                       </div>
                     </div>
 
-
-
-
-
-                    <div class="text-right" v-if="!contractCreated">
+                    <div v-if="!contractCreated" class="text-right">
                       <button
                         v-if="!contractCreated && !existingPayment"
                         type=""
@@ -996,11 +1020,13 @@
           </router-link>
 
           <button
+            v-if="insurance_id"
             v-track:click="'CLICKED_BTN'"
             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
-            @click="submit(`Azulance - ${selectedPlan} option`, price)"
           >
-            Proceeded verification
+            <router-link :to="{ name: 'face', params: { id: insurance_id } }">
+              Proceed to verification
+            </router-link>
           </button>
         </div>
       </div>
@@ -1045,10 +1071,11 @@ export default {
     return {
       selectedPlan: "Basic",
       formatIncorrect: false,
+      insurance_id: null,
       existingPayment: null,
       drivingLicense: null,
       hideImageFielddrivingLicense: null,
-      hideImageFielIdCard:null,
+      hideImageFielIdCard: null,
       adresse: null,
       IdCard: null,
       hideImageFieladresse: null,
@@ -1057,14 +1084,14 @@ export default {
       errors: {
         license: null,
         adress: null,
-        IdCard:null
+        IdCard: null,
       },
       price: null,
       contractCreated: false,
-      beneficiary:null,
+      beneficiary: null,
       formData: {
         justificatifDomicile: null,
-        IdCard:null,
+        IdCard: null,
         permis: null,
         coverageStartDate: null,
         coverageEndDate: null,
@@ -1072,14 +1099,14 @@ export default {
         insurancePremium: null,
       },
       sessionId: null,
-      IdCarderrors :null,
+      IdCarderrors: null,
       publishableKey:
         "pk_test_51MZYljHiiKajDgAsKTAGtexDySSMf7qJ1VxyjEIebTMcEcttRWeCGMnXtXgtCdEf0iN5k60WuXQxGlAva3xG0Yvo00ImgD98YH",
     };
   },
   async created() {
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-
+    this.insurance_id = id;
     const token = this.$store.getters["auth/token"];
     let existingPayment = await axios.get(
       `${import.meta.env.VITE_API_URL}/payment/${id}`,
@@ -1123,9 +1150,8 @@ export default {
     );
 
     if (response.data) {
-     this.beneficiary = response.data
+      this.beneficiary = response.data;
     }
-
 
     this.existingPayment = existingPayment.data;
 
@@ -1164,13 +1190,11 @@ export default {
       );
 
       this.sessionId = request.data.id;
-      console.log(request.data);
     },
     handleFile(event) {
       this.file = event.target.files[0];
 
       if (this.file.type != "application/pdf") {
-        console.log(this.file.type);
         this.formatIncorrect = true;
       } else {
         this.formatIncorrect = false;
@@ -1186,7 +1210,6 @@ export default {
       this.file = event.target.files[0];
 
       if (this.file.type != "application/pdf") {
-        console.log(this.file.type);
         this.formatIncorrect = true;
       } else {
         this.formatIncorrect = false;
@@ -1198,33 +1221,23 @@ export default {
       }
     },
     handleFile2(event) {
-      this.IdCarderrors=false
+      this.IdCarderrors = false;
       this.file = event.target.files[0];
 
-        console.log(this.file.size)
+      const maxSizeInBytes = 110 * 1024;
 
-        const maxSizeInBytes = 110 * 1024;
-
-        if (this.file.size > maxSizeInBytes) {
-          // Afficher un message d'erreur ou effectuer une action en cas de dépassement de la taille maximale
-          this.IdCarderrors = 'The file size exceeds the maximum allowed limit (110 KB).'
-        
-          
-        }
-        else {
-
-          this.formatIncorrect = false
+      if (this.file.size > maxSizeInBytes) {
+        // Afficher un message d'erreur ou effectuer une action en cas de dépassement de la taille maximale
+        this.IdCarderrors =
+          "The file size exceeds the maximum allowed limit (110 KB).";
+      } else {
+        this.formatIncorrect = false;
         this.IdCard = this.file.name;
         this.formData.IdCard = this.file;
         this.previewSrc = URL.createObjectURL(event.target.files[0]);
         this.hideImageFielIdCard = true;
         this.errors.IdCard = null;
-
-        }
-
-    
-        
-    
+      }
     },
     processDate(date) {
       let dateObject = new Date(date);
@@ -1240,7 +1253,6 @@ export default {
       return `${year}-${month}-${day}`;
     },
     async onCreatedContract() {
-      debugger
       if (!this.beneficiary && !this.drivingLicense)
         this.errors.license = " the Driving License is mandatory";
       if (!this.beneficiary && !this.adresse)
@@ -1248,31 +1260,28 @@ export default {
       if (!this.beneficiary && !this.IdCard)
         this.errors["IdCard"] = " the ID Card is mandatory";
 
-      console.log("2")
-      if( this.beneficiary ){
-        console.log("1")
-        const beneficiary = {}
-        if( this.formData.justificatifDomicile ) beneficiary['justificatifDomicile'] = this.formData.justificatifDomicile
-        if( this.formData.permis ) beneficiary['permis'] = this.formData.permis
-        if( this.formData.IdCard ) beneficiary['IdCard'] = this.formData.IdCard
-
-
-        console.log(beneficiary)
+      if (this.beneficiary) {
+        const beneficiary = {};
+        if (this.formData.justificatifDomicile)
+          beneficiary["justificatifDomicile"] =
+            this.formData.justificatifDomicile;
+        if (this.formData.permis) beneficiary["permis"] = this.formData.permis;
+        if (this.formData.IdCard) beneficiary["IdCard"] = this.formData.IdCard;
 
         const token1 = this.$store.getters["auth/token"];
 
         let response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/beneficiary/${this.beneficiary['_id']}`,
-        beneficiary,
-        {
-          headers: {
-            Authorization: `Bearer ${token1}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-        
-
+          `${import.meta.env.VITE_API_URL}/beneficiary/${
+            this.beneficiary["_id"]
+          }`,
+          beneficiary,
+          {
+            headers: {
+              Authorization: `Bearer ${token1}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
       }
 
       this.formData.coverageStartDate = this.quote.coverageStartDate;
@@ -1296,6 +1305,7 @@ export default {
       );
 
       if (response.data) {
+        this.insurance_id = response.data._id;
         this.contractCreated = true;
       }
     },

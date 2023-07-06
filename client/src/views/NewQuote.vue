@@ -941,7 +941,6 @@ export default {
       this.file = event.target.files[0];
 
       if (this.file.type != "application/pdf") {
-        console.log(this.file.type);
         this.formatIncorrect = true;
       } else {
         this.formatIncorrect = false;

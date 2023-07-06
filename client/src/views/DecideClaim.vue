@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,25 +9,25 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
       <main>
         <Banner
+          v-if="claimReviewed"
           type="success"
           class="mb-4"
           :open="claimReviewed"
-          v-if="claimReviewed"
         >
           Claim reviewed successfully .
         </Banner>
 
         <Banner
+          v-if="generalError"
           type="failure"
           class="mb-4"
           :open="generalError"
-          v-if="generalError"
         >
           {{ generalError }}
         </Banner>
@@ -104,9 +104,9 @@
                       >
                       <select
                         id="card-country"
+                        v-model="claim.decision"
                         class="form-select w-full"
                         required
-                        v-model="claim.decision"
                       >
                         <optgroup label="Accept claim">
                           <option>Money coverage</option>
@@ -119,7 +119,7 @@
                           <option>Other</option>
                         </optgroup>
                       </select>
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">
+                      <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         {{ errors.decision }}
                       </p>
                     </div>
@@ -132,12 +132,12 @@
                       >
                       <textarea
                         id="message"
+                        v-model="claim.additionalInfo"
                         rows="4"
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Explain here..."
-                        v-model="claim.additionalInfo"
                       ></textarea>
-                      <p class="text-xs mt-1 text-rose-500" v-if="errors">
+                      <p v-if="errors" class="text-xs mt-1 text-rose-500">
                         {{ errors.additionalInfo }}
                       </p>
                     </div>
@@ -145,10 +145,10 @@
                     <div class="space-y-3">
                       <div class="text-right">
                         <button
+                          v-if="!claimReviewed"
                           type="submit"
                           class="btn bg-indigo-500 border-slate-200 hover:border-slate-300 text-white"
                           @click.prevent="onReviewedClaim"
-                          v-if="!claimReviewed"
                         >
                           Submit
                         </button>
@@ -165,9 +165,9 @@
         </div>
 
         <ModalBlank
-          id="success-modal"
-          :modalOpen="claimReviewed"
           v-if="claimReviewed"
+          id="success-modal"
+          :modal-open="claimReviewed"
         >
           <div class="p-5 flex space-x-4">
             <!-- Icon -->
@@ -232,6 +232,13 @@ export default {
     Banner,
     ModalBlank,
   },
+  setup() {
+    const sidebarOpen = ref(false);
+
+    return {
+      sidebarOpen,
+    };
+  },
   data() {
     return {
       claim: null,
@@ -239,6 +246,39 @@ export default {
       generalError: null,
       claimReviewed: false,
     };
+  },
+  async created() {
+    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
+    const store = useStore();
+
+    const token = store.getters["auth/token"];
+    if (!token) {
+      this.$router.push({ name: "home" });
+    }
+
+    this.role = store.getters["auth/roles"];
+    if (this.role != "Admin") {
+      this.$router.push({ name: "claim", params: { id: id } });
+    }
+
+    const response =
+      JSON.parse(localStorage.getItem("decide-claim-data")) ??
+      (await axios.get(`${import.meta.env.VITE_API_URL}/claims/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }));
+
+    if (response.data) {
+      if (!localStorage.getItem("decide-claim-data")) {
+        //localStorage.setItem("decide-claim-data", JSON.stringify(response));
+      }
+      this.claim = response.data;
+    }
+
+    if (this.claim.status != 0) {
+      this.$router.push({ name: "claim", params: { id: id } });
+    }
   },
   methods: {
     checkStatus(decision) {
@@ -287,47 +327,6 @@ export default {
           this.generalError = error.response.data.message[0];
         });
     },
-  },
-  setup() {
-    const sidebarOpen = ref(false);
-
-    return {
-      sidebarOpen,
-    };
-  },
-  async created() {
-    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-    const store = useStore();
-
-    const token = store.getters["auth/token"];
-    if (!token) {
-      this.$router.push({ name: "home" });
-    }
-
-    this.role = store.getters["auth/roles"];
-    if (this.role != "Admin") {
-      this.$router.push({ name: "claim", params: { id: id } });
-    }
-
-    const response = JSON.parse(localStorage.getItem("decide-claim-data")) ?? await axios.get(
-      `${import.meta.env.VITE_API_URL}/claims/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (response.data) {
-      if (!localStorage.getItem("decide-claim-data")) {
-        //localStorage.setItem("decide-claim-data", JSON.stringify(response));
-      }
-      this.claim = response.data;
-    }
-
-    if (this.claim.status != 0) {
-      this.$router.push({ name: "claim", params: { id: id } });
-    }
   },
 };
 </script>

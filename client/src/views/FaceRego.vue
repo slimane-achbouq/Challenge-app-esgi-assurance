@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen overflow-hidden" style="background-color: #f1f5f9">
     <!-- Sidebar -->
-    <Sidebar :sidebarOpen="sidebarOpen" @close-sidebar="sidebarOpen = false" />
+    <Sidebar :sidebar-open="sidebarOpen" @close-sidebar="sidebarOpen = false" />
 
     <!-- Content area -->
     <div
@@ -9,7 +9,7 @@
     >
       <!-- Site header -->
       <Header
-        :sidebarOpen="sidebarOpen"
+        :sidebar-open="sidebarOpen"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       />
 
@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <div class="border-t border-slate-200" v-if="isWebcamActivatedd">
+          <div v-if="isWebcamActivatedd" class="border-t border-slate-200">
             <div class="max-w-2xl m-auto mt-16">
               <div class="text-center px-4">
                 <div
@@ -68,8 +68,8 @@
             <div class="md:flex flex-1">
               <!-- Middle content -->
               <div
-                class="flex-1 md:ml-6 xl:mx-2 2xl:mx-2"
                 v-if="!isWebcamActivatedd"
+                class="flex-1 md:ml-6 xl:mx-2 2xl:mx-2"
               >
                 <div class="md:py-8">
                   <!-- Blocks -->
@@ -102,8 +102,7 @@
                               autoplay
                             ></video>
 
-                            <canvas ref="canvas" style="display: none;"></canvas>
-
+                            <canvas ref="canvas" style="display: none"></canvas>
                           </div>
                         </div>
                       </div>
@@ -113,7 +112,6 @@
               </div>
             </div>
           </div>
-          
         </div>
       </main>
     </div>
@@ -143,7 +141,7 @@ export default {
     return {
       isWebcamActivatedd: false,
       video: null,
-      benf :null
+      benf: null,
     };
   },
 
@@ -173,27 +171,27 @@ export default {
         }*/
 
     if (response.data) {
-      console.log(response.data);
     }
 
-    const  idBene = response.data.beneficiary
+    const idBene = response.data.beneficiary;
 
-    const response1 = JSON.parse(localStorage.getItem("beneficiary-data")) ?? await axios.get(
-      `${import.meta.env.VITE_API_URL}/beneficiary/${response.data.beneficiary}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response1 =
+      JSON.parse(localStorage.getItem("beneficiary-data")) ??
+      (await axios.get(
+        `${import.meta.env.VITE_API_URL}/beneficiary/${
+          response.data.beneficiary
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ));
 
-      if (response1.data) {
-      
-      this.benf = await response1.data
+    if (response1.data) {
+      this.benf = await response1.data;
       if (this.benf.veriviedImage) this.$router.push("/user-contracts");
-      console.log(this.benf)
-     }
-
+    }
 
     this.video = await this.$refs.video;
 
@@ -232,10 +230,7 @@ export default {
             label: result,
           });
 
-          console.log(result['_distance'])
-          if (result.label !== "unknown" && result['_distance'] < 0.4) {
-
-
+          if (result.label !== "unknown" && result["_distance"] < 0.4) {
             const canvas = this.$refs.canvas;
             const context = canvas.getContext("2d");
             canvas.width = this.video.videoWidth;
@@ -248,42 +243,57 @@ export default {
             const formData = new FormData();
             formData.append("veriviedImage", imageData);
 
-
-            let response =  axios
-              .put(`${import.meta.env.VITE_API_URL}/beneficiary/${idBene}`, formData, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "multipart/form-data",
-                },
-              })
-              .then((data) => {
-                console.log(data)
-              })
+            let response = axios
+              .put(
+                `${import.meta.env.VITE_API_URL}/beneficiary/${idBene}`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              )
+              .then((data) => {})
               .catch((error) => {
                 console.log(error);
               });
 
-            console.log(imageDataURL)
+            Swal.fire({
+              text: "Your ID Card is vérified, wait the admin to validate the contract",
+              icon: "success",
+            }).then(() => {
+              const redirectUrl =
+                "/" + (this.$route.query.redirect || `contract/${id}`);
+              this.$router.replace(redirectUrl);
+            });
 
-
-
-                Swal.fire({
-                text: "Your ID Card is vérified, wait the admin to validate the contract",
-                icon: "success",
-              }).then(() => {
-                  const redirectUrl = "/" + (this.$route.query.redirect || `contract/${id}`);
-                  this.$router.replace(redirectUrl);
-                });
-              
-              
-              const stream = this.video.srcObject;
-              const tracks = stream.getTracks();
-              tracks.forEach((track) => track.stop());
-
+            const stream = this.video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach((track) => track.stop());
           }
         });
       }, 100);
     });
+  },
+
+  beforeUnmount() {
+    // Access the video element using this.$refs
+    const video = this.$refs.video;
+
+    // Check if the video element has a srcObject
+    if (video && video.srcObject) {
+      // Get the stream from the srcObject
+      const stream = video.srcObject;
+
+      // Get all the tracks from the stream
+      const tracks = stream.getTracks();
+
+      // Stop each track
+      tracks.forEach((track) => {
+        track.stop();
+      });
+    }
   },
 
   methods: {
@@ -314,15 +324,14 @@ export default {
         labels.map(async (label) => {
           const descriptions = [];
 
-          const IdCard = this.benf.IdCard.data
+          const IdCard = this.benf.IdCard.data;
 
           const arrayBuffer = Uint8Array.from(this.benf.IdCard.data).buffer;
-          const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+          const blob = new Blob([arrayBuffer], { type: "image/jpeg" });
           const imageUrl = URL.createObjectURL(blob);
-          const img = document.createElement('img');
+          const img = document.createElement("img");
           img.src = imageUrl;
 
-          
           const detections = await faceapi
             .detectSingleFace(img)
             .withFaceLandmarks()
@@ -334,25 +343,5 @@ export default {
       );
     },
   },
-
-  beforeUnmount() {
-    // Access the video element using this.$refs
-    const video = this.$refs.video;
-
-    // Check if the video element has a srcObject
-    if (video && video.srcObject) {
-      // Get the stream from the srcObject
-      const stream = video.srcObject;
-
-      // Get all the tracks from the stream
-      const tracks = stream.getTracks();
-
-      // Stop each track
-      tracks.forEach((track) => {
-        track.stop();
-      });
-    }
-  },
-  
 };
 </script>

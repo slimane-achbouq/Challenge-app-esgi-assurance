@@ -767,7 +767,6 @@ export default {
         );
       }
     } catch (err) {
-      console.log(localStorage.getItem("contracts-length"));
       this.data.contracts = JSON.parse(
         localStorage.getItem("contracts-length")
       );
@@ -805,7 +804,6 @@ export default {
       if (users) {
         this.data.users = users;
         localStorage.setItem("users-length", JSON.stringify(this.data.users));
-        console.log(this.users);
       }
     } catch (err) {
       this.data.users = JSON.parse(localStorage.getItem("users-length"));

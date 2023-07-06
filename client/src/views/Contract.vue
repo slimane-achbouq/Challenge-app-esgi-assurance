@@ -923,13 +923,16 @@ export default {
     },
 
     downloadImage(image) {
-      this.modalOpenImage = image;
+      const byteArray = new Uint8Array(image.data);
 
-      const bytes = image.data; // Remplacez par votre tableau de bytes
-      const byteString = String.fromCharCode.apply(null, bytes);
-      const base64 = btoa(byteString);
+      const blob = new Blob([byteArray], { type: "image/png" });
 
-      this.Image = base64;
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("target", "_blank"); // Open in new tab
+      document.body.appendChild(link);
+      link.click();
     },
     downloadImage1(image) {
       this.modalOpenImage = true;

@@ -1241,20 +1241,14 @@ export default {
       if (!this.file.type.includes("image")) {
         this.IdCarderrors = "The file format must be an image.";
       } else {
-        const maxSizeInBytes = 110 * 1024;
-
-        if (this.file.size > maxSizeInBytes) {
-          // Afficher un message d'erreur ou effectuer une action en cas de dépassement de la taille maximale
-          this.IdCarderrors =
-            "The file size exceeds the maximum allowed limit (110 KB).";
-        } else {
+        
           this.formatIncorrect = false;
           this.IdCard = this.file.name;
           this.formData.IdCard = this.file;
           this.previewSrc = URL.createObjectURL(event.target.files[0]);
           this.hideImageFielIdCard = true;
           this.errors.IdCard = null;
-        }
+        
       }
     },
     processDate(date) {

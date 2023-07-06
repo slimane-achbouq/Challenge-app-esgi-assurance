@@ -38,4 +38,4 @@ jobs:
 
       - name: SSH to DigitalOcean Server
         run: |
-          ssh alsbsb43@gmail.com@165.232.149.190 'docker stack deploy --compose-file docker-compose.yml challenge'
+          ssh root@165.232.149.190 'docker stack deploy --compose-file docker-compose.yml challenge'

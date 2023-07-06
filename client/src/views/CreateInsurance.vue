@@ -262,7 +262,7 @@
                               >
                                 <span class="font-semibold"
                                   >Click to upload the proof of your
-                                  adresse</span
+                                  address</span
                                 >
                                 or drag and drop
                               </p>

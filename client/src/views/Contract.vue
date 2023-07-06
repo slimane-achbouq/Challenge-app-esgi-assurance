@@ -287,7 +287,7 @@
                           </div>
                           <div>
                             <div class="flex justify-between text-sm m-2">
-                              <div class="text-slate-800">Adresse</div>
+                              <div class="text-slate-800">Address</div>
                               <div class="text-slate-400 italic">
                                 {{ user.postalAddress }}
                               </div>
@@ -322,7 +322,7 @@
                           </div>
                           <div>
                             <div class="flex justify-between text-sm m-2">
-                              <div class="text-slate-800">Proof of adresse</div>
+                              <div class="text-slate-800">Proof of address</div>
                               <div class="text-slate-400 italic">
                                 <i
                                   class="fas fa-download cursor-pointer"

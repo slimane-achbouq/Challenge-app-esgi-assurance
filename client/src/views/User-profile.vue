@@ -529,7 +529,7 @@ export default {
           this.searchedAddresses = data.features;
         }
         if (data.features.length == 0) {
-          this.errors.address = "There is no adresse !";
+          this.errors.address = "There is no address !";
           this.isAddressLoading = false;
           return;
         }

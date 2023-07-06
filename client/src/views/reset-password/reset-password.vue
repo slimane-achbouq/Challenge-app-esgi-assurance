@@ -207,7 +207,7 @@ export default {
         this.successMesage = "Your password has been successfully changed.";
       } catch (ex) {
         this.error = new Error(
-          ex || "Failed to change password. Check you have already an compte."
+          ex || "Failed to change password. Check you have already an account."
         );
         throw error;
       }

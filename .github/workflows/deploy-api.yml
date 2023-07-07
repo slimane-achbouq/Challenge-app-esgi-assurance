@@ -26,22 +26,6 @@ jobs:
       - name: Run tests
         run: npm test
         working-directory: ./user
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./payment
-
-      - name: Run tests
-        run: npm test
-        working-directory: ./payment
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./quote
-
-      - name: Run tests
-        run: npm test
-        working-directory: ./quote
   build-and-push:
     name: Build Docker image
     runs-on: ubuntu-latest

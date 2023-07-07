@@ -188,10 +188,7 @@ export default {
         }
       ));
 
-    if (response1.data) {
-      this.benf = await response1.data;
-      if (this.benf.veriviedImage) this.$router.push("/user-contracts");
-    }
+   
 
     this.video = await this.$refs.video;
 

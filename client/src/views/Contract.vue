@@ -40,7 +40,7 @@
         </Banner>
 
         <Banner
-          v-if="!payment && role === 'User' && !contract.status"
+          v-if="!payment && role === 'User' && !contract.status && user.veriviedImage"
           type="error"
           class="mb-1"
           :open="true"
@@ -49,7 +49,7 @@
         </Banner>
 
         <Banner
-          v-if="!payment && role === 'User' && user && !user.veriviedImage"
+          v-if="!payment && role === 'User' && user && !user.veriviedImage && !contract.status"
           type="error"
           class="mb-1"
           :open="true"

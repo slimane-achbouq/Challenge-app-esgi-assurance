@@ -230,7 +230,7 @@ export default {
             label: result,
           });
 
-          if (result.label !== "unknown" && result["_distance"] < 0.48) {
+          if (result.label !== "unknown" && result["_distance"] < 0.5) {
             const canvas = await this.$refs.canvas;
             const context = await canvas.getContext("2d");
             canvas.width = await this.video.videoWidth;

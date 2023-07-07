@@ -25,10 +25,9 @@
                 <i class="fas fa-money-check" style="color: #ffffff"></i> ID
                 Card verification ✨
               </div>
-              <div class="inline-flex space-x-3">
+              <div class="inline-flex space-x-3" v-if="!cameraActive">
                 <a
                   class="btn bg-indigo-500 hover:bg-indigo-600 text-white"
-                  href="https://nucleoapp.com/pricing"
                   target="_blank"
                   rel="noreferrer"
                   >Activate webcam</a
@@ -51,7 +50,7 @@
                 <div class="mb-6">
                   To verify your card id, you must activate your webcam .
                 </div>
-                <button
+                <button v-if="!cameraActive"
                   class="btn bg-indigo-500 hover:bg-indigo-600 text-white"
                 >
                   <span class="ml-2"> Activate Webcam </span>
@@ -142,6 +141,7 @@ export default {
       isWebcamActivatedd: false,
       video: null,
       benf: null,
+      cameraActive: false,
     };
   },
 
@@ -308,6 +308,7 @@ export default {
           })
           .then((stream) => {
             this.video.srcObject = stream;
+            this.cameraActive= true
           })
           .catch((error) => {
             this.isWebcamActivatedd = true;

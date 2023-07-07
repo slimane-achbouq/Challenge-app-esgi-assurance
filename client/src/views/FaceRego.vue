@@ -259,7 +259,7 @@ export default {
                 console.log(error);
               });
 
-            Swal.fire({
+            await Swal.fire({
               text: "Your ID Card is vérified, wait the admin to validate the contract",
               icon: "success",
             }).then(() => {

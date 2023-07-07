@@ -146,48 +146,7 @@ export default {
   },
 
   async mounted() {
-    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
-
-    const token = this.$store.getters["auth/token"];
-    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
-    let response = null;
-
-    try {
-      response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/insurance/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      //localStorage.setItem("insurance-data", JSON.stringify(response.data));
-    } catch (e) {
-      response = JSON.parse(localStorage.getItem("insurance-data"));
-    }
-
-    /*if(response.data["hydra:member"]){
-        customers.value = await response.data["hydra:member"];
-        }*/
-
-    if (response.data) {
-    }
-
-    const idBene = response.data.beneficiary;
-
-    const response1 =
-      JSON.parse(localStorage.getItem("beneficiary-data")) ??
-      (await axios.get(
-        `${import.meta.env.VITE_API_URL}/beneficiary/${
-          response.data.beneficiary
-        }`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      ));
-
+    
    
 
     this.video = await this.$refs.video;
@@ -322,7 +281,7 @@ export default {
         labels.map(async (label) => {
           const descriptions = [];
 
-          const IdCard = this.benf.IdCard.data;
+          const IdCard = '515515';
 
           const arrayBuffer = Uint8Array.from(this.benf.IdCard.data).buffer;
           const blob = new Blob([arrayBuffer], { type: "image/jpeg" });

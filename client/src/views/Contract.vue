@@ -24,7 +24,7 @@
         </Banner>
 
         <Banner
-          v-if="!payment && role === 'User'"
+          v-if="!payment && role === 'User' && user && user.veriviedImage && contract.status"
           type="error"
           class="mb-1"
           :open="true"
@@ -38,6 +38,25 @@
           >
           to start payment
         </Banner>
+
+        <Banner
+          v-if="!payment && role === 'User' && !contract.status"
+          type="error"
+          class="mb-1"
+          :open="true"
+        >
+          You have not yet paid for this contract, wait untill the validation of the admin to process the paiement 
+        </Banner>
+
+        <Banner
+          v-if="!payment && role === 'User' && user && !user.veriviedImage"
+          type="error"
+          class="mb-1"
+          :open="true"
+        >
+          You have not yet paid for this contract, you must verify your ID Card to validate your contract by thea admin then you can process the paiement 
+        </Banner>
+
 
         <Banner v-if="deleted" type="success" class="mb-1" :open="deleted">
           Contract deleted successfully.
@@ -108,8 +127,8 @@
                       <span class="ml-2">Delete</span>
                     </button>
 
-                    <button
-                      v-if="role !== 'Admin' && !payment"
+                    <button 
+                      v-if="role !== 'Admin' && !payment && user && user.veriviedImage && contract.status"
                       class="btn border-slate-200 hover:border-slate-300 text-slate-600 m-2 flex"
                       @click="submit(`Azulance -  option`, price)"
                     >
@@ -710,11 +729,8 @@
                   </div>
 
                   <div class="text-sm mb-0">
-                    <div class="">
-                      <img
-                        :src="'data:image/jpeg;base64,' + Image"
-                        alt="Image"
-                      />
+                    <div id="image-id">
+                      
                     </div>
                   </div>
 
@@ -923,20 +939,42 @@ export default {
     },
 
     downloadImage(image) {
-      const byteArray = new Uint8Array(image.data);
+        const byteArray = new Uint8Array(image.data);
 
-      const blob = new Blob([byteArray], { type: "image/png" });
+        const blob = new Blob([byteArray], { type: "image/png" });
 
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("target", "_blank"); // Open in new tab
-      document.body.appendChild(link);
-      link.click();
-    },
+        const url = window.URL.createObjectURL(blob);
+
+        let imageElement = document.getElementById("img-id"); 
+
+        if (imageElement) {
+          imageElement.parentNode.removeChild(imageElement);
+        }
+        
+          imageElement = document.createElement("img");
+          imageElement.id = "img-id"; 
+          const divElement = document.getElementById("image-id");
+          divElement.appendChild(imageElement);
+        
+          imageElement.src = url;
+          this.modalOpenImage = true;
+      },
     downloadImage1(image) {
-      this.modalOpenImage = true;
       this.Image = image;
+
+      let imageElement = document.getElementById("img-id");
+      if (imageElement) {
+          imageElement.parentNode.removeChild(imageElement);
+      }
+
+          imageElement = document.createElement("img");
+          imageElement.id = "img-id"; 
+          const divElement = document.getElementById("image-id");
+          divElement.appendChild(imageElement);
+          imageElement.src = `data:image/jpeg;base64,${image}`;
+
+      this.modalOpenImage = true;
+      
     },
     processDate(date) {
       let dateObject = new Date(date);

@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^5.1.0",
-    "@esbuild/win32-x64": "^0.18.11",
     "@rushstack/eslint-patch": "^1.1.4",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.0.0",

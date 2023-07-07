@@ -6,7 +6,7 @@ services:
     container_name: api-gateway
     hostname: api-gateway
     build: ./api-gateway
-    image: slimane2/challenge-api-geteway
+    image: slimane3/challenge-api-geteway
     volumes:
       - ./api-gateway:/usr/src/app
       - /usr/src/app/node_modules
@@ -34,7 +34,7 @@ services:
   webserver:
       build:
         context: ./nginx
-      image: slimane2/challenge-webserver
+      image: slimane3/challenge-webserver
       container_name: nginx
       hostname: nginx
       ports:
@@ -74,7 +74,7 @@ services:
   insurance-api:
     container_name: insurance-api
     build: ./insurance-service
-    image: slimane2/challenge-insurence-service
+    image: slimane3/challenge-insurence-service
     volumes:
       - ./insurance-service:/usr/src/app
       - /usr/src/app/node_modules
@@ -95,7 +95,7 @@ services:
   quote-service:
     container_name: quote-api
     build: ./quote-service
-    image: slimane2/challenge-quote-service
+    image: slimane3/challenge-quote-service
     ports:
       - '3002:3002'
     depends_on:
@@ -145,7 +145,7 @@ services:
     container_name: user-service
     hostname: user-service
     build: ./user
-    image: slimane2/challenge-user
+    image: slimane3/challenge-user
     volumes:
       - ./user:/usr/src/app
       - /usr/src/app/node_modules
@@ -171,7 +171,7 @@ services:
     container_name: utils-service
     hostname: utils-service
     build: ./utils
-    image: slimane2/challenge-utils
+    image: slimane3/challenge-utils
     volumes:
       - ./utils:/usr/src/app
       - /usr/src/app/node_modules
@@ -219,7 +219,7 @@ services:
     container_name: claims-service
     hostname: claims-service
     build: ./claims
-    image: slimane2/challenge-claims
+    image: slimane3/challenge-claims
     volumes:
       - ./claims:/src/app
       - /src/app/node_modules
@@ -249,7 +249,7 @@ services:
     container_name: payment-service
     hostname: payment-service
     build: ./payment
-    image: slimane2/challenge-payment
+    image: slimane3/challenge-payment
     volumes:
       - ./payment:/src/app
       - /src/app/node_modules
@@ -285,7 +285,7 @@ services:
     container_name: kpi-service
     hostname: kpi-service
     build: ./kpi
-    image: slimane2/challenge-kpi
+    image: slimane3/challenge-kpi
     volumes:
       - ./kpi:/usr/src/app
       - /usr/src/app/node_modules

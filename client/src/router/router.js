@@ -9,7 +9,7 @@ import Quotes from "@/views/Quotes.vue";
 import Quote from "@/views/Quote.vue";
 import VerificationCompte from "@/views/VerificationCompte.vue";
 import EditQuote from "@/views/EditQuote.vue";
-import NewContract from "@/views/NewContract.vue";
+import Newcontractss from "@/views/Newcontractss.vue";
 import Contracts from "@/views/Contracts.vue";
 import Contract from "@/views/Contract.vue";
 import ResetPasswordInput from "@/views/reset-password/reset-password-view.vue";
@@ -130,9 +130,9 @@ const router = createRouter({
             meta: {requiresUnauth: false},
         },
         {
-            path: "/newContract/:id",
+            path: "/Newcontractss/:id",
             name: "newcontract",
-            component: NewContract,
+            component: Newcontractss,
             meta: {requiresUnauth: false},
         },
         {

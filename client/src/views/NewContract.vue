@@ -1116,6 +1116,82 @@ export default {
     };
   },
   async created() {
+
+
+    this.isLoaded = true;
+    const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
+    this.insurance_id = id;
+    const token = this.$store.getters["auth/token"];
+    let existingPayment = await axios.get(
+      `${import.meta.env.VITE_API_URL}/payment/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    this.existingPayment = existingPayment.data;
+
+    if (this.existingPayment) {
+      const redirectUrl = "/" + (this.$route.query.redirect || "contracts");
+      this.$router.replace(redirectUrl);
+    }
+
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+    let response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/quotes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data) {
+      this.quote = response.data;
+    }
+
+    const idUser = this.$store.getters["auth/id"];
+
+    try {
+      response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/getbeneficiaryByUserId/${idUser}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        this.beneficiary = response.data;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.existingPayment = existingPayment.data;
+
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?page=${page.value}`, {
+    response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/prices/${this.quote.vehicle.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data) {
+      this.prices = response.data;
+    }
+
+    this.price = Math.round(this.prices[0]);
+    this.isLoaded = false;
+
+
+    
     this.isLoaded = true;
     const id = document.URL.substring(document.URL.lastIndexOf("/") + 1);
     this.insurance_id = id;

@@ -10,7 +10,7 @@ services:
     env_file:
       - ./kpi/.env
     ports:
-      - "27023:27017"
+      - "27017:27017"
     networks:
       - my-network
 
@@ -18,16 +18,13 @@ services:
     container_name: kpi-service
     hostname: kpi-service
     build: ./kpi
-    image: slimane2/challenge-kpi
     volumes:
       - ./kpi:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - 3008:3008
+      - 3000:3000
     depends_on:
       - kpi-database
-      - gateway
-      - rabbitmq
     env_file:
       - ./kpi/.env
     networks:

@@ -5,6 +5,7 @@ import {
   Get,
   Headers,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Post,
 } from '@nestjs/common';
@@ -19,23 +20,27 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 export class KpiController {
   constructor(private readonly kpiService: KpiService) {}
 
-  @MessagePattern('createKpi')
-  async createKpi(@Payload() kpi: Kpi) {
+  @HttpCode(HttpStatus.CREATED)
+  @Post()
+  async createKpi(@Body() kpi: Kpi) {
     return this.kpiService.create(kpi);
   }
 
-  @MessagePattern('getUniqueVisitorsCountKpi')
+  @HttpCode(HttpStatus.OK)
+  @Get()
   async getUniqueVisitorsCount(appId: string) {
     return this.kpiService.findAllKpis(appId);
   }
 
-  @MessagePattern('getKpisByTag')
-  async getKpisByTag(@Payload() tag: string) {
+  @HttpCode(HttpStatus.OK)
+  @Get('tag/:tag')
+  async getKpisByTag(@Body() tag: string) {
     return this.kpiService.findKpisByTag(tag);
   }
 
-  @MessagePattern('getKpisByVisitor')
-  async getKpisByVisitor(@Payload() visitor: string) {
+  @HttpCode(HttpStatus.OK)
+  @Get('visitor/:visitor')
+  async getKpisByVisitor(@Body() visitor: string) {
     return this.kpiService.findKpisByVisitor(visitor);
   }
 }

@@ -19,26 +19,27 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @MessagePattern('signIn')
+  @HttpCode(HttpStatus.CREATED)
+  @Post('login')
   async signIn(@Body() signInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
-  //   @UsePipes(new CreateUserValidationPipe())
-  //   @HttpCode(HttpStatus.OK)
-  //   @Post('register')
-  @MessagePattern('register')
+  @UsePipes(new CreateUserValidationPipe())
+  @HttpCode(HttpStatus.OK)
+  @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
   }
 
-  //   @UseGuards(AuthGuard)
-  @MessagePattern('getProfile')
-  getProfile(@Payload() req) {
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
     return req.user;
   }
 
-  @MessagePattern('logout')
+  @HttpCode(HttpStatus.OK)
+  @Get('logout')
   async logout() {
     return this.authService.logout();
   }

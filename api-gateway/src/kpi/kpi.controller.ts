@@ -52,7 +52,9 @@ export class KpiController {
   @HttpCode(HttpStatus.OK)
   @Get('visit')
   async getTotalVisitsCount(@Headers() headers) {
-    return lastValueFrom(this.kpiService.send('getTotalVisitsCount', headers["app-id"]));
+    return lastValueFrom(
+      this.kpiService.send('getTotalVisitsCount', headers['app-id']),
+    );
   }
 
   @HttpCode(HttpStatus.CREATED)
@@ -114,7 +116,7 @@ export class KpiController {
   @Get('kpi')
   getUniqueVisitorsCountKpi(@Headers() headers) {
     return lastValueFrom(
-      this.kpiService.send('getUniqueVisitorsCountKpi', headers["app-id"]),
+      this.kpiService.send('getUniqueVisitorsCountKpi', headers['app-id']),
     );
   }
 

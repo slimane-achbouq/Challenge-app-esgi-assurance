@@ -1,14 +1,22 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Headers,
+} from '@nestjs/common';
 import { VisitService } from './visit.service';
 import { Visit } from '../schemas/visit.schema';
-import { Headers } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('visit')
 export class VisitController {
   constructor(private readonly visitService: VisitService) {}
 
-  @MessagePattern('createVisit')
+  @HttpCode(HttpStatus.CREATED)
+  @Post()
   async createVisit(@Body() visit: Visit) {
     return this.visitService.create(visit);
   }
@@ -21,8 +29,10 @@ export class VisitController {
         return this.visitService.getTotalDistinctVisits(app_id);
     }*/
 
-  @MessagePattern('getTotalVisitsCount')
-  async getTotalVisitsCount(appId: string) {
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  async getTotalVisitsCount(@Headers() headers) {
+    const appId = headers['app-id'];
     return this.visitService.getTotalVisitsByAppId(appId);
   }
 }

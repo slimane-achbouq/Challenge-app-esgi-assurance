@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  kpi-database:
-    container_name: kpi-database
+  database:
+    container_name: database
     image: mongo:latest
-    hostname: kpi-database
+    hostname: database
     volumes:
       - ./kpi/data/db:/data/db
     env_file:
@@ -24,7 +24,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - kpi-database
+      - database
     env_file:
       - ./kpi/.env
     networks:

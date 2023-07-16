@@ -15,7 +15,7 @@ import { AuthModule } from './user/auth.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGODB_URL),
+    MongooseModule.forRoot('mongodb://database:27017/nestjs-mongodb'),
     KpiModule,
     VisitModule,
     VisitorModule,
